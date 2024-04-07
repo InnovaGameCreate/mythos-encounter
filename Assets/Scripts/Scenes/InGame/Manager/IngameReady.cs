@@ -21,8 +21,8 @@ namespace Scenes.Ingame.Manager
         public void SetReady(bool stage = false,bool player = false,bool enemy = false)
         {
             if (stage) StageReady = true;
-            else if (player) StageReady = true;
-            else if (enemy) StageReady = true;
+            else if (player) PlayerReady = true;
+            else if (enemy) EnemyReady = true;
         }
         public bool Ready()
         {
