@@ -27,7 +27,7 @@ namespace Scenes.Ingame.Enemy
             {
 
                 case EnemyName.TestEnemy:
-                    GameObject.Instantiate(TestEnemy);
+                    GameObject.Instantiate(testEnemy);
                     break;
                 default:
                     Debug.LogError("このスクリプトに、すべての敵のプレハブが格納可能かか確認してください");
@@ -41,7 +41,7 @@ namespace Scenes.Ingame.Enemy
             {
 
                 case EnemyName.TestEnemy:
-                    GameObject.Instantiate(TestEnemy, spownPosition, Quaternion.identity);
+                    GameObject.Instantiate(testEnemy, spownPosition, Quaternion.identity);
                     break;
                 default:
                     Debug.LogError("このスクリプトに、すべての敵のプレハブが格納可能かか確認してください");
