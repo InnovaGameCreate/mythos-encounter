@@ -8,7 +8,7 @@ namespace Scenes.Ingame.Enemy
 {
     public class EnemySpawner : MonoBehaviour
     {
-        [SerializeField] GameObject TestEnemy;
+        [SerializeField] private GameObject testEnemy;
 
 
         // Start is called before the first frame update
