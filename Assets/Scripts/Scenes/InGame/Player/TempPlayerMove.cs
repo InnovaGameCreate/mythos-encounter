@@ -2,47 +2,46 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Scenes.Ingame.Enemy
+
+public class TempPlayerMove : MonoBehaviour
 {
-    public class TempPlayerMove : MonoBehaviour
+    CharacterController _characterController;
+    Vector3 _moveVelocity;
+    private float moveSpeed = 5;
+    void Start()
     {
-        CharacterController _characterController;
-        Vector3 _moveVelocity;
-        private float moveSpeed = 5;
-        void Start()
+        _characterController = GetComponent<CharacterController>();
+    }
+
+    void Update()
+    {
+
+        float moveMouseX = Input.GetAxis("Mouse X");
+        if (Mathf.Abs(moveMouseX) > 0.001f)
         {
-            _characterController = GetComponent<CharacterController>();
+            // 回転軸はワールド座標のY軸
+            transform.RotateAround(transform.position, Vector3.up, moveMouseX);
         }
 
-        void Update()
+        _moveVelocity = Vector3.zero;
+        if (Input.GetKey(KeyCode.W))
         {
-
-            float moveMouseX = Input.GetAxis("Mouse X");
-            if (Mathf.Abs(moveMouseX) > 0.001f)
-            {
-                // 回転軸はワールド座標のY軸
-                transform.RotateAround(transform.position, Vector3.up, moveMouseX);
-            }
-
-            _moveVelocity = Vector3.zero;
-            if (Input.GetKey(KeyCode.W))
-            {
-                _moveVelocity += transform.forward;
-            }
-            if (Input.GetKey(KeyCode.S))
-            {
-                _moveVelocity -= transform.forward;
-            }
-            if (Input.GetKey(KeyCode.A))
-            {
-                _moveVelocity -= transform.right;
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                _moveVelocity += transform.right;
-            }
-            _moveVelocity = _moveVelocity.normalized;
-            _characterController.Move(_moveVelocity * Time.deltaTime * moveSpeed);
+            _moveVelocity += transform.forward;
         }
+        if (Input.GetKey(KeyCode.S))
+        {
+            _moveVelocity -= transform.forward;
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            _moveVelocity -= transform.right;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            _moveVelocity += transform.right;
+        }
+        _moveVelocity = _moveVelocity.normalized;
+        _characterController.Move(_moveVelocity * Time.deltaTime * moveSpeed);
     }
 }
+
