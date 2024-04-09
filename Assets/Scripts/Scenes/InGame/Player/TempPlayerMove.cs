@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class TempPlayerMove : MonoBehaviour
 {
     CharacterController _characterController;
@@ -43,3 +44,4 @@ public class TempPlayerMove : MonoBehaviour
         _characterController.Move(_moveVelocity * Time.deltaTime * moveSpeed);
     }
 }
+
