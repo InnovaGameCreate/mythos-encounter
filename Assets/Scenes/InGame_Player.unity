@@ -9553,14 +9553,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7b2e274c57daed4184ccf55e7baad5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _healthSliders:
-  - {fileID: 823847508}
-  _sanValueSliders:
-  - {fileID: 829569121}
-  _healthText:
-  - {fileID: 128045970}
-  _sanValueText:
-  - {fileID: 139305620}
   _players: []
   _playerStatuses: []
 --- !u!4 &1399786869
@@ -12722,6 +12714,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerStatuses: []
   _displayPlayerStatusManager: {fileID: 1399786868}
+  _healthSliders:
+  - {fileID: 823847508}
+  _sanValueSliders:
+  - {fileID: 829569121}
+  _healthText:
+  - {fileID: 128045970}
+  _sanValueText:
+  - {fileID: 139305620}
 --- !u!1001 &1855441610
 PrefabInstance:
   m_ObjectHideFlags: 0
