@@ -6,6 +6,7 @@ using System;
 
 /// <summary>
 /// プレイヤーのステータスを管理するクラス
+/// MV(R)PにおけるModelの役割を想定
 /// </summary>
 namespace Scenes.Ingame.Player
 {
@@ -13,16 +14,19 @@ namespace Scenes.Ingame.Player
     public class PlayerStatus : MonoBehaviour
     {
         //プレイヤーのデータベース(仮置き)
-        private int _playerID = 0;
-        private int _healthBase = 100;
-        private int _staminaBase = 100;
-        private int _sanBase = 100;
+        [Header("プレーヤーのデータベース")]
+        [SerializeField] private int _playerID = 0;
+        [SerializeField] private int _healthBase = 100;
+        [SerializeField] private int _staminaBase = 100;
+        [SerializeField] private int _sanBase = 100;
+
+        public int playerID { get { return _playerID; } }
 
         //現在のステータスの変数（今後ネットワーク化予定）
         //初期化についても今後はデータベースを参照して行うようにする。
-        [SerializeField] private IntReactiveProperty _health = new IntReactiveProperty(0);//HP.ゼロになると死亡
-        [SerializeField] private IntReactiveProperty _stamina = new IntReactiveProperty(0);//スタミナ
-        [SerializeField] private IntReactiveProperty _san = new IntReactiveProperty(0);//SAN値
+        [SerializeField] private IntReactiveProperty _health = new IntReactiveProperty();//HP.ゼロになると死亡
+        [SerializeField] private IntReactiveProperty _stamina = new IntReactiveProperty();//スタミナ
+        [SerializeField] private IntReactiveProperty _san = new IntReactiveProperty();//SAN値
         [SerializeField] private BoolReactiveProperty _survive = new BoolReactiveProperty(true);//生死.trueのときは生きている
         [SerializeField] private BoolReactiveProperty _bleeding = new BoolReactiveProperty(false);//出血状態.trueのときに時間経過で体力が減少
 
@@ -35,7 +39,7 @@ namespace Scenes.Ingame.Player
         public IObservable<bool> OnPlayerbleedingChange { get { return _bleeding; } }//_bleeding(出血状態)が変化した際にイベントが発行
 
 
-        [SerializeField] private DisplayPlayerStatusManager _displayPlayerStatusManager;
+        //[SerializeField] private DisplayPlayerStatusManager _displayPlayerStatusManager;
 
         private void Init()
         {
@@ -46,9 +50,6 @@ namespace Scenes.Ingame.Player
         // Start is called before the first frame update
         void Start()
         {
-            //必要なコンポーネントの取得
-            _displayPlayerStatusManager = GameObject.Find("DisplayPlayerStatusManager").GetComponent<DisplayPlayerStatusManager>();
-
             //初期化
             Init();
             _health.Subscribe(x => CheckHealth(x,_playerID));//体力が変化したときにゲーム内で変更を加える
@@ -149,8 +150,6 @@ namespace Scenes.Ingame.Player
         /// <param name="health">残り体力</param>
         private void CheckHealth(int health, int ID)
         {
-            //体力残量をゲーム内に表示.
-            _displayPlayerStatusManager.ChangeSliderValue(health,ID, "Health");
             Debug.Log("残り体力：" + health);
 
             
@@ -174,8 +173,6 @@ namespace Scenes.Ingame.Player
         /// <param name="san">残りのSAN値</param>
         private void CheckSanValue(int sanValue, int ID)
         {
-            //SAN値の残量をゲーム内に表示.
-            _displayPlayerStatusManager.ChangeSliderValue(sanValue, ID, "SanValue");
             Debug.Log("残りsan値：" + sanValue);
 
             if (sanValue <= 0)
