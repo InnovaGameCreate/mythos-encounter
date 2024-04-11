@@ -15,12 +15,21 @@ namespace Scenes.Ingame.Manager
 
         private Subject<Unit> _initialEvent = new Subject<Unit>();
         private Subject<Unit> _ingameEvent = new Subject<Unit>();
+        private Subject<Unit> _openEscapePointEvent = new Subject<Unit>();
         private Subject<Unit> _resultEvent = new Subject<Unit>();
         private Subject<Unit> _outgameEvent = new Subject<Unit>();
         public IObservable<Unit> OnInitial { get { return _initialEvent; } }
         public IObservable<Unit> OnIngame { get { return _ingameEvent; } }
+        public IObservable<Unit> OnOpenEscapePointEvent { get { return _openEscapePointEvent; } }
         public IObservable<Unit> OnResult { get { return _resultEvent; } }
         public IObservable<Unit> OnOutgame { get { return _outgameEvent; } }
+
+        public IngameState CurrentState { get => _currentState; }
+
+        [SerializeField]
+        private int _escapeItemCount;//脱出までに必要な脱出アイテムの数
+        private int _getEscapeItemCount;//現在取得している脱出アイテムの数
+
         void Awake()
         {
             Instance = this;
@@ -61,9 +70,21 @@ namespace Scenes.Ingame.Manager
         {
             _ingameReady.SetReady(ready);
         }
+
+        //プレイヤーが脱出した際の処理
         public void Escape()
         {
             _resultEvent.OnNext(default);
+        }
+        
+        //プレイヤーが脱出アイテムを入手した際の処理
+        public void GetEscapeItem()
+        {
+            _getEscapeItemCount++;
+            if(_getEscapeItemCount >= _escapeItemCount)
+            {
+                _openEscapePointEvent.OnNext(default);
+            }
         }
     }
 }
