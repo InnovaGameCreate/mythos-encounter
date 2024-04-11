@@ -57,11 +57,9 @@ namespace Scenes.Ingame.Manager
             _currentState = IngameState.Outgame;
         }
 
-        public void SetReady(bool stage = false, bool player = false, bool enemy = false)
+        public void SetReady(ReadyEnum ready)
         {
-            if (stage) _ingameReady.SetReady(stage: stage);
-            else if (player) _ingameReady.SetReady(player:player);
-            else if (enemy) _ingameReady.SetReady(enemy: enemy);
+            _ingameReady.SetReady(ready);
         }
         public void Escape()
         {
