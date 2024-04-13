@@ -18,11 +18,22 @@ namespace Scenes.Ingame.Manager
         /// <param name="stage">ステージの生成が完了した場合</param>
         /// <param name="player">プレイヤーの生成が完了した場合</param>
         /// <param name="enemy">敵の生成が完了した場合</param>
-        public void SetReady(bool stage = false,bool player = false,bool enemy = false)
+        public void SetReady(ReadyEnum ready)
         {
-            if (stage) StageReady = true;
-            else if (player) PlayerReady = true;
-            else if (enemy) EnemyReady = true;
+            switch (ready)
+            {
+                case ReadyEnum.StageReady:
+                    StageReady = true;
+                    break;
+                case ReadyEnum.PlayerReady:
+                    PlayerReady = true;
+                    break;
+                case ReadyEnum.EnemyReady:
+                    EnemyReady = true;
+                    break;
+                default:
+                    break;
+            }
         }
         public bool Ready()
         {
