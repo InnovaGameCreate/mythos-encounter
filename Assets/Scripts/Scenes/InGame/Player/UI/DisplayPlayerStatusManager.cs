@@ -26,6 +26,7 @@ namespace Scenes.Ingame.Player
         private void Start()
         {
             //プレイヤーの数を数える。人数をもとに配列を作成。
+            //今後はここにある処理全てを「Playerのスポーンが完了した」イベントが発行されたら行うようにする。(PlayerSpawnerから参加人数を取得できるようにする)
             _players = GameObject.FindGameObjectsWithTag("Player");
             _playerStatuses = new PlayerStatus[_players.Length];
 

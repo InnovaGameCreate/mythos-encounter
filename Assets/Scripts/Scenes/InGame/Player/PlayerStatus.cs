@@ -19,36 +19,45 @@ namespace Scenes.Ingame.Player
         [SerializeField] private int _healthBase = 100;
         [SerializeField] private int _staminaBase = 100;
         [SerializeField] private int _sanBase = 100;
-
-        public int playerID { get { return _playerID; } }
+        [SerializeField] private int _speedBase = 5;
 
         //現在のステータスの変数（今後ネットワーク化予定）
         //初期化についても今後はデータベースを参照して行うようにする。
         [SerializeField] private IntReactiveProperty _health = new IntReactiveProperty();//HP.ゼロになると死亡
         [SerializeField] private IntReactiveProperty _stamina = new IntReactiveProperty();//スタミナ
         [SerializeField] private IntReactiveProperty _san = new IntReactiveProperty();//SAN値
+        [SerializeField] private IntReactiveProperty _speed = new IntReactiveProperty();//移動速度の基準値
         [SerializeField] private BoolReactiveProperty _survive = new BoolReactiveProperty(true);//生死.trueのときは生きている
         [SerializeField] private BoolReactiveProperty _bleeding = new BoolReactiveProperty(false);//出血状態.trueのときに時間経過で体力が減少
+        [SerializeField] private ReactiveProperty<PlayerActionState> _playerActionState = new ReactiveProperty<PlayerActionState>(PlayerActionState.Idle);
 
 
         //それぞれの購読側を公開する。他のClassでSubscribeできる。
         public IObservable<int> OnPlayerHealthChange { get { return _health; } }//_health(体力)が変化した際にイベントが発行
         public IObservable<int> OnPlayerStaminaChange { get { return _stamina; } }//_stamina(スタミナ)が変化した際にイベントが発行
         public IObservable<int> OnPlayerSanValueChange { get { return _san; } }//_san(SAN値)が変化した際にイベントが発行
+        public IObservable<int> OnPlayerSpeedChange { get { return _speed; } }//_speed(移動速度の基準値)が変化した際にイベントが発行
+
         public IObservable<bool> OnPlayerSurviveChange { get { return _survive; } }//_survive(生死)が変化した際にイベントが発行
         public IObservable<bool> OnPlayerbleedingChange { get { return _bleeding; } }//_bleeding(出血状態)が変化した際にイベントが発行
+        public IObservable<PlayerActionState> OnPlayerActionStateChange { get { return _playerActionState; } }//_PlayerActionState(プレイヤーの行動状態)が変化した際にイベントが発行
 
 
-        //[SerializeField] private DisplayPlayerStatusManager _displayPlayerStatusManager;
+        //一部情報の開示
+        public int playerID { get { return _playerID; } }
+        public int stamina_max { get { return _staminaBase; } }
+        public int nowStaminaValue { get { return _stamina.Value; } }
+        public PlayerActionState nowPlayerActionState { get { return _playerActionState.Value; } }
 
         private void Init()
         {
             _health.Value = _healthBase;
             _stamina.Value = _staminaBase;
             _san.Value = _sanBase;
+            _speed.Value = _speedBase;
         }
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             //初期化
             Init();
@@ -63,12 +72,12 @@ namespace Scenes.Ingame.Player
         // Update is called once per frame
         void Update()
         {
-            //デバッグ用.
+            //デバッグ用.(必要無くなれば消す)
+
             if (Input.GetKeyDown(KeyCode.L))
             {
-                ChangeHealth(20, "damage");
-                ChangeStamina(20, "damage");
-                ChangeSanValue(20, "damage");
+                ChangeHealth(20, "Damage");
+                ChangeSanValue(20, "Damage");
                 ChangeBleedingBool(true);
             }
 
@@ -82,13 +91,13 @@ namespace Scenes.Ingame.Player
         /// 体力を変更させるための関数
         /// </summary>
         /// <param name="value">変更量</param>
-        /// <param name="mode">Heal(回復), damage(減少)の二つのみ</param>
+        /// <param name="mode">Heal(回復), Damage(減少)の二つのみ</param>
         public void ChangeHealth(int value, string mode)
         {
             if (mode == "Heal")
                 _health.Value = Mathf.Min(100, _health.Value + value); 
 
-            else if(mode == "damage")
+            else if(mode == "Damage")
                 _health.Value = Mathf.Max(0, _health.Value - value);
 
         }
@@ -97,12 +106,12 @@ namespace Scenes.Ingame.Player
         /// スタミナを変更させるための関数
         /// </summary>
         /// <param name="value">変更量</param>
-        /// <param name="mode">Heal(回復), damage(減少)の二つのみ</param>
+        /// <param name="mode">Heal(回復), Damage(減少)の二つのみ</param>
         public void ChangeStamina(int value, string mode)
         {
             if (mode == "Heal")
                 _stamina.Value = Mathf.Min(100, _stamina.Value + value);
-            else if (mode == "damage")
+            else if (mode == "Damage")
                 _stamina.Value = Mathf.Max(0, _stamina.Value - value);
         }
 
@@ -110,12 +119,12 @@ namespace Scenes.Ingame.Player
         /// SAN値を変更させるための関数
         /// </summary>
         /// <param name="value">変更量</param>
-        /// <param name="mode">Heal(回復), damage(減少)の二つのみ</param>
+        /// <param name="mode">Heal(回復), Damage(減少)の二つのみ</param>
         public void ChangeSanValue(int value, string mode)
         {
             if (mode == "Heal")
                 _san.Value = Mathf.Min(100, _san.Value + value);
-            else if (mode == "damage")
+            else if (mode == "Damage")
                 _san.Value = Mathf.Max(0, _san.Value - value);
         }
 
@@ -128,19 +137,27 @@ namespace Scenes.Ingame.Player
             _bleeding.Value = value;
         }
 
+        public void ChangePlayerActionState(PlayerActionState state)
+        {
+            _playerActionState.Value = state;
+        }
+
         /// <summary>
         /// 出血状態の処理を行う関数。
         /// </summary>
         /// <returns></returns>
         private IEnumerator Bleeding()
         {
-            while (_bleeding.Value)
+            while (true)
             {
                 yield return new WaitForSeconds(1.0f);
-                if (_bleeding.Value) 
-                    ChangeHealth(1, "damage");
+                if (_bleeding.Value)
+                { 
+                    ChangeHealth(1, "Damage");
+                    Debug.Log("出血ダメージが入りました。");
+                }                   
                 else 
-                    break;
+                    yield break;
             }
         }
 
@@ -178,8 +195,6 @@ namespace Scenes.Ingame.Player
             if (sanValue <= 0)
                 _survive.Value = false;
         }
-
-
     }
 }
 
