@@ -106,6 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _offSet: 0.2
+  _idleCycle: 2
 --- !u!1 &2481875681873542124
 GameObject:
   m_ObjectHideFlags: 0

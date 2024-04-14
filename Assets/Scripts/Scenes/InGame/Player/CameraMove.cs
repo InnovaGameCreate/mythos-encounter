@@ -14,11 +14,11 @@ namespace Scenes.Ingame.Player
     public class CameraMove : MonoBehaviour
     {
         //カメラの揺れに関する設定
-        [SerializeField] private float _offSet;//カメラを揺らす幅
+        [Tooltip("カメラを揺らす幅")][SerializeField] private float _offSet;
+        [Tooltip("待機状態での視点移動の周期")][SerializeField] private float _idleCycle;
+
         private Vector3 _cameraPositionDefault;
         private Sequence sequence;
-        //コンポーネントの取得
-        //[SerializeField] private PlayerStatus _myPlayerState; 
 
         private void Start()
         {
@@ -37,12 +37,11 @@ namespace Scenes.Ingame.Player
             //待機状態ではほんの少しだけゆっくりと視点が変わる
             if (clipTime == 0)
             {
-                var cycle = 2.0f;//視点移動の周期
-
                 sequence.Kill();
                 sequence = DOTween.Sequence();
-                sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y - _offSet / 2, 0), cycle / 2));
-                sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y, 0), cycle / 2));
+                sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y, 0), 0));
+                sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y - _offSet / 2, 0), _idleCycle / 2));
+                sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y, 0), _idleCycle / 2));
                 sequence.Play().SetLoops(-1, LoopType.Yoyo);
 
                 return;
@@ -52,6 +51,7 @@ namespace Scenes.Ingame.Player
             //今回設定する挙動を作成
             sequence.Kill();
             sequence = DOTween.Sequence();
+            sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y, 0), 0));
             sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y - _offSet, 0), clipTime / 2));
             sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y, 0), clipTime / 2));
             sequence.Play().SetLoops(-1, LoopType.Yoyo);     
