@@ -56,7 +56,8 @@ namespace Scenes.Ingame.Player
             //待機状態に切り替え
             //何も入力していない or WSキーの同時押しのように互いに打ち消して動かないときに切り替える
             this.UpdateAsObservable()
-                .Where(_ =>!(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)))
+                .Where(_ =>!(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) ||
+                           _lastPlayerAction != PlayerActionState.Idle && _moveVelocity == Vector3.zero)
                 .Subscribe(_ => 
                 {
                     _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
@@ -140,13 +141,6 @@ namespace Scenes.Ingame.Player
                 _moveVelocity += transform.right;
             }
             _moveVelocity = _moveVelocity.normalized;
-
-            //WSキーの同時押しのように互いに打ち消して動かないとき
-            if (_lastPlayerAction != PlayerActionState.Idle && _moveVelocity == Vector3.zero)
-            {
-                _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
-                _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Idle);
-            }
 
             //状態に応じて移動速度や足音が変化
             switch (_myPlayerStatus.nowPlayerActionState)
