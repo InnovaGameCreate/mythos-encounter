@@ -54,6 +54,7 @@ namespace Scenes.Ingame.Player
                 }).AddTo(this);
 
             //待機状態に切り替え
+            //何も入力していない or WSキーの同時押しのように互いに打ち消して動かないときに切り替える
             this.UpdateAsObservable()
                 .Where(_ =>!(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)))
                 .Subscribe(_ => 
@@ -63,8 +64,12 @@ namespace Scenes.Ingame.Player
                 });
 
             //キー入力の状況による歩行状態への切り替え
+            //①ダッシュキーを押していない,スニークキーを押していない,移動方向ベクトルが0でない,WASDどれかは押している。これらを満たしたとき
+            //②走っている状態でWキーを離したとき
             this.UpdateAsObservable()
-                .Where(_ => !Input.GetKey(dash) && !Input.GetKey(sneak) && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)))  
+                .Where(_ => (!Input.GetKey(dash) && !Input.GetKey(sneak) && _moveVelocity != Vector3.zero &&
+                            (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) ) ||
+                             (_myPlayerStatus.nowPlayerActionState == PlayerActionState.Dash && !Input.GetKey(KeyCode.W)) )  
                 .Subscribe(_ => 
                 {
                     _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
@@ -83,7 +88,7 @@ namespace Scenes.Ingame.Player
 
             //Shift+移動キーを押したときダッシュ状態に切り替え
             this.UpdateAsObservable()
-                .Where(_ => ((Input.GetKeyDown(dash) && Input.GetKey(KeyCode.W)) || (Input.GetKey(dash) && Input.GetKeyDown(KeyCode.W))) && !_isTiredPenalty)
+                .Where(_ => ((Input.GetKeyDown(dash) && Input.GetKey(KeyCode.W)) || (Input.GetKey(dash) && Input.GetKeyDown(KeyCode.W))) && !_isTiredPenalty && _moveVelocity != Vector3.zero)
                 .Subscribe(_ => 
                 {
                     _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Dash);
@@ -92,7 +97,8 @@ namespace Scenes.Ingame.Player
             //Ctrl+移動キーを押したとき忍び歩き状態に切り替え
             this.UpdateAsObservable()
                 .Where(_ => (Input.GetKeyDown(sneak) && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))) ||
-                            (Input.GetKey(sneak) && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D))))
+                            (Input.GetKey(sneak) && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D)))
+                            && _moveVelocity != Vector3.zero)
                 .Subscribe(_ =>
                 {
                     _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
@@ -134,6 +140,13 @@ namespace Scenes.Ingame.Player
                 _moveVelocity += transform.right;
             }
             _moveVelocity = _moveVelocity.normalized;
+
+            //WSキーの同時押しのように互いに打ち消して動かないとき
+            if (_lastPlayerAction != PlayerActionState.Idle && _moveVelocity == Vector3.zero)
+            {
+                _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
+                _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Idle);
+            }
 
             //状態に応じて移動速度や足音が変化
             switch (_myPlayerStatus.nowPlayerActionState)

@@ -33,28 +33,28 @@ namespace Scenes.Ingame.Player
         /// <param name="clipTime"></param>
         public void ChangeViewPoint(float clipTime)
         {
+            //待機状態・移動状態共通の処理を記述
+            sequence.Kill();
+           
+            //最初にカメラをDefaultの位置に戻す処理を追加
+            sequence = DOTween.Sequence();
+            sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y, 0), 0));
+
             //動かない状態の時は引数に0を入れている
             //待機状態ではほんの少しだけゆっくりと視点が変わる
             if (clipTime == 0)
             {
-                sequence.Kill();
-                sequence = DOTween.Sequence();
-                sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y, 0), 0));
                 sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y - _offSet / 2, 0), _idleCycle / 2));
                 sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y, 0), _idleCycle / 2));
                 sequence.Play().SetLoops(-1, LoopType.Yoyo);
-
-                return;
             }
-            
-
-            //今回設定する挙動を作成
-            sequence.Kill();
-            sequence = DOTween.Sequence();
-            sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y, 0), 0));
-            sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y - _offSet, 0), clipTime / 2));
-            sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y, 0), clipTime / 2));
-            sequence.Play().SetLoops(-1, LoopType.Yoyo);     
+            else
+            {
+                //今回設定する挙動を作成
+                sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y - _offSet, 0), clipTime / 2));
+                sequence.Append(this.transform.DOLocalMove(new Vector3(0, _cameraPositionDefault.y, 0), clipTime / 2));
+                sequence.Play().SetLoops(-1, LoopType.Yoyo);
+            }    
         }
     }
 }
