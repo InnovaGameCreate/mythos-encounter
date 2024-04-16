@@ -11910,6 +11910,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _stageSize: {x: 18, y: 18}
   tilePrefab: {fileID: 100000, guid: b2f96746c6005c64888263f64272a556, type: 3}
+  wallXPrefab: {fileID: 3064727835192536343, guid: 2c90745c501d67041bd6d681a16e1bed, type: 3}
+  wallYPrefab: {fileID: 109861664846363845, guid: 0b95451a057615e4286f959970ebdec7, type: 3}
   playerSpawnRoomPrefab: {fileID: 8786186942910803785, guid: e7a10f653a1e6b94ea558c8580d6cf5e, type: 3}
   _2x2RoomPrefab: {fileID: 8786186942910803785, guid: e110b3243bdec2949924f94319fbb51e, type: 3}
   _3x2RoomPrefab: {fileID: 1933500435361441042, guid: 141812f10441dee4f8f9fdc4f9fd6c87, type: 3}

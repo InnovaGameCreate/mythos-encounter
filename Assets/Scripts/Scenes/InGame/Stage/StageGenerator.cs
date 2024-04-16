@@ -18,6 +18,10 @@ namespace Scenes.Ingame.Stage
         [SerializeField]
         private GameObject tilePrefab;
         [SerializeField]
+        private GameObject wallXPrefab;
+        [SerializeField]
+        private GameObject wallYPrefab;
+        [SerializeField]
         private GameObject playerSpawnRoomPrefab;
         [SerializeField]
         private GameObject _2x2RoomPrefab;
@@ -63,6 +67,8 @@ namespace Scenes.Ingame.Stage
         private void GenerateStage()
         {
             Vector3 instantiatePosition = Vector3.zero;
+            Vector3 tileXoffset = new Vector3(tileSize, 0, 0);
+            Vector3 tileZoffset = new Vector3(0, 0, tileSize);
             bool[] roomFlag = new bool[roomId + 1];
             for (int i = 0; i <= roomId; i++)
             {
@@ -77,6 +83,22 @@ namespace Scenes.Ingame.Stage
                     instantiatePosition.x = x * tileSize;
                     instantiatePosition.z = y * tileSize;
                     Instantiate(tilePrefab, instantiatePosition, Quaternion.identity, transform);
+                    if(x == 0)
+                    {
+                        Instantiate(wallXPrefab, instantiatePosition, Quaternion.identity, transform);
+                    }
+                    else if(x == _stageSize.x )
+                    {
+                       Instantiate(wallXPrefab, instantiatePosition + tileXoffset, Quaternion.identity, transform);
+                    }
+                    if(y == 0)
+                    {
+                       Instantiate(wallYPrefab, instantiatePosition, Quaternion.identity *new Quaternion(0, 90, 0, 0), transform);
+                    }
+                    else if (y == _stageSize.y )
+                    {
+                        Instantiate(wallYPrefab, instantiatePosition + tileZoffset, Quaternion.identity * new Quaternion(0, 90, 0, 0), transform);
+                    }
                     int roomId = _stageGenerateData[x, y].RoomId;
                     if (roomFlag[roomId])
                     {
