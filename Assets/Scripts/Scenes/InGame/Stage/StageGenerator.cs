@@ -5,6 +5,13 @@ using System.Linq;
 
 namespace Scenes.Ingame.Stage
 {
+    /// <summary>
+    /// 動作説明
+    /// １._stageSizeに設定されたサイズのステージデータを生成（配列の_stageGenerateDataで管理）
+    /// ２.RandomFullSpaceRoomPlot関数を使い大きい部屋から順に_stageGenerateDat内に部屋のデータを生成。この時生成する部屋は4x4,3x3,2x2の大きさ
+    /// ３.RommShaping関数を使い、孤立して空いている隙間を埋めるように部屋を拡張。
+    /// ４.GenerateAisle関数を使い、通路の作成。現在は縦横１つずつ作成している
+    /// </summary>
     public class StageGenerator : MonoBehaviour
     {
         [SerializeField, Tooltip("intでステージの縦横のサイズ")]
@@ -14,6 +21,7 @@ namespace Scenes.Ingame.Stage
         private int roomId = 0;
         const float tileSize = 5.8f;
         private bool playerSpawnRoom = false;
+        private bool viewDebugLog = false;
         [Header("Prefabs")]
         [SerializeField]
         private GameObject tilePrefab;
@@ -40,17 +48,18 @@ namespace Scenes.Ingame.Stage
         void Start()
         {
             _stageGenerateData = new RoomData[(int)_stageSize.x, (int)_stageSize.y];
-            Debug.Log($"StageSize => x = {_stageGenerateData.GetLength(0)},y = {_stageGenerateData.GetLength(1)}, total = {_stageGenerateData.Length}");
+            if (viewDebugLog) Debug.Log($"StageSize => x = {_stageGenerateData.GetLength(0)},y = {_stageGenerateData.GetLength(1)}, total = {_stageGenerateData.Length}");
             InitialSet();
-            //DebugStageData();
-            TEST();
-            GenerateStage();
+            Generate();
         }
-        private void TEST()
+        private void Generate()
         {
             RandomFullSpaceRoomPlot(20, 12, 8);
+            if (viewDebugLog) DebugStageData();
+            RommShaping();
             GenerateAisle();
-            DebugStageData();
+            if (viewDebugLog) DebugStageData();
+            GenerateStage();
         }
         private void InitialSet()
         {
@@ -75,7 +84,7 @@ namespace Scenes.Ingame.Stage
                 roomFlag[i] = true;
             }
             //tileの生成
-            
+
             for (int y = 0; y < _stageSize.y + 1; y++)
             {
                 for (int x = 0; x < _stageSize.x + 1; x++)
@@ -83,19 +92,19 @@ namespace Scenes.Ingame.Stage
                     instantiatePosition.x = x * tileSize;
                     instantiatePosition.z = y * tileSize;
                     Instantiate(tilePrefab, instantiatePosition, Quaternion.identity, transform);
-                    if(x == 0)
+                    if (x == 0)
                     {
                         Instantiate(wallXPrefab, instantiatePosition, Quaternion.identity, transform);
                     }
-                    else if(x == _stageSize.x )
+                    else if (x == _stageSize.x)
                     {
-                       Instantiate(wallXPrefab, instantiatePosition + tileXoffset, Quaternion.identity, transform);
+                        Instantiate(wallXPrefab, instantiatePosition + tileXoffset, Quaternion.identity, transform);
                     }
-                    if(y == 0)
+                    if (y == 0)
                     {
-                       Instantiate(wallYPrefab, instantiatePosition, Quaternion.identity *new Quaternion(0, 90, 0, 0), transform);
+                        Instantiate(wallYPrefab, instantiatePosition, Quaternion.identity * new Quaternion(0, 90, 0, 0), transform);
                     }
-                    else if (y == _stageSize.y )
+                    else if (y == _stageSize.y)
                     {
                         Instantiate(wallYPrefab, instantiatePosition + tileZoffset, Quaternion.identity * new Quaternion(0, 90, 0, 0), transform);
                     }
@@ -154,13 +163,16 @@ namespace Scenes.Ingame.Stage
             }
             Debug.Log(printData);
         }
+        /// <summary>
+        /// マップに大きい順にランダムに部屋を割り当てる
+        /// </summary>
+        /// <param name="smallRoom">2x2のサイズの部屋を生成する数</param>
+        /// <param name="mediumRoom">3x3のサイズの部屋を生成する数</param>
+        /// <param name="largeRoom">4z4のサイズの部屋を生成する数</param>
         private void RandomFullSpaceRoomPlot(int smallRoom = 0, int mediumRoom = 0, int largeRoom = 0)
         {
             candidatePosition = candidatePositionSet(3, 3);
             Vector2 roomPosition = Vector2.zero;
-            Vector2 smallRoomSize = new Vector2(2, 2);
-            Vector2 mediumRoomSize = new Vector2(3, 3);
-            Vector2 largeRoomSize = new Vector2(4, 4);
             while (true)
             {
                 int roomPositionIndex = Random.Range(0, candidatePosition.Count);
@@ -216,8 +228,6 @@ namespace Scenes.Ingame.Stage
                     break;
                 }
             }
-            DebugStageData();
-            RommShaping();
         }
 
         /// <summary>
@@ -289,8 +299,10 @@ namespace Scenes.Ingame.Stage
                 }
             }
             return candidatePositions;
-            //if (candidatePosition.Count > 0) Debug.Log($"candidatePosition.Count = {candidatePosition.Count} : offset value is {offsetValue}: farst value is {candidatePosition[0]}");
         }
+        /// <summary>
+        /// 孤立した部屋を検索するための関数
+        /// </summary>
         private List<Vector2> candidateAislePosition(int offsetX = 0, int offsetY = 0)
         {
             List<Vector2> candidatePositions = new List<Vector2>();
@@ -309,11 +321,11 @@ namespace Scenes.Ingame.Stage
                             {
                                 if (_stageGenerateData[x - 1, y].RoomId == 0) continue;
                             }
-                            if(y >= 1)
+                            if (y >= 1)
                             {
                                 if (_stageGenerateData[x, y - 1].RoomId == 0) continue;
                             }
-                            if(y < _stageSize.y - 1)
+                            if (y < _stageSize.y - 1)
                             {
                                 if (_stageGenerateData[x, y + 1].RoomId == 0) continue;
                             }
@@ -325,7 +337,7 @@ namespace Scenes.Ingame.Stage
                             {
                                 if (_stageGenerateData[x, y - 1].RoomId == 0) continue;
                             }
-                            if(x < _stageSize.x - 1)
+                            if (x < _stageSize.x - 1)
                             {
                                 if (_stageGenerateData[x + 1, y].RoomId == 0) continue;
                             }
@@ -380,8 +392,6 @@ namespace Scenes.Ingame.Stage
                 }
                 yValue++;
             }
-
-            Debug.Log($"GenerateAisle x = {xAisleNumber},y = {yAisleNumber}");
             _stageGenerateData = newStageGenerateData;
         }
         /// <summary>
@@ -409,6 +419,9 @@ namespace Scenes.Ingame.Stage
             }
             return value;
         }
+        /// <summary>
+        /// 孤立した部屋を埋めるように部屋を拡張する関数
+        /// </summary>
         private void RommShaping()
         {
             var _only1x4Aisle = candidateAislePosition(offsetY: 3);
@@ -421,7 +434,7 @@ namespace Scenes.Ingame.Stage
             _only2x1Aisle = _only2x1Aisle.Except(_only3x1Aisle).ToList();
             _only1x3Aisle = _only1x3Aisle.Except(_only1x4Aisle).ToList();
             _only3x1Aisle = _only3x1Aisle.Except(_only4x1Aisle).ToList();
-            Debug.Log($"Aisle count  1x3 only = {_only1x3Aisle.Count},3x1 = {_only3x1Aisle.Count}, 1x2 only = {_only1x2Aisle.Count},2x1 = {_only2x1Aisle.Count},");
+            if (viewDebugLog) Debug.Log($"Aisle count  1x3 only = {_only1x3Aisle.Count},3x1 = {_only3x1Aisle.Count}, 1x2 only = {_only1x2Aisle.Count},2x1 = {_only2x1Aisle.Count},");
             foreach (var item in _only1x3Aisle)
             {
                 if (item.x > 2)//ブロックの左にroom3x3がある場合
@@ -469,7 +482,7 @@ namespace Scenes.Ingame.Stage
                 {
                     if (_stageGenerateData[(int)item.x, (int)item.y + 1].RoomType == RoomType.room3x3)
                     {
-                        int roomId = _stageGenerateData[(int)item.x, (int)item.y+1].RoomId;
+                        int roomId = _stageGenerateData[(int)item.x, (int)item.y + 1].RoomId;
                         if (_stageGenerateData[(int)item.x + 1, (int)item.y + 1].RoomId == roomId ||
                            _stageGenerateData[(int)item.x + 2, (int)item.y + 1].RoomId == roomId)
                         {
