@@ -12,8 +12,13 @@ namespace Scenes.Ingame.Player
         [SerializeField] CharacterController _characterController;
         [SerializeField] private PlayerStatus _myPlayerStatus;
         [SerializeField] private PlayerSoundManager _myPlayerSoundManager;
-        [SerializeField] private CameraMove _myCameraMove;
         Vector3 _moveVelocity;
+
+        [Header("カメラ関係")]
+        [SerializeField] private CameraMove _myCameraMove;
+        [SerializeField] private GameObject _camera;
+        [SerializeField] private bool isCurcleSetting;
+        private Vector3 _nowCameraAngle;
 
         [SerializeField] private float moveSpeed;
         [Tooltip("スタミナの回復量(per 1sec)")][SerializeField] private int _recoverStamina;
@@ -24,7 +29,10 @@ namespace Scenes.Ingame.Player
 
         void Start()
         {
-            //Cursor.visible = false;
+            if (isCurcleSetting)
+                CursorSetting();
+
+            _nowCameraAngle = _camera.transform.localEulerAngles;
 
             //キーバインドの設定
             KeyCode dash = KeyCode.LeftShift;
@@ -109,6 +117,15 @@ namespace Scenes.Ingame.Player
 
         }
 
+        /// <summary>
+        /// カーソルの設定をしてくれる
+        /// </summary>
+        private void CursorSetting()
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
         void Update()
         {
             float moveMouseX = Input.GetAxis("Mouse X");
@@ -118,6 +135,14 @@ namespace Scenes.Ingame.Player
                 transform.RotateAround(transform.position, Vector3.up, moveMouseX);
             }
 
+            //カメラをX軸方向に回転させる。視点が上下に動かせるように（範囲に制限あり）
+            float moveMouseY = Input.GetAxis("Mouse Y");
+            if (Mathf.Abs(moveMouseY) > 0.001f)
+            {
+                _nowCameraAngle.x -= moveMouseY;
+                _nowCameraAngle.x = Mathf.Clamp(_nowCameraAngle.x, -40, 35);
+                _camera.gameObject.transform.localEulerAngles = _nowCameraAngle;
+            }
             Move();
         }
 
@@ -142,7 +167,7 @@ namespace Scenes.Ingame.Player
             }
             _moveVelocity = _moveVelocity.normalized;
 
-            //状態に応じて移動速度や足音が変化
+            //状態に応じて移動速度が変化
             switch (_myPlayerStatus.nowPlayerActionState)
             {
                 case PlayerActionState.Walk:

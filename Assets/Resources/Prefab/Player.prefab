@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2217506152449124184}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.62, z: 0.12}
+  m_LocalPosition: {x: 0, y: 2.62, z: 0.141}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -122,6 +122,7 @@ GameObject:
   - component: {fileID: 8389478554569858200}
   - component: {fileID: 123063826094000374}
   - component: {fileID: 7111757753802298086}
+  - component: {fileID: 6449360652433016383}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -307,6 +308,8 @@ MonoBehaviour:
   _myPlayerStatus: {fileID: 123063826094000374}
   _myPlayerSoundManager: {fileID: 7111757753802298086}
   _myCameraMove: {fileID: 2943275014606559026}
+  _camera: {fileID: 2217506152449124184}
+  isCurcleSetting: 0
   moveSpeed: 0
   _recoverStamina: 20
   _expandStamina: 20
@@ -360,6 +363,21 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 92aa88c7813d51e48be80e2c82bc4c34, type: 3}
   _itemClips: []
   _effectClips: []
+--- !u!114 &6449360652433016383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2481875681873542124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 659596c111a85e34ca7388ace1b4528a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _mainCamera: {fileID: 1285542953524166243}
+  _getItemRange: 2
+  scrollSense: 10
 --- !u!1001 &7818803104135845221
 PrefabInstance:
   m_ObjectHideFlags: 0
