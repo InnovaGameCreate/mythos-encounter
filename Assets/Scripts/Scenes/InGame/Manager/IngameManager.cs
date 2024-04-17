@@ -38,10 +38,12 @@ namespace Scenes.Ingame.Manager
             OnIngame.Subscribe(_ => InGameState()).AddTo(this);
             OnResult.Subscribe(_ => ResultState()).AddTo(this);
             OnOutgame.Subscribe(_ => OutGameState()).AddTo(this);
+        }
+        private void Start()
+        {
             _ingameEvent.OnNext(default);
         }
-
-        private async UniTaskVoid InitialState()
+        private async Cysharp.Threading.Tasks.UniTaskVoid InitialState()
         {
             Debug.Log("Current State is Initial!");
             _currentState = IngameState.Initial;
