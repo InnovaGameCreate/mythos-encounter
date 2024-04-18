@@ -3,18 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HealOrbEffect : ItemEffect
+namespace Scenes.Ingame.Player
 {
-    PlayerStatus _myPlayerStatus;
-    private void Start()
+    public class HealOrbEffect : ItemEffect
     {
-        base.SetUp();
-        _myPlayerStatus = GameObject.FindWithTag("Player").GetComponent<PlayerStatus>();
-    }
+        PlayerStatus _myPlayerStatus;
+        private void Start()
+        {
+            base.SetUp();
+            _myPlayerStatus = GameObject.FindWithTag("Player").GetComponent<PlayerStatus>();
+        }
 
-    public override void Effect()
-    {
-        _myPlayerStatus.ChangeHealth(100, "Heal");
-    }
+        public override void Effect()
+        {
+            _myPlayerStatus.ChangeHealth(100, "Heal");
+        }
 
+    }
 }
+
