@@ -17,6 +17,7 @@ namespace Scenes.Ingame.Player
     {
         //model
         [SerializeField] private PlayerStatus[] _playerStatuses;
+        [SerializeField] private PlayerItem _playerItem;//マルチの時はスクリプト内でinputAuthority持ってるplayerのを代入させる
         //View
         [SerializeField] private DisplayPlayerStatusManager _displayPlayerStatusManager;
 
@@ -27,9 +28,16 @@ namespace Scenes.Ingame.Player
         [SerializeField] private TMP_Text[] _sanValueText;//各プレイヤーのSAN値残量表示テキスト
 
         [Header("ゲーム内UI(オフライン)")]
+        [Header("スタミナ関係")]//スタミナゲージ系
         [SerializeField] private Image _staminaGaugeBackGround;//個人のスタミナゲージ
         [SerializeField] private RectTransform _staminaGaugeFrontRect;//個人のスタミナゲージ
         [SerializeField] private Image _staminaGaugeFrontImage;//個人のスタミナゲージ
+
+        [Header("アイテム関係")]//アイテム系
+        [SerializeField] private Image[] _itemSlots;//アイテムスロット(7個)
+        [SerializeField] private Image[] _itemImages;//アイテムの画像(7個)
+        [SerializeField] private GameObject _itemPop;//アイテムポップ
+        [SerializeField] private TMP_Text _itemPop_Text;//アイテムポップ
 
         private int _myPlayerID = 0;
 
@@ -40,6 +48,8 @@ namespace Scenes.Ingame.Player
         void Awake()
         {
             _defaulStaminaGaugetWidth = _staminaGaugeFrontRect.sizeDelta.x;
+
+            //プレイヤーの作成が終わり、配列のソートが終了したら叩かれる
             _displayPlayerStatusManager.OnCompleteSort
                 .FirstOrDefault()
                 .Subscribe(_ => 
@@ -82,9 +92,56 @@ namespace Scenes.Ingame.Player
                                 _staminaGaugeBackGround.DOFade(endValue: 1f, duration: 0f);
                                 _staminaGaugeFrontImage.DOFade(endValue: 1f, duration: 0f);
                              }
-                                 
-
+                                
                          }).AddTo(this);
+
+                    //アイテム関係の処理の追加
+                    //PlayerItemスクリプトの取得.マルチ実装のときはinputAuthorityを持つキャラクターのみに指定
+                    _playerItem = GameObject.FindWithTag("Player").GetComponent<PlayerItem>();
+
+                    //現在選択されているスロットを強調表示
+                    _playerItem.OnNowIndexChange
+                        .Subscribe(x =>
+                        {
+                            //全部のスロットの色を元の灰色に戻す
+                            for(int i = 0; i< _itemSlots.Length; i++)
+                                _itemSlots[i].color = new Color(84,84,84);
+
+                            //選択されているスロットだけ赤色に変化
+                            _itemSlots[x].color = Color.red;
+                        }).AddTo(this);
+
+                    //目線の先にアイテムがあるとアイテムポップを表示させる
+                    _playerItem.OnItemPopActive
+                        .Subscribe(x =>
+                        {
+                            if (x != null)
+                            {
+                                _itemPop_Text.text = x;
+                                _itemPop.SetActive(true);
+                            }
+                            else
+                            {
+                                _itemPop_Text.text = null;
+                                _itemPop.SetActive(false);
+                            }
+
+                        });
+
+                    //アイテム取得・破棄時にアイテムスロットの画像を変更させる。
+                    _playerItem.OnItemSlotReplace
+                        .Subscribe(replaceEvent =>
+                        {
+                            if (_playerItem.ItemSlots[replaceEvent.Index].myItemData != null)
+                            {
+                                _itemImages[replaceEvent.Index].sprite = _playerItem.ItemSlots[replaceEvent.Index].myItemData.itemSprite;
+                            }
+                            else
+                            {
+                                _itemImages[replaceEvent.Index].sprite = null;
+                            }
+                        }).AddTo(this);
+
                 }).AddTo(this);
         }
 
@@ -119,5 +176,9 @@ namespace Scenes.Ingame.Player
             float fillAmount = (float)value / _playerStatuses[_myPlayerID].stamina_max;
             _staminaGaugeFrontRect.sizeDelta = new Vector2(_defaulStaminaGaugetWidth * fillAmount, _staminaGaugeFrontRect.sizeDelta.y);
         }
+
+
+        //～～アイテム関連の処理を記述する場所～～
+
     }
 }
