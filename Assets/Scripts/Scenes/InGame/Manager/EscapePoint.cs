@@ -18,9 +18,9 @@ namespace Scenes.Ingame.Manager
             token = new CancellationTokenSource();
             manager = IngameManager.Instance;
             manager.OnInitial.Subscribe(_ => _isActive = false).AddTo(this);
-            manager.OnIngame.Subscribe(_ => _isActive = true).AddTo(this);
             manager.OnOpenEscapePointEvent.Subscribe(_ =>
             {
+                _isActive = true;
                 GetComponent<Renderer>().material = _activeMaterial;
                 GetItem(token.Token).Forget();
             }).AddTo(this);
