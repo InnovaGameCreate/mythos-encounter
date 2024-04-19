@@ -171,61 +171,37 @@ namespace Scenes.Ingame.Stage
         /// <param name="largeRoom">4z4ÇÃÉTÉCÉYÇÃïîâÆÇê∂ê¨Ç∑ÇÈêî</param>
         private void RandomFullSpaceRoomPlot(int smallRoom = 0, int mediumRoom = 0, int largeRoom = 0)
         {
-            candidatePosition = candidatePositionSet(3, 3);
+            int roomSize = 3;//ïîâÆÇÃëÂÇ´Ç≥
             Vector2 roomPosition = Vector2.zero;
-            while (true)
+            while (roomSize > 0)
             {
+
+                candidatePosition = candidatePositionSet(roomSize, roomSize);
                 int roomPositionIndex = Random.Range(0, candidatePosition.Count);
+                if (candidatePosition.Count <= 0)
+                {
+                    roomSize--;
+                    continue;
+                }
                 roomPosition = candidatePosition[roomPositionIndex];
-                if (largeRoom > 0)
+                if (largeRoom > 0 && roomSize == 3)
                 {
                     RoomPlotId(RoomType.room4x4, roomPosition);
                     largeRoom--;
-                    if (largeRoom > 0)
-                    {
-                        candidatePosition = candidatePositionSet(3, 3);
-                        if (candidatePosition.Count <= 0)
-                        {
-                            largeRoom = 0;
-                            candidatePosition = candidatePositionSet(2, 2);
-                        }
-                    }
-                    else
-                    {
-                        candidatePosition = candidatePositionSet(2, 2);
-                    }
                 }
-                else if (mediumRoom > 0)
+                else if (mediumRoom > 0 && roomSize == 2)
                 {
                     RoomPlotId(RoomType.room3x3, roomPosition);
                     mediumRoom--;
-                    if (mediumRoom > 0)
-                    {
-                        candidatePosition = candidatePositionSet(2, 2);
-                        if (candidatePosition.Count <= 0)
-                        {
-                            mediumRoom = 0;
-                            candidatePosition = candidatePositionSet(1, 1);
-                        }
-                    }
-                    else
-                    {
-                        candidatePosition = candidatePositionSet(1, 1);
-                    }
                 }
-                else if (smallRoom > 0)
+                else if (smallRoom > 0 && roomSize == 1)
                 {
                     RoomPlotId(RoomType.room2x2, roomPosition);
                     smallRoom--;
-                    candidatePosition = candidatePositionSet(1, 1);
-                    if (candidatePosition.Count <= 0)
-                    {
-                        break;
-                    }
                 }
                 else
                 {
-                    break;
+                    roomSize--;
                 }
             }
         }
