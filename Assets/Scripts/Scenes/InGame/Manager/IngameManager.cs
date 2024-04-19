@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using System;
 using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace Scenes.Ingame.Manager
 {
@@ -38,10 +39,13 @@ namespace Scenes.Ingame.Manager
             OnIngame.Subscribe(_ => InGameState()).AddTo(this);
             OnResult.Subscribe(_ => ResultState()).AddTo(this);
             OnOutgame.Subscribe(_ => OutGameState()).AddTo(this);
+        }
+        private async void Start()
+        {
+            await Task.Delay(500);
             _ingameEvent.OnNext(default);
         }
-
-        private async UniTaskVoid InitialState()
+        private async Cysharp.Threading.Tasks.UniTaskVoid InitialState()
         {
             Debug.Log("Current State is Initial!");
             _currentState = IngameState.Initial;
@@ -74,12 +78,14 @@ namespace Scenes.Ingame.Manager
         //プレイヤーが脱出した際の処理
         public void Escape()
         {
+            Debug.Log("脱出しました");
             _resultEvent.OnNext(default);
         }
         
         //プレイヤーが脱出アイテムを入手した際の処理
         public void GetEscapeItem()
         {
+            Debug.Log("脱出アイテムを獲得しました");
             _getEscapeItemCount++;
             if(_getEscapeItemCount >= _escapeItemCount)
             {
