@@ -46,6 +46,7 @@ namespace Scenes.Ingame.Player
 
             //プレイヤーの行動状態が変化したら
             _myPlayerStatus.OnPlayerActionStateChange
+                .Skip(1)//初回（スポーン直後）は行わない
                 .Where(state => state == PlayerActionState.Idle || state == PlayerActionState.Walk || state == PlayerActionState.Dash || state == PlayerActionState.Sneak)
                 .Subscribe(state =>
                 {
