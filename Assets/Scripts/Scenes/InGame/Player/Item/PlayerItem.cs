@@ -44,13 +44,6 @@ namespace Scenes.Ingame.Player
         public IObservable<CollectionReplaceEvent<ItemSlotStruct>> OnItemSlotReplace => _itemSlot.ObserveReplace();//外部に_itemSlotの要素が変更されたときに行う処理を登録できるようにする
 
 
-
-        private void Update()
-        {
-            Debug.Log(_itemSlot[_nowIndex.Value].myItemData);
-            Debug.Log(_isCanUseItem);
-        }
-
         // Start is called before the first frame update
         void Start()
         {
