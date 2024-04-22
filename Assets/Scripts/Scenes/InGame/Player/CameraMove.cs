@@ -24,6 +24,7 @@ namespace Scenes.Ingame.Player
         {
             //‹ü‚Ì‰Šú‚ÌêŠ‚ğ‹L˜^
             _cameraPositionDefault = this.transform.position;
+            ChangeViewPoint(0);
         }
 
         /// <summary>
