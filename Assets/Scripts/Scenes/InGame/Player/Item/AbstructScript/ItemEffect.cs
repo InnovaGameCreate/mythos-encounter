@@ -3,7 +3,7 @@ namespace Scenes.Ingame.Player
 {
     /// <summary>
     /// アイテムの効果・データを管理する為の抽象クラス
-    /// 継承するクラスの名前は「アイテム名 + Effect」とすること
+    /// 子クラスの名前は「アイテム名 + Effect」とすること
     /// Startメソッドで必ずSetUp関数を呼ぶこと. 呼び方:「base.SetUp();」
     /// </summary>
     public abstract class ItemEffect : MonoBehaviour

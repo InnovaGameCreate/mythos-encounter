@@ -16,6 +16,8 @@ namespace Scenes.Ingame.Player
     /// </summary>
     public class PlayerItem : MonoBehaviour
     {
+        private PlayerStatus _myPlayerStatus;
+
         //アイテム関係
         private ReactiveProperty<int> _nowIndex = new ReactiveProperty<int>();//選択中のアイテムスロット番号
         
@@ -34,16 +36,19 @@ namespace Scenes.Ingame.Player
         private ReactiveCollection<ItemSlotStruct> _itemSlot = new ReactiveCollection<ItemSlotStruct>();//現在所持しているアイテムのリスト
 
         public List<ItemSlotStruct> ItemSlots { get { return _itemSlot.ToList(); } }//外部に_itemSlotの内容を公開する
+        public int nowIndex { get => _nowIndex.Value; }
 
 
         public IObservable<int> OnNowIndexChange { get { return _nowIndex; } }//外部で_nowIndexの値が変更されたときに行う処理を登録できるようにする
         public IObservable<String> OnItemPopActive { get { return _itemPopActive; } }
         public IObservable<CollectionReplaceEvent<ItemSlotStruct>> OnItemSlotReplace => _itemSlot.ObserveReplace();//外部に_itemSlotの要素が変更されたときに行う処理を登録できるようにする
 
+
         // Start is called before the first frame update
         void Start()
         {
             int layerMask = LayerMask.GetMask("Item");//ItemというレイヤーにあるGameObjectにしかrayが当たらないようにする
+            _myPlayerStatus = GetComponent<PlayerStatus>();
 
             //今後はingame前のアイテムの所持状況を代入させる。α版は初期化
             ItemSlotStruct init = new ItemSlotStruct();            
@@ -61,16 +66,12 @@ namespace Scenes.Ingame.Player
                         if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, _getItemRange, layerMask))//設定した距離にあるアイテムを認知
                         {
                             _itemPopActive.OnNext(hit.collider.name);//アイテムポップが出現
-                            //アイテムスロットが空でかつ利用可能であるときに右クリックを押すと
-                            if (_itemSlot[_nowIndex.Value].myItemData == null && _itemSlot[_nowIndex.Value].myItemSlotStatus == ItemSlotStatus.available && Input.GetMouseButtonDown(1))
+                            //TryGetComponentを行う。
+                            if (hit.collider.gameObject.TryGetComponent(out IInteractable intract))
                             {
-                                ItemSlotStruct item = new ItemSlotStruct();
-                                item.ChangeInfo(hit.collider.gameObject.GetComponent<ItemEffect>().GetItemData(), ItemSlotStatus.available);
-                                ChangeListValue(_nowIndex.Value, item);//アイテムスロットにアイテムを格納
-
-                                Destroy(hit.collider.gameObject);//ステージ上にあるアイテムを破壊
-                                StartCoroutine(CanUseItem());//アイテム取得後0.1秒はアイテムを使えないようにする。
+                                intract.Intract(_myPlayerStatus);
                             }
+
                         }
                         else
                         {
@@ -78,11 +79,13 @@ namespace Scenes.Ingame.Player
                         }
                     });
 
-            //右クリックしたときにアイテムを使用            
+            //左クリックしたときにアイテムを使用
             this.UpdateAsObservable()
-                    .Where(_ => _itemSlot[_nowIndex.Value].myItemData != null && Input.GetMouseButtonDown(1) && _isCanUseItem)
+                    .Where(_ => _itemSlot[_nowIndex.Value].myItemData != null && Input.GetMouseButtonDown(0) && _isCanUseItem)
                     .Subscribe(_ =>
                     {
+                        Debug.Log("アイテム使う");
+
                         //アイテムを使用
                         _itemSlot[_nowIndex.Value].myItemData.thisItemEffect.Effect();
 
@@ -121,7 +124,7 @@ namespace Scenes.Ingame.Player
                         }
                         //数字キーのみの入力時
                         if (Input.GetAxis("Mouse ScrollWheel") == 0)
-                        { 
+                        {
                             _nowIndex.Value = ItemNumberKeyDown() - 49;
                             scrollValue = _nowIndex.Value;
                         }                           
@@ -147,11 +150,11 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// アイテムスロットのリストを変更。今のところ別スクリプトで使わないのでprivateにしておく
+        /// アイテムスロットのリストを変更。
         /// </summary>
         /// <param name="index">変更したいリストの順番</param>
         /// <param name="value">代入する構造体</param>
-        private void ChangeListValue(int index, ItemSlotStruct value)
+        public void ChangeListValue(int index, ItemSlotStruct value)
         {
             _itemSlot[index] = value;
         }
@@ -164,14 +167,13 @@ namespace Scenes.Ingame.Player
         {
             ItemSlotStruct temp = new ItemSlotStruct();
             _itemSlot[index] = temp;
-            Debug.Log("アイテム捨てた");
         }
 
         /// <summary>
         /// アイテム拾得後すぐにアイテムを使えないようにするためのコルーチン
         /// </summary>
         /// <returns></returns>
-        private IEnumerator CanUseItem()
+        public IEnumerator CanUseItem()
         {
             _isCanUseItem = false;
             yield return new WaitForSeconds(0.1f);

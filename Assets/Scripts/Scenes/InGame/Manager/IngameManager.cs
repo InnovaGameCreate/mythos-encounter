@@ -43,6 +43,7 @@ namespace Scenes.Ingame.Manager
         private async void Start()
         {
             await Task.Delay(500);
+            _initialEvent.OnNext(default);
             _ingameEvent.OnNext(default);
         }
         private async Cysharp.Threading.Tasks.UniTaskVoid InitialState()
