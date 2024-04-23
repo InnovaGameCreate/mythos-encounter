@@ -21,7 +21,16 @@ namespace Scenes.Ingame.Stage
         private int roomId = 0;
         const float tileSize = 5.8f;
         private bool playerSpawnRoom = false;
-        private bool viewDebugLog = false;
+        private bool viewDebugLog = false;//確認用のデバックログを表示する
+        [Header("Parent")]
+        [SerializeField]
+        private GameObject floorOnject;
+        [SerializeField]
+        private GameObject outSideWallOnject;
+        [SerializeField]
+        private GameObject inSideWallOnject;
+        [SerializeField]
+        private GameObject roomOnject;
         [Header("Prefabs")]
         [SerializeField]
         private GameObject tilePrefab;
@@ -29,6 +38,10 @@ namespace Scenes.Ingame.Stage
         private GameObject wallXPrefab;
         [SerializeField]
         private GameObject wallYPrefab;
+        [SerializeField]
+        private GameObject wallXDoorPrefab;
+        [SerializeField]
+        private GameObject wallYDoorPrefab;
         [SerializeField]
         private GameObject playerSpawnRoomPrefab;
         [SerializeField]
@@ -55,11 +68,13 @@ namespace Scenes.Ingame.Stage
         private void Generate()
         {
             RandomFullSpaceRoomPlot(20, 12, 8);
-            if (viewDebugLog) DebugStageData();
+            if (viewDebugLog) DebugStageData(_stageGenerateData);
             RommShaping();
             GenerateAisle();
-            if (viewDebugLog) DebugStageData();
+            if (viewDebugLog) Debug.Log("通路生成処理後のデータ");
+            if (viewDebugLog) DebugStageData(_stageGenerateData);
             GenerateStage();
+            GenerateWall();
         }
         private void InitialSet()
         {
@@ -91,22 +106,22 @@ namespace Scenes.Ingame.Stage
                 {
                     instantiatePosition.x = x * tileSize;
                     instantiatePosition.z = y * tileSize;
-                    Instantiate(tilePrefab, instantiatePosition, Quaternion.identity, transform);
+                    Instantiate(tilePrefab, instantiatePosition, Quaternion.identity, floorOnject.transform);
                     if (x == 0)
                     {
-                        Instantiate(wallXPrefab, instantiatePosition, Quaternion.identity, transform);
+                        Instantiate(wallXPrefab, instantiatePosition, Quaternion.identity, outSideWallOnject.transform);
                     }
                     else if (x == _stageSize.x)
                     {
-                        Instantiate(wallXPrefab, instantiatePosition + tileXoffset, Quaternion.identity, transform);
+                        Instantiate(wallXPrefab, instantiatePosition + tileXoffset, Quaternion.identity, outSideWallOnject.transform);
                     }
                     if (y == 0)
                     {
-                        Instantiate(wallYPrefab, instantiatePosition, Quaternion.identity * new Quaternion(0, 90, 0, 0), transform);
+                        Instantiate(wallYPrefab, instantiatePosition, Quaternion.identity * new Quaternion(0, 90, 0, 0), outSideWallOnject.transform);
                     }
                     else if (y == _stageSize.y)
                     {
-                        Instantiate(wallYPrefab, instantiatePosition + tileZoffset, Quaternion.identity * new Quaternion(0, 90, 0, 0), transform);
+                        Instantiate(wallYPrefab, instantiatePosition + tileZoffset, Quaternion.identity * new Quaternion(0, 90, 0, 0), outSideWallOnject.transform);
                     }
                     int roomId = _stageGenerateData[x, y].RoomId;
                     if (roomFlag[roomId])
@@ -117,31 +132,31 @@ namespace Scenes.Ingame.Stage
                             case RoomType.room2x2:
                                 if (!playerSpawnRoom)
                                 {
-                                    Instantiate(playerSpawnRoomPrefab, instantiatePosition, Quaternion.identity, transform);
+                                    Instantiate(playerSpawnRoomPrefab, instantiatePosition, Quaternion.identity, roomOnject.transform);
                                     playerSpawnRoom = true;
                                 }
                                 else
                                 {
-                                    Instantiate(_2x2RoomPrefab, instantiatePosition, Quaternion.identity, transform);
+                                    Instantiate(_2x2RoomPrefab, instantiatePosition, Quaternion.identity, roomOnject.transform);
                                 }
                                 break;
                             case RoomType.room3x2:
-                                Instantiate(_3x2RoomPrefab, instantiatePosition, Quaternion.identity, transform);
+                                Instantiate(_3x2RoomPrefab, instantiatePosition, Quaternion.identity, roomOnject.transform);
                                 break;
                             case RoomType.room2x3:
-                                Instantiate(_2x3RoomPrefab, instantiatePosition, Quaternion.identity, transform);
+                                Instantiate(_2x3RoomPrefab, instantiatePosition, Quaternion.identity, roomOnject.transform);
                                 break;
                             case RoomType.room3x3:
-                                Instantiate(_3x3RoomPrefab, instantiatePosition, Quaternion.identity, transform);
+                                Instantiate(_3x3RoomPrefab, instantiatePosition, Quaternion.identity, roomOnject.transform);
                                 break;
                             case RoomType.room4x3:
-                                Instantiate(_4x3RoomPrefab, instantiatePosition, Quaternion.identity, transform);
+                                Instantiate(_4x3RoomPrefab, instantiatePosition, Quaternion.identity, roomOnject.transform);
                                 break;
                             case RoomType.room3x4:
-                                Instantiate(_3x4RoomPrefab, instantiatePosition, Quaternion.identity, transform);
+                                Instantiate(_3x4RoomPrefab, instantiatePosition, Quaternion.identity, roomOnject.transform);
                                 break;
                             case RoomType.room4x4:
-                                Instantiate(largeRoomPrefab, instantiatePosition, Quaternion.identity, transform);
+                                Instantiate(largeRoomPrefab, instantiatePosition, Quaternion.identity, roomOnject.transform);
                                 break;
                             default:
                                 break;
@@ -149,19 +164,6 @@ namespace Scenes.Ingame.Stage
                     }
                 }
             }
-        }
-        private void DebugStageData()
-        {
-            string printData = "\n";
-            for (int y = 0; y < _stageGenerateData.GetLength(1); y++)
-            {
-                for (int x = 0; x < _stageGenerateData.GetLength(0); x++)
-                {
-                    printData += $"[{_stageGenerateData[x, y].RoomId}]";
-                }
-                printData += "\n";
-            }
-            Debug.Log(printData);
         }
         /// <summary>
         /// マップに大きい順にランダムに部屋を割り当てる
@@ -331,15 +333,63 @@ namespace Scenes.Ingame.Stage
             return candidatePositions;
         }
         /// <summary>
-        /// 通路の作成
+        /// 次の場所は壁のタイルを検索するための関数
+        /// </summary>
+        private List<Vector2> candidateNextWallPosition(int offsetX = 0, int offsetY = 0)
+        {
+            if(offsetX != 0 &&  offsetY != 0) { Debug.LogError("無効な引数です。どちらかを0にしてください"); }
+            List<Vector2> candidatePositions = new List<Vector2>();
+            Vector2 setPosition = Vector2.zero;
+            int xLength = _stageGenerateData.GetLength(0);
+            int yLength = _stageGenerateData.GetLength(1);
+            for (int y = 0; y < yLength - offsetY; y++)
+            {
+                for (int x = 0; x < xLength - offsetX; x++)
+                {
+                    if (_stageGenerateData[x, y].RoomId == 0)
+                    {
+                        if (offsetX != 0)
+                        {
+                            if(x < xLength - 1 && offsetX > 0)
+                            {
+                                if (_stageGenerateData[x + offsetX, y].RoomId == 0) continue;
+                            }
+                            else if (x + offsetX >= 0 && offsetX < 0)
+                            {
+                                if (_stageGenerateData[x + offsetX, y].RoomId == 0) continue;
+                            }
+                        }
+                        else if (offsetY != 0)
+                        {
+                            if(y < yLength - 1 && offsetY > 0)
+                            {
+                                if (_stageGenerateData[x, y + offsetY].RoomId == 0) continue;
+                            }
+                            else if (y - offsetY >= 0 && offsetY < 0)
+                            {
+                                if (_stageGenerateData[x, y + offsetY].RoomId == 0) continue;
+                            }
+                        }
+                        setPosition.x = x + offsetX;
+                        setPosition.y = y;
+                        candidatePositions.Add(setPosition);
+                    }
+                }
+            }
+            return candidatePositions;
+        }
+        /// <summary>
+        /// x軸とy軸に１つずつ通路の作成
         /// </summary>
         private void GenerateAisle()
         {
-            int xAisleNumber = GenerateXAisle((int)_stageSize.x - 4, 4);
-            int yAisleNumber = GenerateYAisle((int)_stageSize.y - 4, 4);
-            int xValue = 0;
-            int yValue = 0;
+            const int OFFSET = 2;//通路を作らない範囲
+            int xAisleNumber = GenerateXAisle((int)_stageSize.x - OFFSET, OFFSET);
+            int yAisleNumber = GenerateYAisle((int)_stageSize.y - OFFSET, OFFSET);
+            bool xSlide = false;
+            bool ySlide = false;
 
+            if (viewDebugLog) Debug.Log($"IslePosition => x = {xAisleNumber},y = {yAisleNumber}");
             RoomData initialData = new RoomData();
             initialData.RoomDataSet(RoomType.none, 0);
             var newStageGenerateData = new RoomData[_stageGenerateData.GetLength(0) + 1, _stageGenerateData.GetLength(1) + 1];
@@ -350,25 +400,58 @@ namespace Scenes.Ingame.Stage
                     newStageGenerateData[i, j] = initialData;
                 }
             }
+            //X軸を通路分ずらす処理
             for (int y = 0; y < _stageGenerateData.GetLength(1); y++)
             {
-                if (y == yAisleNumber)
-                {
-                    yValue++;
-                }
-                xValue = 0;
+                xSlide = false;
                 for (int x = 0; x < _stageGenerateData.GetLength(0); x++)
                 {
-                    if (x == xAisleNumber)
+                    if(xSlide == false)
                     {
-                        xValue++;
+                        if (x >= xAisleNumber && _stageGenerateData[x, y].RoomId != _stageGenerateData[x - 1, y].RoomId)
+                        {
+                            xSlide = true;
+                        }
                     }
-                    newStageGenerateData[xValue, yValue] = _stageGenerateData[x, y];
-                    xValue++;
+                    if(xSlide)
+                    {
+                        newStageGenerateData[x + 1, y] = _stageGenerateData[x, y];
+                    }
+                    else
+                    {
+                        newStageGenerateData[x, y] = _stageGenerateData[x, y];
+                    }
                 }
-                yValue++;
             }
-            _stageGenerateData = newStageGenerateData;
+            //y軸を通路分ずらす処理
+            var tempXPlotData = new RoomData[newStageGenerateData.GetLength(0), newStageGenerateData.GetLength(1)];
+            for (int i = 0; i < (int)_stageSize.y + 1; i++)
+            {
+                for (int j = 0; j < (int)_stageSize.x + 1; j++)
+                {
+                    tempXPlotData[i, j] = initialData;
+                }
+            }
+            for (int x = 0; x < newStageGenerateData.GetLength(0); x++)
+            {
+                ySlide = false;
+                for (int y = 0; y < newStageGenerateData.GetLength(1) - 1; y++)
+                {
+                    if (y >= yAisleNumber && newStageGenerateData[x, y].RoomId != newStageGenerateData[x, y - 1].RoomId)
+                    {
+                        ySlide = true;
+                    }
+                    if (ySlide)
+                    {
+                        tempXPlotData[x, y + 1] = newStageGenerateData[x, y];
+                    }
+                    else
+                    {
+                        tempXPlotData[x, y] = newStageGenerateData[x, y];
+                    }
+                }
+            }
+            _stageGenerateData = tempXPlotData;
         }
         /// <summary>
         ///　ランダムでX軸の通録を作る場所を検索
@@ -572,6 +655,41 @@ namespace Scenes.Ingame.Stage
                 }
             }
         }
+        /// <summary>
+        /// 壁を設置するスクリプト
+        /// </summary>
+        private void GenerateWall()
+        {
+            Vector3 instantiatePosition = Vector3.zero;
+            var _xWallPos = candidateNextWallPosition(offsetX: 1);
+            var _yWallPos = candidateNextWallPosition(offsetY: 1);
+            foreach (var xWall in _xWallPos)
+            {
+                instantiatePosition.x = xWall.x * tileSize;
+                instantiatePosition.z = xWall.y * tileSize;
+                if((xWall.x + xWall.y) % 4 == 0)
+                {
+                    Instantiate(wallXDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallOnject.transform);
+                }
+                else
+                {
+                    Instantiate(wallXPrefab, instantiatePosition, Quaternion.identity, inSideWallOnject.transform);
+                }
+            }
+            foreach (var yWall in _yWallPos)
+            {
+                instantiatePosition.x = yWall.x * tileSize;
+                instantiatePosition.z = yWall.y * tileSize;
+                if ((yWall.x + yWall.y) % 4 == 0)
+                {
+                    Instantiate(wallYDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallOnject.transform);
+                }
+                else
+                {
+                    Instantiate(wallYPrefab, instantiatePosition, Quaternion.identity, inSideWallOnject.transform);
+                }
+            }
+        }
 
         Vector2 translation = Vector2.zero;
         private Vector2 ToVector2(float x, float y)
@@ -579,6 +697,20 @@ namespace Scenes.Ingame.Stage
             translation.x = x;
             translation.y = y;
             return translation;
+        }
+        private void DebugStageData(RoomData[,] target)
+        {
+            string printData = "\n";
+            for (int y = 0; y < target.GetLength(1); y++)
+            {
+                for (int x = 0; x < target.GetLength(0); x++)
+                {
+                    if( target[x, y].RoomId < 10) printData += $"[ {target[x, y].RoomId}]";
+                    else printData += $"[{target[x, y].RoomId}]";
+                }
+                printData += "\n";
+            }
+            Debug.Log(printData);
         }
     }
 }
