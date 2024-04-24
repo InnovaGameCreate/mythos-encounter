@@ -283,6 +283,7 @@ namespace Scenes.Ingame.Stage
         /// </summary>
         private List<Vector2> candidateAislePosition(int offsetX = 0, int offsetY = 0)
         {
+            if(offsetX == 0 && offsetY == 0) Debug.LogError("offset‚Ì’l‚ª—¼•û‚Æ‚à0‚Å‚·");
             List<Vector2> candidatePositions = new List<Vector2>();
             Vector2 setPosition = Vector2.zero;
             for (int y = 0; y < _stageSize.y - offsetY; y++)
@@ -293,16 +294,16 @@ namespace Scenes.Ingame.Stage
                         _stageGenerateData[x, y + offsetY].RoomId == 0 &&
                         _stageGenerateData[x + offsetX, y].RoomId == 0)
                     {
+                        if (x >= 1)
+                        {
+                            if (_stageGenerateData[x - 1, y].RoomId == 0) continue;
+                        }
+                        if (y >= 1)
+                        {
+                            if (_stageGenerateData[x, y - 1].RoomId == 0) continue;
+                        }
                         if (offsetX != 0)
                         {
-                            if (x >= 1)
-                            {
-                                if (_stageGenerateData[x - 1, y].RoomId == 0) continue;
-                            }
-                            if (y >= 1)
-                            {
-                                if (_stageGenerateData[x, y - 1].RoomId == 0) continue;
-                            }
                             if (y < _stageSize.y - 1)
                             {
                                 if (_stageGenerateData[x, y + 1].RoomId == 0) continue;
@@ -311,17 +312,9 @@ namespace Scenes.Ingame.Stage
                         }
                         if (offsetY != 0)
                         {
-                            if (y >= 1 && offsetY != 0)
-                            {
-                                if (_stageGenerateData[x, y - 1].RoomId == 0) continue;
-                            }
                             if (x < _stageSize.x - 1)
                             {
                                 if (_stageGenerateData[x + 1, y].RoomId == 0) continue;
-                            }
-                            if (x >= 1)
-                            {
-                                if (_stageGenerateData[x - 1, y].RoomId == 0) continue;
                             }
                         }
                         setPosition.x = x;
@@ -354,7 +347,7 @@ namespace Scenes.Ingame.Stage
                             {
                                 if (_stageGenerateData[x + offsetX, y].RoomId == 0) continue;
                             }
-                            else if (x + offsetX >= 0 && offsetX < 0)
+                            else if (x + offsetX >= 0)
                             {
                                 if (_stageGenerateData[x + offsetX, y].RoomId == 0) continue;
                             }
@@ -365,7 +358,7 @@ namespace Scenes.Ingame.Stage
                             {
                                 if (_stageGenerateData[x, y + offsetY].RoomId == 0) continue;
                             }
-                            else if (y - offsetY >= 0 && offsetY < 0)
+                            else if (y - offsetY >= 0)
                             {
                                 if (_stageGenerateData[x, y + offsetY].RoomId == 0) continue;
                             }
