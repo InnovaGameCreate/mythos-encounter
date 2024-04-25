@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Cysharp.Threading.Tasks;
+using System.Threading;
+using Unity.VisualScripting.Antlr3.Runtime;
 
 namespace Scenes.Ingame.Stage
 {
@@ -22,6 +25,7 @@ namespace Scenes.Ingame.Stage
         const float tileSize = 5.8f;
         private bool playerSpawnRoom = false;
         private bool viewDebugLog = false;//確認用のデバックログを表示する
+        private CancellationTokenSource source = new CancellationTokenSource();
         [Header("Parent")]
         [SerializeField]
         private GameObject floorOnject;
@@ -60,21 +64,22 @@ namespace Scenes.Ingame.Stage
         private GameObject largeRoomPrefab;
         void Start()
         {
+            CancellationToken token = source.Token;
             _stageGenerateData = new RoomData[(int)_stageSize.x, (int)_stageSize.y];
             if (viewDebugLog) Debug.Log($"StageSize => x = {_stageGenerateData.GetLength(0)},y = {_stageGenerateData.GetLength(1)}, total = {_stageGenerateData.Length}");
             InitialSet();
-            Generate();
+            Generate(token).Forget();
         }
-        private void Generate()
+        private async UniTaskVoid Generate(CancellationToken token)
         {
-            RandomFullSpaceRoomPlot(20, 12, 8);
+            await RandomFullSpaceRoomPlot(token, 20, 12, 8);
             if (viewDebugLog) DebugStageData(_stageGenerateData);
-            RommShaping();
-            GenerateAisle();
+            await RommShaping(token);
+            await GenerateAisle(token);
             if (viewDebugLog) Debug.Log("通路生成処理後のデータ");
             if (viewDebugLog) DebugStageData(_stageGenerateData);
-            GenerateStage();
-            GenerateWall();
+            await GenerateStage(token);
+            await GenerateWall(token);
         }
         private void InitialSet()
         {
@@ -88,7 +93,7 @@ namespace Scenes.Ingame.Stage
                 }
             }
         }
-        private void GenerateStage()
+        private async UniTask GenerateStage(CancellationToken token)
         {
             Vector3 instantiatePosition = Vector3.zero;
             Vector3 tileXoffset = new Vector3(tileSize, 0, 0);
@@ -171,7 +176,7 @@ namespace Scenes.Ingame.Stage
         /// <param name="smallRoom">2x2のサイズの部屋を生成する数</param>
         /// <param name="mediumRoom">3x3のサイズの部屋を生成する数</param>
         /// <param name="largeRoom">4z4のサイズの部屋を生成する数</param>
-        private void RandomFullSpaceRoomPlot(int smallRoom = 0, int mediumRoom = 0, int largeRoom = 0)
+        private async UniTask RandomFullSpaceRoomPlot(CancellationToken token, int smallRoom = 0, int mediumRoom = 0, int largeRoom = 0)
         {
             int roomSize = 3;//部屋の大きさ
             Vector2 roomPosition = Vector2.zero;
@@ -283,7 +288,7 @@ namespace Scenes.Ingame.Stage
         /// </summary>
         private List<Vector2> candidateAislePosition(int offsetX = 0, int offsetY = 0)
         {
-            if(offsetX == 0 && offsetY == 0) Debug.LogError("offsetの値が両方とも0です");
+            if (offsetX == 0 && offsetY == 0) Debug.LogError("offsetの値が両方とも0です");
             List<Vector2> candidatePositions = new List<Vector2>();
             Vector2 setPosition = Vector2.zero;
             for (int y = 0; y < _stageSize.y - offsetY; y++)
@@ -330,7 +335,7 @@ namespace Scenes.Ingame.Stage
         /// </summary>
         private List<Vector2> candidateNextWallPosition(int offsetX = 0, int offsetY = 0)
         {
-            if(offsetX != 0 &&  offsetY != 0) { Debug.LogError("無効な引数です。どちらかを0にしてください"); }
+            if (offsetX != 0 && offsetY != 0) { Debug.LogError("無効な引数です。どちらかを0にしてください"); }
             List<Vector2> candidatePositions = new List<Vector2>();
             Vector2 setPosition = Vector2.zero;
             int xLength = _stageGenerateData.GetLength(0);
@@ -343,7 +348,7 @@ namespace Scenes.Ingame.Stage
                     {
                         if (offsetX != 0)
                         {
-                            if(x < xLength - 1 && offsetX > 0)
+                            if (x < xLength - 1 && offsetX > 0)
                             {
                                 if (_stageGenerateData[x + offsetX, y].RoomId == 0) continue;
                             }
@@ -354,7 +359,7 @@ namespace Scenes.Ingame.Stage
                         }
                         else if (offsetY != 0)
                         {
-                            if(y < yLength - 1 && offsetY > 0)
+                            if (y < yLength - 1 && offsetY > 0)
                             {
                                 if (_stageGenerateData[x, y + offsetY].RoomId == 0) continue;
                             }
@@ -374,7 +379,7 @@ namespace Scenes.Ingame.Stage
         /// <summary>
         /// x軸とy軸に１つずつ通路の作成
         /// </summary>
-        private void GenerateAisle()
+        private async UniTask GenerateAisle(CancellationToken token)
         {
             const int OFFSET = 2;//通路を作らない範囲
             int xAisleNumber = GenerateXAisle((int)_stageSize.x - OFFSET, OFFSET);
@@ -399,14 +404,14 @@ namespace Scenes.Ingame.Stage
                 xSlide = false;
                 for (int x = 0; x < _stageGenerateData.GetLength(0); x++)
                 {
-                    if(xSlide == false)
+                    if (xSlide == false)
                     {
                         if (x >= xAisleNumber && _stageGenerateData[x, y].RoomId != _stageGenerateData[x - 1, y].RoomId)
                         {
                             xSlide = true;
                         }
                     }
-                    if(xSlide)
+                    if (xSlide)
                     {
                         newStageGenerateData[x + 1, y] = _stageGenerateData[x, y];
                     }
@@ -474,7 +479,7 @@ namespace Scenes.Ingame.Stage
         /// <summary>
         /// 孤立した部屋を埋めるように部屋を拡張する関数
         /// </summary>
-        private void RommShaping()
+        private async UniTask RommShaping(CancellationToken token)
         {
             var _only1x4Aisle = candidateAislePosition(offsetY: 3);
             var _only4x1Aisle = candidateAislePosition(offsetX: 3);
@@ -651,7 +656,7 @@ namespace Scenes.Ingame.Stage
         /// <summary>
         /// 壁を設置するスクリプト
         /// </summary>
-        private void GenerateWall()
+        private async UniTask GenerateWall(CancellationToken token)
         {
             Vector3 instantiatePosition = Vector3.zero;
             var _xWallPos = candidateNextWallPosition(offsetX: 1);
@@ -660,7 +665,7 @@ namespace Scenes.Ingame.Stage
             {
                 instantiatePosition.x = xWall.x * tileSize;
                 instantiatePosition.z = xWall.y * tileSize;
-                if((xWall.x + xWall.y) % 4 == 0)
+                if ((xWall.x + xWall.y) % 4 == 0)
                 {
                     Instantiate(wallXDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallOnject.transform);
                 }
@@ -698,12 +703,18 @@ namespace Scenes.Ingame.Stage
             {
                 for (int x = 0; x < target.GetLength(0); x++)
                 {
-                    if( target[x, y].RoomId < 10) printData += $"[ {target[x, y].RoomId}]";
+                    if (target[x, y].RoomId < 10) printData += $"[ {target[x, y].RoomId}]";
                     else printData += $"[{target[x, y].RoomId}]";
                 }
                 printData += "\n";
             }
             Debug.Log(printData);
         }
+        private void OnDestroy()
+        {
+            source.Cancel();
+            source.Dispose();
+        }
     }
+
 }
