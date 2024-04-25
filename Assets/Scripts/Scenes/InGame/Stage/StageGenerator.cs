@@ -1,10 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using System.Threading;
-using Unity.VisualScripting.Antlr3.Runtime;
+using Scenes.Ingame.Manager;
 
 namespace Scenes.Ingame.Stage
 {
@@ -80,6 +79,7 @@ namespace Scenes.Ingame.Stage
             if (viewDebugLog) DebugStageData(_stageGenerateData);
             await GenerateStage(token);
             await GenerateWall(token);
+            IngameManager.Instance.SetReady(ReadyEnum.StageReady);//ステージ生成完了を通知
         }
         private void InitialSet()
         {
