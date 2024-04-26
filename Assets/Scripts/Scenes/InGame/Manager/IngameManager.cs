@@ -5,6 +5,7 @@ using UniRx;
 using System;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
+using Scenes.Ingame.InGameSystem;
 
 namespace Scenes.Ingame.Manager
 {

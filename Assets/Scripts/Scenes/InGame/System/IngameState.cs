@@ -1,4 +1,4 @@
-namespace Scenes.Ingame.Manager
+namespace Scenes.Ingame.InGameSystem
 {
     /// <summary>
     /// Ingame‚Å‚Ìó‘Ô
