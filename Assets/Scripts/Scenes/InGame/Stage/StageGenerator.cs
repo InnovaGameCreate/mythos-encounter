@@ -270,13 +270,12 @@ namespace Scenes.Ingame.Stage
             {
                 for (int x = 0; x < _stageSize.x - offsetX; x++)
                 {
-                    if (_stageGenerateData[x, y].RoomId == 0 &&
-                        _stageGenerateData[x, y + offsetY].RoomId == 0 &&
-                        _stageGenerateData[x + offsetX, y].RoomId == 0 &&
-                        _stageGenerateData[x + offsetX, y + offsetY].RoomId == 0)
+                    if (RoomIdEqual(ToVector2(x, y), Vector2.zero, 0) &&
+                        RoomIdEqual(ToVector2(x, y), ToVector2(0, offsetY), 0) &&
+                        RoomIdEqual(ToVector2(x, y), ToVector2(offsetX, 0), 0) &&
+                        RoomIdEqual(ToVector2(x, y), ToVector2(offsetX, offsetY), 0))
                     {
-                        setPosition.x = x;
-                        setPosition.y = y;
+                        setPosition = ToVector2(x, y);
                         candidatePositions.Add(setPosition);
                     }
                 }
@@ -295,23 +294,23 @@ namespace Scenes.Ingame.Stage
             {
                 for (int x = 0; x < _stageSize.x - offsetX; x++)
                 {
-                    if (_stageGenerateData[x, y].RoomId == 0 &&
-                        _stageGenerateData[x, y + offsetY].RoomId == 0 &&
-                        _stageGenerateData[x + offsetX, y].RoomId == 0)
+                    if (RoomIdEqual(ToVector2(x, y), Vector2.zero, 0) &&
+                        RoomIdEqual(ToVector2(x, y), ToVector2(0, offsetY), 0) &&
+                        RoomIdEqual(ToVector2(x, y), ToVector2(offsetX, 0), 0))
                     {
                         if (x >= 1)
                         {
-                            if (_stageGenerateData[x - 1, y].RoomId == 0) continue;
+                            if (RoomIdEqual(ToVector2(x, y), ToVector2(-1, 0), 0)) continue;
                         }
                         if (y >= 1)
                         {
-                            if (_stageGenerateData[x, y - 1].RoomId == 0) continue;
+                            if (RoomIdEqual(ToVector2(x, y), ToVector2(0, -1), 0)) continue;
                         }
                         if (offsetX != 0)
                         {
                             if (y < _stageSize.y - 1)
                             {
-                                if (_stageGenerateData[x, y + 1].RoomId == 0) continue;
+                                if (RoomIdEqual(ToVector2(x, y), ToVector2(0, 1), 0)) continue;
                             }
 
                         }
@@ -319,11 +318,10 @@ namespace Scenes.Ingame.Stage
                         {
                             if (x < _stageSize.x - 1)
                             {
-                                if (_stageGenerateData[x + 1, y].RoomId == 0) continue;
+                                if (RoomIdEqual(ToVector2(x, y), ToVector2(1, 0), 0)) continue;
                             }
                         }
-                        setPosition.x = x;
-                        setPosition.y = y;
+                        setPosition = ToVector2(x, y);
                         candidatePositions.Add(setPosition);
                     }
                 }
@@ -368,8 +366,7 @@ namespace Scenes.Ingame.Stage
                                 if (_stageGenerateData[x, y + offsetY].RoomId == 0) continue;
                             }
                         }
-                        setPosition.x = x + offsetX;
-                        setPosition.y = y;
+                        setPosition = ToVector2(x + offsetX, y);
                         candidatePositions.Add(setPosition);
                     }
                 }
@@ -499,8 +496,8 @@ namespace Scenes.Ingame.Stage
                     if (_stageGenerateData[(int)item.x - 1, (int)item.y].RoomType == RoomType.room3x3)
                     {
                         int roomId = _stageGenerateData[(int)item.x - 1, (int)item.y].RoomId;
-                        if (_stageGenerateData[(int)item.x - 1, (int)item.y + 1].RoomId == roomId &&
-                           _stageGenerateData[(int)item.x - 1, (int)item.y + 2].RoomId == roomId)
+                        if (RoomIdEqual(item, ToVector2(-1, 1), roomId) &&
+                           RoomIdEqual(item, ToVector2(-1, 2), roomId))
                         {
                             for (int y = 0; y < 3; y++)
                             {
@@ -518,8 +515,8 @@ namespace Scenes.Ingame.Stage
                     if (_stageGenerateData[(int)item.x + 1, (int)item.y].RoomType == RoomType.room3x3)
                     {
                         int roomId = _stageGenerateData[(int)item.x + 1, (int)item.y].RoomId;
-                        if (_stageGenerateData[(int)item.x + 1, (int)item.y + 1].RoomId == roomId ||
-                           _stageGenerateData[(int)item.x + 1, (int)item.y + 2].RoomId == roomId)
+                        if (RoomIdEqual(item, ToVector2(1, 1), roomId) &&
+                           RoomIdEqual(item, ToVector2(1, 2), roomId))
                         {
                             for (int y = 0; y < 3; y++)
                             {
@@ -540,8 +537,8 @@ namespace Scenes.Ingame.Stage
                     if (_stageGenerateData[(int)item.x, (int)item.y + 1].RoomType == RoomType.room3x3)
                     {
                         int roomId = _stageGenerateData[(int)item.x, (int)item.y + 1].RoomId;
-                        if (_stageGenerateData[(int)item.x + 1, (int)item.y + 1].RoomId == roomId ||
-                           _stageGenerateData[(int)item.x + 2, (int)item.y + 1].RoomId == roomId)
+                        if (RoomIdEqual(item, ToVector2(1, 1), roomId) &&
+                           RoomIdEqual(item, ToVector2(2, 1), roomId))
                         {
                             for (int y = 0; y < 4; y++)
                             {
@@ -559,8 +556,8 @@ namespace Scenes.Ingame.Stage
                     if (_stageGenerateData[(int)item.x, (int)item.y - 1].RoomType == RoomType.room3x3)
                     {
                         int roomId = _stageGenerateData[(int)item.x, (int)item.y - 1].RoomId;
-                        if (_stageGenerateData[(int)item.x + 1, (int)item.y - 1].RoomId == roomId &&
-                           _stageGenerateData[(int)item.x + 2, (int)item.y - 1].RoomId == roomId)
+                        if (RoomIdEqual(item, ToVector2(1, -1), roomId) &&
+                           RoomIdEqual(item, ToVector2(2, -1), roomId))
                         {
                             for (int y = 0; y < 4; y++)
                             {
@@ -581,7 +578,7 @@ namespace Scenes.Ingame.Stage
                     if (_stageGenerateData[(int)item.x - 1, (int)item.y].RoomType == RoomType.room2x2)
                     {
                         int roomId = _stageGenerateData[(int)item.x - 1, (int)item.y].RoomId;
-                        if (_stageGenerateData[(int)item.x - 1, (int)item.y + 1].RoomId == roomId)
+                        if (RoomIdEqual(item, ToVector2(-1, 1), roomId))
                         {
                             for (int y = 0; y < 2; y++)
                             {
@@ -599,7 +596,7 @@ namespace Scenes.Ingame.Stage
                     if (_stageGenerateData[(int)item.x + 1, (int)item.y].RoomType == RoomType.room2x2)
                     {
                         int roomId = _stageGenerateData[(int)item.x + 1, (int)item.y].RoomId;
-                        if (_stageGenerateData[(int)item.x + 1, (int)item.y + 1].RoomId == roomId)
+                        if (RoomIdEqual(item, ToVector2(1, 1), roomId))
                         {
                             for (int y = 0; y < 2; y++)
                             {
@@ -620,7 +617,7 @@ namespace Scenes.Ingame.Stage
                     if (_stageGenerateData[(int)item.x, (int)item.y + 1].RoomType == RoomType.room2x2)
                     {
                         int roomId = _stageGenerateData[(int)item.x, (int)item.y + 1].RoomId;
-                        if (_stageGenerateData[(int)item.x + 1, (int)item.y + 1].RoomId == roomId)
+                        if (RoomIdEqual(item, ToVector2(1, 1), roomId))
                         {
                             for (int y = 0; y < 3; y++)
                             {
@@ -638,7 +635,7 @@ namespace Scenes.Ingame.Stage
                     if (_stageGenerateData[(int)item.x, (int)item.y - 1].RoomType == RoomType.room2x2)
                     {
                         int roomId = _stageGenerateData[(int)item.x, (int)item.y - 1].RoomId;
-                        if (_stageGenerateData[(int)item.x + 1, (int)item.y - 1].RoomId == roomId)
+                        if (RoomIdEqual(item, ToVector2(1, -1), roomId))
                         {
                             for (int y = 0; y < 3; y++)
                             {
@@ -663,8 +660,7 @@ namespace Scenes.Ingame.Stage
             var _yWallPos = candidateNextWallPosition(offsetY: 1);
             foreach (var xWall in _xWallPos)
             {
-                instantiatePosition.x = xWall.x * tileSize;
-                instantiatePosition.z = xWall.y * tileSize;
+                instantiatePosition = ToVector3(xWall.x * tileSize, 0, xWall.y * tileSize);
                 if ((xWall.x + xWall.y) % 4 == 0)
                 {
                     Instantiate(wallXDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallOnject.transform);
@@ -676,8 +672,7 @@ namespace Scenes.Ingame.Stage
             }
             foreach (var yWall in _yWallPos)
             {
-                instantiatePosition.x = yWall.x * tileSize;
-                instantiatePosition.z = yWall.y * tileSize;
+                instantiatePosition = ToVector3(yWall.x * tileSize, 0, yWall.y * tileSize);
                 if ((yWall.x + yWall.y) % 4 == 0)
                 {
                     Instantiate(wallYDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallOnject.transform);
@@ -689,12 +684,28 @@ namespace Scenes.Ingame.Stage
             }
         }
 
-        Vector2 translation = Vector2.zero;
+        Vector2 translation2 = Vector2.zero;
+        Vector3 translation3 = Vector3.zero;
         private Vector2 ToVector2(float x, float y)
         {
-            translation.x = x;
-            translation.y = y;
-            return translation;
+            translation2.x = x;
+            translation2.y = y;
+            return translation2;
+        }
+        private Vector3 ToVector3(float x, float y, float z)
+        {
+            translation3.x = x;
+            translation3.y = y;
+            translation3.z = z;
+            return translation3;
+        }
+        private bool RoomIdEqual(Vector2 basePositon, Vector2 position1, int roomId)
+        {
+            if (_stageGenerateData[(int)(basePositon.x + position1.x), (int)(basePositon.y + position1.y)].RoomId == roomId)
+            {
+                return true;
+            }
+            return false;
         }
         private void DebugStageData(RoomData[,] target)
         {
@@ -716,5 +727,4 @@ namespace Scenes.Ingame.Stage
             source.Dispose();
         }
     }
-
 }
