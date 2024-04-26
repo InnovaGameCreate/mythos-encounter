@@ -39,7 +39,7 @@ namespace Scenes.Ingame.Enemy
 
             //ƒeƒXƒg‚Æ‚µ‚Ä‚±‚±‚ÅEnemy§ì‚ğˆË—Š‚µ‚Ä‚¢‚é
             //EnemySpawn(EnemyName.TestEnemy);
-            EnemySpawn(EnemyName.TestEnemy, new Vector3(10, 10, 10));            
+            EnemySpawn(EnemyName.TestEnemy, new Vector3(-10, 2, -10));            
         }
 
         /*
