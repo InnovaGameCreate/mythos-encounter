@@ -12047,6 +12047,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1927873084}
   - component: {fileID: 1927873083}
+  - component: {fileID: 1927873085}
   m_Layer: 0
   m_Name: EnemySpowner
   m_TagString: Untagged
@@ -12066,7 +12067,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3495d4e27afa60438173cb613954761, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testEnemy: {fileID: 9201936745783884321, guid: 5ef73dada9987014a9a5feb985e5f79f, type: 3}
+  _DebugMode: 0
+  _enemyVisibilityMap: {fileID: 0}
+  _x: 0
+  z: 0
+  _range: 0
+  _centerPosition: {x: -46.6, y: 0, z: 0}
+  _testEnemy: {fileID: 0}
 --- !u!4 &1927873084
 Transform:
   m_ObjectHideFlags: 0
@@ -12082,6 +12089,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1927873085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1927873082}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 507a66df44f8d984bbce3b1dc227a0e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxVisivilityRange: 50
+  debugMode: 1
+  gridRange: 0
+  centerPosition: {x: -46.6, y: 1, z: -43.7}
 --- !u!1001 &1928251681
 PrefabInstance:
   m_ObjectHideFlags: 0
