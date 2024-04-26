@@ -19,6 +19,8 @@ namespace Scenes.Ingame.Enemy
         [SerializeField]
         private float _range;
         [SerializeField]
+        private float _maxVisiviilityRange;
+        [SerializeField]
         private Vector3 _centerPosition;
 
         [Header("作成する敵のプレハブ一覧")]
@@ -30,13 +32,14 @@ namespace Scenes.Ingame.Enemy
         {
             //マップをスキャン
             _enemyVisibilityMap = new EnemyVisibilityMap();
+            _enemyVisibilityMap.debugMode = _DebugMode;
+            _enemyVisibilityMap.maxVisivilityRange = _maxVisiviilityRange;
             _enemyVisibilityMap.GridMake(_x, _z, _range, _centerPosition);
             _enemyVisibilityMap.MapScan();
 
             //テストとしてここでEnemy制作を依頼している
             //EnemySpawn(EnemyName.TestEnemy);
             EnemySpawn(EnemyName.TestEnemy, new Vector3(10, 10, 10));            
-
         }
 
         /*
@@ -72,7 +75,11 @@ namespace Scenes.Ingame.Enemy
                     return;
             }
 
-            createEnemySearch = createEnemy.GetComponent<EnemySearch>();
+            if (createEnemy.TryGetComponent<EnemySearch>(out createEnemySearch))
+            {
+                if (_DebugMode) Debug.Log("作成した敵にはサーチがあります");
+                createEnemySearch.SetVisivilityMap(_enemyVisibilityMap.DeepCopy());
+            }
         }
 
     }
