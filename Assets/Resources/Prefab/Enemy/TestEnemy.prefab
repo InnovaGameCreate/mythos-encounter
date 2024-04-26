@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _checkRate: 1
-  _debugMode: 1
+  _debugMode: 0
   _myEneyMove: {fileID: 7130656707961021328}
   _visivilityRange: 25
 --- !u!114 &4878388347575988497

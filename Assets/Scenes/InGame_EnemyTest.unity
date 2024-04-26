@@ -12902,7 +12902,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3495d4e27afa60438173cb613954761, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _DebugMode: 1
+  _DebugMode: 0
   _enemyVisibilityMap: {fileID: 0}
   _x: 9
   _z: 9

@@ -1,11 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Schema;
 using UnityEngine;
-using System;
-using UnityEngine.SocialPlatforms;
-using static UnityEditor.Progress;
+
 
 namespace Scenes.Ingame.Enemy
 {
