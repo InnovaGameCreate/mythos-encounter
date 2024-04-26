@@ -12067,13 +12067,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3495d4e27afa60438173cb613954761, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _DebugMode: 0
+  _DebugMode: 1
   _enemyVisibilityMap: {fileID: 0}
-  _x: 0
-  z: 0
-  _range: 0
-  _centerPosition: {x: -46.6, y: 0, z: 0}
-  _testEnemy: {fileID: 0}
+  _x: 9
+  _z: 9
+  _range: 5.8
+  _centerPosition: {x: -46.6, y: 0, z: -43.7}
+  _testEnemy: {fileID: 9201936745783884321, guid: 5ef73dada9987014a9a5feb985e5f79f, type: 3}
 --- !u!4 &1927873084
 Transform:
   m_ObjectHideFlags: 0
@@ -12096,7 +12096,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1927873082}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 507a66df44f8d984bbce3b1dc227a0e4, type: 3}
   m_Name: 
