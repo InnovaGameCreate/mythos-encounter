@@ -1,4 +1,4 @@
-namespace Scenes.Ingame.Manager
+namespace Scenes.Ingame.InGameSystem
 {
     public struct IngameReady
     {

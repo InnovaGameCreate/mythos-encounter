@@ -2,10 +2,14 @@ using UnityEngine;
 using UniRx;
 using Cysharp.Threading.Tasks;
 using System.Threading;
-namespace Scenes.Ingame.Manager
+using Scenes.Ingame.Manager;
+
+namespace Scenes.Ingame.InGameSystem
 {
-    public class EscapeItem : MonoBehaviour
+    public class EscapePoint : MonoBehaviour
     {
+        [SerializeField]
+        private Material _activeMaterial;
         IngameManager manager;
         private bool _isActive = false;
         private bool _get = false;
@@ -14,24 +18,23 @@ namespace Scenes.Ingame.Manager
         {
             token = new CancellationTokenSource();
             manager = IngameManager.Instance;
-            manager.OnInitial.First().Subscribe(_ => _isActive = false).AddTo(this);
-            manager.OnIngame.First().Subscribe(_ =>
-            { 
+            manager.OnInitial.Subscribe(_ => _isActive = false).AddTo(this);
+            manager.OnOpenEscapePointEvent.Subscribe(_ =>
+            {
                 _isActive = true;
+                GetComponent<Renderer>().material = _activeMaterial;
                 GetItem(token.Token).Forget();
             }).AddTo(this);
-
         }
         async UniTaskVoid GetItem(CancellationToken token)
         {
             await UniTask.WaitUntil(() => _get);
-            manager.GetEscapeItem();
+            manager.Escape();
             Destroy(gameObject, 0.5f);
         }
         private void OnTriggerEnter(Collider collision)
         {
             if (_isActive == false) return;
-            if (collision.gameObject.CompareTag("Player"))
             {
                 _get = true;
             }
