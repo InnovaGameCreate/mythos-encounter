@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Scenes.Ingame.Enemy
 {
+    /// <summary>
+    /// マップの視線の通り方とマップのどのあたりをどのくらい確認したかを記録してゆくクラス。敵キャラがマップを認識するのに使用されるクラス。
+    /// </summary>
     public class EnemyVisibilityMap : MonoBehaviour
     {
         public List<List<VisivilityArea>> visivilityAreaGrid;//Unityの座標系を優先、一個目がx軸二個目がy軸のイメージ左下が[0][0]左上が[0][max]
@@ -29,7 +32,9 @@ namespace Scenes.Ingame.Enemy
             }
         }
 
-        /// <summary>マス目が何度見られたかをbyteで記録し、このマス目から視線の通るマス目をListで記録している</summary>
+        /// <summary>
+        /// マス目が何度見られたかをbyteで記録し、このマス目から視線の通るマス目をListで記録している
+        /// </summary>
         public struct VisivilityArea
         {
             public byte watchNum;//このエリアを見た回数
@@ -54,7 +59,13 @@ namespace Scenes.Ingame.Enemy
             */
         }
 
-        /// <summary>マス目の集合である二次元Listを作成する。</summary>
+        /// <summary>
+        /// マス目の集合である二次元Listを作成する。
+        /// </summary>
+        /// <param name="x">x座標方向にマス目をいくつ並べるか</param>
+        /// <param name="z">z座標方向にマス目をいくつ並べるか</param>
+        /// <param name="range">この距離以上の視線は通らないものと考えてシミュレートされる距離</param>
+        /// <param name="setCenterPosition">左下のマス目の中心位置</param>
         public void GridMake(byte x, byte z, float range, Vector3 setCenterPosition)
         { //マップを作成。xとzはグリッドの配置数。rangeはグリッドの距離。centerPositionは左下の位置
             if (debugMode) Debug.Log("グリッド作成開始");
@@ -76,7 +87,9 @@ namespace Scenes.Ingame.Enemy
             if (debugMode) Debug.Log("SecondSize(z)" + visivilityAreaGrid[0].Count());
         }
 
-        /// <summary>マップをスキャンしてマス目同士での視界の通っている情報を決定する</summary>
+        /// <summary>
+        /// マップをスキャンしてマス目同士での視界の通っている情報を決定する
+        /// </summary>
         public void MapScan()
         {//マップをスキャンして実際の視界がどのように通っているかを設定
             if (debugMode) Debug.Log("マップスキャン開始");
@@ -117,7 +130,10 @@ namespace Scenes.Ingame.Enemy
             if (debugMode) Debug.Log("マップのスキャンが完了しました");
         }
 
-        /// <summary>自身のディープコピーを作成して返す</summary>
+        /// <summary>
+        /// 自身のディープコピーを作成して返す
+        /// </summary>
+        /// <returns>自身のディープコピー</returns>
         public EnemyVisibilityMap DeepCopy()
         {
             if (debugMode) Debug.Log("ディープコピー開始");
@@ -145,8 +161,12 @@ namespace Scenes.Ingame.Enemy
             return copy;
         }
 
-
-        /// <summary>最も見ていないマスの中で最も近いものを取得する</summary>
+        
+        /// <summary>
+        /// 次に確認すべき最も見ておらず最も近い位置を取得。
+        /// </summary>
+        /// <param name="nowPosition">現在のcharacterの座標</param>
+        /// <returns>次に行くべき座標</returns>
         public Vector3 GetNextNearWatchPosition(Vector3 nowPosition) {
             if (debugMode) Debug.Log("次の移動先を取得");
             List<byte> nextPositionX = new List<byte>();
@@ -190,7 +210,11 @@ namespace Scenes.Ingame.Enemy
             return nextPosition;
         }
 
-        /// <summary>今いる場所から見れるマス目の見た回数のカウントを増加させる</summary>
+        /// <summary>
+        /// 今いる場所から見れるマス目の見た回数のカウントを増加させる
+        /// </summary>
+        /// <param name="nowPosition">現在の座標</param>
+        /// <param name="visivilityRange">視界の長さ</param>
         public void CheckVisivility(Vector3 nowPosition ,float visivilityRange) {
             if (debugMode) Debug.Log("視界の通りをチェック");
             VisivilityArea newVisivilityArea;
