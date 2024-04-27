@@ -14,6 +14,7 @@ namespace Scenes.Ingame.Enemy
         public float gridRange;
         public Vector3 centerPosition;//いちばん左下のグリッドの中央
 
+        /// <summary>マス目の位置を2つのbyteで表し疎のマス目までの距離をfoatであらわしている</summary>
         public struct DoubleByteAndMonoFloat
         {//位置と距離
             public byte x;
@@ -28,8 +29,9 @@ namespace Scenes.Ingame.Enemy
             }
         }
 
+        /// <summary>マス目が何度見られたかをbyteで記録し、このマス目から視線の通るマス目をListで記録している</summary>
         public struct VisivilityArea
-        {//各エリアの情報、そこを見ることのできる他の位置とこのエリアを見た回数
+        {
             public byte watchNum;//このエリアを見た回数
             public List<DoubleByteAndMonoFloat> canVisivleAreaPosition;
             public VisivilityArea(byte sWatchNum)
@@ -52,6 +54,7 @@ namespace Scenes.Ingame.Enemy
             */
         }
 
+        /// <summary>マス目の集合である二次元Listを作成する。</summary>
         public void GridMake(byte x, byte z, float range, Vector3 setCenterPosition)
         { //マップを作成。xとzはグリッドの配置数。rangeはグリッドの距離。centerPositionは左下の位置
             if (debugMode) Debug.Log("グリッド作成開始");
@@ -73,6 +76,7 @@ namespace Scenes.Ingame.Enemy
             if (debugMode) Debug.Log("SecondSize(z)" + visivilityAreaGrid[0].Count());
         }
 
+        /// <summary>マップをスキャンしてマス目同士での視界の通っている情報を決定する</summary>
         public void MapScan()
         {//マップをスキャンして実際の視界がどのように通っているかを設定
             if (debugMode) Debug.Log("マップスキャン開始");
@@ -113,7 +117,7 @@ namespace Scenes.Ingame.Enemy
             if (debugMode) Debug.Log("マップのスキャンが完了しました");
         }
 
-
+        /// <summary>自身のディープコピーを作成して返す</summary>
         public EnemyVisibilityMap DeepCopy()
         {
             if (debugMode) Debug.Log("ディープコピー開始");
@@ -141,27 +145,9 @@ namespace Scenes.Ingame.Enemy
             return copy;
         }
 
-        public void WatchNumKeepSmaller() {//グリッドを見た回数の大小関係はそのままに値を小さくする
-            if (debugMode) Debug.Log("グリッドを見た回数を大小関係はそのままに小さくする");
-            byte smallestWatchNum = byte.MaxValue;
-            for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
-            {
-                for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
-                {
-                    if (smallestWatchNum > visivilityAreaGrid[x][z].watchNum) { smallestWatchNum = visivilityAreaGrid[x][z].watchNum; }
-                }
-            }
-            for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
-            {
-                for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
-                {
-                    VisivilityArea newVisivilityArea = new VisivilityArea((byte)(visivilityAreaGrid[x][z].watchNum - smallestWatchNum), visivilityAreaGrid[x][z].canVisivleAreaPosition); ;
-                    visivilityAreaGrid[x][z] = newVisivilityArea;
-                }
-            }
-        }
 
-        public Vector3 GetNextNearWatchPosition(Vector3 nowPosition) {//WatchNumKeepSmallerメソッドの機能も内蔵
+        /// <summary>最も見ていないマスの中で最も近いものを取得する</summary>
+        public Vector3 GetNextNearWatchPosition(Vector3 nowPosition) {
             if (debugMode) Debug.Log("次の移動先を取得");
             List<byte> nextPositionX = new List<byte>();
             List<byte> nextPositionZ = new List<byte>();
@@ -204,6 +190,7 @@ namespace Scenes.Ingame.Enemy
             return nextPosition;
         }
 
+        /// <summary>今いる場所から見れるマス目の見た回数のカウントを増加させる</summary>
         public void CheckVisivility(Vector3 nowPosition ,float visivilityRange) {
             if (debugMode) Debug.Log("視界の通りをチェック");
             VisivilityArea newVisivilityArea;
