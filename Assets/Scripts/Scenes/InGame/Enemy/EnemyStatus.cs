@@ -19,16 +19,19 @@ namespace Scenes.Ingame.Enemy
         [SerializeField][Tooltip("索敵時の速度")] private float _searchSpeedBase;
         [SerializeField][Tooltip("追跡時の速度")] private float _chaseSpeedBase;
         [SerializeField][Tooltip("攻撃力の初期値")] private int _atackPowerBase;
-        [SerializeField][Tooltip("聴力の初期値")] private float _audiometerPowerBase;
+        [SerializeField][Tooltip("聴力の初期値。0は全く聞こえず100はどんな小さい音も聞き逃さない")][Range(0, 100)] private float _audiometerPowerBase;
         [SerializeField][Tooltip("光に反応するかどうかの初期値")] private bool _reactToLightBase;
         [SerializeField][Tooltip("飛行しているかどうかの初期値")] private bool _flyingBase;
         [SerializeField][Tooltip("スタミナの初期値")] private int _staminaBase;
-        [SerializeField][Tooltip("特殊行動のクールタイム")] private int _actionCoolTime;
+        [SerializeField][Tooltip("特殊行動のクールタイム")] private int _actionCoolTimeBase;
         [SerializeField][Tooltip("敵の覚えている可能性のある呪文")] private List<EnemyMagic> _enemyMagics;
         [SerializeField][Tooltip("一個体の覚えている呪文")] private int _hasMagicNum;
-        [SerializeField][Tooltip("初期のState")]private EnemyState _enemyStateBase;
+        [SerializeField][Tooltip("初期のState")] private EnemyState _enemyStateBase;
 
-        
+        [Header("自身についているであろうスクリプト")]
+        [SerializeField] EnemySearch _enemySearch;
+
+
         private IntReactiveProperty _hp = new IntReactiveProperty();
         private FloatReactiveProperty _patolloringSpeed = new FloatReactiveProperty();
         private FloatReactiveProperty _searcSpeed = new FloatReactiveProperty();
@@ -38,10 +41,7 @@ namespace Scenes.Ingame.Enemy
         private BoolReactiveProperty _reactToLight = new BoolReactiveProperty();
         private BoolReactiveProperty _flying = new BoolReactiveProperty();
         private IntReactiveProperty _stamina = new IntReactiveProperty();
-        private BoolReactiveProperty _actionCool = new BoolReactiveProperty();
-        /// <summary>
-        /// Enum(enemyState)をintとしてリアクティブプロパティにしています。castして使えば大丈夫
-        /// </summary>
+        private FloatReactiveProperty _actionCoolTime = new FloatReactiveProperty();
         private ReactiveProperty<EnemyState>  _enemyState = new ReactiveProperty<EnemyState>();
 
 
@@ -57,11 +57,16 @@ namespace Scenes.Ingame.Enemy
         public IObservable<EnemyState> OnEnemyStateChange { get { return _enemyState; } }
 
 
+        public float ReturnAudiomaterPower { get { return _audiometerPower.Value; } }
+        public EnemyState ReturnEnemyState { get { return _enemyState.Value; } }
+        
+
         /// <summary>
         /// 初期設定をする。外部から呼び出すこととする
         /// </summary>
         /// <returns>正常にセットアップできたかどうか</returns>
         public bool Init() {
+            //初期値を設定してゆく
             _hp.Value = _hpBase;
             _patolloringSpeed.Value = _patolloringSpeedBase;
             _searcSpeed.Value = _searchSpeedBase;
@@ -72,8 +77,15 @@ namespace Scenes.Ingame.Enemy
             _reactToLight.Value = _reactToLightBase;
             _flying.Value = _flyingBase;
             _stamina.Value = _staminaBase;
+            _actionCoolTime.Value = _actionCoolTimeBase;
             _enemyState.Value = _enemyStateBase;
             return true;
+
+            //自身についているメソッドの初期値を設定してゆく
+
+
+
+
         }
 
         // Start is called before the first frame update
@@ -87,5 +99,10 @@ namespace Scenes.Ingame.Enemy
         {
 
         }
+
+        public void ChangeEnemyState(EnemyState state) {
+            _enemyState.Value = state;
+        }
+
     }
 }

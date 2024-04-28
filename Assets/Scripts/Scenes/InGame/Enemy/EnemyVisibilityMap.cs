@@ -274,10 +274,8 @@ namespace Scenes.Ingame.Enemy
         /// 特定の位置から音が聞こえてきた場合の処理
         /// </summary>
         /// <param name="position">音源の座標</param>
-        /// /// <param name="nowPosition">敵キャラのの座標</param>
         /// <param name="resetRange">音源が存在するであろうという事で対象とする範囲</param>
-        /// /// <returns>次に行くべき座標</returns>
-        public Vector3 HearingSound(Vector3 position,Vector3 nowPosition,float resetRange) {
+        public void HearingSound(Vector3 position,float resetRange) {
             if (debugMode) Debug.Log("特定位置から聞こえてきた音について対処");
             VisivilityArea newVisivilityArea;
             if ((position.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < position.x))
@@ -312,7 +310,6 @@ namespace Scenes.Ingame.Enemy
                 }
                 if (debugMode) Debug.Log("x座標がマップからはみ出ています");
             }
-            return GetNextNearWatchPosition(nowPosition);
         }
 
         /// <summary>

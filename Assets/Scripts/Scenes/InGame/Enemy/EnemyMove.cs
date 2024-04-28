@@ -13,7 +13,16 @@ namespace Scenes.Ingame.Enemy
     {
         public bool endMove;
         private NavMeshAgent _myAgent;
-        // Start is called before the first frame update
+        [SerializeField] EnemyStatus _enemyStatus;
+       
+
+        /// <summary>
+        /// ‰Šú‰»ˆ—ŠO•”‚©‚çŒÄ‚Ño‚·
+        /// </summary>
+        public void Init() { 
+        
+        }
+
         void Start()
         {
             _myAgent = GetComponent<NavMeshAgent>();

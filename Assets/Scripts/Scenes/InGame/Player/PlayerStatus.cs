@@ -21,9 +21,9 @@ namespace Scenes.Ingame.Player
         [SerializeField] private int _sanBase = 100;
         [SerializeField] private int _speedBase = 5;
         [SerializeField][Tooltip("プレイヤーの持つ照明の光の届く距離")] private float _lightrangeBase = 20;
-        [SerializeField][Tooltip("プレイヤーのしゃがみ歩き時の音量")] private float _sneakVolumeBase;
-        [SerializeField][Tooltip("プレイヤーの歩き時の音量")] private float _walkVolumeBase;
-        [SerializeField][Tooltip("プレイヤーの走りの音量")] private float _runVolumeBase;
+        [SerializeField][Tooltip("プレイヤーのしゃがみ歩き時の音量")] private float _sneakVolumeBase = 5;
+        [SerializeField][Tooltip("プレイヤーの歩き時の音量")] private float _walkVolumeBase = 10;
+        [SerializeField][Tooltip("プレイヤーの走りの音量")] private float _runVolumeBase = 15;
 
 
         //現在のステータスの変数（今後ネットワーク化予定）
@@ -62,6 +62,10 @@ namespace Scenes.Ingame.Player
         public int stamina_max { get { return _staminaBase; } }
         public int nowStaminaValue { get { return _stamina.Value; } }
         public PlayerActionState nowPlayerActionState { get { return _playerActionState.Value; } }
+
+        public float nowPlayerSneakVolume { get { return _sneakVolume.Value; } }
+        public float nowPlayerWalkVolume { get { return _walkVolume.Value; } }
+        public float nowPlayerRunVolume { get { return _runVolume.Value; } }
 
         private void Init()
         {
