@@ -4,6 +4,7 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using Scenes.Ingame.Manager;
+using Scenes.Ingame.InGameSystem;
 
 namespace Scenes.Ingame.Stage
 {
