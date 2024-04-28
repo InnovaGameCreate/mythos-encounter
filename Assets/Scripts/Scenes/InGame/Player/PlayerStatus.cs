@@ -20,6 +20,11 @@ namespace Scenes.Ingame.Player
         [SerializeField] private int _staminaBase = 100;
         [SerializeField] private int _sanBase = 100;
         [SerializeField] private int _speedBase = 5;
+        [SerializeField][Tooltip("プレイヤーの持つ照明の光の届く距離")] private float _lightrangeBase = 20;
+        [SerializeField][Tooltip("プレイヤーのしゃがみ歩き時の音量")] private float _sneakVolumeBase;
+        [SerializeField][Tooltip("プレイヤーの歩き時の音量")] private float _walkVolumeBase;
+        [SerializeField][Tooltip("プレイヤーの走りの音量")] private float _runVolumeBase;
+
 
         //現在のステータスの変数（今後ネットワーク化予定）
         //初期化についても今後はデータベースを参照して行うようにする。
@@ -30,6 +35,11 @@ namespace Scenes.Ingame.Player
         [SerializeField] private BoolReactiveProperty _survive = new BoolReactiveProperty(true);//生死.trueのときは生きている
         [SerializeField] private BoolReactiveProperty _bleeding = new BoolReactiveProperty(false);//出血状態.trueのときに時間経過で体力が減少
         [SerializeField] private ReactiveProperty<PlayerActionState> _playerActionState = new ReactiveProperty<PlayerActionState>(PlayerActionState.Idle);
+        [SerializeField] private FloatReactiveProperty _lightrange = new FloatReactiveProperty();//光の届く距離
+        [SerializeField] private FloatReactiveProperty _sneakVolume = new FloatReactiveProperty();//しゃがみ時の音量
+        [SerializeField] private FloatReactiveProperty _walkVolume = new FloatReactiveProperty();//しゃがみ時の音量
+        [SerializeField] private FloatReactiveProperty _runVolume = new FloatReactiveProperty();//しゃがみ時の音量
+
 
 
         //それぞれの購読側を公開する。他のClassでSubscribeできる。
@@ -41,6 +51,10 @@ namespace Scenes.Ingame.Player
         public IObservable<bool> OnPlayerSurviveChange { get { return _survive; } }//_survive(生死)が変化した際にイベントが発行
         public IObservable<bool> OnPlayerbleedingChange { get { return _bleeding; } }//_bleeding(出血状態)が変化した際にイベントが発行
         public IObservable<PlayerActionState> OnPlayerActionStateChange { get { return _playerActionState; } }//_PlayerActionState(プレイヤーの行動状態)が変化した際にイベントが発行
+        public IObservable<float> OnLightrangeChange { get { return _lightrange; } }//プレイヤーの光の届く距離が変化した場合にイベントが発行
+        public IObservable<float> OnSneakVolumeChange { get { return _sneakVolume; } }//プレイヤーの光の届く距離が変化した場合にイベントが発行
+        public IObservable<float> OnWalkVolumeChange { get { return _walkVolume; } }//プレイヤーの光の届く距離が変化した場合にイベントが発行
+        public IObservable<float> OnRunVolumeChange { get { return _runVolume; } }//プレイヤーの光の届く距離が変化した場合にイベントが発行
 
 
         //一部情報の開示
@@ -55,6 +69,10 @@ namespace Scenes.Ingame.Player
             _stamina.Value = _staminaBase;
             _san.Value = _sanBase;
             _speed.Value = _speedBase;
+            _lightrange.Value = _lightrangeBase;
+            _sneakVolume.Value = _sneakVolumeBase;
+            _walkVolume.Value = _walkVolumeBase;
+            _runVolume.Value = _runVolumeBase;
         }
         // Start is called before the first frame update
         void Awake()

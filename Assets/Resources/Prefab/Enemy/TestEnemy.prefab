@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _checkRate: 1
-  _debugMode: 0
+  _debugMode: 1
   _myEneyMove: {fileID: 7130656707961021328}
   _visivilityRange: 25
 --- !u!114 &4878388347575988497
@@ -210,6 +210,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390bdcf7353e76145aa55ffe69269aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hpBase: 0
+  _patolloringSpeedBase: 0
+  _searchSpeedBase: 0
+  _chaseSpeedBase: 0
+  _atackPowerBase: 0
+  _audiometerPowerBase: 0
+  _reactToLightBase: 0
+  _flyingBase: 0
+  _staminaBase: 0
+  _actionCoolTime: 0
+  _enemyMagics: 
+  _hasMagicNum: 0
+  _enemyStateBase: 0
 --- !u!195 &-8031655832550655550
 NavMeshAgent:
   m_ObjectHideFlags: 0

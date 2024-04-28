@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Scenes.Ingame.Enemy
 {
+    /// <summary>
+    /// 敵キャラの攻撃を管理する。追跡状態と攻撃状態はこのスクリプトが作動する
+    /// </summary>
     public class EnemyAttack : MonoBehaviour
     {
         // Start is called before the first frame update

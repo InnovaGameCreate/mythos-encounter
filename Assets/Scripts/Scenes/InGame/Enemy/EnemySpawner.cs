@@ -6,6 +6,9 @@ using UnityEngine;
 
 namespace Scenes.Ingame.Enemy
 {
+    /// <summary>
+    /// 敵キャラを作成する
+    /// </summary>
     public class EnemySpawner : MonoBehaviour
     {
         [Header("デバッグするかどうか")]
@@ -63,6 +66,7 @@ namespace Scenes.Ingame.Enemy
         {
             GameObject createEnemy;
             EnemySearch createEnemySearch;
+            EnemyStatus createEnemyStatus;
             switch (enemeyName)
             {
 
@@ -80,6 +84,12 @@ namespace Scenes.Ingame.Enemy
                 if (_DebugMode) Debug.Log("作成した敵にはサーチがあります");
                 createEnemySearch.SetVisivilityMap(_enemyVisibilityMap.DeepCopy());
             }
+            if (createEnemy.TryGetComponent<EnemyStatus>(out createEnemyStatus))
+            {
+                if (_DebugMode) Debug.Log("作成した敵にはEnemyStatusクラスがあります");
+                createEnemyStatus.Init();
+            }
+
         }
 
     }

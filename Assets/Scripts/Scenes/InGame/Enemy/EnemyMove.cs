@@ -6,6 +6,9 @@ using UnityEngine.AI;
 
 namespace Scenes.Ingame.Enemy
 {
+    /// <summary>
+    /// 敵キャラクターの移動を管理する
+    /// </summary>
     public class EnemyMove : MonoBehaviour
     {
         public bool endMove;

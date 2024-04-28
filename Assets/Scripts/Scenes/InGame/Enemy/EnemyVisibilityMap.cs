@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 
 namespace Scenes.Ingame.Enemy
@@ -269,8 +270,71 @@ namespace Scenes.Ingame.Enemy
             }
         }
 
+        /// <summary>
+        /// 特定の位置から音が聞こえてきた場合の処理
+        /// </summary>
+        /// <param name="position">音源の座標</param>
+        /// /// <param name="nowPosition">敵キャラのの座標</param>
+        /// <param name="resetRange">音源が存在するであろうという事で対象とする範囲</param>
+        /// /// <returns>次に行くべき座標</returns>
+        public Vector3 HearingSound(Vector3 position,Vector3 nowPosition,float resetRange) {
+            if (debugMode) Debug.Log("特定位置から聞こえてきた音について対処");
+            VisivilityArea newVisivilityArea;
+            if ((position.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < position.x))
+            {//x座標がマップの範囲内であるかどうか
+                if ((position.z < centerPosition.z + (visivilityAreaGrid[0].Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < position.z)) //z座標がマップの範囲内であるかどうか
+                {
+                    for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
+                    {
+                        for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
+                        {
+                            //マスが対象範囲か調べる                          
+                            if (resetRange > Vector3.Magnitude(position - (centerPosition + new Vector3(x, 0, z) * gridRange)))
+                            {
+                                //対象内の場合見た回数を0とする
+                                newVisivilityArea = new VisivilityArea((byte)(0), visivilityAreaGrid[x][z].canVisivleAreaPosition);
+                                visivilityAreaGrid[x][z] = newVisivilityArea;
+                                if (debugMode) { DrawCross(position - (centerPosition + new Vector3(x, 0, z) * gridRange),10,Color.magenta,2f); }
+
+                            }
+                            else 
+                            {
+                                //対象でない場合見た回数を1追加する(何度も音を聞いた場合に最も新しい音を対象とするため)
+                                newVisivilityArea = new VisivilityArea((byte)(visivilityAreaGrid[x][z].watchNum + 1), visivilityAreaGrid[x][z].canVisivleAreaPosition);
+                                visivilityAreaGrid[x][z] = newVisivilityArea;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (debugMode) Debug.Log("z座標がマップからはみ出ています");
+                }
+                if (debugMode) Debug.Log("x座標がマップからはみ出ています");
+            }
+            return GetNextNearWatchPosition(nowPosition);
+        }
+
+        /// <summary>
+        /// プレイヤーの光が見えているかどうかを検出する
+        /// </summary>
+        /// <param name="EnemyPosition">敵の居場所</param>
+        /// <param name="PlayerPosition">プレイヤーの居場所</param>
+        /// <param name="visivilityRange">敵の視界の距離</param>
+        /// <param name="LightRange">プレイヤーの視界の距離</param>
+        public void RightCheck(Vector3 EnemyPosition,Vector3 PlayerPosition,float visivilityRange,float LightRange) { 
+        
+        }
 
 
+
+
+
+        private void DrawCross(Vector3 position,float size,Color color ,float time) 
+        {
+            Debug.DrawLine(position + new Vector3(size/2,0,size/2), position + new Vector3(-size, 0, -size),color,time);
+            Debug.DrawLine(position + new Vector3(-size/2, 0, size/2), position + new Vector3(-size/2, 0, size/2), color, time);
+        }
 
     }
 }
