@@ -58,6 +58,7 @@ namespace Scenes.Ingame.Enemy
 
 
         public float ReturnAudiomaterPower { get { return _audiometerPower.Value; } }
+        public bool ReturnReactToLight { get { return _reactToLight.Value; } }
         public EnemyState ReturnEnemyState { get { return _enemyState.Value; } }
         
 
@@ -79,13 +80,13 @@ namespace Scenes.Ingame.Enemy
             _stamina.Value = _staminaBase;
             _actionCoolTime.Value = _actionCoolTimeBase;
             _enemyState.Value = _enemyStateBase;
-            return true;
+            
 
             //自身についているメソッドの初期値を設定してゆく
+            _enemySearch.Init();
 
 
-
-
+            return true;
         }
 
         // Start is called before the first frame update

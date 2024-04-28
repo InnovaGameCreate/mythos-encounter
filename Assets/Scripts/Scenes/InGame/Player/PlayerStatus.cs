@@ -52,9 +52,9 @@ namespace Scenes.Ingame.Player
         public IObservable<bool> OnPlayerbleedingChange { get { return _bleeding; } }//_bleeding(出血状態)が変化した際にイベントが発行
         public IObservable<PlayerActionState> OnPlayerActionStateChange { get { return _playerActionState; } }//_PlayerActionState(プレイヤーの行動状態)が変化した際にイベントが発行
         public IObservable<float> OnLightrangeChange { get { return _lightrange; } }//プレイヤーの光の届く距離が変化した場合にイベントが発行
-        public IObservable<float> OnSneakVolumeChange { get { return _sneakVolume; } }//プレイヤーの光の届く距離が変化した場合にイベントが発行
-        public IObservable<float> OnWalkVolumeChange { get { return _walkVolume; } }//プレイヤーの光の届く距離が変化した場合にイベントが発行
-        public IObservable<float> OnRunVolumeChange { get { return _runVolume; } }//プレイヤーの光の届く距離が変化した場合にイベントが発行
+        public IObservable<float> OnSneakVolumeChange { get { return _sneakVolume; } }//プレイヤーの忍び歩きの音が届く距離が変化した場合にイベントが発行
+        public IObservable<float> OnWalkVolumeChange { get { return _walkVolume; } }//プレイヤーの歩く音が届く距離が変化した場合にイベントが発行
+        public IObservable<float> OnRunVolumeChange { get { return _runVolume; } }//プレイヤーの走る音が届く距離が変化した場合にイベントが発行
 
 
         //一部情報の開示
@@ -62,7 +62,7 @@ namespace Scenes.Ingame.Player
         public int stamina_max { get { return _staminaBase; } }
         public int nowStaminaValue { get { return _stamina.Value; } }
         public PlayerActionState nowPlayerActionState { get { return _playerActionState.Value; } }
-
+        public float nowPlayerLightRange { get { return _lightrange.Value; } }
         public float nowPlayerSneakVolume { get { return _sneakVolume.Value; } }
         public float nowPlayerWalkVolume { get { return _walkVolume.Value; } }
         public float nowPlayerRunVolume { get { return _runVolume.Value; } }

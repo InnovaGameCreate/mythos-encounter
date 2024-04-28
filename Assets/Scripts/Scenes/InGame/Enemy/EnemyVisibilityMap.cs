@@ -206,7 +206,7 @@ namespace Scenes.Ingame.Enemy
             //実際に次ぎに行くべき座標を示す
             Vector3 nextPosition = (new Vector3(nearPositionX,0,nearPositionZ) * gridRange) + centerPosition;
             if (debugMode) {//次に行くべき位置を描画
-                Debug.DrawLine(nextPosition,nextPosition+new Vector3(0,20,0),Color.magenta,20);
+                Debug.DrawLine(nextPosition,nextPosition+new Vector3(0,20,0),Color.magenta,3);
             }
             return nextPosition;
         }
@@ -275,7 +275,8 @@ namespace Scenes.Ingame.Enemy
         /// </summary>
         /// <param name="position">音源の座標</param>
         /// <param name="resetRange">音源が存在するであろうという事で対象とする範囲</param>
-        public void HearingSound(Vector3 position,float resetRange) {
+        /// <param name="resetRange">定期的なチェックによって呼び出されたのかどうか</param>
+        public void HearingSound(Vector3 position,float resetRange,bool periodic) {
             if (debugMode) Debug.Log("特定位置から聞こえてきた音について対処");
             VisivilityArea newVisivilityArea;
             if ((position.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < position.x))
@@ -292,14 +293,16 @@ namespace Scenes.Ingame.Enemy
                                 //対象内の場合見た回数を0とする
                                 newVisivilityArea = new VisivilityArea((byte)(0), visivilityAreaGrid[x][z].canVisivleAreaPosition);
                                 visivilityAreaGrid[x][z] = newVisivilityArea;
-                                if (debugMode) { DrawCross(position - (centerPosition + new Vector3(x, 0, z) * gridRange),10,Color.magenta,2f); }
+                                if (debugMode) { DrawCross((centerPosition + new Vector3(x, 0, z) * gridRange),5,Color.magenta,2f); }
 
                             }
                             else 
                             {
                                 //対象でない場合見た回数を1追加する(何度も音を聞いた場合に最も新しい音を対象とするため)
-                                newVisivilityArea = new VisivilityArea((byte)(visivilityAreaGrid[x][z].watchNum + 1), visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                                visivilityAreaGrid[x][z] = newVisivilityArea;
+                                if (periodic) {//細かく走りまくることで音のしていないエリアが極端に捜索先にならないようにするグリッチの対策
+                                    newVisivilityArea = new VisivilityArea((byte)(visivilityAreaGrid[x][z].watchNum + 1), visivilityAreaGrid[x][z].canVisivleAreaPosition);
+                                    visivilityAreaGrid[x][z] = newVisivilityArea;
+                                }
                             }
                         }
                     }
@@ -315,12 +318,86 @@ namespace Scenes.Ingame.Enemy
         /// <summary>
         /// プレイヤーの光が見えているかどうかを検出する
         /// </summary>
-        /// <param name="EnemyPosition">敵の居場所</param>
-        /// <param name="PlayerPosition">プレイヤーの居場所</param>
+        /// <param name="enemyPosition">敵の居場所</param>
+        /// <param name="playerPosition">プレイヤーの居場所</param>
         /// <param name="visivilityRange">敵の視界の距離</param>
-        /// <param name="LightRange">プレイヤーの視界の距離</param>
-        public void RightCheck(Vector3 EnemyPosition,Vector3 PlayerPosition,float visivilityRange,float LightRange) { 
-        
+        /// <param name="lightRange">プレイヤーの視界の距離</param>
+        /// <param name="NextPosition">参照渡しで最も強い光の見えた位置を返される</param>
+        /// <returns>光は見えたかどうか</returns>
+        public bool RightCheck(Vector3 enemyPosition,Vector3 playerPosition,float visivilityRange,float lightRange,ref Vector3 NextPosition) {
+            if (!(enemyPosition.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < enemyPosition.x)) {
+                Debug.LogError("EnemyPosition.xが範囲外です");
+            }
+            if (!(enemyPosition.z < centerPosition.z + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < enemyPosition.z))
+            {
+                Debug.LogError("EnemyPosition.zが範囲外です");
+            }
+            if (!(playerPosition.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < playerPosition.x))
+            {
+                Debug.LogError("PlayerPosition.xが範囲外です");
+            }
+            if (!(playerPosition.z < centerPosition.z + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < playerPosition.z))
+            {
+                Debug.LogError("EPlayerPosition.zが範囲外です");
+            }
+            //Enemyから見れる可能性のあるマスを取得
+            byte enemyGridPositionX, enemyGridPositionZ;
+            enemyGridPositionX = (byte)Mathf.FloorToInt((float)(enemyPosition.x - centerPosition.x + 0.5 * gridRange) / gridRange);
+            enemyGridPositionZ = (byte)Mathf.FloorToInt((float)(enemyPosition.z - centerPosition.z + 0.5 * gridRange) / gridRange);
+            List<DoubleByteAndMonoFloat> enemyVisivilityGridPosition = visivilityAreaGrid[enemyGridPositionX][enemyGridPositionZ].canVisivleAreaPosition;
+            if (debugMode)
+            {
+                for (byte e = 0; e < enemyVisivilityGridPosition.Count; e++)
+                {
+                    if(enemyVisivilityGridPosition[e].range < visivilityRange) Debug.DrawLine((new Vector3(enemyGridPositionX, 0, enemyGridPositionZ) * gridRange) + centerPosition, (new Vector3(enemyVisivilityGridPosition[e].x, 0, enemyVisivilityGridPosition[e].z) * gridRange) + centerPosition, Color.green, 1f);
+                }
+            }
+
+            //光が届く可能性のあるマスを取得
+            byte rightGridPositionX, rightGridPositionZ;
+            rightGridPositionX = (byte)Mathf.FloorToInt((float)(playerPosition.x - centerPosition.x + 0.5 * gridRange) / gridRange);
+            rightGridPositionZ = (byte)Mathf.FloorToInt((float)(playerPosition.z - centerPosition.z + 0.5 * gridRange) / gridRange);
+            List<DoubleByteAndMonoFloat> rightingGridPosition = visivilityAreaGrid[rightGridPositionX][rightGridPositionZ].canVisivleAreaPosition;
+            if (debugMode)
+            {
+                for (byte r = 0; r < rightingGridPosition.Count; r++)
+                {
+                    if (rightingGridPosition[r].range < lightRange) { } Debug.DrawLine((new Vector3(rightGridPositionX, 0, rightGridPositionZ) * gridRange) + centerPosition, (new Vector3(rightingGridPosition[r].x, 0, rightingGridPosition[r].z) * gridRange) + centerPosition,Color.yellow,1f);
+                }
+             }
+
+            //見ることのできる最も明るいマスを決定
+            bool canLookLight = false;
+            byte mostShiningGridPositionX = 0, mostShiningGridPositionZ = 0;
+            float shining = 0;
+            for (byte e = 0;e < enemyVisivilityGridPosition.Count;e++) {
+                for (byte r = 0;r< rightingGridPosition.Count;r++) {
+                    if (enemyVisivilityGridPosition[e].x == rightingGridPosition[r].x && enemyVisivilityGridPosition[e].z == rightingGridPosition[r].z) {//光が届く可能性があり見えているマスを取得
+                        if (enemyVisivilityGridPosition[e].range < visivilityRange && rightingGridPosition[r].range < lightRange) { //見える上に光も届く
+                            if (debugMode) { DrawCross((new Vector3(rightingGridPosition[r].x, 0, rightingGridPosition[r].z) * gridRange) + centerPosition, 2, Color.yellow, 1); }
+                            if (shining < lightRange - rightingGridPosition[r].range)//最も明るいマスである
+                            {
+                                mostShiningGridPositionX = rightingGridPosition[r].x;
+                                mostShiningGridPositionZ = rightingGridPosition[r].z;
+                                shining = lightRange - rightingGridPosition[r].range;
+                                canLookLight = true;
+                            }
+                        }                    
+                    }
+                }
+            }
+
+            //情報を返す
+            if (canLookLight)
+            {
+                NextPosition = (new Vector3(mostShiningGridPositionX, 0, mostShiningGridPositionZ) * gridRange) + centerPosition;
+                if (debugMode) { DrawCross(NextPosition, 5, Color.yellow, 1); Debug.Log("光が見えた！"); Debug.DrawLine(NextPosition, NextPosition + new Vector3(0, 20, 0), Color.magenta, 3); }
+                return true;
+            }
+            else {
+                if (debugMode) { Debug.Log("光は見えなかった"); }
+                return false;
+            }
         }
 
 
@@ -330,7 +407,7 @@ namespace Scenes.Ingame.Enemy
         private void DrawCross(Vector3 position,float size,Color color ,float time) 
         {
             Debug.DrawLine(position + new Vector3(size/2,0,size/2), position + new Vector3(-size, 0, -size),color,time);
-            Debug.DrawLine(position + new Vector3(-size/2, 0, size/2), position + new Vector3(-size/2, 0, size/2), color, time);
+            Debug.DrawLine(position + new Vector3(-size/2, 0, size/2), position + new Vector3(size/2, 0, -size/2), color, time);
         }
 
     }

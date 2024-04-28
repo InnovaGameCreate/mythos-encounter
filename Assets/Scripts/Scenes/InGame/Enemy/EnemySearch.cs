@@ -2,8 +2,8 @@ using Scenes.Ingame.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Scenes.Ingame.Player;
 using UniRx;
+using Unity.VisualScripting;
 
 namespace Scenes.Ingame.Enemy
 {
@@ -29,7 +29,7 @@ namespace Scenes.Ingame.Enemy
         private GameObject _player;
         private PlayerStatus _playerStatus;
         private float _audiomaterPower;
-
+        Vector3 nextPositionCandidate = new Vector3(0,0,0);
         //索敵行動のクラスです
         // Start is called before the first frame update
         void Start()
@@ -40,14 +40,15 @@ namespace Scenes.Ingame.Enemy
         /// <summary>
         /// 外部からこのスクリプトの初期設定をするために呼び出す
         /// </summary>
-        public void Init(){
+        public void Init()
+        {
             _player = GameObject.Find("Player");
             if (_player == null) { Debug.LogWarning("プレイヤーが認識できません"); }
             _playerStatus = _player.GetComponent<PlayerStatus>();
             if (_playerStatus == null) { Debug.LogWarning("プレイヤーステータスが認識できません"); }
             //スペックの初期設定
             _audiomaterPower = _enemyStatus.ReturnAudiomaterPower;
-            
+
 
 
             //スペックの変更を受け取る
@@ -63,24 +64,25 @@ namespace Scenes.Ingame.Enemy
                     {
                         if (_playerStatus.nowPlayerActionState == PlayerActionState.Sneak)
                         {
-                            if (Mathf.Pow((float)(_playerStatus.nowPlayerSneakVolume * _audiomaterPower * 0.01f),2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x,2) + (Mathf.Pow(transform.position.y - _player.transform.position.y, 2)))  > 0) 
+                            if (Mathf.Pow((float)(_playerStatus.nowPlayerSneakVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)
                             { //音が聞こえるかどうか
-                                _myVisivilityMap.HearingSound(_player.transform.position,15);
+                                _myVisivilityMap.HearingSound(_player.transform.position, 15,false);
                                 _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
                             }
                         }
-                        else if(_playerStatus.nowPlayerActionState == PlayerActionState.Walk)
+                        else if (_playerStatus.nowPlayerActionState == PlayerActionState.Walk)
                         {
-                            if (Mathf.Pow((float)(_playerStatus.nowPlayerWalkVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) + (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)
+                            if (Mathf.Pow((float)(_playerStatus.nowPlayerWalkVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)
                             { //音が聞こえるかどうか
-                                _myVisivilityMap.HearingSound(_player.transform.position, 15);
+                                _myVisivilityMap.HearingSound(_player.transform.position, 15,false);
                                 _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
                             }
-                        } else if (_playerStatus.nowPlayerActionState == PlayerActionState.Dash)
+                        }
+                        else if (_playerStatus.nowPlayerActionState == PlayerActionState.Dash)
                         {
-                            if (Mathf.Pow((float)(_playerStatus.nowPlayerRunVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) + (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)
+                            if (Mathf.Pow((float)(_playerStatus.nowPlayerRunVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)
                             { //音が聞こえるかどうか
-                                _myVisivilityMap.HearingSound(_player.transform.position, 15);
+                                _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
                                 _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
                             }
                         }
@@ -103,10 +105,6 @@ namespace Scenes.Ingame.Enemy
 
 
 
-
-
-
-
                 //定期的に視界情報を調べる
                 _checkTimeCount += Time.deltaTime;
                 if (_checkTimeCount > _checkRate)
@@ -115,48 +113,46 @@ namespace Scenes.Ingame.Enemy
                     //いろんなものを調べる。これは決定的なものほど優先して認識する
                     if (false)
                     { //プレイヤーの姿が見えるか調べる
-
+                       _enemyStatus.ChangeEnemyState(EnemyState.Chese);
                     }
-                    else if (false)
+                    else if (_enemyStatus.ReturnReactToLight&& _myVisivilityMap.RightCheck(this.transform.position,_player.transform.position,_visivilityRange,_playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
                     { //光が見えるか調べる
+                        if (_debugMode) Debug.Log("光が見えた");
+                        _enemyStatus.ChangeEnemyState(EnemyState.Searching);
+                        _myEneyMove.SetMovePosition(nextPositionCandidate);
+                    }
+                    else if (_playerStatus.nowPlayerActionState == PlayerActionState.Sneak && Mathf.Pow((float)(_playerStatus.nowPlayerSneakVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)//忍音が聞こえるかどうか
+                    {
+
+                        if (_debugMode) Debug.Log("忍ぶ音が聞こえる");
+                        _enemyStatus.ChangeEnemyState(EnemyState.Searching);
+                        _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
+                        _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
 
                     }
-                    else if (_enemyStatus.ReturnEnemyState == EnemyState.Patorolling || _enemyStatus.ReturnEnemyState == EnemyState.Searching)//プレイヤーが音を立てているかどうか
+                    else if (_playerStatus.nowPlayerActionState == PlayerActionState.Walk && Mathf.Pow((float)(_playerStatus.nowPlayerWalkVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)//歩く音が聞こえるかどうか
                     {
-                        if (_playerStatus.nowPlayerActionState == PlayerActionState.Sneak)
-                        {
-                            if (Mathf.Pow((float)(_playerStatus.nowPlayerSneakVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) + (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)
-                            { //音が聞こえるかどうか
-                                if (_debugMode) Debug.Log("忍ぶ音が聞こえる");
-                                _myVisivilityMap.HearingSound(_player.transform.position,  15);
-                                _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
-                            }
-                        }
-                        else if (_playerStatus.nowPlayerActionState == PlayerActionState.Walk)
-                        {
-                            if (Mathf.Pow((float)(_playerStatus.nowPlayerWalkVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) + (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)
-                            { //音が聞こえるかどうか
-                                if (_debugMode) Debug.Log("歩く音が聞こえる");
-                                _myVisivilityMap.HearingSound(_player.transform.position,  15);
-                                _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
-                            }
-                        }
-                        else if (_playerStatus.nowPlayerActionState == PlayerActionState.Dash)
-                        {
-                            if (Mathf.Pow((float)(_playerStatus.nowPlayerRunVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) + (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)
-                            { //音が聞こえるかどうか
-                                if (_debugMode) Debug.Log("走る音が聞こえる");
-                                _myVisivilityMap.HearingSound(_player.transform.position, 15);
-                                _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
-                            }
-                        }
-                        else if (_debugMode) Debug.Log("音は聞こえない");
+                        if (_debugMode) Debug.Log("歩く音が聞こえる");
+                        _enemyStatus.ChangeEnemyState(EnemyState.Searching);
+                        _myVisivilityMap.HearingSound(_player.transform.position, 15,true);
+                        _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
+
                     }
-                    else {
+                    else if (_playerStatus.nowPlayerActionState == PlayerActionState.Dash && Mathf.Pow((float)(_playerStatus.nowPlayerRunVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)//走る音が聞こえるかどうか
+                    {
+
+                        if (_debugMode) Debug.Log("走る音が聞こえる");
+                        _enemyStatus.ChangeEnemyState(EnemyState.Searching);
+                        _myVisivilityMap.HearingSound(_player.transform.position, 15,true);
+                        _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
+
+                    }
+                    else
+                    {
                         //なんの痕跡も見つからなかった場合普通に巡回する
                         _myVisivilityMap.CheckVisivility(this.transform.position, _visivilityRange);
                         if (_myEneyMove.endMove)//移動が終わっている場合
-                        { 
+                        {
                             //痕跡のあった場所まで来たが何もいなかった場合ここが実行されるのでStatusを書き換える
                             _enemyStatus.ChangeEnemyState(EnemyState.Patorolling);
                             //あらたな移動先を取得するメソッドを書き込む
@@ -170,8 +166,8 @@ namespace Scenes.Ingame.Enemy
         }
 
 
-        public void SetVisivilityMap(EnemyVisibilityMap setVisivilityMap) 
-        { 
+        public void SetVisivilityMap(EnemyVisibilityMap setVisivilityMap)
+        {
             _myVisivilityMap = setVisivilityMap;
         }
 

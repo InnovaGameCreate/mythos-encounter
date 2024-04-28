@@ -170,6 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   endMove: 0
+  _enemyStatus: {fileID: 7000828227398978958}
 --- !u!114 &41553992271996288
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,6 +187,7 @@ MonoBehaviour:
   _debugMode: 1
   _myEneyMove: {fileID: 7130656707961021328}
   _visivilityRange: 25
+  _enemyStatus: {fileID: 7000828227398978958}
 --- !u!114 &4878388347575988497
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,19 +212,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390bdcf7353e76145aa55ffe69269aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hpBase: 0
-  _patolloringSpeedBase: 0
-  _searchSpeedBase: 0
-  _chaseSpeedBase: 0
-  _atackPowerBase: 0
-  _audiometerPowerBase: 0
-  _reactToLightBase: 0
-  _flyingBase: 0
-  _staminaBase: 0
-  _actionCoolTime: 0
+  _hpBase: 10
+  _patolloringSpeedBase: 4
+  _searchSpeedBase: 5
+  _chaseSpeedBase: 7
+  _atackPowerBase: 10
+  _audiometerPowerBase: 100
+  _reactToLightBase: 1
+  _flyingBase: 1
+  _staminaBase: 100
+  _actionCoolTimeBase: 20
   _enemyMagics: 
   _hasMagicNum: 0
   _enemyStateBase: 0
+  _enemySearch: {fileID: 41553992271996288}
 --- !u!195 &-8031655832550655550
 NavMeshAgent:
   m_ObjectHideFlags: 0
