@@ -97,28 +97,31 @@ namespace Scenes.Ingame.Enemy
                 {
                     _playerDistance = Vector3.Magnitude(this.transform.position - _player.transform.position);
                     _checkTimeCount = 0;
+                    Debug.LogWarning("San判定");
                     if (CheckCanPlayerVisivlleCheck()) //敵が見えるかどうかを確認する
                     {
-                        _myVisivilityMap.ChangeEveryGridWatchNum(1,true);
-                        _myVisivilityMap.SetGridWatchNum(_player.transform.position,0);
+                        _myVisivilityMap.ChangeEveryGridWatchNum(1, true);
+                        _myVisivilityMap.SetGridWatchNum(_player.transform.position, 0);
                         _brindCheseTimeCount = 0;//見えたのであきらめるまでのカウントはリセット
                         //移動目標をプレイヤーの座標にする
                         _enemyMove.SetMovePosition(_player.transform.position);
                         if (_playerDistance < _atackRange)//近接攻撃の射程内か確認する
                         { //近接攻撃をする
                             _enemyStatus.SetEnemyState(EnemyState.Atack);
-                            if (_atackTimeCount > _attackTime) {
+                            if (_atackTimeCount > _attackTime)
+                            {
                                 _atackTimeCount = 0;
                                 _shotTimeCount = 0;//遠隔から近接の距離に入った瞬間2連続で攻撃が行われないために両方のカウントを0にしている。
-                                if(_debugMode)Debug.LogWarning("ここで近接攻撃！");
+                                if (_debugMode) Debug.LogWarning("ここで近接攻撃！");
                             }
-                            
+
 
                         }
                         else if (_playerDistance < _shotRange) //遠隔攻撃の射程内か確認する
                         { //遠隔攻撃をする
                             _enemyStatus.SetEnemyState(EnemyState.Atack);
-                            if (_shotTimeCount > _shotTime) {
+                            if (_shotTimeCount > _shotTime)
+                            {
                                 _atackTimeCount = 0;
                                 _shotTimeCount = 0;
                                 if (_debugMode) Debug.LogWarning("ここで遠隔攻撃！");
@@ -134,10 +137,12 @@ namespace Scenes.Ingame.Enemy
                     else
                     { //敵が見えないならせめてなんとかいそうなエリアへ行こうとする
                         _brindCheseTimeCount += _checkRate;
-                        if (_brindCheseTimeCount > _brindCheseTime) { //あきらめるかどうかの判定
+                        if (_brindCheseTimeCount > _brindCheseTime)
+                        { //あきらめるかどうかの判定
                             _enemyStatus.SetEnemyState(EnemyState.Searching);//追っかけるのあきらめた
                         }
-                        else{ //まだあきらめない場合、近距離に特化したのSearchを行う
+                        else
+                        { //まだあきらめない場合、近距離に特化したのSearchを行う
                             _enemyStatus.SetEnemyState(EnemyState.Chese);
 
                             if (_enemyStatus.ReturnReactToLight && _myVisivilityMap.RightCheck(this.transform.position, _player.transform.position, _visivilityRange, _playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
@@ -189,13 +194,22 @@ namespace Scenes.Ingame.Enemy
                             }
                         }
                     }
-                }           
+                }
+            }
+            else 
+            {//追跡攻撃状態でなくても定期的にSANダメージを与えているかを確認する
+                _checkTimeCount += Time.deltaTime;
+                if (_checkTimeCount > _checkRate)
+                {
+                    _checkTimeCount = 0;
+                    Debug.LogWarning("San判定");
+                }
             }
         }
 
         protected bool CheckCanPlayerVisivlleCheck()
-        {
-            float range = Vector3.Magnitude(this.transform.position - _player.transform.position);//平方根を求めるのはすごくコストが重いらしいので確実に計算が必要になってからしてます
+        {//キャラクターによって視界の角度判定つける？ミゴは360°、深き者どもは270°、一般的な人間の狂信者とかなら180°とか...
+            float range = Vector3.Magnitude(this.transform.position - _player.transform.position) - 0.2f;//プレイヤー本体のコライダーに当たるため減らしてる
                                                                                                   //視界が通るか＝Rayが通るか
             bool hit;
             Ray ray = new Ray(this.transform.position, _player.transform.position - this.transform.position);

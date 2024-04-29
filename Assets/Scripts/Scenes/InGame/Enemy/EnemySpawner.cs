@@ -78,16 +78,10 @@ namespace Scenes.Ingame.Enemy
                     Debug.LogError("このスクリプトに、すべての敵のプレハブが格納可能かを確認してください");
                     return;
             }
-
-            if (createEnemy.TryGetComponent<EnemySearch>(out createEnemySearch))
-            {
-                if (_DebugMode) Debug.Log("作成した敵にはサーチがあります");
-                createEnemySearch.SetVisivilityMap(_enemyVisibilityMap.DeepCopy());
-            }
             if (createEnemy.TryGetComponent<EnemyStatus>(out createEnemyStatus))
             {
                 if (_DebugMode) Debug.Log("作成した敵にはEnemyStatusクラスがあります");
-                createEnemyStatus.Init();
+                createEnemyStatus.Init(_enemyVisibilityMap.DeepCopy());
             }
 
         }

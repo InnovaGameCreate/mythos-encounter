@@ -54,7 +54,7 @@ namespace Scenes.Ingame.Enemy
         private BoolReactiveProperty _flying = new BoolReactiveProperty();
         private IntReactiveProperty _stamina = new IntReactiveProperty();
         private FloatReactiveProperty _actionCoolTime = new FloatReactiveProperty();
-        private ReactiveProperty<EnemyState>  _enemyState = new ReactiveProperty<EnemyState>(EnemyState.None);
+        private ReactiveProperty<EnemyState>  _enemyState = new ReactiveProperty<EnemyState>(EnemyState.Patorolling);
 
         private IntReactiveProperty _horror = new IntReactiveProperty();
         private IntReactiveProperty _atackPower = new IntReactiveProperty();
