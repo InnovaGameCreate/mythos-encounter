@@ -53,6 +53,7 @@ namespace Scenes.Ingame.Enemy
         private float _brindCheseTimeCount;
         private EnemyVisibilityMap _myVisivilityMap;
         private EnemyState _lastEnemyState = EnemyState.None;
+        Vector3 nextPositionCandidate = new Vector3(0, 0, 0);
 
         /// <summary>
         /// 初期あk処理外部からアクセスすⓈる
@@ -73,7 +74,7 @@ namespace Scenes.Ingame.Enemy
                 if ((state == EnemyState.Chese || state == EnemyState.Atack) && !((_lastEnemyState == EnemyState.Chese || _lastEnemyState == EnemyState.Atack))) 
                 { 
                     _lastEnemyState = state;
-                    _myVisivilityMap
+                    _myVisivilityMap.SetEveryGridWatchNum(50);
                 } 
             }).AddTo(this);
 
@@ -96,11 +97,13 @@ namespace Scenes.Ingame.Enemy
                 {
                     _playerDistance = Vector3.Magnitude(this.transform.position - _player.transform.position);
                     _checkTimeCount = 0;
-                    if (true) //敵が見えるかどうかを確認する
+                    if (CheckCanPlayerVisivlleCheck()) //敵が見えるかどうかを確認する
                     {
+                        _myVisivilityMap.ChangeEveryGridWatchNum(1,true);
+                        _myVisivilityMap.SetGridWatchNum(_player.transform.position,0);
                         _brindCheseTimeCount = 0;//見えたのであきらめるまでのカウントはリセット
                         //移動目標をプレイヤーの座標にする
-
+                        _enemyMove.SetMovePosition(_player.transform.position);
                         if (_playerDistance < _atackRange)//近接攻撃の射程内か確認する
                         { //近接攻撃をする
                             _enemyStatus.SetEnemyState(EnemyState.Atack);
@@ -136,39 +139,76 @@ namespace Scenes.Ingame.Enemy
                         }
                         else{ //まだあきらめない場合、近距離に特化したのSearchを行う
                             _enemyStatus.SetEnemyState(EnemyState.Chese);
-                            if (_enemyMove.endMove) { //移動が終了している場合
-                                
-                            
+
+                            if (_enemyStatus.ReturnReactToLight && _myVisivilityMap.RightCheck(this.transform.position, _player.transform.position, _visivilityRange, _playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
+                            { //光が見えるか調べる
+                                if (_debugMode) Debug.Log("追跡中光が見えた");
+                                _enemyStatus.SetEnemyState(EnemyState.Searching);
+                                _enemyMove.SetMovePosition(nextPositionCandidate);
+                            }
+                            else if (_enemyMove.endMove)
+                            { //移動が終了している場合
+                                if (_playerStatus.nowPlayerActionState == PlayerActionState.Sneak && Mathf.Pow((float)(_playerStatus.nowPlayerSneakVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)//忍音が聞こえるかどうか
+                                {
+
+                                    if (_debugMode) Debug.Log("追跡中忍ぶ音が聞こえる");
+                                    _enemyStatus.SetEnemyState(EnemyState.Searching);
+                                    _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
+                                    _enemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
+
+                                }
+                                else if (_playerStatus.nowPlayerActionState == PlayerActionState.Walk && Mathf.Pow((float)(_playerStatus.nowPlayerWalkVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)//歩く音が聞こえるかどうか
+                                {
+                                    if (_debugMode) Debug.Log("追跡中歩く音が聞こえる");
+                                    _enemyStatus.SetEnemyState(EnemyState.Searching);
+                                    _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
+                                    _enemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
+
+                                }
+                                else if (_playerStatus.nowPlayerActionState == PlayerActionState.Dash && Mathf.Pow((float)(_playerStatus.nowPlayerRunVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)//走る音が聞こえるかどうか
+                                {
+
+                                    if (_debugMode) Debug.Log("追跡中走る音が聞こえる");
+                                    _enemyStatus.SetEnemyState(EnemyState.Searching);
+                                    _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
+                                    _enemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
+
+                                }
+                                else
+                                {
+                                    //なんの痕跡も見つからなかった場合普通に巡回する
+                                    _myVisivilityMap.CheckVisivility(this.transform.position, _visivilityRange);
+                                    if (_enemyMove.endMove)//移動が終わっている場合
+                                    {
+                                        //痕跡のあった場所まで来たが何もいなかった場合ここが実行されるのでStatusを書き換える
+                                        _enemyStatus.SetEnemyState(EnemyState.Patorolling);
+                                        //あらたな移動先を取得するメソッドを書き込む
+                                        _enemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
+                                    }
+                                }
                             }
                         }
-                    
-                    
                     }
-
                 }           
             }
+        }
 
-
-
-                    //やる事、一定時間ごとに判定
-
-
-
-
-
-
-
-                    //プレイヤーは見えるかA/B
-
-                    //A移動先をプレイヤーに
-
-                    //攻撃可能かの判定
-
-
-
-
-
-
-         }
+        protected bool CheckCanPlayerVisivlleCheck()
+        {
+            float range = Vector3.Magnitude(this.transform.position - _player.transform.position);//平方根を求めるのはすごくコストが重いらしいので確実に計算が必要になってからしてます
+                                                                                                  //視界が通るか＝Rayが通るか
+            bool hit;
+            Ray ray = new Ray(this.transform.position, _player.transform.position - this.transform.position);
+            hit = Physics.Raycast(ray, out RaycastHit hitInfo, range, -1, QueryTriggerInteraction.Collide);
+            if (!hit)
+            { //何にもあたっていなかった場合
+                if (_debugMode) { Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 3); Debug.Log("プレイヤー発見"); }
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
