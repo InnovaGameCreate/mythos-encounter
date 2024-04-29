@@ -164,10 +164,9 @@ MonoBehaviour:
   _attackTime: 5
   _atackRange: 5
   canShot: 1
-  _shotPower: 10
   _shotTime: 10
   _shotRange: 15
-  _ballet: {fileID: 0}
+  _ballet: {fileID: 2261882221392382239, guid: 39e56c2c101133e4ba9db45ecad211dd, type: 3}
   _enemyStatus: {fileID: 7000828227398978958}
   _enemySearch: {fileID: 41553992271996288}
   _enemyMove: {fileID: 7130656707961021328}

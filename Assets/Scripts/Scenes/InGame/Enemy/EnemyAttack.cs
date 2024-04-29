@@ -27,7 +27,7 @@ namespace Scenes.Ingame.Enemy
         [SerializeField][Tooltip("攻撃の間隔")] private float _attackTime;
         [SerializeField][Tooltip("近接攻撃の射程")] private float _atackRange;
         [SerializeField][Tooltip("遠隔攻撃が可能かどうか")] private bool canShot;
-        [SerializeField][Tooltip("遠隔攻撃の攻撃力")] private int _shotPower;
+        //[SerializeField][Tooltip("遠隔攻撃の攻撃力")] private int _shotPower;
         [SerializeField][Tooltip("遠隔攻撃の間隔")] private float _shotTime;
         [SerializeField][Tooltip("遠隔攻撃の射程")] private float _shotRange;
         [SerializeField][Tooltip("弾丸")] private GameObject _ballet;
@@ -112,7 +112,8 @@ namespace Scenes.Ingame.Enemy
                             {
                                 _atackTimeCount = 0;
                                 _shotTimeCount = 0;//遠隔から近接の距離に入った瞬間2連続で攻撃が行われないために両方のカウントを0にしている。
-                                if (_debugMode) Debug.LogWarning("ここで近接攻撃！");
+                                if (_debugMode) Debug.Log("ここで近接攻撃！");
+                                _playerStatus.ChangeHealth(_atackPower,"Damage");
                             }
 
 
@@ -124,7 +125,8 @@ namespace Scenes.Ingame.Enemy
                             {
                                 _atackTimeCount = 0;
                                 _shotTimeCount = 0;
-                                if (_debugMode) Debug.LogWarning("ここで遠隔攻撃！");
+                                if (_debugMode) Debug.Log("ここで遠隔攻撃！");
+                                GameObject.Instantiate(_ballet,this.transform.position,Quaternion.identity);
                             }
 
 
