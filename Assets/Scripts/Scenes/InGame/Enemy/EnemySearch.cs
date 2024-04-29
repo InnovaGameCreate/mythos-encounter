@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using Unity.VisualScripting;
+using static Scenes.Ingame.Enemy.EnemyVisibilityMap;
+using Cysharp.Threading.Tasks.Triggers;
 
 namespace Scenes.Ingame.Enemy
 {
@@ -40,8 +42,9 @@ namespace Scenes.Ingame.Enemy
         /// <summary>
         /// 外部からこのスクリプトの初期設定をするために呼び出す
         /// </summary>
-        public void Init()
+        public void Init(EnemyVisibilityMap setVisivilityMap)
         {
+            _myVisivilityMap = setVisivilityMap;
             _player = GameObject.Find("Player");
             if (_player == null) { Debug.LogWarning("プレイヤーが認識できません"); }
             _playerStatus = _player.GetComponent<PlayerStatus>();
@@ -111,21 +114,22 @@ namespace Scenes.Ingame.Enemy
                 {
                     _checkTimeCount = 0;
                     //いろんなものを調べる。これは決定的なものほど優先して認識する
-                    if (false)
+                    if (CheckCanPlayerVisivlleCheck())
                     { //プレイヤーの姿が見えるか調べる
-                       _enemyStatus.ChangeEnemyState(EnemyState.Chese);
+                      _myEneyMove.SetMovePosition(_player.transform.position);
+                      _enemyStatus.SetEnemyState(EnemyState.Chese);
                     }
                     else if (_enemyStatus.ReturnReactToLight&& _myVisivilityMap.RightCheck(this.transform.position,_player.transform.position,_visivilityRange,_playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
                     { //光が見えるか調べる
                         if (_debugMode) Debug.Log("光が見えた");
-                        _enemyStatus.ChangeEnemyState(EnemyState.Searching);
+                        _enemyStatus.SetEnemyState(EnemyState.Searching);
                         _myEneyMove.SetMovePosition(nextPositionCandidate);
                     }
                     else if (_playerStatus.nowPlayerActionState == PlayerActionState.Sneak && Mathf.Pow((float)(_playerStatus.nowPlayerSneakVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)//忍音が聞こえるかどうか
                     {
 
                         if (_debugMode) Debug.Log("忍ぶ音が聞こえる");
-                        _enemyStatus.ChangeEnemyState(EnemyState.Searching);
+                        _enemyStatus.SetEnemyState(EnemyState.Searching);
                         _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
                         _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
 
@@ -133,7 +137,7 @@ namespace Scenes.Ingame.Enemy
                     else if (_playerStatus.nowPlayerActionState == PlayerActionState.Walk && Mathf.Pow((float)(_playerStatus.nowPlayerWalkVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)//歩く音が聞こえるかどうか
                     {
                         if (_debugMode) Debug.Log("歩く音が聞こえる");
-                        _enemyStatus.ChangeEnemyState(EnemyState.Searching);
+                        _enemyStatus.SetEnemyState(EnemyState.Searching);
                         _myVisivilityMap.HearingSound(_player.transform.position, 15,true);
                         _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
 
@@ -142,7 +146,7 @@ namespace Scenes.Ingame.Enemy
                     {
 
                         if (_debugMode) Debug.Log("走る音が聞こえる");
-                        _enemyStatus.ChangeEnemyState(EnemyState.Searching);
+                        _enemyStatus.SetEnemyState(EnemyState.Searching);
                         _myVisivilityMap.HearingSound(_player.transform.position, 15,true);
                         _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
 
@@ -154,7 +158,7 @@ namespace Scenes.Ingame.Enemy
                         if (_myEneyMove.endMove)//移動が終わっている場合
                         {
                             //痕跡のあった場所まで来たが何もいなかった場合ここが実行されるのでStatusを書き換える
-                            _enemyStatus.ChangeEnemyState(EnemyState.Patorolling);
+                            _enemyStatus.SetEnemyState(EnemyState.Patorolling);
                             //あらたな移動先を取得するメソッドを書き込む
                             _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
                         }
@@ -165,12 +169,21 @@ namespace Scenes.Ingame.Enemy
             }
         }
 
-
-        public void SetVisivilityMap(EnemyVisibilityMap setVisivilityMap)
-        {
-            _myVisivilityMap = setVisivilityMap;
+        protected bool CheckCanPlayerVisivlleCheck() {
+            float range = Vector3.Magnitude(this.transform.position - _player.transform.position);//平方根を求めるのはすごくコストが重いらしいので確実に計算が必要になってからしてます
+                                             //視界が通るか＝Rayが通るか
+            bool hit;
+            Ray ray = new Ray(this.transform.position, _player.transform.position - this.transform.position);
+            hit = Physics.Raycast(ray, out RaycastHit hitInfo, range, -1, QueryTriggerInteraction.Collide);
+            if (!hit)
+            { //何にもあたっていなかった場合
+                if (_debugMode) { Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 3); Debug.Log("プレイヤー発見"); }
+                return true;
+            }
+            else { 
+                return false;
+            }
         }
-
 
     }
 }

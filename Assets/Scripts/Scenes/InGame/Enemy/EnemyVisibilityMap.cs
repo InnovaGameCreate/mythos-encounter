@@ -400,6 +400,37 @@ namespace Scenes.Ingame.Enemy
             }
         }
 
+        /// <summary>
+        /// 全てのマス目の見た回数を規定回数変更する
+        /// </summary>
+        /// <param name="change">変化させる数</param>
+        /// /// <param name="plus">足すならtrue、引くならfalse</param>
+        public void ChangeEveryGridWatchNum(byte change　,bool plus) 
+        { 
+        
+        }
+
+        /// <summary>
+        /// 全てのマス目の見た回数をセットする
+        /// </summary>
+        /// <param name="num"></param>
+        public void SetEveryGridWatchNum(byte num) 
+        { 
+        
+        }
+
+        /// <summary>
+        /// 特定のグリッドの見た回数をセットする
+        /// </summary>
+        /// <param name="Position">マスのある位置</param>
+        /// <param name="num">セットする数</param>
+        public void SetGridWatchNum(Vector3 Position,byte num)
+        { 
+        
+        }
+
+
+
 
 
 

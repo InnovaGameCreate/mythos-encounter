@@ -7,6 +7,10 @@ namespace Scenes.Ingame.Enemy
     public enum EnemyState
     {
         /// <summary>
+        /// ‚È‚É‚à“o˜^‚³‚ê‚Ä‚¢‚È‚¢ó‘Ô
+        /// </summary>
+        None,
+        /// <summary>
         /// „‰ñ
         /// </summary>
         Patorolling,
