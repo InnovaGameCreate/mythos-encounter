@@ -13,14 +13,14 @@ namespace Scenes.Ingame.Enemy
     public class EnemyAttack : MonoBehaviour
     {
         [Header("このスクリプトを制御する変数")]
-        [SerializeField][Tooltip("何秒ごとに視界の状態をチェックするか")] private float _checkRate;
+        [SerializeField][Tooltip("何秒ごとに視界の状態、攻撃可能性、SANをチェックするか")] private float _checkRate;
         [SerializeField][Tooltip("戦闘時の視界の広さ")] private float _visivilityRange;//仕様上視界範囲は全て同一？じゃなかったらこれはEnemyStatusに送り込むよ
         [SerializeField] [Tooltip("見失ったとしてもどれだけの時間頑張って探そうとするかどうか")]private float _brindCheseTime;
         [SerializeField][Tooltip("デバッグするかどうか")] private bool _debugMode;
 
 
 
-        private int _horro;
+        private int _horror;
         private int _atackPower;
 
         [Header("Horror,AtackPowerを除く攻撃性能")]
@@ -54,13 +54,14 @@ namespace Scenes.Ingame.Enemy
         private EnemyVisibilityMap _myVisivilityMap;
         private EnemyState _lastEnemyState = EnemyState.None;
         Vector3 nextPositionCandidate = new Vector3(0, 0, 0);
+        private Camera _camera;
 
         /// <summary>
         /// 初期あk処理外部からアクセスすⓈる
         /// </summary>
         public void Init(EnemyVisibilityMap setVisivilityMap) {
             _myVisivilityMap = setVisivilityMap;
-            _horro = _enemyStatus.ReturnAtackPower;
+            _horror = _enemyStatus.ReturnHorror;
             _atackPower = _enemyStatus.ReturnAtackPower;
             _audiomaterPower = _enemyStatus.ReturnAudiomaterPower;
 
@@ -68,6 +69,8 @@ namespace Scenes.Ingame.Enemy
             if (_player == null) { Debug.LogWarning("プレイヤーが認識できません"); }
             _playerStatus = _player.GetComponent<PlayerStatus>();
             if (_playerStatus == null) { Debug.LogWarning("プレイヤーステータスが認識できません"); }
+
+            _camera = GameObject.Find("Main Camera").GetComponent<Camera>();
 
             _enemyStatus.OnEnemyStateChange.Subscribe(state => 
             {
@@ -97,43 +100,47 @@ namespace Scenes.Ingame.Enemy
                 {
                     _playerDistance = Vector3.Magnitude(this.transform.position - _player.transform.position);
                     _checkTimeCount = 0;
-                    Debug.LogWarning("San判定");
-                    if (CheckCanPlayerVisivlleCheck()) //敵が見えるかどうかを確認する
+                    if (CheckCanPlayerVisivlleCheck()) //敵が見えるルートがあるかかどうかを確認する
                     {
-                        _myVisivilityMap.ChangeEveryGridWatchNum(1, true);
-                        _myVisivilityMap.SetGridWatchNum(_player.transform.position, 0);
-                        _brindCheseTimeCount = 0;//見えたのであきらめるまでのカウントはリセット
-                        //移動目標をプレイヤーの座標にする
-                        _enemyMove.SetMovePosition(_player.transform.position);
-                        if (_playerDistance < _atackRange)//近接攻撃の射程内か確認する
-                        { //近接攻撃をする
-                            _enemyStatus.SetEnemyState(EnemyState.Atack);
-                            if (_atackTimeCount > _attackTime)
-                            {
-                                _atackTimeCount = 0;
-                                _shotTimeCount = 0;//遠隔から近接の距離に入った瞬間2連続で攻撃が行われないために両方のカウントを0にしている。
-                                if (_debugMode) Debug.Log("ここで近接攻撃！");
-                                _playerStatus.ChangeHealth(_atackPower,"Damage");
+                        //こちらが深淵を除くときry
+                        SanCheck();
+                        if (_playerDistance < _visivilityRange)//見える距離にいるかどうか
+                        {
+                            _myVisivilityMap.ChangeEveryGridWatchNum(1, true);
+                            _myVisivilityMap.SetGridWatchNum(_player.transform.position, 0);
+                            _brindCheseTimeCount = 0;//見えたのであきらめるまでのカウントはリセット
+                                                     //移動目標をプレイヤーの座標にする
+                            _enemyMove.SetMovePosition(_player.transform.position);
+                            if (_playerDistance < _atackRange)//近接攻撃の射程内か確認する
+                            { //近接攻撃をする
+                                _enemyStatus.SetEnemyState(EnemyState.Atack);
+                                if (_atackTimeCount > _attackTime)
+                                {
+                                    _atackTimeCount = 0;
+                                    _shotTimeCount = 0;//遠隔から近接の距離に入った瞬間2連続で攻撃が行われないために両方のカウントを0にしている。
+                                    if (_debugMode) Debug.Log("ここで近接攻撃！");
+                                    _playerStatus.ChangeHealth(_atackPower, "Damage");
+                                }
+
+
                             }
+                            else if (_playerDistance < _shotRange) //遠隔攻撃の射程内か確認する
+                            { //遠隔攻撃をする
+                                _enemyStatus.SetEnemyState(EnemyState.Atack);
+                                if (_shotTimeCount > _shotTime)
+                                {
+                                    _atackTimeCount = 0;
+                                    _shotTimeCount = 0;
+                                    if (_debugMode) Debug.Log("ここで遠隔攻撃！");
+                                    GameObject.Instantiate(_ballet, this.transform.position, Quaternion.identity);
+                                }
 
 
-                        }
-                        else if (_playerDistance < _shotRange) //遠隔攻撃の射程内か確認する
-                        { //遠隔攻撃をする
-                            _enemyStatus.SetEnemyState(EnemyState.Atack);
-                            if (_shotTimeCount > _shotTime)
-                            {
-                                _atackTimeCount = 0;
-                                _shotTimeCount = 0;
-                                if (_debugMode) Debug.Log("ここで遠隔攻撃！");
-                                GameObject.Instantiate(_ballet,this.transform.position,Quaternion.identity);
                             }
-
-
-                        }
-                        else
-                        {//攻撃できないなら追いかける
-                            _enemyStatus.SetEnemyState(EnemyState.Chese);
+                            else
+                            {//攻撃できないなら追いかける
+                                _enemyStatus.SetEnemyState(EnemyState.Chese);
+                            }
                         }
                     }
                     else
@@ -204,12 +211,12 @@ namespace Scenes.Ingame.Enemy
                 if (_checkTimeCount > _checkRate)
                 {
                     _checkTimeCount = 0;
-                    Debug.LogWarning("San判定");
+                    //Debug.LogWarning("San判定");現状視界が360なので視界が通らないここに要は無し
                 }
             }
         }
 
-        protected bool CheckCanPlayerVisivlleCheck()
+        protected virtual bool CheckCanPlayerVisivlleCheck()
         {//キャラクターによって視界の角度判定つける？ミゴは360°、深き者どもは270°、一般的な人間の狂信者とかなら180°とか...
             float range = Vector3.Magnitude(this.transform.position - _player.transform.position) - 0.2f;//プレイヤー本体のコライダーに当たるため減らしてる
                                                                                                   //視界が通るか＝Rayが通るか
@@ -224,6 +231,24 @@ namespace Scenes.Ingame.Enemy
             else
             {
                 return false;
+            }
+        }
+
+        protected virtual void SanCheck() {
+            Vector3 ScreenPosition = _camera.WorldToScreenPoint(this.transform.position);
+            //Debug.Log(ScreenPosition);
+            if (ScreenPosition.x > 0 && ScreenPosition.x < 1920) {
+                if (ScreenPosition.y > 0 && ScreenPosition.y < 1080) {
+                    if (ScreenPosition.z > 0)
+                    {
+                        Debug.LogWarning(_horror);
+                        _playerStatus.ChangeSanValue(_horror, "Damage");
+
+
+
+
+                    }
+                }
             }
         }
     }

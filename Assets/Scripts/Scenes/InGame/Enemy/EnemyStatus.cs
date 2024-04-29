@@ -29,9 +29,10 @@ namespace Scenes.Ingame.Enemy
         [SerializeField][Tooltip("初期のState")] private EnemyState _enemyStateBase;
 
         [Header("敵キャラの攻撃性能の初期値")]
-        [SerializeField][Tooltip("Sanへの攻撃力")] private int _horrorBase;
         [SerializeField][Tooltip("攻撃力の初期値")] private int _atackPowerBase;
+        [SerializeField][Tooltip("Sanへの攻撃力")] private int _horrorBase;
         /*使用書に書いていないけど追加した変数軍団。今はEnemyAtackにあるけど、これあってだいじょうぶそうならここにねじこんでUniRxに対応させる
+         * 
         [SerializeField][Tooltip("攻撃のレートの初期値")] private float _atackrateBase;
         [SerializeField][Tooltip("遠隔攻撃可能であるかどうか")] private bool _canShot;
         [SerializeField][Tooltip("遠隔攻撃の初期値")] private int _ShotPower;
@@ -104,6 +105,8 @@ namespace Scenes.Ingame.Enemy
             _stamina.Value = _staminaBase;
             _actionCoolTime.Value = _actionCoolTimeBase;
             _enemyState.Value = _enemyStateBase;
+
+            _horror.Value = _horrorBase;
             
 
             //自身についているメソッドの初期値を設定してゆく
