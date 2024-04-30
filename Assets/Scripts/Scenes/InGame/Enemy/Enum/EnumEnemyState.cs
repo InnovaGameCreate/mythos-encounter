@@ -25,7 +25,7 @@ namespace Scenes.Ingame.Enemy
         /// <summary>
         /// UŒ‚
         /// </summary>
-        Atack,
+        Attack,
         /// <summary>
         /// ‘ŞU
         /// </summary>

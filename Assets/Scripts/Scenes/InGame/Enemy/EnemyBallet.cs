@@ -12,6 +12,7 @@ public class EnemyBallet : MonoBehaviour
     void Start()
     {
         this.transform.LookAt(GameObject.Find("Player").transform.position);
+        _rigidbody.velocity = transform.forward * _speed;
         Debug.Log("”­ŽË");
     }
 
@@ -19,15 +20,18 @@ public class EnemyBallet : MonoBehaviour
     void FixedUpdate()
     {
         _lifeTime -= Time.deltaTime;
-        _rigidbody.velocity = transform.forward * _speed;
+        
         if (_lifeTime < 0) { Destroy(this.gameObject); }
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Player") { //–½’†‚¾I
-            collision.gameObject.GetComponent<Scenes.Ingame.Player.PlayerStatus>().ChangeHealth(_damage,"Damage");            
+            collision.gameObject.GetComponent<Scenes.Ingame.Player.PlayerStatus>().ChangeHealth(_damage, "Damage");
+            Destroy(this.gameObject);
+        } else if (collision.gameObject.tag == "Stage") {
+            Destroy(this.gameObject);
         }
-        Destroy(this.gameObject);
+        
     }
 }

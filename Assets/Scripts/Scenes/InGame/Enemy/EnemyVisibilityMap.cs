@@ -287,7 +287,7 @@ namespace Scenes.Ingame.Enemy
         /// </summary>
         /// <param name="position">音源の座標</param>
         /// <param name="resetRange">音源が存在するであろうという事で対象とする範囲</param>
-        /// <param name="resetRange">定期的なチェックによって呼び出されたのかどうか</param>
+        /// <param name="periodic">定期的なチェックによって呼び出されたのかどうか</param>
         public void HearingSound(Vector3 position, float resetRange, bool periodic)
         {
             if (debugMode) Debug.Log("特定位置から聞こえてきた音について対処");

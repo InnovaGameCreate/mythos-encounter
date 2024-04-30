@@ -57,7 +57,7 @@ namespace Scenes.Ingame.Enemy
         private Camera _camera;
 
         /// <summary>
-        /// 初期あk処理外部からアクセスすⓈる
+        /// 初期化処理、外部からアクセスする
         /// </summary>
         public void Init(EnemyVisibilityMap setVisivilityMap) {
             _myVisivilityMap = setVisivilityMap;
@@ -74,7 +74,7 @@ namespace Scenes.Ingame.Enemy
 
             _enemyStatus.OnEnemyStateChange.Subscribe(state => 
             {
-                if ((state == EnemyState.Chese || state == EnemyState.Atack) && !((_lastEnemyState == EnemyState.Chese || _lastEnemyState == EnemyState.Atack))) 
+                if ((state == EnemyState.Chese || state == EnemyState.Attack) && !((_lastEnemyState == EnemyState.Chese || _lastEnemyState == EnemyState.Attack))) 
                 { 
                     _lastEnemyState = state;
                     _myVisivilityMap.SetEveryGridWatchNum(50);
@@ -87,7 +87,7 @@ namespace Scenes.Ingame.Enemy
         protected virtual void FixedUpdate()
         {
             float _playerDistance;
-            if (_enemyStatus.ReturnEnemyState == EnemyState.Chese || _enemyStatus.ReturnEnemyState == EnemyState.Atack)
+            if (_enemyStatus.ReturnEnemyState == EnemyState.Chese || _enemyStatus.ReturnEnemyState == EnemyState.Attack)
             { //追跡状態または攻撃状態の場合
 
                 //いろいろ数える
@@ -113,7 +113,7 @@ namespace Scenes.Ingame.Enemy
                             _enemyMove.SetMovePosition(_player.transform.position);
                             if (_playerDistance < _atackRange)//近接攻撃の射程内か確認する
                             { //近接攻撃をする
-                                _enemyStatus.SetEnemyState(EnemyState.Atack);
+                                _enemyStatus.SetEnemyState(EnemyState.Attack);
                                 if (_atackTimeCount > _attackTime)
                                 {
                                     _atackTimeCount = 0;
@@ -126,13 +126,13 @@ namespace Scenes.Ingame.Enemy
                             }
                             else if (_playerDistance < _shotRange) //遠隔攻撃の射程内か確認する
                             { //遠隔攻撃をする
-                                _enemyStatus.SetEnemyState(EnemyState.Atack);
+                                _enemyStatus.SetEnemyState(EnemyState.Attack);
                                 if (_shotTimeCount > _shotTime)
                                 {
                                     _atackTimeCount = 0;
                                     _shotTimeCount = 0;
                                     if (_debugMode) Debug.Log("ここで遠隔攻撃！");
-                                    GameObject.Instantiate(_ballet, this.transform.position, Quaternion.identity);
+                                    GameObject.Instantiate(_ballet, this.transform.position + new Vector3(0,2,0) + this.transform.forward, Quaternion.identity);
                                 }
 
 
