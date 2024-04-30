@@ -4,7 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
-
+using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
+using Scenes.Ingame.InGameSystem;
+using System;
+using System.Threading;
 
 namespace Scenes.Ingame.Enemy
 {
@@ -24,8 +28,6 @@ namespace Scenes.Ingame.Enemy
         [SerializeField][Tooltip("飛行しているかどうかの初期値")] private bool _flyingBase;
         [SerializeField][Tooltip("スタミナの初期値")] private int _staminaBase;
         [SerializeField][Tooltip("特殊行動のクールタイム")] private int _actionCoolTimeBase;
-        [SerializeField][Tooltip("敵の覚えている可能性のある呪文")] private List<EnemyMagic> _enemyMagics;
-        [SerializeField][Tooltip("一個体の覚えている呪文")] private int _hasMagicNum;
         [SerializeField][Tooltip("初期のState")] private EnemyState _enemyStateBase;
 
         [Header("敵キャラの攻撃性能の初期値")]
@@ -40,11 +42,22 @@ namespace Scenes.Ingame.Enemy
         [SerializeField][Tooltip("遠隔攻撃の射程の初期値")] private float _shotRateBase;
         */
 
+        [Header("その他")]
+        [SerializeField][Tooltip("撤退時に落とすユニークアイテム")] private GameObject _uniqueItem;
+        [SerializeField][Tooltip("敵の覚えている可能性のある呪文")] private List<EnemyMagic> _enemyMagics;
+        [SerializeField][Tooltip("一個体の覚えている呪文")] private int _hasMagicNum;
+        [SerializeField][Tooltip("退散から復帰するまでのミリ秒")] private int _fallBackTime;
+        [SerializeField][Tooltip("見た目のゲームオブジェクト")] private GameObject _visual;
 
         [Header("自身についているであろうスクリプト")]
         [SerializeField] EnemySearch _enemySearch;
         [SerializeField] EnemyAttack _enemyAttack;
         [SerializeField] EnemyMove _enemyMove;
+
+
+
+        [Header("デバッグするかどうか")]
+        [SerializeField] private bool _debugMode;
 
 
 
@@ -108,6 +121,36 @@ namespace Scenes.Ingame.Enemy
         /// <returns>正常にセットアップできたかどうか</returns>
         public bool Init(EnemyVisibilityMap visivilityMap) {
             //初期値を設定してゆく
+            ResetStatus();
+            
+
+            //自身についているメソッドの初期化
+            _enemySearch.Init(visivilityMap);
+            _enemyAttack.Init(visivilityMap.DeepCopy());//Atackはサーチの後にInit
+            _enemyMove.Init();
+
+            //撃破されたことを検出
+            OnHpChange.Where(hp => hp <= 0).Subscribe(hp =>
+            {
+                FallBack();
+            }).AddTo(this);
+            return true;
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (_debugMode && Input.GetKey(KeyCode.Z)) { FallBack(); }
+        }
+
+        public void SetEnemyState(EnemyState state) {
+            _enemyState.Value = state;
+        }
+
+        /// <summary>
+        /// ステータスのみ初期化する
+        /// </summary>
+        public void ResetStatus() {
             _hp.Value = _hpBase;
             _patolloringSpeed.Value = _patolloringSpeedBase;
             _searcSpeed.Value = _searchSpeedBase;
@@ -122,31 +165,30 @@ namespace Scenes.Ingame.Enemy
             _enemyState.Value = _enemyStateBase;
 
             _horror.Value = _horrorBase;
-            
-
-            //自身についているメソッドの初期値を設定してゆく
-            _enemySearch.Init(visivilityMap);
-            _enemyAttack.Init(visivilityMap.DeepCopy());//Atackはサーチの後にInit
-            _enemyMove.Init();
-
-
-            return true;
         }
 
-        // Start is called before the first frame update
-        void Start()
+        /// <summary>
+        /// 退散させるために使用する
+        /// </summary>
+        public void FallBack() { 
+            //機能を停止
+            _enemyAttack.enabled = false;
+            _enemyMove.enabled = false; 
+            _enemySearch.enabled = false;
+            _visual.active = false;
+            GameObject.Instantiate(_uniqueItem,this.transform.position,Quaternion.identity);
+            Debug.Log(this.gameObject.name + "退散しました！");
+            ReMap(this.GetCancellationTokenOnDestroy()).Forget();
+        }
+
+        private async Cysharp.Threading.Tasks.UniTaskVoid ReMap(CancellationToken ct)
         {
-            
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
-        public void SetEnemyState(EnemyState state) {
-            _enemyState.Value = state;
+            await Task.Delay(_fallBackTime,ct);
+            //機能を停止
+            _enemyAttack.enabled = true;
+            _enemyMove.enabled = true;
+            _enemySearch.enabled = true;
+            _visual.active = true;
         }
 
     }

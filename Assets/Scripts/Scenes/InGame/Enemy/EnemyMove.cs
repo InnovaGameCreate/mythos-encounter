@@ -129,7 +129,6 @@ namespace Scenes.Ingame.Enemy
                                     _enemyStatus.Stamina = _enemyStatus.Stamina + 1;
                                 }
                             }
-
                         }
                         else
                         { //まだスタミナが切れ切って無い場合

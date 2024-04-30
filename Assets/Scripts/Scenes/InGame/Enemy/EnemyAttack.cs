@@ -50,7 +50,7 @@ namespace Scenes.Ingame.Enemy
         private float _shotTimeCount;
         private float _audiomaterPower;//聞く力
         private float _checkTimeCount;//前回チェックしてからの時間を計測
-        [SerializeField] private float _brindCheseTimeCount;
+         float _brindCheseTimeCount;
         private EnemyVisibilityMap _myVisivilityMap;
         private EnemyState _lastEnemyState = EnemyState.None;
         Vector3 nextPositionCandidate = new Vector3(0, 0, 0);
