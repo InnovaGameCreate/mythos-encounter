@@ -17,9 +17,12 @@ namespace Scenes.Ingame.Manager
         private ResultValue _resultValue;
         private Subject<ResultValue> _result = new Subject<ResultValue>();
         public IObservable<ResultValue> OnResultValue { get { return _result; } }
-        void Start()
+        private void Awake()
         {
             Instance = this;
+        }
+        void Start()
+        {
             _resultValue = new ResultValue();
             _token = new CancellationTokenSource();
             _timerToken = new CancellationTokenSource();
@@ -72,7 +75,7 @@ namespace Scenes.Ingame.Manager
         private int Bonus()
         {
             int money = 100;
-            money += (20 - _resultValue.time * 60) * 5;
+            money += (20 - _resultValue.time / 60) * 5 > 0 ? (20 - _resultValue.time / 60) * 5 : 0;
             money += 20 * _resultValue.level;
             money += _resultValue.getUnique ? 50 : 0;
             money += _resultValue.firstContact ? 100 : 0;
