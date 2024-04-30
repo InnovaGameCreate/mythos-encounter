@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 7736650679182576676}
   - component: {fileID: 1614493044594472170}
   m_Layer: 0
-  m_Name: EnemySpowner
+  m_Name: EnemySpowner (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7736650679182576676
 Transform:
   m_ObjectHideFlags: 0
@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1614493044594472170
 MonoBehaviour:
@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3495d4e27afa60438173cb613954761, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _DebugMode: 1
+  _debugMode: 0
+  _nonInGameManagerMode: 0
   _enemyVisibilityMap: {fileID: 0}
   _x: 9
   _z: 9
