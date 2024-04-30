@@ -260,6 +260,9 @@ namespace Scenes.Ingame.Enemy
                 {
                     if (debugMode) Debug.Log("z座標がマップからはみ出ています");
                 }
+                
+            }
+            else {
                 if (debugMode) Debug.Log("x座標がマップからはみ出ています");
             }
 
