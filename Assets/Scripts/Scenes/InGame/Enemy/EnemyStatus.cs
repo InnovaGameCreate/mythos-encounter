@@ -18,7 +18,7 @@ namespace Scenes.Ingame.Enemy
         [SerializeField][Tooltip("hpの初期値")] private int _hpBase;
         [SerializeField][Tooltip("巡回時の速度の初期値")] private float _patolloringSpeedBase;
         [SerializeField][Tooltip("索敵時の速度")] private float _searchSpeedBase;
-        [SerializeField][Tooltip("追跡時の速度")] private float _chaseSpeedBase;       
+        [SerializeField][Tooltip("追跡時の速度")] private float _chaseSpeedBase;
         [SerializeField][Tooltip("聴力の初期値。0は全く聞こえず100はどんな小さい音も聞き逃さない")][Range(0, 100)] private float _audiometerPowerBase;
         [SerializeField][Tooltip("光に反応するかどうかの初期値")] private bool _reactToLightBase;
         [SerializeField][Tooltip("飛行しているかどうかの初期値")] private bool _flyingBase;
@@ -46,6 +46,9 @@ namespace Scenes.Ingame.Enemy
         [SerializeField] EnemyAttack _enemyAttack;
         [SerializeField] EnemyMove _enemyMove;
 
+
+
+
         private IntReactiveProperty _hp = new IntReactiveProperty();
         private FloatReactiveProperty _patolloringSpeed = new FloatReactiveProperty();
         private FloatReactiveProperty _searcSpeed = new FloatReactiveProperty();
@@ -55,16 +58,16 @@ namespace Scenes.Ingame.Enemy
         private BoolReactiveProperty _flying = new BoolReactiveProperty();
         private IntReactiveProperty _stamina = new IntReactiveProperty();
         private FloatReactiveProperty _actionCoolTime = new FloatReactiveProperty();
-        private ReactiveProperty<EnemyState>  _enemyState = new ReactiveProperty<EnemyState>(EnemyState.Patorolling);
+        private ReactiveProperty<EnemyState> _enemyState = new ReactiveProperty<EnemyState>(EnemyState.Patorolling);
 
         private IntReactiveProperty _horror = new IntReactiveProperty();
         private IntReactiveProperty _atackPower = new IntReactiveProperty();
 
 
-        public IObservable<int> OnHpChange { get { return _hp; }  }
+        public IObservable<int> OnHpChange { get { return _hp; } }
         public IObservable<float> OnPatolloringSppedChange { get { return _patolloringSpeed; } }
         public IObservable<float> OnSearchSpeedChange { get { return _searcSpeed; } }
-        public IObservable<float> OnCheseSpeedChange { get { return _cheseSpeed;} }
+        public IObservable<float> OnCheseSpeedChange { get { return _cheseSpeed; } }
         public IObservable<float> OnAudiometerPowerChange { get { return _audiometerPower; } }
         public IObservable<bool> OnReactToLightChange { get { return _reactToLight; } }
         public IObservable<bool> OnFlyingChange { get { return _flying; } }
@@ -75,13 +78,25 @@ namespace Scenes.Ingame.Enemy
         public IObservable<int> OnAtackPowerChange { get { return _atackPower; } }
 
 
-        
+        //##########GetとかSetのかたまり
+        public float ReturnPatolloringSpeed { get { return _patolloringSpeed.Value; } }
+        public float ReturnSearchSpeed { get { return _searcSpeed.Value; } }
+        public float ReturnCheseSpeed { get { return _cheseSpeed.Value; } }
+
+        public int ReturnStaminaBase { get { return _staminaBase; } }
+        public int Stamina { get { return _stamina.Value; } set { _stamina.Value = value; } }
+
         public float ReturnAudiomaterPower { get { return _audiometerPower.Value; } }
         public bool ReturnReactToLight { get { return _reactToLight.Value; } }
         public EnemyState ReturnEnemyState { get { return _enemyState.Value; } }
 
         public int ReturnHorror { get { return _horror.Value; } }
         public int ReturnAtackPower { get { return _atackPower.Value; } }
+        
+        
+
+
+
 
         //##########UniRxにかかわらない変数
         private EnemyVisibilityMap _myEnemyVisivilityMap;

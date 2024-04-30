@@ -50,7 +50,7 @@ namespace Scenes.Ingame.Enemy
         private float _shotTimeCount;
         private float _audiomaterPower;//聞く力
         private float _checkTimeCount;//前回チェックしてからの時間を計測
-        private float _brindCheseTimeCount;
+        [SerializeField] private float _brindCheseTimeCount;
         private EnemyVisibilityMap _myVisivilityMap;
         private EnemyState _lastEnemyState = EnemyState.None;
         Vector3 nextPositionCandidate = new Vector3(0, 0, 0);
@@ -157,7 +157,6 @@ namespace Scenes.Ingame.Enemy
                             if (_enemyStatus.ReturnReactToLight && _myVisivilityMap.RightCheck(this.transform.position, _player.transform.position, _visivilityRange, _playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
                             { //光が見えるか調べる
                                 if (_debugMode) Debug.Log("追跡中光が見えた");
-                                _enemyStatus.SetEnemyState(EnemyState.Searching);
                                 _enemyMove.SetMovePosition(nextPositionCandidate);
                             }
                             else if (_enemyMove.endMove)
@@ -166,7 +165,6 @@ namespace Scenes.Ingame.Enemy
                                 {
 
                                     if (_debugMode) Debug.Log("追跡中忍ぶ音が聞こえる");
-                                    _enemyStatus.SetEnemyState(EnemyState.Searching);
                                     _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
                                     _enemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
 
@@ -174,7 +172,6 @@ namespace Scenes.Ingame.Enemy
                                 else if (_playerStatus.nowPlayerActionState == PlayerActionState.Walk && Mathf.Pow((float)(_playerStatus.nowPlayerWalkVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)//歩く音が聞こえるかどうか
                                 {
                                     if (_debugMode) Debug.Log("追跡中歩く音が聞こえる");
-                                    _enemyStatus.SetEnemyState(EnemyState.Searching);
                                     _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
                                     _enemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
 
@@ -183,7 +180,6 @@ namespace Scenes.Ingame.Enemy
                                 {
 
                                     if (_debugMode) Debug.Log("追跡中走る音が聞こえる");
-                                    _enemyStatus.SetEnemyState(EnemyState.Searching);
                                     _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
                                     _enemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
 
@@ -194,8 +190,6 @@ namespace Scenes.Ingame.Enemy
                                     _myVisivilityMap.CheckVisivility(this.transform.position, _visivilityRange);
                                     if (_enemyMove.endMove)//移動が終わっている場合
                                     {
-                                        //痕跡のあった場所まで来たが何もいなかった場合ここが実行されるのでStatusを書き換える
-                                        _enemyStatus.SetEnemyState(EnemyState.Patorolling);
                                         //あらたな移動先を取得するメソッドを書き込む
                                         _enemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
                                     }
@@ -241,7 +235,6 @@ namespace Scenes.Ingame.Enemy
                 if (ScreenPosition.y > 0 && ScreenPosition.y < 1080) {
                     if (ScreenPosition.z > 0)
                     {
-                        Debug.LogWarning(_horror);
                         _playerStatus.ChangeSanValue(_horror, "Damage");
 
 

@@ -12902,7 +12902,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3495d4e27afa60438173cb613954761, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _DebugMode: 0
+  _DebugMode: 1
   _enemyVisibilityMap: {fileID: 0}
   _x: 9
   _z: 9
@@ -15705,7 +15705,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 848513832572176275, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.72
+      value: -38.3
       objectReference: {fileID: 0}
     - target: {fileID: 848513832572176275, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
       propertyPath: m_LocalPosition.y
@@ -15713,7 +15713,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 848513832572176275, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -2.55
+      value: -37
       objectReference: {fileID: 0}
     - target: {fileID: 848513832572176275, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
       propertyPath: m_LocalRotation.w

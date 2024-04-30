@@ -162,7 +162,7 @@ MonoBehaviour:
   _brindCheseTime: 30
   _debugMode: 0
   _attackTime: 5
-  _atackRange: 0
+  _atackRange: 5
   canShot: 1
   _shotTime: 10
   _shotRange: 15
@@ -226,13 +226,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hpBase: 10
-  _patolloringSpeedBase: 4
-  _searchSpeedBase: 5
-  _chaseSpeedBase: 7
+  _patolloringSpeedBase: 0
+  _searchSpeedBase: 0
+  _chaseSpeedBase: 3
   _audiometerPowerBase: 100
   _reactToLightBase: 1
   _flyingBase: 1
-  _staminaBase: 100
+  _staminaBase: 5
   _actionCoolTimeBase: 20
   _enemyMagics: 
   _hasMagicNum: 0
