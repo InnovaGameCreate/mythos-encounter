@@ -332,6 +332,10 @@ MonoBehaviour:
   _staminaBase: 100
   _sanBase: 100
   _speedBase: 5
+  _lightrangeBase: 20
+  _sneakVolumeBase: 5
+  _walkVolumeBase: 15
+  _runVolumeBase: 25
   _health:
     value: 0
   _stamina:
@@ -345,6 +349,14 @@ MonoBehaviour:
   _bleeding:
     value: 0
   _playerActionState:
+    value: 0
+  _lightrange:
+    value: 0
+  _sneakVolume:
+    value: 0
+  _walkVolume:
+    value: 0
+  _runVolume:
     value: 0
 --- !u!114 &7111757753802298086
 MonoBehaviour:
@@ -406,6 +418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coolTime: 0
+  consumeSanValue: 0
 --- !u!1001 &7818803104135845221
 PrefabInstance:
   m_ObjectHideFlags: 0
