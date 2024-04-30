@@ -97,7 +97,7 @@ namespace Scenes.Ingame.Enemy
         public float ReturnCheseSpeed { get { return _cheseSpeed.Value; } }
 
         public int ReturnStaminaBase { get { return _staminaBase; } }
-        public int Stamina { get { return _stamina.Value; } set { _stamina.Value = value; } }
+        public int Stamina { get { return _stamina.Value; } }
 
         public float ReturnAudiomaterPower { get { return _audiometerPower.Value; } }
         public bool ReturnReactToLight { get { return _reactToLight.Value; } }
@@ -168,6 +168,15 @@ namespace Scenes.Ingame.Enemy
         }
 
         /// <summary>
+        /// 攻撃を加えるために使用する
+        /// </summary>
+        /// <param name="damage">与えるダメージ</param>
+        public void AddDamage(int damage) {
+            _hp.Value -= damage;
+        }
+
+
+        /// <summary>
         /// 退散させるために使用する
         /// </summary>
         public void FallBack() { 
@@ -179,6 +188,14 @@ namespace Scenes.Ingame.Enemy
             GameObject.Instantiate(_uniqueItem,this.transform.position,Quaternion.identity);
             Debug.Log(this.gameObject.name + "退散しました！");
             ReMap(this.GetCancellationTokenOnDestroy()).Forget();
+        }
+
+        /// <summary>
+        /// スタミナの値を書き換えるのに使用する
+        /// </summary>
+        /// <param name="changeStamina">書き換えるスタミナの値</param>
+        public void StaminaChange(int changeStamina) { 
+            _stamina.Value = changeStamina;
         }
 
         private async Cysharp.Threading.Tasks.UniTaskVoid ReMap(CancellationToken ct)

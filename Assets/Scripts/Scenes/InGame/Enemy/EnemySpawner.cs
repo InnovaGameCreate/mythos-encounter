@@ -12,7 +12,8 @@ namespace Scenes.Ingame.Enemy
     public class EnemySpawner : MonoBehaviour
     {
         [Header("デバッグするかどうか")]
-        [SerializeField] private bool _DebugMode;
+        [SerializeField] private bool _debugMode;
+        [SerializeField][Tooltip("InGameManager無しで機能させるかどうか")] private bool _nonInGameManagerMode;
 
         [Header("スキャンするマップに関して")]
         [SerializeField]
@@ -35,32 +36,16 @@ namespace Scenes.Ingame.Enemy
         {
             //マップをスキャン
             _enemyVisibilityMap = new EnemyVisibilityMap();
-            _enemyVisibilityMap.debugMode = _DebugMode;
+            _enemyVisibilityMap.debugMode = _debugMode;
             _enemyVisibilityMap.maxVisivilityRange = _maxVisiviilityRange;
             _enemyVisibilityMap.GridMake(_x, _z, _range, _centerPosition);
             _enemyVisibilityMap.MapScan();
 
             //テストとしてここでEnemy制作を依頼している
-            //EnemySpawn(EnemyName.TestEnemy);
-            EnemySpawn(EnemyName.TestEnemy, new Vector3(-10, 4, -10));            
+            EnemySpawn(EnemyName.TestEnemy, new Vector3(-10, _centerPosition.y+3, -10));            
         }
 
-        /*
-        public void EnemySpawn(EnemyName enemeyName)//ポリモーフィズムには死んでもらいました
-        {
-            switch (enemeyName)
-            {
 
-                case EnemyName.TestEnemy:
-                    GameObject.Instantiate(_testEnemy);
-                    if (_DebugMode) Debug.Log("エネミーは制作されました");
-                    break;
-                default:
-                    Debug.LogError("このスクリプトに、すべての敵のプレハブが格納可能かか確認してください");
-                    return;
-            }
-        }
-        */
 
         public void EnemySpawn(EnemyName enemeyName, Vector3 spownPosition)//位置を指定してスポーンさせたい場合
         {
@@ -72,7 +57,7 @@ namespace Scenes.Ingame.Enemy
 
                 case EnemyName.TestEnemy:
                     createEnemy = GameObject.Instantiate(_testEnemy, spownPosition, Quaternion.identity);
-                    if (_DebugMode) Debug.Log("エネミーは制作されました");
+                    if (_debugMode) Debug.Log("エネミーは制作されました");
                     break;
                 default:
                     Debug.LogError("このスクリプトに、すべての敵のプレハブが格納可能かを確認してください");
@@ -80,7 +65,7 @@ namespace Scenes.Ingame.Enemy
             }
             if (createEnemy.TryGetComponent<EnemyStatus>(out createEnemyStatus))
             {
-                if (_DebugMode) Debug.Log("作成した敵にはEnemyStatusクラスがあります");
+                if (_debugMode) Debug.Log("作成した敵にはEnemyStatusクラスがあります");
                 createEnemyStatus.Init(_enemyVisibilityMap.DeepCopy());
             }
 
