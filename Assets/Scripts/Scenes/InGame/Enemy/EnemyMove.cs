@@ -52,7 +52,7 @@ namespace Scenes.Ingame.Enemy
                         _myAgent.speed = _enemyStatus.ReturnPatolloringSpeed;
                         if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
                         { //スタミナが削れていたら
-                            _enemyStatus.Stamina = _enemyStatus.Stamina + 1;
+                            _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
                         }
                         else if (_enemyStatus.ReturnStaminaBase < _enemyStatus.Stamina)
                         {
@@ -63,7 +63,7 @@ namespace Scenes.Ingame.Enemy
                         _myAgent.speed = _enemyStatus.ReturnSearchSpeed;
                         if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
                         { //スタミナが削れていたら
-                            _enemyStatus.Stamina = _enemyStatus.Stamina + 1;
+                            _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
                         }
                         else if(_enemyStatus.ReturnStaminaBase < _enemyStatus.Stamina)
                         {
@@ -82,7 +82,7 @@ namespace Scenes.Ingame.Enemy
                             {//回復しきっていないなら回復する
                                 if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
                                 { //スタミナが削れていたら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
-                                    _enemyStatus.Stamina = _enemyStatus.Stamina + 1;
+                                    _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
                                 }
                             }
 
@@ -94,14 +94,14 @@ namespace Scenes.Ingame.Enemy
                                 _staminaOver = true;
                                 if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
                                 { //スタミナが削れていたら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
-                                    _enemyStatus.Stamina = _enemyStatus.Stamina + 1;
+                                    _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
                                 }
                             }
                             else
                             {
                                 if (0 < _enemyStatus.Stamina)
                                 { //スタミナを削れるなら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
-                                    _enemyStatus.Stamina = _enemyStatus.Stamina - 1;
+                                    _enemyStatus.StaminaChange(_enemyStatus.Stamina - 1);
                                 }
                             }
                         }
@@ -126,7 +126,7 @@ namespace Scenes.Ingame.Enemy
                             {//回復しきっていないなら回復する
                                 if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
                                 { //スタミナが削れていたら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
-                                    _enemyStatus.Stamina = _enemyStatus.Stamina + 1;
+                                    _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
                                 }
                             }
                         }
@@ -137,14 +137,14 @@ namespace Scenes.Ingame.Enemy
                                 _staminaOver = true;
                                 if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
                                 { //スタミナが削れていたら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
-                                    _enemyStatus.Stamina = _enemyStatus.Stamina + 1;
+                                    _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
                                 }
                             }
                             else
                             {
                                 if (0 < _enemyStatus.Stamina)
                                 { //スタミナを削れるなら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
-                                    _enemyStatus.Stamina = _enemyStatus.Stamina - 1;
+                                    _enemyStatus.StaminaChange(_enemyStatus.Stamina - 1);
                                 }
                             }
                         }
