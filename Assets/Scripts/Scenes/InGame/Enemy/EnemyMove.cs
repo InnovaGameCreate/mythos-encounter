@@ -19,15 +19,15 @@ namespace Scenes.Ingame.Enemy
         /// <summary>
         /// 初期化処理外部から呼び出す
         /// </summary>
-        public void Init() { 
-        
+        public void Init() {
+            _myAgent = GetComponent<NavMeshAgent>();
+            if (_myAgent == null) Debug.LogError("NavMeshAgentが認識できません");
+            _myAgent.destination = this.transform.position;
         }
 
         void Start()
         {
-            _myAgent = GetComponent<NavMeshAgent>();
-            if (_myAgent == null) Debug.LogError("NavMeshAgentが認識できません");
-            _myAgent.destination = this.transform.position;
+
         }
 
         // Update is called once per frame
