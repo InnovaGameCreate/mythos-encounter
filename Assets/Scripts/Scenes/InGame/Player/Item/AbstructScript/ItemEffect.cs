@@ -6,10 +6,11 @@ namespace Scenes.Ingame.Player
     /// 子クラスの名前は「アイテム名 + Effect」とすること
     /// Startメソッドで必ずSetUp関数を呼ぶこと. 呼び方:「base.SetUp();」
     /// </summary>
+    [RequireComponent(typeof(ItemInstract))]
     public abstract class ItemEffect : MonoBehaviour
     {
         public ItemData myItemData;
-
+        [HideInInspector]public PlayerStatus ownerPlayerStatus;
 
         public void SetUp()
         {

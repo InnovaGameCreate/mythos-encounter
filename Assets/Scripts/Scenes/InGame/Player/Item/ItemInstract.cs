@@ -21,6 +21,10 @@ namespace Scenes.Ingame.Player
                 StartCoroutine(PlayerItem.CanUseItem());//アイテム取得後0.1秒はアイテムを使えないようにする。
                 Destroy(this.gameObject , 0.15f);//ステージ上にあるアイテムを破壊
             }
+
+            //アイテムにアタッチされているEffect系のスクリプトに取得者のPlayerStatusの情報を流す。
+            var effect = this.gameObject.GetComponent<ItemEffect>();
+            effect.ownerPlayerStatus = status;
         }
     }
 }
