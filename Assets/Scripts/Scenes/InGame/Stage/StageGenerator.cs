@@ -5,6 +5,8 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using Scenes.Ingame.Manager;
 using Scenes.Ingame.InGameSystem;
+using Unity.AI;
+using Unity.AI.Navigation;
 
 namespace Scenes.Ingame.Stage
 {
@@ -82,6 +84,7 @@ namespace Scenes.Ingame.Stage
             if (viewDebugLog) DebugStageData(_stageGenerateData);
             await GenerateStage(token);
             await GenerateWall(token);
+            floorObject.GetComponent<NavMeshSurface>().BuildNavMesh();
             IngameManager.Instance.SetReady(ReadyEnum.StageReady);//ステージ生成完了を通知
         }
         private void InitialSet()
