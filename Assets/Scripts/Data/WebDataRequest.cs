@@ -16,7 +16,8 @@ public class WebDataRequest : MonoBehaviour
 {
     private const string SheetID = "18s4lIZRvuOdiEjQVsyX7BKPhbGpw6SdjSY6NIHYWL1k";
     private string[] SheetName = { "CharacterTable", "ItemTable", "EnemyDataTable" };
-    public List<EnemyData> EnemyDataArrayList = new List<EnemyData>();
+    public List<EnemyDataStruct> EnemyDataArrayList = new List<EnemyDataStruct>();
+    public List<ItemDataStruct> ItemDataArrayList = new List<ItemDataStruct>();
     private CancellationTokenSource _timeOutToken;
     private CancellationTokenSource _loadSuccessToken;
     private const int TIMEOUTMILISECOND = 10000;//10ïb
@@ -66,6 +67,7 @@ public class WebDataRequest : MonoBehaviour
             {
                 DataArrayList[i] = ConvertToArrayListFrom(request[i].downloadHandler.text);
             }
+            ConvertStringToItemData(DataArrayList[(int)DataType.ItemTable]);
             ConvertStringToEnemyData(DataArrayList[(int)DataType.EnemyDataTable]);
         }
         _loadSuccessToken.Cancel();
@@ -105,7 +107,7 @@ public class WebDataRequest : MonoBehaviour
     private void ConvertStringToEnemyData(List<string[]> _dataArray)
     {
         EnemyDataArrayList.Clear();
-        EnemyData inputTempData = new EnemyData();
+        EnemyDataStruct inputTempData = new EnemyDataStruct();
         foreach (var dataRecord in _dataArray)
         {
             string[] armor = dataRecord[4].Split('/');
@@ -130,6 +132,38 @@ public class WebDataRequest : MonoBehaviour
             EnemyDataArrayList.Add(inputTempData);
         }
         if (debugMode) Debug.Log("EnemyDataLoadEnd");
+    }
+    private void ConvertStringToItemData(List<string[]> _dataArray)
+    {
+        ItemDataArrayList.Clear();
+        ItemDataStruct inputTempData = new ItemDataStruct();
+        ItemCategory _itemCategory = new ItemCategory();
+        foreach (var dataRecord in _dataArray)
+        {
+            switch (dataRecord[3])
+            {
+                case "Shop":
+                    _itemCategory = ItemCategory.Shop;
+                    break;
+                case "Stage":
+                    _itemCategory = ItemCategory.Stage;
+                    break;
+                case "Unique":
+                    _itemCategory = ItemCategory.Unique;
+                    break;
+                default:
+                    break;
+            }
+            inputTempData.ItemDataSet(
+                int.Parse(dataRecord[0]),//ID
+                dataRecord[1],//ñºëO
+                dataRecord[2],//ê‡ñæ
+                _itemCategory,//category
+                int.Parse(dataRecord[4])//price
+                );
+            ItemDataArrayList.Add(inputTempData);
+        }
+        if (debugMode) Debug.Log("ItemDataLoadEnd");
     }
     private void OnDestroy()
     {

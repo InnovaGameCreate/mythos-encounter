@@ -1,4 +1,4 @@
-public struct EnemyData
+public struct EnemyDataStruct
 {
     private int _enemyId;
     private string _name;
