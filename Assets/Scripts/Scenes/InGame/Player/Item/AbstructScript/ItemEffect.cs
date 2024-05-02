@@ -22,6 +22,12 @@ namespace Scenes.Ingame.Player
         {
             return myItemData;
         }
+
+        /// <summary>
+        /// 拾われたときに実行する処理を記述
+        /// </summary>
+        public abstract void OnPickUp();
+
         /// <summary>
         /// アイテムの効果を実装する関数
         /// </summary>

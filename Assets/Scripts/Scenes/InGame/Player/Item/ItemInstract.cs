@@ -25,6 +25,7 @@ namespace Scenes.Ingame.Player
             //アイテムにアタッチされているEffect系のスクリプトに取得者のPlayerStatusの情報を流す。
             var effect = this.gameObject.GetComponent<ItemEffect>();
             effect.ownerPlayerStatus = status;
+            effect.OnPickUp();//各アイテムの拾った時の処理を実行させる
         }
     }
 }

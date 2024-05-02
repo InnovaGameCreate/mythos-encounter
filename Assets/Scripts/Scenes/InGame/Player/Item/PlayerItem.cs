@@ -90,10 +90,10 @@ namespace Scenes.Ingame.Player
                         _itemSlot[_nowIndex.Value].myItemData.thisItemEffect.Effect();
 
                         //もし使い切りアイテムであればListの,対応する順番を初期化する
-                        if (_itemSlot[_nowIndex.Value].myItemData.isSingleUse)
-                        {
-                            ThrowItem(_nowIndex.Value);
-                        }
+                        //if (_itemSlot[_nowIndex.Value].myItemData.isSingleUse)
+                        //{
+                            //ThrowItem(_nowIndex.Value);
+                        //}
                     });
 
             //Hキーを入力したときにアイテムを破棄            

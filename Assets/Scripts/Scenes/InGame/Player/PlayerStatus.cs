@@ -34,6 +34,7 @@ namespace Scenes.Ingame.Player
         [SerializeField] private IntReactiveProperty _speed = new IntReactiveProperty();//移動速度の基準値
         [SerializeField] private BoolReactiveProperty _survive = new BoolReactiveProperty(true);//生死.trueのときは生きている
         [SerializeField] private BoolReactiveProperty _bleeding = new BoolReactiveProperty(false);//出血状態.trueのときに時間経過で体力が減少
+
         [SerializeField] private ReactiveProperty<PlayerActionState> _playerActionState = new ReactiveProperty<PlayerActionState>(PlayerActionState.Idle);
         [SerializeField] private FloatReactiveProperty _lightrange = new FloatReactiveProperty();//光の届く距離
         [SerializeField] private FloatReactiveProperty _sneakVolume = new FloatReactiveProperty();//しゃがみ時の音量
@@ -61,11 +62,14 @@ namespace Scenes.Ingame.Player
         public int playerID { get { return _playerID; } }
         public int stamina_max { get { return _staminaBase; } }
         public int nowStaminaValue { get { return _stamina.Value; } }
+        public int nowPlayerSpeed { get { return _speed.Value; } }
         public PlayerActionState nowPlayerActionState { get { return _playerActionState.Value; } }
         public float nowPlayerLightRange { get { return _lightrange.Value; } }
         public float nowPlayerSneakVolume { get { return _sneakVolume.Value; } }
         public float nowPlayerWalkVolume { get { return _walkVolume.Value; } }
         public float nowPlayerRunVolume { get { return _runVolume.Value; } }
+
+        public int lastHP;//HPの変動前の数値を記録。比較に用いる
 
         private void Init()
         {
@@ -117,11 +121,15 @@ namespace Scenes.Ingame.Player
         public void ChangeHealth(int value, string mode)
         {
             if (mode == "Heal")
-                _health.Value = Mathf.Min(100, _health.Value + value); 
-
-            else if(mode == "Damage")
+            {
+                lastHP = _health.Value;
+                _health.Value = Mathf.Min(100, _health.Value + value);
+            }
+            else if (mode == "Damage")
+            {
+                lastHP = _health.Value;
                 _health.Value = Mathf.Max(0, _health.Value - value);
-
+            }
         }
 
         /// <summary>
@@ -148,6 +156,15 @@ namespace Scenes.Ingame.Player
                 _san.Value = Mathf.Min(100, _san.Value + value);
             else if (mode == "Damage")
                 _san.Value = Mathf.Max(0, _san.Value - value);
+        }
+
+        /// <summary>
+        /// 移動速度を変更させる関数
+        /// </summary>
+        /// <param name="value">変更量</param>
+        public void ChangeSpeed(int value)
+        {
+            _speed.Value = value;
         }
 
         /// <summary>
