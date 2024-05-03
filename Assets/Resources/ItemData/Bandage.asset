@@ -19,4 +19,4 @@ MonoBehaviour:
   itemInfo: "\u51FA\u8840\u72B6\u614B\u3092\u6CBB\u3059\u6D88\u8017\u54C1"
   type: 1
   isSingleUse: 1
-  thisItemEffect: {fileID: 0}
+  prefab: {fileID: 4570247510132778309, guid: f9758bb809c86794c9f5f7c72ca5e703, type: 3}

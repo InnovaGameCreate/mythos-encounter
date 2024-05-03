@@ -8,8 +8,9 @@ namespace Scenes.Ingame.Player
 {
     public class BandageEffect : ItemEffect
     {
-        private float _timer;
+        private float _startTime;
         private bool _stopCoroutineBool = false;
+        private int speed;
         private void Start()
         {
             base.SetUp();
@@ -17,45 +18,60 @@ namespace Scenes.Ingame.Player
 
         public override void OnPickUp()
         {
-            //包帯使用中にダメージを受けたら包帯の使用を解除
-            ownerPlayerStatus.OnPlayerHealthChange
-                .Where(x => ownerPlayerStatus.lastHP > x)
-                .Subscribe(_ => _stopCoroutineBool = true)
-                .AddTo(this);
+            //攻撃くらったときを示すBoolがTrueになったときにアイテム使用を中断
+            ownerPlayerStatus.OnEnemyAttackedMe
+                .Skip(1)//初期化の時は無視
+                .Subscribe(_ => _stopCoroutineBool = true).AddTo(this);
         }
 
         public override void Effect()
         {
-            StartCoroutine(UseBandage());
-            //ownerPlayerStatus.ChangeBleedingBool(false);
+            if (ownerPlayerStatus.nowBleedingValue)
+                StartCoroutine(UseBandage());
+            else
+                Debug.Log("出血状態ではないので使用しませんでした。");
         }
 
         public IEnumerator UseBandage()
         {
             Debug.Log("包帯使う");
+            
             //アイテム仕様直後にステータス変更を行う
-            int speed = ownerPlayerStatus.nowPlayerSpeed;
+            speed = ownerPlayerStatus.nowPlayerSpeed;
             ownerPlayerStatus.ChangeSpeed(ownerPlayerStatus.nowPlayerSpeed / 2);
+            ownerPlayerItem.isCanChangeBringItem = false;
             //ToDo:Playerに包帯を巻くエフェクトを発生させる
 
+            _startTime = Time.time;
+            Debug.Log(_startTime);
             
-            while(true)
+            
+            
+            while (true)
             {
-                _timer += Time.deltaTime;
-
+                yield return null;
+                //攻撃を食らった際にこのコルーチンを破棄              
                 if (_stopCoroutineBool == true)
                 {
+                    Debug.Log("包帯使用のコルーチンを破棄");
                     _stopCoroutineBool = false;
                     ownerPlayerStatus.ChangeSpeed(speed);
+                    ownerPlayerItem.ThrowItem(ownerPlayerItem.nowIndex);
+                    ownerPlayerItem.isCanChangeBringItem = true;
                     yield break;
                 }
-
-                if (_timer > 10.0f) 
+               
+                if (Time.time - _startTime >= 10.0f) 
                 {
                     ownerPlayerStatus.ChangeBleedingBool(false);
                     ownerPlayerStatus.ChangeSpeed(speed);
+                    ownerPlayerItem.ThrowItem(ownerPlayerItem.nowIndex);
+                    ownerPlayerItem.isCanChangeBringItem = true;
+                    yield break;
                 }
+               
             }
+            
         }
     }
 }

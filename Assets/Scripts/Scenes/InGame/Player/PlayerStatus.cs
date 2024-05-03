@@ -41,7 +41,8 @@ namespace Scenes.Ingame.Player
         [SerializeField] private FloatReactiveProperty _walkVolume = new FloatReactiveProperty();//しゃがみ時の音量
         [SerializeField] private FloatReactiveProperty _runVolume = new FloatReactiveProperty();//しゃがみ時の音量
 
-
+        //その他のSubject
+        private Subject<Unit> _enemyAttackedMe = new Subject<Unit>();//敵から攻撃を食らったときのイベント
 
         //それぞれの購読側を公開する。他のClassでSubscribeできる。
         public IObservable<int> OnPlayerHealthChange { get { return _health; } }//_health(体力)が変化した際にイベントが発行
@@ -57,12 +58,15 @@ namespace Scenes.Ingame.Player
         public IObservable<float> OnWalkVolumeChange { get { return _walkVolume; } }//プレイヤーの歩く音が届く距離が変化した場合にイベントが発行
         public IObservable<float> OnRunVolumeChange { get { return _runVolume; } }//プレイヤーの走る音が届く距離が変化した場合にイベントが発行
 
+        public IObservable<Unit> OnEnemyAttackedMe { get { return _enemyAttackedMe; } }//敵から攻撃を受けた際にイベントが発行
 
         //一部情報の開示
         public int playerID { get { return _playerID; } }
         public int stamina_max { get { return _staminaBase; } }
         public int nowStaminaValue { get { return _stamina.Value; } }
         public int nowPlayerSpeed { get { return _speed.Value; } }
+
+        public bool nowBleedingValue { get { return _bleeding.Value; } }
         public PlayerActionState nowPlayerActionState { get { return _playerActionState.Value; } }
         public float nowPlayerLightRange { get { return _lightrange.Value; } }
         public float nowPlayerSneakVolume { get { return _sneakVolume.Value; } }
@@ -70,6 +74,7 @@ namespace Scenes.Ingame.Player
         public float nowPlayerRunVolume { get { return _runVolume.Value; } }
 
         public int lastHP;//HPの変動前の数値を記録。比較に用いる
+        public int bleedingDamage = 1;//出血時に受けるダメージ
 
         private void Init()
         {
@@ -92,7 +97,7 @@ namespace Scenes.Ingame.Player
             _san.Subscribe(x => CheckSanValue(x, _playerID));//SAN値が変化したときにゲーム内で変更を加える
             _bleeding.
                 Where(x => x == true).
-                Subscribe(_ => StartCoroutine(Bleeding()));//出血状態になったときに出血処理を開始
+                Subscribe(_ => StartCoroutine(Bleeding(bleedingDamage)));//出血状態になったときに出血処理を開始
         }
 
         // Update is called once per frame
@@ -105,6 +110,7 @@ namespace Scenes.Ingame.Player
                 ChangeHealth(20, "Damage");
                 ChangeSanValue(20, "Damage");
                 ChangeBleedingBool(true);
+                _enemyAttackedMe.OnNext(default);
             }
 
             if (Input.GetKeyDown(KeyCode.K))
@@ -185,14 +191,14 @@ namespace Scenes.Ingame.Player
         /// 出血状態の処理を行う関数。
         /// </summary>
         /// <returns></returns>
-        private IEnumerator Bleeding()
+        private IEnumerator Bleeding(int damage)
         {
             while (true)
             {
                 yield return new WaitForSeconds(1.0f);
                 if (_bleeding.Value)
                 { 
-                    ChangeHealth(1, "Damage");
+                    ChangeHealth(damage, "Damage");
                     Debug.Log("出血ダメージが入りました。");
                 }                   
                 else 
@@ -206,7 +212,7 @@ namespace Scenes.Ingame.Player
         /// <param name="health">残り体力</param>
         private void CheckHealth(int health, int ID)
         {
-            Debug.Log("残り体力：" + health);
+            //Debug.Log("残り体力：" + health);
 
             
             if (health <= 0)
@@ -220,7 +226,7 @@ namespace Scenes.Ingame.Player
         private void CheckStamina(int stamina, int ID)
         {
             //スタミナ残量をゲーム内に表示.
-            Debug.Log("残りスタミナ：" + stamina);
+            //Debug.Log("残りスタミナ：" + stamina);
         }
 
         /// <summary>
@@ -229,7 +235,7 @@ namespace Scenes.Ingame.Player
         /// <param name="san">残りのSAN値</param>
         private void CheckSanValue(int sanValue, int ID)
         {
-            Debug.Log("残りsan値：" + sanValue);
+            //Debug.Log("残りsan値：" + sanValue);
 
             if (sanValue <= 0)
                 _survive.Value = false;

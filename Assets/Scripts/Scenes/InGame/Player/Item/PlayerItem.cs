@@ -20,7 +20,10 @@ namespace Scenes.Ingame.Player
 
         //アイテム関係
         private ReactiveProperty<int> _nowIndex = new ReactiveProperty<int>();//選択中のアイテムスロット番号
-        
+        public GameObject myRightHand;//手のこと
+        public GameObject nowBringItem;//現在手に持っているアイテム
+        public bool isCanChangeBringItem = true;//手に持つアイテムの変更を許可するか否か
+
         //Ray関連
         [SerializeField] Camera _mainCamera;//playerの目線を担うカメラ
         [SerializeField] private float _getItemRange = 2.0f;//アイテムを入手できる距離
@@ -54,7 +57,7 @@ namespace Scenes.Ingame.Player
             ItemSlotStruct init = new ItemSlotStruct();            
             for (int i = 0; i < 7; i++)
             {
-                init.ChangeInfo(null, ItemSlotStatus.available);
+                init.ChangeInfo();
                 _itemSlot.Add(init);
             }
 
@@ -71,7 +74,6 @@ namespace Scenes.Ingame.Player
                             {
                                 intract.Intract(_myPlayerStatus);
                             }
-
                         }
                         else
                         {
@@ -87,13 +89,7 @@ namespace Scenes.Ingame.Player
                         Debug.Log("アイテム使う");
 
                         //アイテムを使用
-                        _itemSlot[_nowIndex.Value].myItemData.thisItemEffect.Effect();
-
-                        //もし使い切りアイテムであればListの,対応する順番を初期化する
-                        //if (_itemSlot[_nowIndex.Value].myItemData.isSingleUse)
-                        //{
-                            //ThrowItem(_nowIndex.Value);
-                        //}
+                        nowBringItem.GetComponent<ItemEffect>().Effect();
                     });
 
             //Hキーを入力したときにアイテムを破棄            
@@ -108,11 +104,29 @@ namespace Scenes.Ingame.Player
                         ThrowItem(_nowIndex.Value);
                     });
 
+            //アイテムスロットの選択状態が変わったときに、手元に適切なアイテムを出現させる
+            _nowIndex
+                .Subscribe(_ => 
+                {
+                    //他にアイテムを手に持っていたら、それを破壊
+                    if(nowBringItem != null)
+                    Destroy(nowBringItem);
+
+                    //手に選択したアイテムを出現させる
+                    if (_itemSlot[_nowIndex.Value].myItemData != null)
+                    {
+                        nowBringItem = Instantiate(_itemSlot[_nowIndex.Value].myItemData.prefab, myRightHand.transform.position, _itemSlot[_nowIndex.Value].myItemData.prefab.transform.rotation);
+                        nowBringItem.transform.parent = myRightHand.transform;
+                        nowBringItem.GetComponent<ItemInstract>().InstantIntract(_myPlayerStatus);
+                    }
+                }).AddTo(this);
+
             //プレイヤーの入力による_nowIndexの変更
             //1.マウスホイールの入力
             //2.数字キーの入力
             this.UpdateAsObservable()
                     .Where(_ => Input.GetAxis("Mouse ScrollWheel") != 0 || ItemNumberKeyDown() != 0)
+                    .Where(_ => isCanChangeBringItem)
                     .Subscribe(_ =>
                     {
                         //マウスホールのみの入力時
@@ -163,8 +177,9 @@ namespace Scenes.Ingame.Player
         /// アイテムを捨てる・使い切るときに呼び出す。Listの変更（初期化）に使う
         /// </summary>
         /// <param name="index">変更したいリストの順番</param>
-        private void ThrowItem(int index)
+        public void ThrowItem(int index)
         {
+            Destroy(nowBringItem);
             ItemSlotStruct temp = new ItemSlotStruct();
             _itemSlot[index] = temp;
         }

@@ -17,14 +17,33 @@ namespace Scenes.Ingame.Player
                 ItemSlotStruct item = new ItemSlotStruct();
                 item.ChangeInfo(this.GetComponent<ItemEffect>().GetItemData(), ItemSlotStatus.available);
                 PlayerItem.ChangeListValue(PlayerItem.nowIndex, item);//アイテムスロットにアイテムを格納
+                PlayerItem.nowBringItem = this.gameObject;
 
                 StartCoroutine(PlayerItem.CanUseItem());//アイテム取得後0.1秒はアイテムを使えないようにする。
-                Destroy(this.gameObject , 0.15f);//ステージ上にあるアイテムを破壊
+
+                //取得したアイテムを手の近くに移動
+                this.gameObject.transform.position = PlayerItem.myRightHand.transform.position;
+                this.gameObject.transform.parent = PlayerItem.myRightHand.transform;
             }
 
-            //アイテムにアタッチされているEffect系のスクリプトに取得者のPlayerStatusの情報を流す。
+            //アイテムにアタッチされているEffect系のスクリプトに取得者の情報を流す。
             var effect = this.gameObject.GetComponent<ItemEffect>();
             effect.ownerPlayerStatus = status;
+            effect.ownerPlayerItem = PlayerItem;
+            effect.OnPickUp();//各アイテムの拾った時の処理を実行させる
+        }
+
+        /// <summary>
+        /// アイテムを切り替えた際に情報を流すための関数
+        /// </summary>
+        /// <param name="status">持ち主のPlayerStatus</param>
+        public void InstantIntract(PlayerStatus status)
+        {
+            var PlayerItem = status.gameObject.GetComponent<PlayerItem>();
+            //アイテムにアタッチされているEffect系のスクリプトに取得者の情報を流す。
+            var effect = this.gameObject.GetComponent<ItemEffect>();
+            effect.ownerPlayerStatus = status;
+            effect.ownerPlayerItem = PlayerItem;
             effect.OnPickUp();//各アイテムの拾った時の処理を実行させる
         }
     }

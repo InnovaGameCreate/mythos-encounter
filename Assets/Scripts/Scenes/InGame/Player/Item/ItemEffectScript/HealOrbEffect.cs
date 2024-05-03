@@ -21,6 +21,7 @@ namespace Scenes.Ingame.Player
         public override void Effect()
         {
             ownerPlayerStatus.ChangeHealth(100, "Heal");
+            ownerPlayerItem.ThrowItem(ownerPlayerItem.nowIndex);
         }
 
     }

@@ -17,7 +17,6 @@ public class ItemData : ScriptableObject
     [Header("インゲームの設定")]
     [Tooltip("使い切りのアイテムならtrueに")]
     public bool isSingleUse;
-    [HideInInspector]
-    public ItemEffect thisItemEffect;//inspecter上では空のままで大丈夫
+    [Tooltip("このアイテムのプレハブ")] public GameObject prefab;
 }
 
