@@ -141,10 +141,14 @@ namespace Scenes.Ingame.Player
             if (Mathf.Abs(moveMouseY) > 0.001f)
             {
                 _nowCameraAngle.x -= moveMouseY;
-                _nowCameraAngle.x = Mathf.Clamp(_nowCameraAngle.x, -40, 35);
+                _nowCameraAngle.x = Mathf.Clamp(_nowCameraAngle.x, -40, 60);
                 _camera.gameObject.transform.localEulerAngles = _nowCameraAngle;
             }
             Move();
+
+            //Ž©—R—Ž‰º
+            if (this.gameObject.transform.position.y > 0)
+                this.gameObject.transform.position -= new Vector3(0, 9.8f *Time.deltaTime, 0);
         }
 
         private void Move()

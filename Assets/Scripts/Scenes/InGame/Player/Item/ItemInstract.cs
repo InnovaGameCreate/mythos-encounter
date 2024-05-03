@@ -24,13 +24,14 @@ namespace Scenes.Ingame.Player
                 //取得したアイテムを手の近くに移動
                 this.gameObject.transform.position = PlayerItem.myRightHand.transform.position;
                 this.gameObject.transform.parent = PlayerItem.myRightHand.transform;
-            }
 
-            //アイテムにアタッチされているEffect系のスクリプトに取得者の情報を流す。
-            var effect = this.gameObject.GetComponent<ItemEffect>();
-            effect.ownerPlayerStatus = status;
-            effect.ownerPlayerItem = PlayerItem;
-            effect.OnPickUp();//各アイテムの拾った時の処理を実行させる
+                //アイテムにアタッチされているEffect系のスクリプトに取得者の情報を流す。
+                var effect = this.gameObject.GetComponent<ItemEffect>();
+                effect.ownerPlayerStatus = status;
+                effect.ownerPlayerItem = PlayerItem;
+                effect.OnPickUp();//各アイテムの拾った時の処理を実行させる
+                PlayerItem.nowBringItem.GetComponent<Rigidbody>().useGravity = false;//アイテムを持った時に重力の影響を受けないようにする
+            }
         }
 
         /// <summary>
@@ -45,6 +46,7 @@ namespace Scenes.Ingame.Player
             effect.ownerPlayerStatus = status;
             effect.ownerPlayerItem = PlayerItem;
             effect.OnPickUp();//各アイテムの拾った時の処理を実行させる
+            PlayerItem.nowBringItem.GetComponent<Rigidbody>().useGravity = false;//アイテムを持った時に重力の影響を受けないようにする
         }
     }
 }

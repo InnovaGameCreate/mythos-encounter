@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8922068900310112615}
   - component: {fileID: 7279544102987469898}
   - component: {fileID: 4686608353179275495}
+  - component: {fileID: 7433570426077695508}
   m_Layer: 10
   m_Name: Bandage
   m_TagString: Item
@@ -34,7 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6676466388114763343
 MeshFilter:
@@ -136,3 +137,30 @@ MonoBehaviour:
   myItemData: {fileID: 11400000, guid: 223fdd8427ea6f04ba2bd49236b537be, type: 2}
   ownerPlayerStatus: {fileID: 0}
   ownerPlayerItem: {fileID: 0}
+--- !u!54 &7433570426077695508
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4570247510132778309}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

@@ -11,16 +11,12 @@ namespace Scenes.Ingame.Player
         private float _startTime;
         private bool _stopCoroutineBool = false;
         private int speed;
-        private void Start()
-        {
-            base.SetUp();
-        }
+
 
         public override void OnPickUp()
         {
             //攻撃くらったときを示すBoolがTrueになったときにアイテム使用を中断
             ownerPlayerStatus.OnEnemyAttackedMe
-                .Skip(1)//初期化の時は無視
                 .Subscribe(_ => _stopCoroutineBool = true).AddTo(this);
         }
 
@@ -44,9 +40,7 @@ namespace Scenes.Ingame.Player
 
             _startTime = Time.time;
             Debug.Log(_startTime);
-            
-            
-            
+                       
             while (true)
             {
                 yield return null;
@@ -68,10 +62,8 @@ namespace Scenes.Ingame.Player
                     ownerPlayerItem.ThrowItem(ownerPlayerItem.nowIndex);
                     ownerPlayerItem.isCanChangeBringItem = true;
                     yield break;
-                }
-               
-            }
-            
+                }               
+            }            
         }
     }
 }

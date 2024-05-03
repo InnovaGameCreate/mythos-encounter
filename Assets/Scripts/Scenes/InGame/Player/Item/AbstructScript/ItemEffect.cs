@@ -4,8 +4,6 @@ namespace Scenes.Ingame.Player
     /// <summary>
     /// アイテムの効果・データを管理する為の抽象クラス
     /// 子クラスの名前は「アイテム名 + Effect」とすること
-    /// Startメソッドで必ずSetUp関数を呼ぶこと. 呼び方:「base.SetUp();」
-    /// 
     /// </summary>
     [RequireComponent(typeof(ItemInstract))]
     public abstract class ItemEffect : MonoBehaviour
@@ -13,11 +11,6 @@ namespace Scenes.Ingame.Player
         public ItemData myItemData;
         [HideInInspector]public PlayerStatus ownerPlayerStatus;
         [HideInInspector] public PlayerItem ownerPlayerItem;
-
-        public void SetUp()
-        {
-            this.gameObject.layer = LayerMask.NameToLayer("Item");
-        }
 
         public ItemData GetItemData()
         {

@@ -7,12 +7,6 @@ namespace Scenes.Ingame.Player
 {
     public class HealOrbEffect : ItemEffect
     {
-        private void Start()
-        {
-            base.SetUp();
-            
-        }
-
         public override void OnPickUp()
         {
             

@@ -103,20 +103,25 @@ namespace Scenes.Ingame.Player
         // Update is called once per frame
         void Update()
         {
+#if UNITY_EDITOR
             //デバッグ用.(必要無くなれば消す)
-
             if (Input.GetKeyDown(KeyCode.L))
             {
                 ChangeHealth(20, "Damage");
                 ChangeSanValue(20, "Damage");
                 ChangeBleedingBool(true);
-                _enemyAttackedMe.OnNext(default);
             }
 
             if (Input.GetKeyDown(KeyCode.K))
             {
                 ChangeBleedingBool(false);
             }
+
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                _enemyAttackedMe.OnNext(default);
+            }
+#endif           
         }
 
         /// <summary>

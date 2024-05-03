@@ -26,7 +26,7 @@ namespace Scenes.Ingame.Player
 
         //Ray関連
         [SerializeField] Camera _mainCamera;//playerの目線を担うカメラ
-        [SerializeField] private float _getItemRange = 2.0f;//アイテムを入手できる距離
+        [SerializeField] private float _getItemRange = 3.0f;//アイテムを入手できる距離
 
         //アイテムスロット（UI）の操作関連
         private float scrollValue;
@@ -97,11 +97,16 @@ namespace Scenes.Ingame.Player
                     .Where(_ => _itemSlot[_nowIndex.Value].myItemData != null && Input.GetKeyDown(KeyCode.H))
                     .Subscribe(_ =>
                     {
-                        //捨てたアイテムを近くに複製し、再度拾えるようにする。
-                        //処理（未実装）
-
-                        //アイテムを捨てる。
-                        ThrowItem(_nowIndex.Value);
+                        var rb = nowBringItem.GetComponent<Rigidbody>();
+                        //アイテムを近くに投げ捨てる
+                        nowBringItem.transform.parent = null;
+                        rb.useGravity = true;
+                        rb.AddForce(_mainCamera.transform.forward * 300);
+                        
+                        //アイテムスロットのListを更新
+                        nowBringItem = null;
+                        ItemSlotStruct temp = new ItemSlotStruct();
+                        _itemSlot[_nowIndex.Value] = temp;
                     });
 
             //アイテムスロットの選択状態が変わったときに、手元に適切なアイテムを出現させる
@@ -110,14 +115,14 @@ namespace Scenes.Ingame.Player
                 {
                     //他にアイテムを手に持っていたら、それを破壊
                     if(nowBringItem != null)
-                    Destroy(nowBringItem);
+                        Destroy(nowBringItem);
 
                     //手に選択したアイテムを出現させる
                     if (_itemSlot[_nowIndex.Value].myItemData != null)
                     {
                         nowBringItem = Instantiate(_itemSlot[_nowIndex.Value].myItemData.prefab, myRightHand.transform.position, _itemSlot[_nowIndex.Value].myItemData.prefab.transform.rotation);
                         nowBringItem.transform.parent = myRightHand.transform;
-                        nowBringItem.GetComponent<ItemInstract>().InstantIntract(_myPlayerStatus);
+                        nowBringItem.GetComponent<ItemInstract>().InstantIntract(_myPlayerStatus);//アイテムに必要な情報を与える
                     }
                 }).AddTo(this);
 
@@ -179,7 +184,9 @@ namespace Scenes.Ingame.Player
         /// <param name="index">変更したいリストの順番</param>
         public void ThrowItem(int index)
         {
-            Destroy(nowBringItem);
+            if(nowBringItem != null)
+                Destroy(nowBringItem);
+
             ItemSlotStruct temp = new ItemSlotStruct();
             _itemSlot[index] = temp;
         }
