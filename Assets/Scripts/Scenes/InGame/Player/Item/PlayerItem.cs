@@ -27,7 +27,7 @@ namespace Scenes.Ingame.Player
 
         //Ray関連
         [SerializeField] Camera _mainCamera;//playerの目線を担うカメラ
-        [SerializeField] private float _getItemRange = 3.0f;//アイテムを入手できる距離
+        [SerializeField] private float _getItemRange;//アイテムを入手できる距離
 
         //アイテムスロット（UI）の操作関連
         private float scrollValue;

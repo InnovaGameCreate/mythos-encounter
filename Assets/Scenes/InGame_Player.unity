@@ -7415,7 +7415,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6449360652433016383, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
       propertyPath: _getItemRange
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8389478554569858200, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
       propertyPath: _myPlayerStatus

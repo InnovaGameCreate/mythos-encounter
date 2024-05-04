@@ -10,7 +10,6 @@ namespace Scenes.Ingame.Player
     {
         private float _startTime;
         private bool _stopCoroutineBool = false;
-        private int speed;
 
 
         public override void OnPickUp()
@@ -32,9 +31,9 @@ namespace Scenes.Ingame.Player
         {
             Debug.Log("包帯使う");
             
-            //アイテム仕様直後にステータス変更を行う
-            speed = ownerPlayerStatus.nowPlayerSpeed;
-            ownerPlayerStatus.ChangeSpeed(ownerPlayerStatus.nowPlayerSpeed / 2);
+            //アイテム使用直後にステータス変更を行う
+            ownerPlayerStatus.UseItem(true);
+            ownerPlayerStatus.ChangeSpeed();
             ownerPlayerItem.isCanChangeBringItem = false;
             //ToDo:Playerに包帯を巻くエフェクトを発生させる
 
@@ -49,8 +48,8 @@ namespace Scenes.Ingame.Player
                 {
                     Debug.Log("包帯使用のコルーチンを破棄");
                     _stopCoroutineBool = false;
-                    ownerPlayerStatus.ChangeSpeed(speed);
-                    ownerPlayerItem.ThrowItem(ownerPlayerItem.nowIndex);
+                    ownerPlayerStatus.UseItem(false);
+                    ownerPlayerStatus.ChangeSpeed();
                     ownerPlayerItem.isCanChangeBringItem = true;
                     yield break;
                 }
@@ -58,7 +57,8 @@ namespace Scenes.Ingame.Player
                 if (Time.time - _startTime >= 10.0f) 
                 {
                     ownerPlayerStatus.ChangeBleedingBool(false);
-                    ownerPlayerStatus.ChangeSpeed(speed);
+                    ownerPlayerStatus.UseItem(false);
+                    ownerPlayerStatus.ChangeSpeed();
                     ownerPlayerItem.ThrowItem(ownerPlayerItem.nowIndex);
                     ownerPlayerItem.isCanChangeBringItem = true;
                     yield break;

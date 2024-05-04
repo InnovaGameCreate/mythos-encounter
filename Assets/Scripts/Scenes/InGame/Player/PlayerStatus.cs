@@ -75,6 +75,7 @@ namespace Scenes.Ingame.Player
 
         public int lastHP;//HPの変動前の数値を記録。比較に用いる
         public int bleedingDamage = 1;//出血時に受けるダメージ
+        private bool _isUseItem = false;
 
         private void Init()
         {
@@ -172,10 +173,18 @@ namespace Scenes.Ingame.Player
         /// <summary>
         /// 移動速度を変更させる関数
         /// </summary>
-        /// <param name="value">変更量</param>
-        public void ChangeSpeed(int value)
+        public void ChangeSpeed()
         {
-            _speed.Value = value;
+            _speed.Value = (int)(_speedBase * (_isUseItem ? 0.5f : 1));
+        }
+
+        /// <summary>
+        /// アイテムを使っているのか管理するための関数
+        /// </summary>
+        /// <param name="value"></param>
+        public void UseItem(bool value)
+        { 
+            _isUseItem = value;
         }
 
         /// <summary>

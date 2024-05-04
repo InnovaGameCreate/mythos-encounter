@@ -395,7 +395,7 @@ MonoBehaviour:
   nowBringItem: {fileID: 0}
   isCanChangeBringItem: 1
   _mainCamera: {fileID: 1285542953524166243}
-  _getItemRange: 2
+  _getItemRange: 3
   scrollSense: 10
 --- !u!114 &5250157038054447586
 MonoBehaviour:
