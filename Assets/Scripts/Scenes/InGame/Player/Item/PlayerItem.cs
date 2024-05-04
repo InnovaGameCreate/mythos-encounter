@@ -5,6 +5,7 @@ using UniRx;
 using UniRx.Triggers;
 using System;
 using System.Linq;
+using Unity.VisualScripting;
 
 namespace Scenes.Ingame.Player
 {
@@ -68,7 +69,8 @@ namespace Scenes.Ingame.Player
                         RaycastHit hit;
                         if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, _getItemRange, layerMask))//設定した距離にあるアイテムを認知
                         {
-                            _itemPopActive.OnNext(hit.collider.name);//アイテムポップが出現
+                            string name = hit.collider.gameObject.GetComponent<ItemEffect>().GetItemData().itemName;
+                            _itemPopActive.OnNext(name);//アイテムポップが出現
                             //TryGetComponentを行う。
                             if (hit.collider.gameObject.TryGetComponent(out IInteractable intract))
                             {
