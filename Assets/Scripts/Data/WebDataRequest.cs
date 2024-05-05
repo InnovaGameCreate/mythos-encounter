@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -22,7 +21,7 @@ public class WebDataRequest : MonoBehaviour
     public List<PlayerDataStruct> PlayerDataArrayList = new List<PlayerDataStruct>();
     private CancellationTokenSource _timeOutToken;
     private CancellationTokenSource _loadSuccessToken;
-    private const int TIMEOUTMILISECOND = 10000;//10秒
+    private const int TIMEOUTMILISECOND = 10000;//タイムアウトする10秒(ミリ単位)
     private List<string[]>[] DataArrayList;
     private bool debugMode = true;
     void Start()
@@ -75,12 +74,18 @@ public class WebDataRequest : MonoBehaviour
         }
         _loadSuccessToken.Cancel();
     }
+    /// <summary>
+    /// 読み込みが終わらなかったらタイムアウトさせて処理を中断する
+    /// </summary>
     private async UniTaskVoid TimeOutTimer(CancellationToken token)
     {
         await UniTask.Delay(TIMEOUTMILISECOND, cancellationToken: token);
         _timeOutToken.Cancel();
         throw new TimeoutException();
     }
+    /// <summary>
+    /// 読み込んだスプレットシートの各要素を配列にする
+    /// </summary>
     static List<string[]> ConvertToArrayListFrom(string text)
     {
         List<string[]> cardDataStringsList = new List<string[]>();
@@ -107,6 +112,9 @@ public class WebDataRequest : MonoBehaviour
 
         return cardDataStringsList;
     }
+    /// <summary>
+    /// 配列のデータをEnemyDataStructの型に変更させる
+    /// </summary>
     private void ConvertStringToEnemyData(List<string[]> _dataArray)
     {
         EnemyDataArrayList.Clear();
@@ -115,6 +123,7 @@ public class WebDataRequest : MonoBehaviour
         {
             string[] armor = dataRecord[4].Split('/');
             string[] moveSpeed = dataRecord[5].Split('/');
+            string[] spell = dataRecord[10].Split('/');
             inputTempData.EnemyDataSet(
                 int.Parse(dataRecord[0]),//ID
                 dataRecord[1],//名前
@@ -128,14 +137,17 @@ public class WebDataRequest : MonoBehaviour
                 int.Parse(dataRecord[7]),//hearing
                 int.Parse(dataRecord[8]),//vision
                 int.Parse(dataRecord[9]),//actionCooltime
-                dataRecord[10],//magic
-                int.Parse(dataRecord[11]),//magicCount
+                spell,//spell
+                int.Parse(dataRecord[11]),//spellCount
                 float.Parse(dataRecord[12])//san
                 );
             EnemyDataArrayList.Add(inputTempData);
         }
         if (debugMode) Debug.Log("EnemyDataLoadEnd");
     }
+    /// <summary>
+    /// 配列のデータをItemDataStructの型に変更させる
+    /// </summary>
     private void ConvertStringToItemData(List<string[]> _dataArray)
     {
         ItemDataArrayList.Clear();
@@ -168,6 +180,9 @@ public class WebDataRequest : MonoBehaviour
         }
         if (debugMode) Debug.Log("ItemDataLoadEnd");
     }
+    /// <summary>
+    /// 配列のデータをPlayerDataStructの型に変更させる
+    /// </summary>
     private void ConvertStringToPlayerData(List<string[]> _dataArray)
     {
         PlayerDataArrayList.Clear();
