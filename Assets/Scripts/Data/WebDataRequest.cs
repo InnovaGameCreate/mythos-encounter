@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -18,6 +19,7 @@ public class WebDataRequest : MonoBehaviour
     private string[] SheetName = { "CharacterTable", "ItemTable", "EnemyDataTable" };
     public List<EnemyDataStruct> EnemyDataArrayList = new List<EnemyDataStruct>();
     public List<ItemDataStruct> ItemDataArrayList = new List<ItemDataStruct>();
+    public List<PlayerDataStruct> PlayerDataArrayList = new List<PlayerDataStruct>();
     private CancellationTokenSource _timeOutToken;
     private CancellationTokenSource _loadSuccessToken;
     private const int TIMEOUTMILISECOND = 10000;//10•b
@@ -67,6 +69,7 @@ public class WebDataRequest : MonoBehaviour
             {
                 DataArrayList[i] = ConvertToArrayListFrom(request[i].downloadHandler.text);
             }
+            ConvertStringToPlayerData(DataArrayList[(int)DataType.CharacterTable]);
             ConvertStringToItemData(DataArrayList[(int)DataType.ItemTable]);
             ConvertStringToEnemyData(DataArrayList[(int)DataType.EnemyDataTable]);
         }
@@ -164,6 +167,30 @@ public class WebDataRequest : MonoBehaviour
             ItemDataArrayList.Add(inputTempData);
         }
         if (debugMode) Debug.Log("ItemDataLoadEnd");
+    }
+    private void ConvertStringToPlayerData(List<string[]> _dataArray)
+    {
+        PlayerDataArrayList.Clear();
+        PlayerDataStruct inputTempData = new PlayerDataStruct();
+        foreach (var dataRecord in _dataArray)
+        {
+            string[] items = dataRecord[3].Split('/');
+            string[] spell = dataRecord[5].Split('/');
+            string[] mythCreature = dataRecord[6].Split('/');
+            inputTempData.PlayerDataSet(
+                int.Parse(dataRecord[0]),//ID
+                dataRecord[1],//–¼‘O
+                int.Parse(dataRecord[2]),//money
+                items,//items
+                int.Parse(dataRecord[4]),//mythPoint
+                spell,//spell
+                mythCreature,//mythCreature
+                int.Parse(dataRecord[7]),//escape
+                int.Parse(dataRecord[8])//dispersingEscape
+                );
+            PlayerDataArrayList.Add(inputTempData);
+        }
+        if (debugMode) Debug.Log("PlayerDataLoadEnd");
     }
     private void OnDestroy()
     {
