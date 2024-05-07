@@ -22,7 +22,7 @@ namespace Scenes.Ingame.Stage
         private List<Vector2> candidatePosition = new List<Vector2>();
         private RoomData[,] _stageGenerateData;
         private int roomId = 0;
-        const float tileSize = 5.8f;
+        const float tileSize = 5.85f;
         private bool playerSpawnRoom = false;
         private bool viewDebugLog = false;//確認用のデバックログを表示する
         private CancellationTokenSource source = new CancellationTokenSource();
@@ -39,9 +39,13 @@ namespace Scenes.Ingame.Stage
         [SerializeField]
         private GameObject tilePrefab;
         [SerializeField]
-        private GameObject wallXPrefab;
+        private GameObject outSideWallXPrefab;
         [SerializeField]
-        private GameObject wallYPrefab;
+        private GameObject outSideWallYPrefab;
+        [SerializeField]
+        private GameObject inSideWallXPrefab;
+        [SerializeField]
+        private GameObject inSideWallYPrefab;
         [SerializeField]
         private GameObject wallXDoorPrefab;
         [SerializeField]
@@ -115,19 +119,19 @@ namespace Scenes.Ingame.Stage
                     Instantiate(tilePrefab, instantiatePosition, Quaternion.identity, floorOnject.transform);
                     if (x == 0)
                     {
-                        Instantiate(wallXPrefab, instantiatePosition, Quaternion.identity, outSideWallOnject.transform);
+                        Instantiate(outSideWallXPrefab, instantiatePosition, Quaternion.identity, outSideWallOnject.transform);
                     }
                     else if (x == _stageSize.x)
                     {
-                        Instantiate(wallXPrefab, instantiatePosition + tileXoffset, Quaternion.identity, outSideWallOnject.transform);
+                        Instantiate(outSideWallXPrefab, instantiatePosition + tileXoffset, Quaternion.identity, outSideWallOnject.transform);
                     }
                     if (y == 0)
                     {
-                        Instantiate(wallYPrefab, instantiatePosition, Quaternion.identity * new Quaternion(0, 90, 0, 0), outSideWallOnject.transform);
+                        Instantiate(outSideWallYPrefab, instantiatePosition, Quaternion.identity * new Quaternion(0, 90, 0, 0), outSideWallOnject.transform);
                     }
                     else if (y == _stageSize.y)
                     {
-                        Instantiate(wallYPrefab, instantiatePosition + tileZoffset, Quaternion.identity * new Quaternion(0, 90, 0, 0), outSideWallOnject.transform);
+                        Instantiate(outSideWallYPrefab, instantiatePosition + tileZoffset, Quaternion.identity * new Quaternion(0, 90, 0, 0), outSideWallOnject.transform);
                     }
                     int roomId = _stageGenerateData[x, y].RoomId;
                     if (roomFlag[roomId])
@@ -668,7 +672,7 @@ namespace Scenes.Ingame.Stage
                 }
                 else
                 {
-                    Instantiate(wallXPrefab, instantiatePosition, Quaternion.identity, inSideWallOnject.transform);
+                    Instantiate(inSideWallXPrefab, instantiatePosition, Quaternion.identity, inSideWallOnject.transform);
                 }
             }
             foreach (var yWall in _yWallPos)
@@ -680,7 +684,7 @@ namespace Scenes.Ingame.Stage
                 }
                 else
                 {
-                    Instantiate(wallYPrefab, instantiatePosition, Quaternion.identity, inSideWallOnject.transform);
+                    Instantiate(inSideWallYPrefab, instantiatePosition, Quaternion.identity, inSideWallOnject.transform);
                 }
             }
         }
@@ -700,9 +704,9 @@ namespace Scenes.Ingame.Stage
             translation3.z = z;
             return translation3;
         }
-        private bool RoomIdEqual(Vector2 basePositon, Vector2 position1, int roomId)
+        private bool RoomIdEqual(Vector2 basePosition, Vector2 position1, int roomId)
         {
-            if (_stageGenerateData[(int)(basePositon.x + position1.x), (int)(basePositon.y + position1.y)].RoomId == roomId)
+            if (_stageGenerateData[(int)(basePosition.x + position1.x), (int)(basePosition.y + position1.y)].RoomId == roomId)
             {
                 return true;
             }
