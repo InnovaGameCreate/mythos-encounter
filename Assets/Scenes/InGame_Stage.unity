@@ -2218,6 +2218,7 @@ GameObject:
   m_Component:
   - component: {fileID: 385755861}
   - component: {fileID: 385755860}
+  - component: {fileID: 385755862}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -2302,6 +2303,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &385755862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 385755859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1001 &411928438
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14334,6 +14358,42 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: tilePrefab
+      value: 
+      objectReference: {fileID: 5511715714760156985, guid: 8123d4872b9c4674bb8fe45f4be33121, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: wallXPrefab
+      value: 
+      objectReference: {fileID: 3064727835192536343, guid: 48d86a03617bad249986c177a2e76f4e, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: wallYPrefab
+      value: 
+      objectReference: {fileID: 109861664846363845, guid: a1e50afbf824d9a47886622d3dac9c24, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: wallXDoorPrefab
+      value: 
+      objectReference: {fileID: 3064727835192536343, guid: 8457aec2305875b45b017bcb1dee3ab9, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: wallYDoorPrefab
+      value: 
+      objectReference: {fileID: 109861664846363845, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: inSideWallXPrefab
+      value: 
+      objectReference: {fileID: 3064727835192536343, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: inSideWallYPrefab
+      value: 
+      objectReference: {fileID: 109861664846363845, guid: e2affe5c2d976bf41a24ad67e112139a, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: outSideWallXPrefab
+      value: 
+      objectReference: {fileID: 3064727835192536343, guid: 48d86a03617bad249986c177a2e76f4e, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: outSideWallYPrefab
+      value: 
+      objectReference: {fileID: 109861664846363845, guid: a1e50afbf824d9a47886622d3dac9c24, type: 3}
     - target: {fileID: 6624500817061936141, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
       propertyPath: m_Name
       value: Stage
