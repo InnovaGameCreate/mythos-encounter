@@ -1,4 +1,4 @@
-using Scenes.Ingame.Player;
+ï»¿using Scenes.Ingame.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,15 +14,16 @@ namespace Scenes.Ingame.Player
         [SerializeField] private PlayerSoundManager _myPlayerSoundManager;
         Vector3 _moveVelocity;
 
-        [Header("ƒJƒƒ‰ŠÖŒW")]
+        [Header("ã‚«ãƒ¡ãƒ©é–¢ä¿‚")]
         [SerializeField] private CameraMove _myCameraMove;
         [SerializeField] private GameObject _camera;
         [SerializeField] private bool isCurcleSetting;
         private Vector3 _nowCameraAngle;
 
         [SerializeField] private float moveSpeed;
-        [Tooltip("ƒXƒ^ƒ~ƒi‚Ì‰ñ•œ—Ê(per 1sec)")][SerializeField] private int _recoverStamina;
-        [Tooltip("ƒXƒ^ƒ~ƒi‚ÌÁ”ï—Ê(per 1sec)")][SerializeField] private int _expandStamina;
+        [Tooltip("ã‚¹ã‚¿ãƒŸãƒŠã®å›å¾©é‡(per 1sec)")][SerializeField] private int _recoverStamina;
+        [Tooltip("ã‚¹ã‚¿ãƒŸãƒŠã®å›å¾©é‡[ç–²åŠ´æ™‚](per 1sec)")][SerializeField] private int _recoverStaminaOnlyTired;
+        [Tooltip("ã‚¹ã‚¿ãƒŸãƒŠã®æ¶ˆè²»é‡(per 1sec)")][SerializeField] private int _expandStamina;
 
         private bool _isTiredPenalty = false;
         private PlayerActionState _lastPlayerAction = PlayerActionState.Idle;
@@ -34,69 +35,69 @@ namespace Scenes.Ingame.Player
 
             _nowCameraAngle = _camera.transform.localEulerAngles;
 
-            //ƒL[ƒoƒCƒ“ƒh‚Ìİ’è
+            //ã‚­ãƒ¼ãƒã‚¤ãƒ³ãƒ‰ã®è¨­å®š
             KeyCode dash = KeyCode.LeftShift;
             KeyCode sneak = KeyCode.LeftControl;
 
             #region Subscribes
-            //ƒvƒŒƒCƒ„[‚ÌŠî‘b‘¬“x‚ª•ÏX‚³‚ê‚½‚ç
+            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®åŸºç¤é€Ÿåº¦ãŒå¤‰æ›´ã•ã‚ŒãŸã‚‰
             _myPlayerStatus.OnPlayerSpeedChange
                 .Where(x => x >= 0)
                 .Subscribe(x => moveSpeed = x).AddTo(this);
 
-            //ƒvƒŒƒCƒ„[‚Ìs“®ó‘Ô‚ª•Ï‰»‚µ‚½‚ç
+            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¡Œå‹•çŠ¶æ…‹ãŒå¤‰åŒ–ã—ãŸã‚‰
             _myPlayerStatus.OnPlayerActionStateChange
-                .Skip(1)//‰‰ñiƒXƒ|[ƒ“’¼Œãj‚Ís‚í‚È‚¢
+                .Skip(1)//åˆå›ï¼ˆã‚¹ãƒãƒ¼ãƒ³ç›´å¾Œï¼‰ã¯è¡Œã‚ãªã„
                 .Where(state => state == PlayerActionState.Idle || state == PlayerActionState.Walk || state == PlayerActionState.Dash || state == PlayerActionState.Sneak)
                 .Subscribe(state =>
                 {
-                    //ƒXƒ^ƒ~ƒi‚Ì‘Œ¸‚ğŒˆ’è
+                    //ã‚¹ã‚¿ãƒŸãƒŠã®å¢—æ¸›ã‚’æ±ºå®š
                     if (state == PlayerActionState.Dash)
                         StartCoroutine(DecreaseStamina());
-                    else if(_lastPlayerAction == PlayerActionState.Dash && state != PlayerActionState.Dash)//•Ï‰»‘O‚Ìó‘Ô‚ªƒ_ƒbƒVƒ…‚Å‚©‚ÂA•Ï‰»Œã‚ªƒXƒ^ƒ~ƒi‚ğ‰ñ•œ‚Å‚«‚éó‘Ô‚Ì
-                        StartCoroutine(IncreaseStamina());                                                 //ƒXƒ^ƒ~ƒi‰ñ•œƒRƒ‹[ƒ`ƒ“‚Ìd•¡‚ğ”ğ‚¯‚é‚½‚ß‚Ìˆ’u
+                    else if(_lastPlayerAction == PlayerActionState.Dash && state != PlayerActionState.Dash)//å¤‰åŒ–å‰ã®çŠ¶æ…‹ãŒãƒ€ãƒƒã‚·ãƒ¥ã§ã‹ã¤ã€å¤‰åŒ–å¾ŒãŒã‚¹ã‚¿ãƒŸãƒŠã‚’å›å¾©ã§ãã‚‹çŠ¶æ…‹ã®æ™‚
+                        StartCoroutine(IncreaseStamina());                                                 //ã‚¹ã‚¿ãƒŸãƒŠå›å¾©ã‚³ãƒ«ãƒ¼ãƒãƒ³ã®é‡è¤‡ã‚’é¿ã‘ã‚‹ãŸã‚ã®å‡¦ç½®
 
-                    //‘«‰¹‚Ìí—Ş‚ğŒˆ’èE–Â‚ç‚·
+                    //è¶³éŸ³ã®ç¨®é¡ã‚’æ±ºå®šãƒ»é³´ã‚‰ã™
                     _myPlayerSoundManager.FootSound(state);
-                    //ˆÚ“®‚É‚æ‚é‹“_‚Ì•Ï‰»‚Ìd•û‚ğİ’è
+                    //ç§»å‹•ã«ã‚ˆã‚‹è¦–ç‚¹ã®å¤‰åŒ–ã®ä»•æ–¹ã‚’è¨­å®š
                     _myCameraMove.ChangeViewPoint(_myPlayerSoundManager.GetClipLength());
                 }).AddTo(this);
 
-            //‘Ò‹@ó‘Ô‚ÉØ‚è‘Ö‚¦
-            //‰½‚à“ü—Í‚µ‚Ä‚¢‚È‚¢ or WSƒL[‚Ì“¯‰Ÿ‚µ‚Ì‚æ‚¤‚ÉŒİ‚¢‚É‘Å‚¿Á‚µ‚Ä“®‚©‚È‚¢‚Æ‚«‚ÉØ‚è‘Ö‚¦‚é
+            //å¾…æ©ŸçŠ¶æ…‹ã«åˆ‡ã‚Šæ›¿ãˆ
+            //ä½•ã‚‚å…¥åŠ›ã—ã¦ã„ãªã„ or WSã‚­ãƒ¼ã®åŒæ™‚æŠ¼ã—ã®ã‚ˆã†ã«äº’ã„ã«æ‰“ã¡æ¶ˆã—ã¦å‹•ã‹ãªã„ã¨ãã«åˆ‡ã‚Šæ›¿ãˆã‚‹
             this.UpdateAsObservable()
                 .Where(_ =>!(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) ||
                            _lastPlayerAction != PlayerActionState.Idle && _moveVelocity == Vector3.zero)
                 .Subscribe(_ => 
                 {
-                    _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//•Ï‰»‘O‚Ìó‘Ô‚ğ‹L˜^‚·‚éB
+                    _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//å¤‰åŒ–å‰ã®çŠ¶æ…‹ã‚’è¨˜éŒ²ã™ã‚‹ã€‚
                     _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Idle);
                 });
 
-            //ƒL[“ü—Í‚Ìó‹µ‚É‚æ‚é•àsó‘Ô‚Ö‚ÌØ‚è‘Ö‚¦
-            //‡@ƒ_ƒbƒVƒ…ƒL[‚ğ‰Ÿ‚µ‚Ä‚¢‚È‚¢,ƒXƒj[ƒNƒL[‚ğ‰Ÿ‚µ‚Ä‚¢‚È‚¢,ˆÚ“®•ûŒüƒxƒNƒgƒ‹‚ª0‚Å‚È‚¢,WASD‚Ç‚ê‚©‚Í‰Ÿ‚µ‚Ä‚¢‚éB‚±‚ê‚ç‚ğ–‚½‚µ‚½‚Æ‚«
-            //‡A‘–‚Á‚Ä‚¢‚éó‘Ô‚ÅWƒL[‚ğ—£‚µ‚½‚Æ‚«
+            //ã‚­ãƒ¼å…¥åŠ›ã®çŠ¶æ³ã«ã‚ˆã‚‹æ­©è¡ŒçŠ¶æ…‹ã¸ã®åˆ‡ã‚Šæ›¿ãˆ
+            //â‘ ãƒ€ãƒƒã‚·ãƒ¥ã‚­ãƒ¼ã‚’æŠ¼ã—ã¦ã„ãªã„,ã‚¹ãƒ‹ãƒ¼ã‚¯ã‚­ãƒ¼ã‚’æŠ¼ã—ã¦ã„ãªã„,ç§»å‹•æ–¹å‘ãƒ™ã‚¯ãƒˆãƒ«ãŒ0ã§ãªã„,WASDã©ã‚Œã‹ã¯æŠ¼ã—ã¦ã„ã‚‹ã€‚ã“ã‚Œã‚‰ã‚’æº€ãŸã—ãŸã¨ã
+            //â‘¡èµ°ã£ã¦ã„ã‚‹çŠ¶æ…‹ã§Wã‚­ãƒ¼ã‚’é›¢ã—ãŸã¨ã
             this.UpdateAsObservable()
                 .Where(_ => (!Input.GetKey(dash) && !Input.GetKey(sneak) && _moveVelocity != Vector3.zero &&
                             (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) ) ||
                              (_myPlayerStatus.nowPlayerActionState == PlayerActionState.Dash && !Input.GetKey(KeyCode.W)) )  
                 .Subscribe(_ => 
                 {
-                    _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//•Ï‰»‘O‚Ìó‘Ô‚ğ‹L˜^‚·‚éB
+                    _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//å¤‰åŒ–å‰ã®çŠ¶æ…‹ã‚’è¨˜éŒ²ã™ã‚‹ã€‚
                     _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Walk);
                 });
 
-            //ƒXƒ^ƒ~ƒi‚ªØ‚ê‚½Û‚Ì•àsó‘Ô‚Ö‚ÌØ‚è‘Ö‚¦iƒyƒiƒ‹ƒeƒB‚ª‚Â‚­j
+            //ã‚¹ã‚¿ãƒŸãƒŠãŒåˆ‡ã‚ŒãŸéš›ã®æ­©è¡ŒçŠ¶æ…‹ã¸ã®åˆ‡ã‚Šæ›¿ãˆï¼ˆãƒšãƒŠãƒ«ãƒ†ã‚£ãŒã¤ãï¼‰
             this.UpdateAsObservable()
                 .Where(_ => Input.GetKey(dash) && Input.GetKey(KeyCode.W) && _myPlayerStatus.nowStaminaValue == 0)
                 .Subscribe(_ =>
                 {
-                    _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//•Ï‰»‘O‚Ìó‘Ô‚ğ‹L˜^‚·‚éB
+                    _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//å¤‰åŒ–å‰ã®çŠ¶æ…‹ã‚’è¨˜éŒ²ã™ã‚‹ã€‚
                     _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Walk);
                     StartCoroutine(CountTiredPenalty());
                 });
 
-            //Shift+ˆÚ“®ƒL[‚ğ‰Ÿ‚µ‚½‚Æ‚«ƒ_ƒbƒVƒ…ó‘Ô‚ÉØ‚è‘Ö‚¦
+            //Shift+ç§»å‹•ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã¨ããƒ€ãƒƒã‚·ãƒ¥çŠ¶æ…‹ã«åˆ‡ã‚Šæ›¿ãˆ
             this.UpdateAsObservable()
                 .Where(_ => ((Input.GetKeyDown(dash) && Input.GetKey(KeyCode.W)) || (Input.GetKey(dash) && Input.GetKeyDown(KeyCode.W))) && !_isTiredPenalty && _moveVelocity != Vector3.zero)
                 .Subscribe(_ => 
@@ -104,14 +105,14 @@ namespace Scenes.Ingame.Player
                     _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Dash);
                 });
 
-            //Ctrl+ˆÚ“®ƒL[‚ğ‰Ÿ‚µ‚½‚Æ‚«”E‚Ñ•à‚«ó‘Ô‚ÉØ‚è‘Ö‚¦
+            //Ctrl+ç§»å‹•ã‚­ãƒ¼ã‚’æŠ¼ã—ãŸã¨ãå¿ã³æ­©ãçŠ¶æ…‹ã«åˆ‡ã‚Šæ›¿ãˆ
             this.UpdateAsObservable()
                 .Where(_ => (Input.GetKeyDown(sneak) && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))) ||
                             (Input.GetKey(sneak) && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D)))
                             && _moveVelocity != Vector3.zero)
                 .Subscribe(_ =>
                 {
-                    _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//•Ï‰»‘O‚Ìó‘Ô‚ğ‹L˜^‚·‚éB
+                    _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//å¤‰åŒ–å‰ã®çŠ¶æ…‹ã‚’è¨˜éŒ²ã™ã‚‹ã€‚
                     _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Sneak);
                 });
             #endregion
@@ -119,7 +120,7 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// ƒJ[ƒ\ƒ‹‚Ìİ’è‚ğ‚µ‚Ä‚­‚ê‚é
+        /// ã‚«ãƒ¼ã‚½ãƒ«ã®è¨­å®šã‚’ã—ã¦ãã‚Œã‚‹
         /// </summary>
         private void CursorSetting()
         {
@@ -132,11 +133,11 @@ namespace Scenes.Ingame.Player
             float moveMouseX = Input.GetAxis("Mouse X");
             if (Mathf.Abs(moveMouseX) > 0.001f)
             {
-                // ‰ñ“]²‚Íƒ[ƒ‹ƒhÀ•W‚ÌY²
+                // å›è»¢è»¸ã¯ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã®Yè»¸
                 transform.RotateAround(transform.position, Vector3.up, moveMouseX);
             }
 
-            //ƒJƒƒ‰‚ğX²•ûŒü‚É‰ñ“]‚³‚¹‚éB‹“_‚ªã‰º‚É“®‚©‚¹‚é‚æ‚¤‚Éi”ÍˆÍ‚É§ŒÀ‚ ‚èj
+            //ã‚«ãƒ¡ãƒ©ã‚’Xè»¸æ–¹å‘ã«å›è»¢ã•ã›ã‚‹ã€‚è¦–ç‚¹ãŒä¸Šä¸‹ã«å‹•ã‹ã›ã‚‹ã‚ˆã†ã«ï¼ˆç¯„å›²ã«åˆ¶é™ã‚ã‚Šï¼‰
             float moveMouseY = Input.GetAxis("Mouse Y");
             if (Mathf.Abs(moveMouseY) > 0.001f)
             {
@@ -146,7 +147,7 @@ namespace Scenes.Ingame.Player
             }
             Move();
 
-            //©—R—‰º
+            //è‡ªç”±è½ä¸‹
             if (this.gameObject.transform.position.y > 0)
                 this.gameObject.transform.position -= new Vector3(0, 9.8f *Time.deltaTime, 0);
         }
@@ -172,7 +173,7 @@ namespace Scenes.Ingame.Player
             }
             _moveVelocity = _moveVelocity.normalized;
 
-            //ó‘Ô‚É‰‚¶‚ÄˆÚ“®‘¬“x‚ª•Ï‰»
+            //çŠ¶æ…‹ã«å¿œã˜ã¦ç§»å‹•é€Ÿåº¦ãŒå¤‰åŒ–
             switch (_myPlayerStatus.nowPlayerActionState)
             {
                 case PlayerActionState.Walk:
@@ -194,23 +195,41 @@ namespace Scenes.Ingame.Player
             while (_myPlayerStatus.nowPlayerActionState == PlayerActionState.Dash)
             { 
                 yield return new WaitForSeconds(0.1f);
-                _myPlayerStatus.ChangeStamina(_recoverStamina / 10, "Damage");
+                _myPlayerStatus.ChangeStamina(_expandStamina / 10, "Damage");
             }           
         }
 
         private IEnumerator IncreaseStamina()
         {
-            while (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Dash)
+            yield return null;
+            
+            //ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆçŠ¶æ…‹ã§ã®å›å¾©
+            if(!_isTiredPenalty)
             {
-                yield return new WaitForSeconds(0.1f);
-                _myPlayerStatus.ChangeStamina(_expandStamina / 10, "Heal");
+                while (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Dash)
+                {
+                    yield return new WaitForSeconds(0.1f);
+                    _myPlayerStatus.ChangeStamina(_recoverStamina / 10, "Heal");
+                }
             }
+            //ã‚¹ã‚¿ãƒŸãƒŠåˆ‡ã‚ŒçŠ¶æ…‹ã§ã®å›å¾©
+            elseã€€if(_isTiredPenalty)
+            {
+                yield return new WaitForSeconds(0.5f);//å›å¾©é–‹å§‹ã¾ã§ã®ãƒ©ã‚°
+
+                while (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Dash)
+                {
+                    yield return new WaitForSeconds(0.1f);
+                    _myPlayerStatus.ChangeStamina(_recoverStaminaOnlyTired / 10, "Heal");
+                }
+            }
+
         }
 
         private IEnumerator CountTiredPenalty()
         { 
             _isTiredPenalty = true;
-            yield return new WaitUntil(() => _myPlayerStatus.nowStaminaValue > 10);//ƒXƒ^ƒ~ƒi‚ª10‚Ü‚Å‰ñ•œ‚·‚é‚Ì‚ğ‘Ò‚Â
+            yield return new WaitUntil(() => _myPlayerStatus.nowStaminaValueã€€> 10);//ã‚¹ã‚¿ãƒŸãƒŠãŒ10ã«ãªã‚‹ã¾ã§å›å¾©ã™ã‚‹ã®ã‚’å¾…ã¤
             _isTiredPenalty = false;
         }
     }
