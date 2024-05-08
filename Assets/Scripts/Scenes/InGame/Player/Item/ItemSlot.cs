@@ -1,3 +1,4 @@
+using UnityEngine;
 /// <summary>
 /// アイテムスロットが使用できるか否か
 /// </summary>
@@ -13,11 +14,12 @@ public struct ItemSlotStruct
     public ItemSlotStatus myItemSlotStatus;
 
     /// <summary>
-    /// 構造体にある変数を変更する関数
+    /// 構造体にある変数を変更する関数.初期化したいときは引数なしでOK
     /// </summary>
-    /// <param name="data"></param>
-    /// <param name="status"></param>
-    public void ChangeInfo(ItemData data, ItemSlotStatus status)
+    /// <param name="data">aアイテムのデータ</param>
+    /// <param name="status">アイテムスロットが使用できるのかを決定</param>
+    /// <param name="obj">アイテムのゲームオブジェクト</param>
+    public void ChangeInfo(ItemData data = null, ItemSlotStatus status = ItemSlotStatus.available)
     { 
         this.myItemData = data;
         this.myItemSlotStatus = status;

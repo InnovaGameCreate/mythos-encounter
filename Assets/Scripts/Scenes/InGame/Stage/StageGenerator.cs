@@ -11,22 +11,22 @@ using Unity.AI.Navigation;
 namespace Scenes.Ingame.Stage
 {
     /// <summary>
-    /// “®ìà–¾
-    /// ‚P._stageSize‚Éİ’è‚³‚ê‚½ƒTƒCƒY‚ÌƒXƒe[ƒWƒf[ƒ^‚ğ¶¬i”z—ñ‚Ì_stageGenerateData‚ÅŠÇ—j
-    /// ‚Q.RandomFullSpaceRoomPlotŠÖ”‚ğg‚¢‘å‚«‚¢•”‰®‚©‚ç‡‚É_stageGenerateDat“à‚É•”‰®‚Ìƒf[ƒ^‚ğ¶¬B‚±‚Ì¶¬‚·‚é•”‰®‚Í4x4,3x3,2x2‚Ì‘å‚«‚³
-    /// ‚R.RommShapingŠÖ”‚ğg‚¢AŒÇ—§‚µ‚Ä‹ó‚¢‚Ä‚¢‚éŒ„ŠÔ‚ğ–„‚ß‚é‚æ‚¤‚É•”‰®‚ğŠg’£B
-    /// ‚S.GenerateAisleŠÖ”‚ğg‚¢A’Ê˜H‚Ìì¬BŒ»İ‚Íc‰¡‚P‚Â‚¸‚Âì¬‚µ‚Ä‚¢‚é
+    /// å‹•ä½œèª¬æ˜
+    /// ï¼‘._stageSizeã«è¨­å®šã•ã‚ŒãŸã‚µã‚¤ã‚ºã®ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ‡ãƒ¼ã‚¿ã‚’ç”Ÿæˆï¼ˆé…åˆ—ã®_stageGenerateDataã§ç®¡ç†ï¼‰
+    /// ï¼’.RandomFullSpaceRoomPloté–¢æ•°ã‚’ä½¿ã„å¤§ãã„éƒ¨å±‹ã‹ã‚‰é †ã«_stageGenerateDatå†…ã«éƒ¨å±‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ç”Ÿæˆã€‚ã“ã®æ™‚ç”Ÿæˆã™ã‚‹éƒ¨å±‹ã¯4x4,3x3,2x2ã®å¤§ãã•
+    /// ï¼“.RommShapingé–¢æ•°ã‚’ä½¿ã„ã€å­¤ç«‹ã—ã¦ç©ºã„ã¦ã„ã‚‹éš™é–“ã‚’åŸ‹ã‚ã‚‹ã‚ˆã†ã«éƒ¨å±‹ã‚’æ‹¡å¼µã€‚
+    /// ï¼”.GenerateAisleé–¢æ•°ã‚’ä½¿ã„ã€é€šè·¯ã®ä½œæˆã€‚ç¾åœ¨ã¯ç¸¦æ¨ªï¼‘ã¤ãšã¤ä½œæˆã—ã¦ã„ã‚‹
     /// </summary>
     public class StageGenerator : MonoBehaviour
     {
-        [SerializeField, Tooltip("int‚ÅƒXƒe[ƒW‚Ìc‰¡‚ÌƒTƒCƒY")]
+        [SerializeField, Tooltip("intã§ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¸¦æ¨ªã®ã‚µã‚¤ã‚º")]
         private Vector2 _stageSize;
         private List<Vector2> candidatePosition = new List<Vector2>();
         private RoomData[,] _stageGenerateData;
         private int roomId = 0;
         const float tileSize = 5.85f;
         private bool playerSpawnRoom = false;
-        private bool viewDebugLog = false;//Šm”F—p‚ÌƒfƒoƒbƒNƒƒO‚ğ•\¦‚·‚é
+        private bool viewDebugLog = false;//ç¢ºèªç”¨ã®ãƒ‡ãƒãƒƒã‚¯ãƒ­ã‚°ã‚’è¡¨ç¤ºã™ã‚‹
         private CancellationTokenSource source = new CancellationTokenSource();
         [Header("Parent")]
         [SerializeField]
@@ -84,11 +84,12 @@ namespace Scenes.Ingame.Stage
             if (viewDebugLog) DebugStageData(_stageGenerateData);
             await RommShaping(token);
             await GenerateAisle(token);
-            if (viewDebugLog) Debug.Log("’Ê˜H¶¬ˆ—Œã‚Ìƒf[ƒ^");
+            if (viewDebugLog) Debug.Log("é€šè·¯ç”Ÿæˆå‡¦ç†å¾Œã®ãƒ‡ãƒ¼ã‚¿");
             if (viewDebugLog) DebugStageData(_stageGenerateData);
             await GenerateStage(token);
             await GenerateWall(token);
-            IngameManager.Instance.SetReady(ReadyEnum.StageReady);//ƒXƒe[ƒW¶¬Š®—¹‚ğ’Ê’m
+            floorObject.GetComponent<NavMeshSurface>().BuildNavMesh();
+            IngameManager.Instance.SetReady(ReadyEnum.StageReady);//ã‚¹ãƒ†ãƒ¼ã‚¸ç”Ÿæˆå®Œäº†ã‚’é€šçŸ¥
         }
         private void InitialSet()
         {
@@ -112,7 +113,7 @@ namespace Scenes.Ingame.Stage
             {
                 roomFlag[i] = true;
             }
-            //tile‚Ì¶¬
+            //tileã®ç”Ÿæˆ
 
             for (int y = 0; y < _stageSize.y + 1; y++)
             {
@@ -137,6 +138,7 @@ namespace Scenes.Ingame.Stage
                     else if (y == _stageSize.y)
                     {
                         Instantiate(outSideWallYPrefab, instantiatePosition + tileZoffset, Quaternion.identity * new Quaternion(0, 90, 0, 0), outSideWallObject.transform);
+
                     }
                     int roomId = _stageGenerateData[x, y].RoomId;
                     if (roomFlag[roomId])
@@ -181,14 +183,14 @@ namespace Scenes.Ingame.Stage
             }
         }
         /// <summary>
-        /// ƒ}ƒbƒv‚É‘å‚«‚¢‡‚Éƒ‰ƒ“ƒ_ƒ€‚É•”‰®‚ğŠ„‚è“–‚Ä‚é
+        /// ãƒãƒƒãƒ—ã«å¤§ãã„é †ã«ãƒ©ãƒ³ãƒ€ãƒ ã«éƒ¨å±‹ã‚’å‰²ã‚Šå½“ã¦ã‚‹
         /// </summary>
-        /// <param name="smallRoom">2x2‚ÌƒTƒCƒY‚Ì•”‰®‚ğ¶¬‚·‚é”</param>
-        /// <param name="mediumRoom">3x3‚ÌƒTƒCƒY‚Ì•”‰®‚ğ¶¬‚·‚é”</param>
-        /// <param name="largeRoom">4z4‚ÌƒTƒCƒY‚Ì•”‰®‚ğ¶¬‚·‚é”</param>
+        /// <param name="smallRoom">2x2ã®ã‚µã‚¤ã‚ºã®éƒ¨å±‹ã‚’ç”Ÿæˆã™ã‚‹æ•°</param>
+        /// <param name="mediumRoom">3x3ã®ã‚µã‚¤ã‚ºã®éƒ¨å±‹ã‚’ç”Ÿæˆã™ã‚‹æ•°</param>
+        /// <param name="largeRoom">4z4ã®ã‚µã‚¤ã‚ºã®éƒ¨å±‹ã‚’ç”Ÿæˆã™ã‚‹æ•°</param>
         private async UniTask RandomFullSpaceRoomPlot(CancellationToken token, int smallRoom = 0, int mediumRoom = 0, int largeRoom = 0)
         {
-            int roomSize = 3;//•”‰®‚Ì‘å‚«‚³
+            int roomSize = 3;//éƒ¨å±‹ã®å¤§ãã•
             Vector2 roomPosition = Vector2.zero;
             while (roomSize > 0)
             {
@@ -224,10 +226,10 @@ namespace Scenes.Ingame.Stage
         }
 
         /// <summary>
-        /// ƒf[ƒ^ã‚É•”‰®‚Ìƒf[ƒ^‚ğ“o˜^‚·‚é
+        /// ãƒ‡ãƒ¼ã‚¿ä¸Šã«éƒ¨å±‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ç™»éŒ²ã™ã‚‹
         /// </summary>
-        /// <param name="plotRoomSize">ƒ‹[ƒ€‚Ì‘å‚«‚³</param>
-        /// <param name="plotPosition">ƒ‹[ƒ€‚Ìİ’èˆÊ’u</param>
+        /// <param name="plotRoomSize">ãƒ«ãƒ¼ãƒ ã®å¤§ãã•</param>
+        /// <param name="plotPosition">ãƒ«ãƒ¼ãƒ ã®è¨­å®šä½ç½®</param>
         private void RoomPlotId(RoomType plotRoomType, Vector2 plotPosition)
         {
             roomId++;
@@ -270,7 +272,7 @@ namespace Scenes.Ingame.Stage
         }
 
         /// <summary>
-        /// ƒ‹[ƒ€‚ğ”z’u‰Â”\‚ÈÀ•W‚ÌƒŠƒXƒg‚ğì¬‚·‚é
+        /// ãƒ«ãƒ¼ãƒ ã‚’é…ç½®å¯èƒ½ãªåº§æ¨™ã®ãƒªã‚¹ãƒˆã‚’ä½œæˆã™ã‚‹
         /// </summary>
         private List<Vector2> candidatePositionSet(int offsetX = 1, int offsetY = 1)
         {
@@ -293,11 +295,11 @@ namespace Scenes.Ingame.Stage
             return candidatePositions;
         }
         /// <summary>
-        /// ŒÇ—§‚µ‚½•”‰®‚ğŒŸõ‚·‚é‚½‚ß‚ÌŠÖ”
+        /// å­¤ç«‹ã—ãŸéƒ¨å±‹ã‚’æ¤œç´¢ã™ã‚‹ãŸã‚ã®é–¢æ•°
         /// </summary>
         private List<Vector2> candidateAislePosition(int offsetX = 0, int offsetY = 0)
         {
-            if (offsetX == 0 && offsetY == 0) Debug.LogError("offset‚Ì’l‚ª—¼•û‚Æ‚à0‚Å‚·");
+            if (offsetX == 0 && offsetY == 0) Debug.LogError("offsetã®å€¤ãŒä¸¡æ–¹ã¨ã‚‚0ã§ã™");
             List<Vector2> candidatePositions = new List<Vector2>();
             Vector2 setPosition = Vector2.zero;
             for (int y = 0; y < _stageSize.y - offsetY; y++)
@@ -339,11 +341,11 @@ namespace Scenes.Ingame.Stage
             return candidatePositions;
         }
         /// <summary>
-        /// Ÿ‚ÌêŠ‚Í•Ç‚Ìƒ^ƒCƒ‹‚ğŒŸõ‚·‚é‚½‚ß‚ÌŠÖ”
+        /// æ¬¡ã®å ´æ‰€ã¯å£ã®ã‚¿ã‚¤ãƒ«ã‚’æ¤œç´¢ã™ã‚‹ãŸã‚ã®é–¢æ•°
         /// </summary>
         private List<Vector2> candidateNextWallPosition(int offsetX = 0, int offsetY = 0)
         {
-            if (offsetX != 0 && offsetY != 0) { Debug.LogError("–³Œø‚Èˆø”‚Å‚·B‚Ç‚¿‚ç‚©‚ğ0‚É‚µ‚Ä‚­‚¾‚³‚¢"); }
+            if (offsetX != 0 && offsetY != 0) { Debug.LogError("ç„¡åŠ¹ãªå¼•æ•°ã§ã™ã€‚ã©ã¡ã‚‰ã‹ã‚’0ã«ã—ã¦ãã ã•ã„"); }
             List<Vector2> candidatePositions = new List<Vector2>();
             Vector2 setPosition = Vector2.zero;
             int xLength = _stageGenerateData.GetLength(0);
@@ -384,11 +386,11 @@ namespace Scenes.Ingame.Stage
             return candidatePositions;
         }
         /// <summary>
-        /// x²‚Æy²‚É‚P‚Â‚¸‚Â’Ê˜H‚Ìì¬
+        /// xè»¸ã¨yè»¸ã«ï¼‘ã¤ãšã¤é€šè·¯ã®ä½œæˆ
         /// </summary>
         private async UniTask GenerateAisle(CancellationToken token)
         {
-            const int OFFSET = 2;//’Ê˜H‚ğì‚ç‚È‚¢”ÍˆÍ
+            const int OFFSET = 2;//é€šè·¯ã‚’ä½œã‚‰ãªã„ç¯„å›²
             int xAisleNumber = GenerateXAisle((int)_stageSize.x - OFFSET, OFFSET);
             int yAisleNumber = GenerateYAisle((int)_stageSize.y - OFFSET, OFFSET);
             bool xSlide = false;
@@ -405,7 +407,7 @@ namespace Scenes.Ingame.Stage
                     newStageGenerateData[i, j] = initialData;
                 }
             }
-            //X²‚ğ’Ê˜H•ª‚¸‚ç‚·ˆ—
+            //Xè»¸ã‚’é€šè·¯åˆ†ãšã‚‰ã™å‡¦ç†
             for (int y = 0; y < _stageGenerateData.GetLength(1); y++)
             {
                 xSlide = false;
@@ -428,7 +430,7 @@ namespace Scenes.Ingame.Stage
                     }
                 }
             }
-            //y²‚ğ’Ê˜H•ª‚¸‚ç‚·ˆ—
+            //yè»¸ã‚’é€šè·¯åˆ†ãšã‚‰ã™å‡¦ç†
             var tempXPlotData = new RoomData[newStageGenerateData.GetLength(0), newStageGenerateData.GetLength(1)];
             for (int i = 0; i < (int)_stageSize.y + 1; i++)
             {
@@ -459,7 +461,7 @@ namespace Scenes.Ingame.Stage
             _stageGenerateData = tempXPlotData;
         }
         /// <summary>
-        ///@ƒ‰ƒ“ƒ_ƒ€‚ÅX²‚Ì’Ê˜^‚ğì‚éêŠ‚ğŒŸõ
+        ///ã€€ãƒ©ãƒ³ãƒ€ãƒ ã§Xè»¸ã®é€šéŒ²ã‚’ä½œã‚‹å ´æ‰€ã‚’æ¤œç´¢
         /// </summary>
         private int GenerateXAisle(int max, int min = 0)
         {
@@ -484,7 +486,7 @@ namespace Scenes.Ingame.Stage
             return value;
         }
         /// <summary>
-        /// ŒÇ—§‚µ‚½•”‰®‚ğ–„‚ß‚é‚æ‚¤‚É•”‰®‚ğŠg’£‚·‚éŠÖ”
+        /// å­¤ç«‹ã—ãŸéƒ¨å±‹ã‚’åŸ‹ã‚ã‚‹ã‚ˆã†ã«éƒ¨å±‹ã‚’æ‹¡å¼µã™ã‚‹é–¢æ•°
         /// </summary>
         private async UniTask RommShaping(CancellationToken token)
         {
@@ -501,7 +503,7 @@ namespace Scenes.Ingame.Stage
             if (viewDebugLog) Debug.Log($"Aisle count  1x3 only = {_only1x3Aisle.Count},3x1 = {_only3x1Aisle.Count}, 1x2 only = {_only1x2Aisle.Count},2x1 = {_only2x1Aisle.Count},");
             foreach (var item in _only1x3Aisle)
             {
-                if (item.x > 2)//ƒuƒƒbƒN‚Ì¶‚Éroom3x3‚ª‚ ‚éê‡
+                if (item.x > 2)//ãƒ–ãƒ­ãƒƒã‚¯ã®å·¦ã«room3x3ãŒã‚ã‚‹å ´åˆ
                 {
                     if (_stageGenerateData[(int)item.x - 1, (int)item.y].RoomType == RoomType.room3x3)
                     {
@@ -520,7 +522,7 @@ namespace Scenes.Ingame.Stage
                         }
                     }
                 }
-                if (item.x < _stageGenerateData.GetLength(0) - 2)//ƒuƒƒbƒN‚Ì‰E‚Éroom3x3‚ª‚ ‚éê‡
+                if (item.x < _stageGenerateData.GetLength(0) - 2)//ãƒ–ãƒ­ãƒƒã‚¯ã®å³ã«room3x3ãŒã‚ã‚‹å ´åˆ
                 {
                     if (_stageGenerateData[(int)item.x + 1, (int)item.y].RoomType == RoomType.room3x3)
                     {
@@ -542,7 +544,7 @@ namespace Scenes.Ingame.Stage
             }
             foreach (var item in _only3x1Aisle)
             {
-                if (item.y < _stageGenerateData.GetLength(1) - 2)//ƒuƒƒbƒN‚Ì‰º‚Éroom3x3‚ª‚ ‚éê‡
+                if (item.y < _stageGenerateData.GetLength(1) - 2)//ãƒ–ãƒ­ãƒƒã‚¯ã®ä¸‹ã«room3x3ãŒã‚ã‚‹å ´åˆ
                 {
                     if (_stageGenerateData[(int)item.x, (int)item.y + 1].RoomType == RoomType.room3x3)
                     {
@@ -561,7 +563,7 @@ namespace Scenes.Ingame.Stage
                         }
                     }
                 }
-                if (item.y > 2)//ƒuƒƒbƒN‚Ìã‚Éroom3x3‚ª‚ ‚éê‡
+                if (item.y > 2)//ãƒ–ãƒ­ãƒƒã‚¯ã®ä¸Šã«room3x3ãŒã‚ã‚‹å ´åˆ
                 {
                     if (_stageGenerateData[(int)item.x, (int)item.y - 1].RoomType == RoomType.room3x3)
                     {
@@ -583,7 +585,7 @@ namespace Scenes.Ingame.Stage
             }
             foreach (var item in _only1x2Aisle)
             {
-                if (item.x > 1)//ƒuƒƒbƒN‚Ì¶‚Éroom2x2‚ª‚ ‚éê‡
+                if (item.x > 1)//ãƒ–ãƒ­ãƒƒã‚¯ã®å·¦ã«room2x2ãŒã‚ã‚‹å ´åˆ
                 {
                     if (_stageGenerateData[(int)item.x - 1, (int)item.y].RoomType == RoomType.room2x2)
                     {
@@ -601,7 +603,7 @@ namespace Scenes.Ingame.Stage
                         }
                     }
                 }
-                if (item.x < _stageGenerateData.GetLength(0) - 1)//ƒuƒƒbƒN‚Ì‰E‚Éroom2x2‚ª‚ ‚éê‡
+                if (item.x < _stageGenerateData.GetLength(0) - 1)//ãƒ–ãƒ­ãƒƒã‚¯ã®å³ã«room2x2ãŒã‚ã‚‹å ´åˆ
                 {
                     if (_stageGenerateData[(int)item.x + 1, (int)item.y].RoomType == RoomType.room2x2)
                     {
@@ -622,7 +624,7 @@ namespace Scenes.Ingame.Stage
             }
             foreach (var item in _only2x1Aisle)
             {
-                if (item.y < _stageGenerateData.GetLength(1) - 1)//ƒuƒƒbƒN‚æ‚è‰º‚Éroom2x2‚ª‚ ‚é
+                if (item.y < _stageGenerateData.GetLength(1) - 1)//ãƒ–ãƒ­ãƒƒã‚¯ã‚ˆã‚Šä¸‹ã«room2x2ãŒã‚ã‚‹
                 {
                     if (_stageGenerateData[(int)item.x, (int)item.y + 1].RoomType == RoomType.room2x2)
                     {
@@ -640,7 +642,7 @@ namespace Scenes.Ingame.Stage
                         }
                     }
                 }
-                if (item.y > 1)//ƒuƒƒbƒN‚æ‚èã‚Éroom2x2‚ª‚ ‚é
+                if (item.y > 1)//ãƒ–ãƒ­ãƒƒã‚¯ã‚ˆã‚Šä¸Šã«room2x2ãŒã‚ã‚‹
                 {
                     if (_stageGenerateData[(int)item.x, (int)item.y - 1].RoomType == RoomType.room2x2)
                     {
@@ -661,7 +663,7 @@ namespace Scenes.Ingame.Stage
             }
         }
         /// <summary>
-        /// •Ç‚ğİ’u‚·‚éƒXƒNƒŠƒvƒg
+        /// å£ã‚’è¨­ç½®ã™ã‚‹ã‚¹ã‚¯ãƒªãƒ—ãƒˆ
         /// </summary>
         private async UniTask GenerateWall(CancellationToken token)
         {
