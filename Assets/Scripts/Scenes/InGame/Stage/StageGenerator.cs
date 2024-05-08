@@ -5,6 +5,8 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using Scenes.Ingame.Manager;
 using Scenes.Ingame.InGameSystem;
+using Unity.AI;
+using Unity.AI.Navigation;
 
 namespace Scenes.Ingame.Stage
 {
@@ -28,13 +30,15 @@ namespace Scenes.Ingame.Stage
         private CancellationTokenSource source = new CancellationTokenSource();
         [Header("Parent")]
         [SerializeField]
-        private GameObject floorOnject;
+        private GameObject floorObject;
         [SerializeField]
-        private GameObject outSideWallOnject;
+        private GameObject secondFloorObject;
         [SerializeField]
-        private GameObject inSideWallOnject;
+        private GameObject outSideWallObject;
         [SerializeField]
-        private GameObject roomOnject;
+        private GameObject inSideWallObject;
+        [SerializeField]
+        private GameObject roomObject;
         [Header("Prefabs")]
         [SerializeField]
         private GameObject tilePrefab;
@@ -114,24 +118,25 @@ namespace Scenes.Ingame.Stage
             {
                 for (int x = 0; x < _stageSize.x + 1; x++)
                 {
-                    instantiatePosition.x = x * tileSize;
-                    instantiatePosition.z = y * tileSize;
-                    Instantiate(tilePrefab, instantiatePosition, Quaternion.identity, floorOnject.transform);
+                    instantiatePosition = ToVector3(x * tileSize, 5.8f, y * tileSize);
+                    Instantiate(tilePrefab, instantiatePosition, Quaternion.identity, secondFloorObject.transform);
+                    instantiatePosition = ToVector3(x * tileSize, 0, y * tileSize);
+                    Instantiate(tilePrefab, instantiatePosition, Quaternion.identity, floorObject.transform);
                     if (x == 0)
                     {
-                        Instantiate(outSideWallXPrefab, instantiatePosition, Quaternion.identity, outSideWallOnject.transform);
+                        Instantiate(outSideWallXPrefab, instantiatePosition, Quaternion.identity, outSideWallObject.transform);
                     }
                     else if (x == _stageSize.x)
                     {
-                        Instantiate(outSideWallXPrefab, instantiatePosition + tileXoffset, Quaternion.identity, outSideWallOnject.transform);
+                        Instantiate(outSideWallXPrefab, instantiatePosition + tileXoffset, Quaternion.identity, outSideWallObject.transform);
                     }
                     if (y == 0)
                     {
-                        Instantiate(outSideWallYPrefab, instantiatePosition, Quaternion.identity * new Quaternion(0, 90, 0, 0), outSideWallOnject.transform);
+                        Instantiate(outSideWallYPrefab, instantiatePosition, Quaternion.identity * new Quaternion(0, 90, 0, 0), outSideWallObject.transform);
                     }
                     else if (y == _stageSize.y)
                     {
-                        Instantiate(outSideWallYPrefab, instantiatePosition + tileZoffset, Quaternion.identity * new Quaternion(0, 90, 0, 0), outSideWallOnject.transform);
+                        Instantiate(outSideWallYPrefab, instantiatePosition + tileZoffset, Quaternion.identity * new Quaternion(0, 90, 0, 0), outSideWallObject.transform);
                     }
                     int roomId = _stageGenerateData[x, y].RoomId;
                     if (roomFlag[roomId])
@@ -142,31 +147,31 @@ namespace Scenes.Ingame.Stage
                             case RoomType.room2x2:
                                 if (!playerSpawnRoom)
                                 {
-                                    Instantiate(playerSpawnRoomPrefab, instantiatePosition, Quaternion.identity, roomOnject.transform);
+                                    Instantiate(playerSpawnRoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
                                     playerSpawnRoom = true;
                                 }
                                 else
                                 {
-                                    Instantiate(_2x2RoomPrefab, instantiatePosition, Quaternion.identity, roomOnject.transform);
+                                    Instantiate(_2x2RoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
                                 }
                                 break;
                             case RoomType.room3x2:
-                                Instantiate(_3x2RoomPrefab, instantiatePosition, Quaternion.identity, roomOnject.transform);
+                                Instantiate(_3x2RoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
                                 break;
                             case RoomType.room2x3:
-                                Instantiate(_2x3RoomPrefab, instantiatePosition, Quaternion.identity, roomOnject.transform);
+                                Instantiate(_2x3RoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
                                 break;
                             case RoomType.room3x3:
-                                Instantiate(_3x3RoomPrefab, instantiatePosition, Quaternion.identity, roomOnject.transform);
+                                Instantiate(_3x3RoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
                                 break;
                             case RoomType.room4x3:
-                                Instantiate(_4x3RoomPrefab, instantiatePosition, Quaternion.identity, roomOnject.transform);
+                                Instantiate(_4x3RoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
                                 break;
                             case RoomType.room3x4:
-                                Instantiate(_3x4RoomPrefab, instantiatePosition, Quaternion.identity, roomOnject.transform);
+                                Instantiate(_3x4RoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
                                 break;
                             case RoomType.room4x4:
-                                Instantiate(largeRoomPrefab, instantiatePosition, Quaternion.identity, roomOnject.transform);
+                                Instantiate(largeRoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
                                 break;
                             default:
                                 break;
@@ -668,11 +673,11 @@ namespace Scenes.Ingame.Stage
                 instantiatePosition = ToVector3(xWall.x * tileSize, 0, xWall.y * tileSize);
                 if ((xWall.x + xWall.y) % 4 == 0)
                 {
-                    Instantiate(wallXDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallOnject.transform);
+                    Instantiate(wallXDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallObject.transform);
                 }
                 else
                 {
-                    Instantiate(inSideWallXPrefab, instantiatePosition, Quaternion.identity, inSideWallOnject.transform);
+                    Instantiate(inSideWallXPrefab, instantiatePosition, Quaternion.identity, inSideWallObject.transform);
                 }
             }
             foreach (var yWall in _yWallPos)
@@ -680,11 +685,11 @@ namespace Scenes.Ingame.Stage
                 instantiatePosition = ToVector3(yWall.x * tileSize, 0, yWall.y * tileSize);
                 if ((yWall.x + yWall.y) % 4 == 0)
                 {
-                    Instantiate(wallYDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallOnject.transform);
+                    Instantiate(wallYDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallObject.transform);
                 }
                 else
                 {
-                    Instantiate(inSideWallYPrefab, instantiatePosition, Quaternion.identity, inSideWallOnject.transform);
+                    Instantiate(inSideWallYPrefab, instantiatePosition, Quaternion.identity, inSideWallObject.transform);
                 }
             }
         }
