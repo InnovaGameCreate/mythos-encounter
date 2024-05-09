@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 904d39a32dcf4834c9301b4828d5d988, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.377132, g: 0.41591766, b: 0.453619, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2279,6 +2279,7 @@ GameObject:
   m_Component:
   - component: {fileID: 385755861}
   - component: {fileID: 385755860}
+  - component: {fileID: 385755862}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -2293,7 +2294,7 @@ Light:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 385755859}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 10
   m_Type: 1
   m_Shape: 0
@@ -2363,6 +2364,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &385755862
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 385755859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 3
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_RenderingLayers: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_ShadowRenderingLayers: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
 --- !u!1001 &411928438
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10473,6 +10497,55 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: 9947a6e7e8c8208469c1c86e15f5c089, type: 3}
   m_PrefabInstance: {fileID: 1685099761}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1686051332 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2217506152449124184, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
+  m_PrefabInstance: {fileID: 5737438665223900935}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1686051337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1686051332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
 --- !u!1001 &1707345543
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14629,6 +14702,74 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: tilePrefab
+      value: 
+      objectReference: {fileID: 5511715714760156985, guid: 8123d4872b9c4674bb8fe45f4be33121, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: wallXPrefab
+      value: 
+      objectReference: {fileID: 3064727835192536343, guid: 48d86a03617bad249986c177a2e76f4e, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: wallYPrefab
+      value: 
+      objectReference: {fileID: 109861664846363845, guid: a1e50afbf824d9a47886622d3dac9c24, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: _2x2RoomPrefab
+      value: 
+      objectReference: {fileID: 8786186942910803785, guid: 7db0cf38dce9fa64999c1eb0a4233904, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: _2x3RoomPrefab
+      value: 
+      objectReference: {fileID: 6045110285935921703, guid: aa79a40f799c7e04c9529fb5cccd1793, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: _3x2RoomPrefab
+      value: 
+      objectReference: {fileID: 1933500435361441042, guid: 6074b02227914414b994219fab8048af, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: _3x3RoomPrefab
+      value: 
+      objectReference: {fileID: 7734731353070572643, guid: f560b40c6a5ec594abce2e3b9218f0e9, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: _3x4RoomPrefab
+      value: 
+      objectReference: {fileID: 4005016619045169543, guid: bd727e825a5da2540a1b70ac06cbacc6, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: _4x3RoomPrefab
+      value: 
+      objectReference: {fileID: 2692840134059464349, guid: 591e94cb7a776f948a6ac819ea0a07a7, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: largeRoomPrefab
+      value: 
+      objectReference: {fileID: 7104717311803946632, guid: 4c03c507947cc1246995d939790f23bb, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: wallXDoorPrefab
+      value: 
+      objectReference: {fileID: 3064727835192536343, guid: 8457aec2305875b45b017bcb1dee3ab9, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: wallYDoorPrefab
+      value: 
+      objectReference: {fileID: 109861664846363845, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: inSideWallXPrefab
+      value: 
+      objectReference: {fileID: 3064727835192536343, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: inSideWallYPrefab
+      value: 
+      objectReference: {fileID: 109861664846363845, guid: e2affe5c2d976bf41a24ad67e112139a, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: outSideWallXPrefab
+      value: 
+      objectReference: {fileID: 3064727835192536343, guid: 48d86a03617bad249986c177a2e76f4e, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: outSideWallYPrefab
+      value: 
+      objectReference: {fileID: 109861664846363845, guid: a1e50afbf824d9a47886622d3dac9c24, type: 3}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: playerSpawnRoomPrefab
+      value: 
+      objectReference: {fileID: 8786186942910803785, guid: fb3b94e0d3de78842a2c2cdd2820335d, type: 3}
     - target: {fileID: 6624500817061936141, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
       propertyPath: m_Name
       value: Stage
@@ -14997,6 +15138,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1285542953524166243, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
+      propertyPath: m_ClearFlags
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1285542953524166243, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1285542953524166243, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1285542953524166243, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2481875681873542124, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
       propertyPath: m_Name
       value: Player
@@ -15004,7 +15161,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2217506152449124184, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1686051337}
   m_SourcePrefab: {fileID: 100100000, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
 --- !u!1001 &5841598955695576496
 PrefabInstance:
