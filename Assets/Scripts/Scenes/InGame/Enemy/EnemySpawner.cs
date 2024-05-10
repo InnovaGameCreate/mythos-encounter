@@ -49,6 +49,7 @@ namespace Scenes.Ingame.Enemy
         [SerializeField] private GameObject _MiGo;
 
 
+
         [Header("ê∂ê¨Ç∑ÇÈç€ÇÃê›íË")]
         [SerializeField] private Vector3 _enemySpawnPosition;
 
