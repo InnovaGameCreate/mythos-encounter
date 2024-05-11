@@ -271,7 +271,7 @@ Transform:
   - {fileID: 3919837908161370143}
   - {fileID: 3749939161639175603}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2817882825628233842
 MonoBehaviour:
@@ -291,19 +291,21 @@ MonoBehaviour:
   outSideWallObject: {fileID: 1744168106335570809}
   inSideWallObject: {fileID: 215056969595494429}
   roomObject: {fileID: 4998191480817402690}
-  tilePrefab: {fileID: 100000, guid: b2f96746c6005c64888263f64272a556, type: 3}
-  wallXPrefab: {fileID: 3064727835192536343, guid: 2c90745c501d67041bd6d681a16e1bed, type: 3}
-  wallYPrefab: {fileID: 109861664846363845, guid: 0b95451a057615e4286f959970ebdec7, type: 3}
-  wallXDoorPrefab: {fileID: 3064727835192536343, guid: 97ef6616874ca4348ac8c5528306e503, type: 3}
-  wallYDoorPrefab: {fileID: 109861664846363845, guid: e62e48260661e9b45b27cb5c7a9be7cc, type: 3}
-  playerSpawnRoomPrefab: {fileID: 8786186942910803785, guid: b3aba7bdc9adf1f40b99bbc093ef1edb, type: 3}
-  _2x2RoomPrefab: {fileID: 8786186942910803785, guid: 15b202855f2c44c40aebf6736d17719b, type: 3}
-  _3x2RoomPrefab: {fileID: 1933500435361441042, guid: 336f32a92a2ec6e4c9956aaed2e8e11b, type: 3}
-  _2x3RoomPrefab: {fileID: 6045110285935921703, guid: 2e4ad8e5f9f220a45bfc79f64ce53bac, type: 3}
-  _3x3RoomPrefab: {fileID: 7734731353070572643, guid: c47ed04a12149ee4da68b75948f4e508, type: 3}
-  _4x3RoomPrefab: {fileID: 2692840134059464349, guid: 20e0cf672315b7345ab550c51f7122ea, type: 3}
-  _3x4RoomPrefab: {fileID: 4005016619045169543, guid: d1b9965b73be2634796a81897c5a6c56, type: 3}
-  largeRoomPrefab: {fileID: 7104717311803946632, guid: 3ccbdd665e8846044a5de19e35144cdb, type: 3}
+  tilePrefab: {fileID: 5511715714760156985, guid: 8123d4872b9c4674bb8fe45f4be33121, type: 3}
+  outSideWallXPrefab: {fileID: 3064727835192536343, guid: 48d86a03617bad249986c177a2e76f4e, type: 3}
+  outSideWallYPrefab: {fileID: 109861664846363845, guid: a1e50afbf824d9a47886622d3dac9c24, type: 3}
+  inSideWallXPrefab: {fileID: 3064727835192536343, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+  inSideWallYPrefab: {fileID: 109861664846363845, guid: e2affe5c2d976bf41a24ad67e112139a, type: 3}
+  wallXDoorPrefab: {fileID: 3064727835192536343, guid: 8457aec2305875b45b017bcb1dee3ab9, type: 3}
+  wallYDoorPrefab: {fileID: 109861664846363845, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+  playerSpawnRoomPrefab: {fileID: 8786186942910803785, guid: fb3b94e0d3de78842a2c2cdd2820335d, type: 3}
+  _2x2RoomPrefab: {fileID: 8786186942910803785, guid: 7db0cf38dce9fa64999c1eb0a4233904, type: 3}
+  _3x2RoomPrefab: {fileID: 1933500435361441042, guid: 6074b02227914414b994219fab8048af, type: 3}
+  _2x3RoomPrefab: {fileID: 6045110285935921703, guid: aa79a40f799c7e04c9529fb5cccd1793, type: 3}
+  _3x3RoomPrefab: {fileID: 7734731353070572643, guid: f560b40c6a5ec594abce2e3b9218f0e9, type: 3}
+  _4x3RoomPrefab: {fileID: 2692840134059464349, guid: 591e94cb7a776f948a6ac819ea0a07a7, type: 3}
+  _3x4RoomPrefab: {fileID: 4005016619045169543, guid: bd727e825a5da2540a1b70ac06cbacc6, type: 3}
+  largeRoomPrefab: {fileID: 7104717311803946632, guid: 4c03c507947cc1246995d939790f23bb, type: 3}
 --- !u!1 &8953441585888980059
 GameObject:
   m_ObjectHideFlags: 0
