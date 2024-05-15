@@ -25,7 +25,11 @@ namespace Scenes.Ingame.Player
         [Tooltip("スタミナの消費量(per 1sec)")][SerializeField] private int _expandStamina;
 
         private bool _isTiredPenalty = false;
+        private bool _isCanMove = true;
         private PlayerActionState _lastPlayerAction = PlayerActionState.Idle;
+
+        //主に外部スクリプトで扱うフィールド
+        public bool isParalyzed = false;
 
         void Start()
         {
@@ -116,6 +120,7 @@ namespace Scenes.Ingame.Player
                 });
             #endregion
 
+            StartCoroutine(CheckParalyze());
         }
 
         /// <summary>
@@ -144,7 +149,9 @@ namespace Scenes.Ingame.Player
                 _nowCameraAngle.x = Mathf.Clamp(_nowCameraAngle.x, -40, 60);
                 _camera.gameObject.transform.localEulerAngles = _nowCameraAngle;
             }
-            Move();
+
+            if(_isCanMove)
+                Move();
 
             //自由落下
             if (this.gameObject.transform.position.y > 0)
@@ -212,6 +219,28 @@ namespace Scenes.Ingame.Player
             _isTiredPenalty = true;
             yield return new WaitUntil(() => _myPlayerStatus.nowStaminaValue > 10);//スタミナが10まで回復するのを待つ
             _isTiredPenalty = false;
+        }
+
+        private IEnumerator CheckParalyze()
+        { 
+            while (true) 
+            {
+                yield return new WaitForSeconds(1.0f);
+                if (isParalyzed)
+                {
+                    //25%の確率で1秒間動けない
+                    int random = Random.Range(0, 4);
+                    if (random == 0)
+                        _isCanMove = false;
+                    else
+                        _isCanMove = true;
+                }
+                else
+                { 
+                    if(_isCanMove == false)
+                        _isCanMove = true;
+                }
+            }
         }
     }
 }

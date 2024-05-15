@@ -170,6 +170,11 @@ namespace Scenes.Ingame.Player
             else return 0;
         }
 
+        public ItemSlotStruct GetItemSlot(int index)
+        {
+            return _itemSlot[index];
+        }
+
         /// <summary>
         /// アイテムスロットのリストを変更。
         /// </summary>

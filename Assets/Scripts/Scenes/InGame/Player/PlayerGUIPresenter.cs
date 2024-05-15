@@ -104,9 +104,12 @@ namespace Scenes.Ingame.Player
                         .Subscribe(x =>
                         {
                             //全部のスロットの色を元の灰色に戻す
-                            for(int i = 0; i< _itemSlots.Length; i++)
-                                _itemSlots[i].color = new Color(84,84,84);
-
+                            for (int i = 0; i < _itemSlots.Length; i++)
+                            {
+                                _itemSlots[i].color = new Color(84,84,84,1);
+                                Debug.Log(_itemSlots[i].color);
+                            }
+                            
                             //選択されているスロットだけ赤色に変化
                             _itemSlots[x].color = Color.red;
                         }).AddTo(this);
@@ -139,7 +142,9 @@ namespace Scenes.Ingame.Player
                             else
                             {
                                 _itemImages[replaceEvent.Index].sprite = null;
+
                             }
+
                         }).AddTo(this);
 
                 }).AddTo(this);
@@ -179,6 +184,5 @@ namespace Scenes.Ingame.Player
 
 
         //～～アイテム関連の処理を記述する場所～～
-
     }
 }
