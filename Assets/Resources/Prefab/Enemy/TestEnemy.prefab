@@ -214,8 +214,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hpBase: 10
-  _patolloringSpeedBase: 0
-  _searchSpeedBase: 0
+  _patolloringSpeedBase: 1
+  _searchSpeedBase: 2
   _chaseSpeedBase: 3
   _audiometerPowerBase: 100
   _reactToLightBase: 1

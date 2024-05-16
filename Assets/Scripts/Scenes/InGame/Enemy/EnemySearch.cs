@@ -131,6 +131,7 @@ namespace Scenes.Ingame.Enemy
                       _myEneyMove.SetMovePosition(_player.transform.position);
                       _enemyStatus.SetEnemyState(EnemyState.Chese);
                     }
+                    
                     else if (_enemyStatus.ReturnReactToLight&& _myVisivilityMap.RightCheck(this.transform.position,_player.transform.position,_visivilityRange,_playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&‚Í¶‚©‚ç•]‰¿‚³‚ê‚é–‚É’ˆÓ
                     { //Œõ‚ªŒ©‚¦‚é‚©’²‚×‚é
                         if (_debugMode) Debug.Log("Œõ‚ªŒ©‚¦‚½");
@@ -156,6 +157,7 @@ namespace Scenes.Ingame.Enemy
                             _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
                         }
                     }
+                    
                 }
             }
         }
