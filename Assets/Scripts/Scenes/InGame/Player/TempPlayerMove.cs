@@ -86,7 +86,7 @@ namespace Scenes.Ingame.Player
                 .Where(_ => (!Input.GetKey(dash) && !Input.GetKey(sneak) && _moveVelocity != Vector3.zero &&
                             (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) ) ||
                              (_myPlayerStatus.nowPlayerActionState == PlayerActionState.Dash && !Input.GetKey(KeyCode.W)) )
-                .Where(_ => _isCanMove && _isCannotMoveByParalyze == false)
+                .Where(_ => _isCanMove && !_isCannotMoveByParalyze)
                 .Subscribe(_ => 
                 {
                     _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
@@ -106,7 +106,7 @@ namespace Scenes.Ingame.Player
             //Shift+移動キーを押したときダッシュ状態に切り替え
             this.UpdateAsObservable()
                 .Where(_ => ((Input.GetKeyDown(dash) && Input.GetKey(KeyCode.W)) || (Input.GetKey(dash) && Input.GetKeyDown(KeyCode.W))) && !_isTiredPenalty && _moveVelocity != Vector3.zero)
-                .Where(_ => _isCanMove && _isCannotMoveByParalyze == false)
+                .Where(_ => _isCanMove && !_isCannotMoveByParalyze)
                 .Subscribe(_ => 
                 {
                     _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Dash);
@@ -117,7 +117,7 @@ namespace Scenes.Ingame.Player
                 .Where(_ => (Input.GetKeyDown(sneak) && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))) ||
                             (Input.GetKey(sneak) && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D)))
                             && _moveVelocity != Vector3.zero)
-                .Where(_ => _isCanMove && _isCannotMoveByParalyze == false)
+                .Where(_ => _isCanMove && !_isCannotMoveByParalyze)
                 .Subscribe(_ =>
                 {
                     _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
@@ -156,9 +156,9 @@ namespace Scenes.Ingame.Player
             }
 
             //動ける状態であれば動く
-            if (_isCanMove && _isCannotMoveByParalyze == false)
+            if (_isCanMove && !_isCannotMoveByParalyze)
                 Move();
-            else if(_isCanMove == false || _isCannotMoveByParalyze)
+            else if(!_isCanMove || _isCannotMoveByParalyze)
             {
                 _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
                 _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Idle);//待機状態へ移行
