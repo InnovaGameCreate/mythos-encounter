@@ -144,6 +144,7 @@ namespace Scenes.Ingame.Enemy
         }
 
         public void SetEnemyState(EnemyState state) {
+            if (_debugMode) { Debug.Log("State•ÏX" + _enemyState.Value); }
             _enemyState.Value = state;
         }
 

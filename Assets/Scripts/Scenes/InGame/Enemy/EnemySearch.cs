@@ -138,6 +138,7 @@ namespace Scenes.Ingame.Enemy
                         _enemyStatus.SetEnemyState(EnemyState.Searching);
                         _myEneyMove.SetMovePosition(nextPositionCandidate);
                     }
+                    
                     else if (Mathf.Pow((float)(valume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) + (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0) 
                     { //プレイヤーの騒音が聞こえるか調べる
  
@@ -145,18 +146,26 @@ namespace Scenes.Ingame.Enemy
                         _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
                         _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
                     }
+                    
                     else
                     {
                         //なんの痕跡も見つからなかった場合普通に巡回する
                         _myVisivilityMap.CheckVisivility(this.transform.position, _visivilityRange);
+                        
                         if (_myEneyMove.endMove)//移動が終わっている場合
                         {
+                            
                             //痕跡のあった場所まで来たが何もいなかった場合ここが実行されるのでStatusを書き換える
                             _enemyStatus.SetEnemyState(EnemyState.Patorolling);
                             //あらたな移動先を取得するメソッドを書き込む
                             _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
+                            
                         }
+                            
+                        
                     }
+                    
+                    
                     
                 }
             }

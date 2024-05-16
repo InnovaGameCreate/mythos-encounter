@@ -158,7 +158,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _checkRate: 0.5
   _visivilityRange: 25
-  _brindCheseTime: 30
+  _brindCheseTime: 10
   _debugMode: 1
   _attackTime: 5
   _atackRange: 5
