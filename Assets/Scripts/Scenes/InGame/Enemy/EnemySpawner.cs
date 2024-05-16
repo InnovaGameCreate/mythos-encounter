@@ -50,7 +50,8 @@ namespace Scenes.Ingame.Enemy
         // Start is called before the first frame update
         void Start()
         {
-            if (_nonInGameManagerMode) {
+            if (_nonInGameManagerMode)
+            {
                 //マップをスキャン
                 _enemyVisibilityMap = new EnemyVisibilityMap();
                 _enemyVisibilityMap.debugMode = _debugMode;
@@ -61,6 +62,9 @@ namespace Scenes.Ingame.Enemy
                 //テストとしてここでEnemy制作を依頼している
                 EnemySpawn(EnemyName.TestEnemy, new Vector3(-10, _centerPosition.y + 3, -10));
 
+            }
+            else {
+                IngameManager.Instance.OnInitial.Subscribe(_ => InitialSpawn());
             }
 
             if (Instance == null)
