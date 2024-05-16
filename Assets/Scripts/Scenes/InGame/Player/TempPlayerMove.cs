@@ -26,6 +26,7 @@ namespace Scenes.Ingame.Player
 
         private bool _isTiredPenalty = false;
         private bool _isCanMove = true;
+        private bool _isCannotMoveByParalyze = false;
         private PlayerActionState _lastPlayerAction = PlayerActionState.Idle;
 
         //主に外部スクリプトで扱うフィールド
@@ -85,7 +86,7 @@ namespace Scenes.Ingame.Player
                 .Where(_ => (!Input.GetKey(dash) && !Input.GetKey(sneak) && _moveVelocity != Vector3.zero &&
                             (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) ) ||
                              (_myPlayerStatus.nowPlayerActionState == PlayerActionState.Dash && !Input.GetKey(KeyCode.W)) )
-                .Where(_ => _isCanMove)
+                .Where(_ => _isCanMove && _isCannotMoveByParalyze == false)
                 .Subscribe(_ => 
                 {
                     _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
@@ -105,7 +106,7 @@ namespace Scenes.Ingame.Player
             //Shift+移動キーを押したときダッシュ状態に切り替え
             this.UpdateAsObservable()
                 .Where(_ => ((Input.GetKeyDown(dash) && Input.GetKey(KeyCode.W)) || (Input.GetKey(dash) && Input.GetKeyDown(KeyCode.W))) && !_isTiredPenalty && _moveVelocity != Vector3.zero)
-                .Where(_ => _isCanMove)
+                .Where(_ => _isCanMove && _isCannotMoveByParalyze == false)
                 .Subscribe(_ => 
                 {
                     _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Dash);
@@ -116,7 +117,7 @@ namespace Scenes.Ingame.Player
                 .Where(_ => (Input.GetKeyDown(sneak) && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))) ||
                             (Input.GetKey(sneak) && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D)))
                             && _moveVelocity != Vector3.zero)
-                .Where(_ => _isCanMove)
+                .Where(_ => _isCanMove && _isCannotMoveByParalyze == false)
                 .Subscribe(_ =>
                 {
                     _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
@@ -155,9 +156,9 @@ namespace Scenes.Ingame.Player
             }
 
             //動ける状態であれば動く
-            if (_isCanMove)
+            if (_isCanMove && _isCannotMoveByParalyze == false)
                 Move();
-            else
+            else if(_isCanMove == false || _isCannotMoveByParalyze)
             {
                 _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
                 _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Idle);//待機状態へ移行
@@ -235,19 +236,19 @@ namespace Scenes.Ingame.Player
         { 
             while (true) 
             {
-                yield return new WaitForSeconds(1.0f);
+                yield return new WaitForSeconds(5.0f);
                 if (_isParalyzed)
                 {
                     //25%の確率で1秒間動けない
                     int random = Random.Range(0, 4);
                     if (random == 0)
                     {
-                        _isCanMove = false;
+                        _isCannotMoveByParalyze = true;
                         Debug.Log("体が思うように動かない...!!");
                     }
                     else
-                    { 
-                        _isCanMove = true;
+                    {
+                        _isCannotMoveByParalyze = false;
                         Debug.Log("動ける!!");
                     }                       
                 }
@@ -261,6 +262,10 @@ namespace Scenes.Ingame.Player
         public void Paralyze(bool value)
         {
             _isParalyzed = value;
+
+            //麻痺状態が治ってたら、動けるようにもする
+            if (value == false)
+                _isCannotMoveByParalyze = false;
         }
 
         /// <summary>
@@ -280,6 +285,8 @@ namespace Scenes.Ingame.Player
         { 
             _isCanMove = value;
         }
+
+
     }
 }
 

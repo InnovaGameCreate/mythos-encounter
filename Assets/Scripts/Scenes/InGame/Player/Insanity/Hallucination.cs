@@ -23,7 +23,7 @@ namespace Scenes.Ingame.Player
         public void Setup()
         {
             _soundManager = GetComponent<PlayerSoundManager>();
-            _audioListener = transform.Find("Main Camera").gameObject.GetComponent<AudioListener>();
+            _audioListener = GetComponentInChildren<AudioListener>();
             //_HallucinationPrefab = Resources.Load();
 
             _decideCoroutineBool
