@@ -17,17 +17,13 @@ namespace Scenes.Ingame.Player
 
         private ItemSlotStruct _unavailableSlot;
 
-        private void Start()
-        {
-            Setup();
-            _myPlayerItem = GetComponent<PlayerItem>();
-            _myPlayerMove = GetComponent<TempPlayerMove>();
-
-            _unavailableSlot = new ItemSlotStruct(null,ItemSlotStatus.unavailable);
-        }
-
         public void Setup()
         {
+            _myPlayerItem = GetComponent<PlayerItem>();
+            _myPlayerMove = GetComponent<TempPlayerMove>();
+            _unavailableSlot = new ItemSlotStruct(null, ItemSlotStatus.unavailable);
+
+
             _randoms[0] = Random.Range(0, 7);
             while (true)
             {
@@ -37,22 +33,34 @@ namespace Scenes.Ingame.Player
                 else
                     break;
             }
+
+            Debug.Log("選ばれたスロットNo：" + _randoms[0] + " , " + _randoms[1]);
         }
 
         public void Active()
         {
+            Setup();
+
             //「減らすスロットにアイテムが入っているとその場に落とす」処理の実装
             for (int i = 0; i < 2; i++)
             {
-                var itemSlot = _myPlayerItem.GetItemSlot(_randoms[i]);
+                var itemSlot = _myPlayerItem.ItemSlots[_randoms[i]];
                 if (itemSlot.myItemData != null)
                 {
-                    //アイテムを真下に落とす
-                    _myPlayerItem.nowBringItem.transform.parent = null;
-                    var rb = _myPlayerItem.nowBringItem.GetComponent<Rigidbody>();
-                    rb.useGravity = true;
+                    //今手に持っているアイテムだった時
+                    if (_randoms[i] == _myPlayerItem.nowIndex)
+                    {
+                        //アイテムを真下に落とす
+                        _myPlayerItem.nowBringItem.transform.parent = null;
+                        var rb = _myPlayerItem.nowBringItem.GetComponent<Rigidbody>();
+                        rb.useGravity = true;
 
-                    _myPlayerItem.nowBringItem = null;
+                        _myPlayerItem.nowBringItem = null;
+                    }
+                    else //手に持っていないアイテムだった時
+                    {
+                        Instantiate(itemSlot.myItemData.prefab, this.gameObject.transform.position + new Vector3(0,1,0), itemSlot.myItemData.prefab.transform.rotation);
+                    }
                 }
 
                 //ランダムな2つのスロット初期化＆利用不可能にする
@@ -60,7 +68,7 @@ namespace Scenes.Ingame.Player
             }
 
             //「身体のマヒ」機能の実装
-            _myPlayerMove.isParalyzed = true;
+            _myPlayerMove.Paralyze(true);
         }
 
         public void Hide()
@@ -72,7 +80,10 @@ namespace Scenes.Ingame.Player
             }
 
             //「身体のマヒ」解除
-            _myPlayerMove.isParalyzed = false;
+            _myPlayerMove.Paralyze(false);
+            _myPlayerMove.MoveControl(true);
+
+            Destroy(this);
         }
     }
 }

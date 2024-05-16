@@ -29,7 +29,8 @@ namespace Scenes.Ingame.Player
         private PlayerActionState _lastPlayerAction = PlayerActionState.Idle;
 
         //主に外部スクリプトで扱うフィールド
-        public bool isParalyzed = false;
+        private bool _isParalyzed = false;//身体の麻痺.BodyParalyze.Csで使用
+        private bool _isPulsation = false;//心拍数増加.IncreasePulsation.Csで使用
 
         void Start()
         {
@@ -83,7 +84,8 @@ namespace Scenes.Ingame.Player
             this.UpdateAsObservable()
                 .Where(_ => (!Input.GetKey(dash) && !Input.GetKey(sneak) && _moveVelocity != Vector3.zero &&
                             (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) ) ||
-                             (_myPlayerStatus.nowPlayerActionState == PlayerActionState.Dash && !Input.GetKey(KeyCode.W)) )  
+                             (_myPlayerStatus.nowPlayerActionState == PlayerActionState.Dash && !Input.GetKey(KeyCode.W)) )
+                .Where(_ => _isCanMove)
                 .Subscribe(_ => 
                 {
                     _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
@@ -103,6 +105,7 @@ namespace Scenes.Ingame.Player
             //Shift+移動キーを押したときダッシュ状態に切り替え
             this.UpdateAsObservable()
                 .Where(_ => ((Input.GetKeyDown(dash) && Input.GetKey(KeyCode.W)) || (Input.GetKey(dash) && Input.GetKeyDown(KeyCode.W))) && !_isTiredPenalty && _moveVelocity != Vector3.zero)
+                .Where(_ => _isCanMove)
                 .Subscribe(_ => 
                 {
                     _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Dash);
@@ -113,6 +116,7 @@ namespace Scenes.Ingame.Player
                 .Where(_ => (Input.GetKeyDown(sneak) && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))) ||
                             (Input.GetKey(sneak) && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D)))
                             && _moveVelocity != Vector3.zero)
+                .Where(_ => _isCanMove)
                 .Subscribe(_ =>
                 {
                     _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
@@ -150,8 +154,14 @@ namespace Scenes.Ingame.Player
                 _camera.gameObject.transform.localEulerAngles = _nowCameraAngle;
             }
 
-            if(_isCanMove)
+            //動ける状態であれば動く
+            if (_isCanMove)
                 Move();
+            else
+            {
+                _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
+                _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Idle);//待機状態へ移行
+            }
 
             //自由落下
             if (this.gameObject.transform.position.y > 0)
@@ -201,7 +211,7 @@ namespace Scenes.Ingame.Player
             while (_myPlayerStatus.nowPlayerActionState == PlayerActionState.Dash)
             { 
                 yield return new WaitForSeconds(0.1f);
-                _myPlayerStatus.ChangeStamina(_recoverStamina / 10, "Damage");
+                _myPlayerStatus.ChangeStamina(_expandStamina / 10 * (_isPulsation ? 2 : 1), "Damage");
             }           
         }
 
@@ -210,7 +220,7 @@ namespace Scenes.Ingame.Player
             while (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Dash)
             {
                 yield return new WaitForSeconds(0.1f);
-                _myPlayerStatus.ChangeStamina(_expandStamina / 10, "Heal");
+                _myPlayerStatus.ChangeStamina(_recoverStamina / 10, "Heal"); 
             }
         }
 
@@ -226,21 +236,49 @@ namespace Scenes.Ingame.Player
             while (true) 
             {
                 yield return new WaitForSeconds(1.0f);
-                if (isParalyzed)
+                if (_isParalyzed)
                 {
                     //25%の確率で1秒間動けない
                     int random = Random.Range(0, 4);
                     if (random == 0)
+                    {
                         _isCanMove = false;
+                        Debug.Log("体が思うように動かない...!!");
+                    }
                     else
+                    { 
                         _isCanMove = true;
-                }
-                else
-                { 
-                    if(_isCanMove == false)
-                        _isCanMove = true;
+                        Debug.Log("動ける!!");
+                    }                       
                 }
             }
+        }
+
+        /// <summary>
+        /// 体が麻痺しているか否かを決定する関数
+        /// </summary>
+        /// <param name="value"></param>
+        public void Paralyze(bool value)
+        {
+            _isParalyzed = value;
+        }
+
+        /// <summary>
+        /// 心拍数が増えているか否かを決定する関数
+        /// </summary>
+        /// <param name="value"></param>
+        public void Pulsation(bool value)
+        {
+            _isPulsation = value;
+        }
+
+        /// <summary>
+        /// 移動できるか否かを決定する関数
+        /// </summary>
+        /// <param name="value"></param>
+        public void MoveControl(bool value)
+        { 
+            _isCanMove = value;
         }
     }
 }

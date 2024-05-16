@@ -18,6 +18,7 @@ namespace Scenes.Ingame.Player
         //model
         [SerializeField] private PlayerStatus[] _playerStatuses;
         [SerializeField] private PlayerItem _playerItem;//マルチの時はスクリプト内でinputAuthority持ってるplayerのを代入させる
+        [SerializeField] private PlayerInsanityManager _playerInsanityManager;//マルチの時はスクリプト内でinputAuthority持ってるplayerのを代入させる
         //View
         [SerializeField] private DisplayPlayerStatusManager _displayPlayerStatusManager;
 
@@ -38,6 +39,10 @@ namespace Scenes.Ingame.Player
         [SerializeField] private Image[] _itemImages;//アイテムの画像(7個)
         [SerializeField] private GameObject _itemPop;//アイテムポップ
         [SerializeField] private TMP_Text _itemPop_Text;//アイテムポップ
+
+        [Header("発狂関係")]
+        [SerializeField] private Image[] _insanityIcons;//発狂アイコン(5個)
+        [SerializeField] private Sprite[] _insanityIconSprites;//発狂アイコンの元画像.EyeParalyze,BodyParalyze,IncreasePulsation,Scream,Hallucination の順番で
 
         private int _myPlayerID = 0;
 
@@ -101,13 +106,14 @@ namespace Scenes.Ingame.Player
 
                     //現在選択されているスロットを強調表示
                     _playerItem.OnNowIndexChange
+                        .Skip(1)
                         .Subscribe(x =>
                         {
                             //全部のスロットの色を元の灰色に戻す
                             for (int i = 0; i < _itemSlots.Length; i++)
                             {
-                                _itemSlots[i].color = new Color(84,84,84,1);
-                                Debug.Log(_itemSlots[i].color);
+                                if (_playerItem.ItemSlots[i].myItemSlotStatus == ItemSlotStatus.available)
+                                    _itemSlots[i].color = new Color(0.32f , 0.32f , 0.32f);
                             }
                             
                             //選択されているスロットだけ赤色に変化
@@ -145,6 +151,58 @@ namespace Scenes.Ingame.Player
 
                             }
 
+                            //利用不可のスロットの枠を青に変化
+                            if (_playerItem.ItemSlots[replaceEvent.Index].myItemSlotStatus == ItemSlotStatus.unavailable)
+                                _itemSlots[replaceEvent.Index].color = Color.blue;
+                            else
+                            { 
+                                //先にグレーに戻す
+                                _itemSlots[replaceEvent.Index].color = new Color(0.32f, 0.32f, 0.32f);
+
+                                //もし選択中のアイテムスロットなら赤色に戻す
+                                if(replaceEvent.Index == _playerItem.nowIndex)
+                                    _itemSlots[replaceEvent.Index].color = Color.red;
+
+                            }
+
+                        }).AddTo(this);
+
+                    //PlayerInsanityManagerスクリプトの取得.マルチ実装のときはinputAuthorityを持つキャラクターのみに指定
+                    _playerInsanityManager = GameObject.FindWithTag("Player").GetComponent<PlayerInsanityManager>();
+
+                    //発狂のスクリプトを管理するListに要素が追加されたときに、アイコンを変化させる。
+                    _playerInsanityManager.OnInsanitiesAdd
+                        .Subscribe(addEvent =>
+                        {
+                            _insanityIcons[addEvent.Index].color += new Color(0, 0, 0, 1.0f);//不透明にする
+                            switch (_playerInsanityManager.Insanities[addEvent.Index])
+                            {
+                                case EyeParalyze:
+                                    _insanityIcons[addEvent.Index].sprite = _insanityIconSprites[0];
+                                    break;
+                                case BodyParalyze:
+                                    _insanityIcons[addEvent.Index].sprite = _insanityIconSprites[1];
+                                    break;
+                                case IncreasePulsation:
+                                    _insanityIcons[addEvent.Index].sprite = _insanityIconSprites[2];
+                                    break;
+                                case Scream:
+                                    _insanityIcons[addEvent.Index].sprite = _insanityIconSprites[3];
+                                    break;
+                                case Hallucination:
+                                    _insanityIcons[addEvent.Index].sprite = _insanityIconSprites[4];
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }).AddTo(this);
+
+                    //発狂のスクリプトを管理するListの要素が削除されたときに、アイコンを変化させる。
+                    _playerInsanityManager.OnInsanitiesRemove
+                        .Subscribe(removeEvent =>
+                        {
+                            _insanityIcons[removeEvent.Index].color -= new Color(0, 0, 0, 1.0f);//透明にする
+                            _insanityIcons[removeEvent.Index].sprite = null;
                         }).AddTo(this);
 
                 }).AddTo(this);

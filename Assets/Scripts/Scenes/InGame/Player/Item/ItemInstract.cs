@@ -19,7 +19,6 @@ namespace Scenes.Ingame.Player
                 PlayerItem.ChangeListValue(PlayerItem.nowIndex, item);//アイテムスロットにアイテムを格納
                 PlayerItem.nowBringItem = this.gameObject;
 
-                StartCoroutine(PlayerItem.CanUseItem());//アイテム取得後0.1秒はアイテムを使えないようにする。
 
                 //取得したアイテムを手の近くに移動
                 this.gameObject.transform.position = PlayerItem.myRightHand.transform.position;
