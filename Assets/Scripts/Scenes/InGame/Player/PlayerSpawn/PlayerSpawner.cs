@@ -18,7 +18,8 @@ namespace Scenes.Ingame.Player
         [Header("UI")]
         [SerializeField] private GameObject _playerUI;
 
-        Vector3 SpawnPosition;
+        private Vector3 _spawnPosition;
+        private StageGenerator _stageGenerator;
         public readonly int _playerNum = 1;
         // Start is called before the first frame update
         void Start()
@@ -27,6 +28,9 @@ namespace Scenes.Ingame.Player
                 Instance = this;
             else
                 Destroy(this.gameObject);
+
+            _stageGenerator = GameObject.FindObjectOfType<StageGenerator>();
+            _spawnPosition = _stageGenerator.spawnPosition;
 
             IngameManager.Instance.OnInitial
                 .Subscribe(_ => SpawnPlayer());
@@ -38,8 +42,7 @@ namespace Scenes.Ingame.Player
             //指定された人数分複製を行う
             for (int i = 0; i < _playerNum; i++)
             {
-                SpawnPosition = StageGenerator.SpawnPosition;
-                Instantiate(_myPlayerPrefab[i], SpawnPosition, Quaternion.identity);
+                Instantiate(_myPlayerPrefab[i], _spawnPosition, Quaternion.identity);
             }
 
             //PlayerUIを１つだけ生成する。
