@@ -1,5 +1,6 @@
 using Scenes.Ingame.InGameSystem;
 using Scenes.Ingame.Manager;
+using Scenes.Ingame.Stage;
 using UniRx;
 using UnityEngine;
 
@@ -13,11 +14,11 @@ namespace Scenes.Ingame.Player
         public static PlayerSpawner Instance;
         [Header("プレイヤーのスポーン関係")]
         [SerializeField] private GameObject[] _myPlayerPrefab;//プレイヤープレハブ
-        [SerializeField] private GameObject[] _spawnPosition;//プレイヤーがスポーンする座標
 
         [Header("UI")]
         [SerializeField] private GameObject _playerUI;
 
+        Vector3 SpawnPosition;
         public readonly int _playerNum = 1;
         // Start is called before the first frame update
         void Start()
@@ -37,7 +38,8 @@ namespace Scenes.Ingame.Player
             //指定された人数分複製を行う
             for (int i = 0; i < _playerNum; i++)
             {
-                Instantiate(_myPlayerPrefab[i], _spawnPosition[i].transform.position, Quaternion.identity);
+                SpawnPosition = StageGenerator.SpawnPosition;
+                Instantiate(_myPlayerPrefab[i], SpawnPosition, Quaternion.identity);
             }
 
             //PlayerUIを１つだけ生成する。
