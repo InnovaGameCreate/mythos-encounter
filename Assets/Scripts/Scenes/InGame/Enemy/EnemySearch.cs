@@ -14,24 +14,24 @@ namespace Scenes.Ingame.Enemy
     /// </summary>
     public class EnemySearch : MonoBehaviour
     {
-        private EnemyVisibilityMap _myVisivilityMap;
+        protected EnemyVisibilityMap _myVisivilityMap;
         [SerializeField]
-        private float _checkRate;//何秒ごとに視界の状態をチェックするか
-        private float _checkTimeCount;//前回チェックしてからの時間を計測
+        protected float _checkRate;//何秒ごとに視界の状態をチェックするか
+        protected float _checkTimeCount;//前回チェックしてからの時間を計測
         [SerializeField]
-        private bool _debugMode;
+        protected bool _debugMode;
         [SerializeField]
-        private EnemyMove _myEneyMove;
+        protected EnemyMove _myEneyMove;
 
         [SerializeField]
-        private float _visivilityRange;//仕様上視界範囲は全て同一？じゃなかったらこれはEnemyStatusに送り込むよ
+        protected float _visivilityRange;//仕様上視界範囲は全て同一？じゃなかったらこれはEnemyStatusに送り込むよ
         [SerializeField]
-        private EnemyStatus _enemyStatus;
+        protected EnemyStatus _enemyStatus;
 
-        private GameObject _player;
-        private PlayerStatus _playerStatus;
-        private float _audiomaterPower;
-        Vector3 nextPositionCandidate = Vector3.zero;
+        protected GameObject _player;
+        protected PlayerStatus _playerStatus;
+        protected float _audiomaterPower;
+        protected Vector3 nextPositionCandidate = Vector3.zero;
         //索敵行動のクラスです
         // Start is called before the first frame update
         void Start()

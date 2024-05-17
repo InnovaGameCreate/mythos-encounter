@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Scenes.Ingame.InGameSystem;
 using System;
 using System.Threading;
+using Cysharp.Threading.Tasks.Triggers;
 
 namespace Scenes.Ingame.Enemy
 {
@@ -53,6 +54,7 @@ namespace Scenes.Ingame.Enemy
         [SerializeField] EnemySearch _enemySearch;
         [SerializeField] EnemyAttack _enemyAttack;
         [SerializeField] EnemyMove _enemyMove;
+        [SerializeField] EnemyUniqueAction _enemyUniqueAction;
 
 
 
@@ -70,7 +72,7 @@ namespace Scenes.Ingame.Enemy
         private BoolReactiveProperty _reactToLight = new BoolReactiveProperty();
         private BoolReactiveProperty _flying = new BoolReactiveProperty();
         private IntReactiveProperty _stamina = new IntReactiveProperty();
-        private FloatReactiveProperty _actionCoolTime = new FloatReactiveProperty();
+        private IntReactiveProperty _actionCoolTime = new IntReactiveProperty();
         private ReactiveProperty<EnemyState> _enemyState = new ReactiveProperty<EnemyState>(EnemyState.Patorolling);
 
         private IntReactiveProperty _horror = new IntReactiveProperty();
@@ -128,6 +130,7 @@ namespace Scenes.Ingame.Enemy
             _enemySearch.Init(visivilityMap);
             _enemyAttack.Init(visivilityMap.DeepCopy());//Atackはサーチの後にInit
             _enemyMove.Init();
+            _enemyUniqueAction.Init(_actionCoolTime.Value);
 
             //撃破されたことを検出
             OnHpChange.Where(hp => hp <= 0).Subscribe(hp =>
