@@ -13,6 +13,7 @@ namespace Scenes.Ingame.Player
     {
         [SerializeField] private AudioSource _audio;
         [SerializeField] private AudioClip[] _footClips;//足音のClip
+        [SerializeField] private AudioClip[] _screamClips;//悲鳴のClip
         [SerializeField] private AudioClip[] _itemClips;//アイテムのClip
         [SerializeField] private AudioClip[] _effectClips;//効果音のClip
 
@@ -77,6 +78,24 @@ namespace Scenes.Ingame.Player
                     _audio.Play();
                     break;
             }            
+        }
+
+        /// <summary>
+        /// Scream.Csにて、人が叫ぶ時の効果音を発生させる関数。
+        /// </summary>
+        /// <param name="gender">性別.男：Male , 女性：Female</param>
+        public void SetScreamClip(string gender)
+        {
+            _audio.volume = 0.5f;
+
+            if (gender == "Male")
+            {
+                _audio.PlayOneShot(_screamClips[0]);
+            }
+            else if(gender == "Female")
+            {
+                _audio.PlayOneShot(_screamClips[1]);
+            }
         }
     }
 }

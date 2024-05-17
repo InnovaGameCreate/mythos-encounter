@@ -13,6 +13,12 @@ public struct ItemSlotStruct
     public ItemData myItemData;
     public ItemSlotStatus myItemSlotStatus;
 
+    public ItemSlotStruct(ItemData data, ItemSlotStatus status)
+    {
+        this.myItemData = data;
+        this.myItemSlotStatus = status;
+    }
+
     /// <summary>
     /// \‘¢‘Ì‚É‚ ‚é•Ï”‚ğ•ÏX‚·‚éŠÖ”.‰Šú‰»‚µ‚½‚¢‚Æ‚«‚Íˆø”‚È‚µ‚ÅOK
     /// </summary>

@@ -23,7 +23,7 @@ namespace Scenes.Ingame.Player
         private ReactiveProperty<int> _nowIndex = new ReactiveProperty<int>();//選択中のアイテムスロット番号
         public GameObject myRightHand;//手のこと
         public GameObject nowBringItem;//現在手に持っているアイテム
-        public bool isCanChangeBringItem = true;//手に持つアイテムの変更を許可するか否か
+        private bool _isCanChangeBringItem = true;//手に持つアイテムの変更を許可するか否か
 
         //Ray関連
         [SerializeField] Camera _mainCamera;//playerの目線を担うカメラ
@@ -62,6 +62,9 @@ namespace Scenes.Ingame.Player
                 _itemSlot.Add(init);
             }
 
+            //色々な変数の初期化
+            scrollValue = 0;
+
             //視線の先にアイテムがあるか確認。あれば右クリックで拾得できるようにする
             this.UpdateAsObservable()
                     .Subscribe(_ =>
@@ -96,10 +99,11 @@ namespace Scenes.Ingame.Player
 
             //Hキーを入力したときにアイテムを破棄            
             this.UpdateAsObservable()
-                    .Where(_ => _itemSlot[_nowIndex.Value].myItemData != null && Input.GetKeyDown(KeyCode.H))
+                    .Where(_ => _itemSlot[_nowIndex.Value].myItemData != null && Input.GetKeyDown(KeyCode.H) && _isCanUseItem)
                     .Subscribe(_ =>
                     {
                         var rb = nowBringItem.GetComponent<Rigidbody>();
+                        nowBringItem.GetComponent<Collider>().enabled = true;
                         //アイテムを近くに投げ捨てる
                         nowBringItem.transform.parent = null;
                         rb.useGravity = true;
@@ -125,6 +129,9 @@ namespace Scenes.Ingame.Player
                         nowBringItem = Instantiate(_itemSlot[_nowIndex.Value].myItemData.prefab, myRightHand.transform.position, _itemSlot[_nowIndex.Value].myItemData.prefab.transform.rotation);
                         nowBringItem.transform.parent = myRightHand.transform;
                         nowBringItem.GetComponent<ItemInstract>().InstantIntract(_myPlayerStatus);//アイテムに必要な情報を与える
+
+                        //視覚上のバグを無くすために手に持っている間はColliderを消す
+                        nowBringItem.GetComponent<Collider>().enabled = false;
                     }
                 }).AddTo(this);
 
@@ -133,7 +140,7 @@ namespace Scenes.Ingame.Player
             //2.数字キーの入力
             this.UpdateAsObservable()
                     .Where(_ => Input.GetAxis("Mouse ScrollWheel") != 0 || ItemNumberKeyDown() != 0)
-                    .Where(_ => isCanChangeBringItem)
+                    .Where(_ => _isCanChangeBringItem)
                     .Subscribe(_ =>
                     {
                         //マウスホールのみの入力時
@@ -141,13 +148,20 @@ namespace Scenes.Ingame.Player
                         {
                             scrollValue += Input.GetAxis("Mouse ScrollWheel") * scrollSense;
                             scrollValue = Mathf.Clamp(scrollValue,0,6);
-                            _nowIndex.Value = (int)scrollValue;
+
+                            if(_itemSlot[(int)scrollValue].myItemSlotStatus != ItemSlotStatus.unavailable)
+                                _nowIndex.Value = (int)scrollValue;
                         }
                         //数字キーのみの入力時
                         if (Input.GetAxis("Mouse ScrollWheel") == 0)
                         {
-                            _nowIndex.Value = ItemNumberKeyDown() - 49;
-                            scrollValue = _nowIndex.Value;
+                            int temp = ItemNumberKeyDown() - 49;
+
+                            if (_itemSlot[temp].myItemSlotStatus != ItemSlotStatus.unavailable)
+                            { 
+                                _nowIndex.Value = ItemNumberKeyDown() - 49;
+                                scrollValue = _nowIndex.Value;
+                            }                           
                         }                           
                     });
         }
@@ -193,15 +207,14 @@ namespace Scenes.Ingame.Player
             _itemSlot[index] = temp;
         }
 
-        /// <summary>
-        /// アイテム拾得後すぐにアイテムを使えないようにするためのコルーチン
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator CanUseItem()
+        public void ChangeCanUseItem(bool value)
+        { 
+            _isCanUseItem = value;
+        }
+
+        public void ChangeCanChangeBringItem(bool value)
         {
-            _isCanUseItem = false;
-            yield return new WaitForSeconds(0.1f);
-            _isCanUseItem = true;
+            _isCanChangeBringItem = value;
         }
     }
 }

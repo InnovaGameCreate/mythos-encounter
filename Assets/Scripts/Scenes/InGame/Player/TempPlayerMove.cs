@@ -25,7 +25,13 @@ namespace Scenes.Ingame.Player
         [Tooltip("スタミナの消費量(per 1sec)")][SerializeField] private int _expandStamina;
 
         private bool _isTiredPenalty = false;
+        private bool _isCanMove = true;
+        private bool _isCannotMoveByParalyze = false;
         private PlayerActionState _lastPlayerAction = PlayerActionState.Idle;
+
+        //主に外部スクリプトで扱うフィールド
+        private bool _isParalyzed = false;//身体の麻痺.BodyParalyze.Csで使用
+        private bool _isPulsation = false;//心拍数増加.IncreasePulsation.Csで使用
 
         void Start()
         {
@@ -79,7 +85,8 @@ namespace Scenes.Ingame.Player
             this.UpdateAsObservable()
                 .Where(_ => (!Input.GetKey(dash) && !Input.GetKey(sneak) && _moveVelocity != Vector3.zero &&
                             (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) ) ||
-                             (_myPlayerStatus.nowPlayerActionState == PlayerActionState.Dash && !Input.GetKey(KeyCode.W)) )  
+                             (_myPlayerStatus.nowPlayerActionState == PlayerActionState.Dash && !Input.GetKey(KeyCode.W)) )
+                .Where(_ => _isCanMove && !_isCannotMoveByParalyze)
                 .Subscribe(_ => 
                 {
                     _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
@@ -99,6 +106,7 @@ namespace Scenes.Ingame.Player
             //Shift+移動キーを押したときダッシュ状態に切り替え
             this.UpdateAsObservable()
                 .Where(_ => ((Input.GetKeyDown(dash) && Input.GetKey(KeyCode.W)) || (Input.GetKey(dash) && Input.GetKeyDown(KeyCode.W))) && !_isTiredPenalty && _moveVelocity != Vector3.zero)
+                .Where(_ => _isCanMove && !_isCannotMoveByParalyze)
                 .Subscribe(_ => 
                 {
                     _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Dash);
@@ -109,6 +117,7 @@ namespace Scenes.Ingame.Player
                 .Where(_ => (Input.GetKeyDown(sneak) && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))) ||
                             (Input.GetKey(sneak) && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D)))
                             && _moveVelocity != Vector3.zero)
+                .Where(_ => _isCanMove && !_isCannotMoveByParalyze)
                 .Subscribe(_ =>
                 {
                     _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
@@ -116,6 +125,7 @@ namespace Scenes.Ingame.Player
                 });
             #endregion
 
+            StartCoroutine(CheckParalyze());
         }
 
         /// <summary>
@@ -144,7 +154,15 @@ namespace Scenes.Ingame.Player
                 _nowCameraAngle.x = Mathf.Clamp(_nowCameraAngle.x, -40, 60);
                 _camera.gameObject.transform.localEulerAngles = _nowCameraAngle;
             }
-            Move();
+
+            //動ける状態であれば動く
+            if (_isCanMove && !_isCannotMoveByParalyze)
+                Move();
+            else if(!_isCanMove || _isCannotMoveByParalyze)
+            {
+                _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
+                _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Idle);//待機状態へ移行
+            }
 
             //自由落下
             if (this.gameObject.transform.position.y > 0)
@@ -194,7 +212,7 @@ namespace Scenes.Ingame.Player
             while (_myPlayerStatus.nowPlayerActionState == PlayerActionState.Dash)
             { 
                 yield return new WaitForSeconds(0.1f);
-                _myPlayerStatus.ChangeStamina(_recoverStamina / 10, "Damage");
+                _myPlayerStatus.ChangeStamina(_expandStamina / 10 * (_isPulsation ? 2 : 1), "Damage");
             }           
         }
 
@@ -203,7 +221,7 @@ namespace Scenes.Ingame.Player
             while (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Dash)
             {
                 yield return new WaitForSeconds(0.1f);
-                _myPlayerStatus.ChangeStamina(_expandStamina / 10, "Heal");
+                _myPlayerStatus.ChangeStamina(_recoverStamina / 10, "Heal"); 
             }
         }
 
@@ -213,6 +231,62 @@ namespace Scenes.Ingame.Player
             yield return new WaitUntil(() => _myPlayerStatus.nowStaminaValue > 10);//スタミナが10まで回復するのを待つ
             _isTiredPenalty = false;
         }
+
+        private IEnumerator CheckParalyze()
+        { 
+            while (true) 
+            {
+                yield return new WaitForSeconds(5.0f);
+                if (_isParalyzed)
+                {
+                    //25%の確率で1秒間動けない
+                    int random = Random.Range(0, 4);
+                    if (random == 0)
+                    {
+                        _isCannotMoveByParalyze = true;
+                        Debug.Log("体が思うように動かない...!!");
+                    }
+                    else
+                    {
+                        _isCannotMoveByParalyze = false;
+                        Debug.Log("動ける!!");
+                    }                       
+                }
+            }
+        }
+
+        /// <summary>
+        /// 体が麻痺しているか否かを決定する関数
+        /// </summary>
+        /// <param name="value"></param>
+        public void Paralyze(bool value)
+        {
+            _isParalyzed = value;
+
+            //麻痺状態が治ってたら、動けるようにもする
+            if (value == false)
+                _isCannotMoveByParalyze = false;
+        }
+
+        /// <summary>
+        /// 心拍数が増えているか否かを決定する関数
+        /// </summary>
+        /// <param name="value"></param>
+        public void Pulsation(bool value)
+        {
+            _isPulsation = value;
+        }
+
+        /// <summary>
+        /// 移動できるか否かを決定する関数
+        /// </summary>
+        /// <param name="value"></param>
+        public void MoveControl(bool value)
+        { 
+            _isCanMove = value;
+        }
+
+
     }
 }
 
