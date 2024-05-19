@@ -26,6 +26,27 @@
  - 過度な略称は使わないでください(rigidBody2D→rb2など）
  - IObservableなどは"On"から始めてください(OnDeadなど)
 
+## プルリクエストの書き方
+基本的にテンプレートに書いてある枠に沿って書いてください
+<--- --->はコメントアウトを意味します、この間に書いてむもプルリクエスト上には反映されません。
+### Reviewersの設定
+プルリクエスト作成後、マージされるためには2人以上のreviewが必要な設定になっています。作成は下記のようにReviewerを設定してください。
+
+![image](https://github.com/InnovaGameCreate/mythos-encounter/assets/67269447/4bebb78c-d38a-406f-90bf-ff0a6d9c6e2e)
+
+この際に設定するのは下記の3人です。
+
+tibigamePoppo
+
+iwamotoHinata
+
+Tyunosause
+
+### Request Changeを貰ったら
+Reviewerから作業内容についてアドバイスや修正があることがあります。この際にRequest Changeというものをもらいます。
+問題がなければApproveをもらいます。
+Request Changeを貰ったら内容に沿って修正を行なってください。
+
 ## 使用アセット
 ### スクリプト関係
 - TextMeshPro

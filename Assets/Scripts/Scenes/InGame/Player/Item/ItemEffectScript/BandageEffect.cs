@@ -34,7 +34,7 @@ namespace Scenes.Ingame.Player
             //アイテム使用直後にステータス変更を行う
             ownerPlayerStatus.UseItem(true);
             ownerPlayerStatus.ChangeSpeed();
-            ownerPlayerItem.isCanChangeBringItem = false;
+            ownerPlayerItem.ChangeCanChangeBringItem(false);
             //ToDo:Playerに包帯を巻くエフェクトを発生させる
 
             _startTime = Time.time;
@@ -50,7 +50,7 @@ namespace Scenes.Ingame.Player
                     _stopCoroutineBool = false;
                     ownerPlayerStatus.UseItem(false);
                     ownerPlayerStatus.ChangeSpeed();
-                    ownerPlayerItem.isCanChangeBringItem = true;
+                    ownerPlayerItem.ChangeCanChangeBringItem(false);
                     yield break;
                 }
                
@@ -60,7 +60,7 @@ namespace Scenes.Ingame.Player
                     ownerPlayerStatus.UseItem(false);
                     ownerPlayerStatus.ChangeSpeed();
                     ownerPlayerItem.ThrowItem(ownerPlayerItem.nowIndex);
-                    ownerPlayerItem.isCanChangeBringItem = true;
+                    ownerPlayerItem.ChangeCanChangeBringItem(true);
                     yield break;
                 }               
             }            

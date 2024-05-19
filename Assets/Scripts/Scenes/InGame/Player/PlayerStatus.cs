@@ -74,8 +74,10 @@ namespace Scenes.Ingame.Player
         public float nowPlayerRunVolume { get { return _runVolume.Value; } }
 
         public int lastHP;//HPの変動前の数値を記録。比較に用いる
+        public int lastSanValue;//SAN値の変動前の数値を記録。比較に用いる
         public int bleedingDamage = 1;//出血時に受けるダメージ
         private bool _isUseItem = false;
+        private bool _isPulsationBleeding = false;
 
         private void Init()
         {
@@ -87,6 +89,9 @@ namespace Scenes.Ingame.Player
             _sneakVolume.Value = _sneakVolumeBase;
             _walkVolume.Value = _walkVolumeBase;
             _runVolume.Value = _runVolumeBase;
+
+            lastHP = 100;
+            lastSanValue = 100;
         }
         // Start is called before the first frame update
         void Awake()
@@ -108,14 +113,15 @@ namespace Scenes.Ingame.Player
             //デバッグ用.(必要無くなれば消す)
             if (Input.GetKeyDown(KeyCode.L))
             {
-                ChangeHealth(20, "Damage");
-                ChangeSanValue(20, "Damage");
+                ChangeHealth(10, "Damage");
+                ChangeSanValue(10, "Damage");
                 ChangeBleedingBool(true);
             }
 
             if (Input.GetKeyDown(KeyCode.K))
             {
                 ChangeBleedingBool(false);
+                ChangeSanValue(10, "Heal");
             }
 
             if (Input.GetKeyDown(KeyCode.P))
@@ -165,9 +171,16 @@ namespace Scenes.Ingame.Player
         public void ChangeSanValue(int value, string mode)
         {
             if (mode == "Heal")
+            {
+                lastSanValue = _san.Value;
                 _san.Value = Mathf.Min(100, _san.Value + value);
+            }
+
             else if (mode == "Damage")
+            { 
+                lastSanValue = _san.Value;
                 _san.Value = Mathf.Max(0, _san.Value - value);
+            }                
         }
 
         /// <summary>
@@ -185,6 +198,15 @@ namespace Scenes.Ingame.Player
         public void UseItem(bool value)
         { 
             _isUseItem = value;
+        }
+
+        /// <summary>
+        /// 心拍数に応じて出血状態時の出血量を変化させる関数
+        /// </summary>
+        /// <param name="value"></param>
+        public void PulsationBleeding(bool value)
+        {
+            _isPulsationBleeding = value;
         }
 
         /// <summary>
@@ -212,7 +234,7 @@ namespace Scenes.Ingame.Player
                 yield return new WaitForSeconds(1.0f);
                 if (_bleeding.Value)
                 { 
-                    ChangeHealth(damage, "Damage");
+                    ChangeHealth(damage * (_isPulsationBleeding ? 2 : 1), "Damage");
                     Debug.Log("出血ダメージが入りました。");
                 }                   
                 else 
@@ -246,10 +268,10 @@ namespace Scenes.Ingame.Player
         /// <summary>
         /// san値に関する処理を行う
         /// </summary>
-        /// <param name="san">残りのSAN値</param>
+        /// <param name="sanValue">残りのSAN値</param>
         private void CheckSanValue(int sanValue, int ID)
         {
-            //Debug.Log("残りsan値：" + sanValue);
+            //Debug.Log("残りsan値：" + sanValue);           
 
             if (sanValue <= 0)
                 _survive.Value = false;
