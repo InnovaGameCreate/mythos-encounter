@@ -21,6 +21,8 @@ namespace Scenes.Ingame.Stage
     {
         [SerializeField, Tooltip("intでステージの縦横のサイズ")]
         private Vector2 _stageSize;
+        private Vector3 _spawnPosition;
+        public Vector3 spawnPosition { get => _spawnPosition; }
         private List<Vector2> candidatePosition = new List<Vector2>();
         private RoomData[,] _stageGenerateData;
         private int roomId = 0;
@@ -150,6 +152,7 @@ namespace Scenes.Ingame.Stage
                                 if (!playerSpawnRoom)
                                 {
                                     Instantiate(playerSpawnRoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
+                                    _spawnPosition = instantiatePosition;
                                     playerSpawnRoom = true;
                                 }
                                 else
