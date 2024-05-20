@@ -7,5 +7,8 @@ namespace Scenes.Ingame.Enemy
     public enum EnemyName
     {
         TestEnemy,
+        DeepOnes,
+        SpawnOfCthulhu,
+        MiGo,
     }
 }

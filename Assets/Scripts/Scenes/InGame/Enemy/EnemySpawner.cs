@@ -14,6 +14,7 @@ namespace Scenes.Ingame.Enemy
         [Header("デバッグするかどうか")]
         [SerializeField] private bool _debugMode;
         [SerializeField][Tooltip("InGameManager無しで機能させるかどうか")] private bool _nonInGameManagerMode;
+        [SerializeField][Tooltip("デバッグ時に作成する敵")]private EnemyName _enemyName;
 
         [Header("スキャンするマップに関して")]
         [SerializeField]
@@ -29,7 +30,10 @@ namespace Scenes.Ingame.Enemy
 
         [Header("作成する敵のプレハブ一覧")]
         [SerializeField] private GameObject _testEnemy;
-        
+        [SerializeField] private GameObject _deepOnes;
+        [SerializeField] private GameObject _spawnOfCthulhu;
+        [SerializeField] private GameObject _MiGo;
+
 
         // Start is called before the first frame update
         void Start()
@@ -42,7 +46,7 @@ namespace Scenes.Ingame.Enemy
             _enemyVisibilityMap.MapScan();
 
             //テストとしてここでEnemy制作を依頼している
-            EnemySpawn(EnemyName.TestEnemy, new Vector3(-10, _centerPosition.y+3, -10));            
+            EnemySpawn(_enemyName, new Vector3(-10, _centerPosition.y+3, -10));            
         }
 
 
@@ -57,6 +61,18 @@ namespace Scenes.Ingame.Enemy
 
                 case EnemyName.TestEnemy:
                     createEnemy = GameObject.Instantiate(_testEnemy, spownPosition, Quaternion.identity);
+                    if (_debugMode) Debug.Log("エネミーは制作されました");
+                    break;
+                case EnemyName.DeepOnes:
+                    createEnemy = GameObject.Instantiate(_deepOnes, spownPosition, Quaternion.identity);
+                    if (_debugMode) Debug.Log("エネミーは制作されました");
+                    break;
+                case EnemyName.SpawnOfCthulhu:
+                    createEnemy = GameObject.Instantiate(_spawnOfCthulhu, spownPosition, Quaternion.identity);
+                    if (_debugMode) Debug.Log("エネミーは制作されました");
+                    break;
+                case EnemyName.MiGo:
+                    createEnemy = GameObject.Instantiate(_MiGo, spownPosition, Quaternion.identity);
                     if (_debugMode) Debug.Log("エネミーは制作されました");
                     break;
                 default:

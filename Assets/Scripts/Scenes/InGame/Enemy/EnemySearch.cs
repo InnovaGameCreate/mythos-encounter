@@ -14,24 +14,24 @@ namespace Scenes.Ingame.Enemy
     /// </summary>
     public class EnemySearch : MonoBehaviour
     {
-        private EnemyVisibilityMap _myVisivilityMap;
+        protected EnemyVisibilityMap _myVisivilityMap;
         [SerializeField]
-        private float _checkRate;//何秒ごとに視界の状態をチェックするか
-        private float _checkTimeCount;//前回チェックしてからの時間を計測
+        protected float _checkRate;//何秒ごとに視界の状態をチェックするか
+        protected float _checkTimeCount;//前回チェックしてからの時間を計測
         [SerializeField]
-        private bool _debugMode;
+        protected bool _debugMode;
         [SerializeField]
-        private EnemyMove _myEneyMove;
+        protected EnemyMove _myEneyMove;
 
         [SerializeField]
-        private float _visivilityRange;//仕様上視界範囲は全て同一？じゃなかったらこれはEnemyStatusに送り込むよ
+        protected float _visivilityRange;//仕様上視界範囲は全て同一？じゃなかったらこれはEnemyStatusに送り込むよ
         [SerializeField]
-        private EnemyStatus _enemyStatus;
+        protected EnemyStatus _enemyStatus;
 
-        private GameObject _player;
-        private PlayerStatus _playerStatus;
-        private float _audiomaterPower;
-        Vector3 nextPositionCandidate = Vector3.zero;
+        protected GameObject _player;
+        protected PlayerStatus _playerStatus;
+        protected float _audiomaterPower;
+        protected Vector3 nextPositionCandidate = Vector3.zero;
         //索敵行動のクラスです
         // Start is called before the first frame update
         void Start()
@@ -131,12 +131,14 @@ namespace Scenes.Ingame.Enemy
                       _myEneyMove.SetMovePosition(_player.transform.position);
                       _enemyStatus.SetEnemyState(EnemyState.Chese);
                     }
+                    
                     else if (_enemyStatus.ReturnReactToLight&& _myVisivilityMap.RightCheck(this.transform.position,_player.transform.position,_visivilityRange,_playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
                     { //光が見えるか調べる
                         if (_debugMode) Debug.Log("光が見えた");
                         _enemyStatus.SetEnemyState(EnemyState.Searching);
                         _myEneyMove.SetMovePosition(nextPositionCandidate);
                     }
+                    
                     else if (Mathf.Pow((float)(valume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) + (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0) 
                     { //プレイヤーの騒音が聞こえるか調べる
  
@@ -144,18 +146,27 @@ namespace Scenes.Ingame.Enemy
                         _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
                         _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
                     }
+                    
                     else
                     {
                         //なんの痕跡も見つからなかった場合普通に巡回する
                         _myVisivilityMap.CheckVisivility(this.transform.position, _visivilityRange);
+                        
                         if (_myEneyMove.endMove)//移動が終わっている場合
                         {
+                            
                             //痕跡のあった場所まで来たが何もいなかった場合ここが実行されるのでStatusを書き換える
                             _enemyStatus.SetEnemyState(EnemyState.Patorolling);
                             //あらたな移動先を取得するメソッドを書き込む
                             _myEneyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
+                            
                         }
+                            
+                        
                     }
+                    
+                    
+                    
                 }
             }
         }

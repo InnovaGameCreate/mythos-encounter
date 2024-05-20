@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7736650679182576676}
   - component: {fileID: 1614493044594472170}
   m_Layer: 0
-  m_Name: EnemySpowner (1)
+  m_Name: EnemySpowner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1614493044594472170
 MonoBehaviour:
@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _debugMode: 0
   _nonInGameManagerMode: 0
+  _enemyName: 0
   _enemyVisibilityMap: {fileID: 0}
   _x: 9
   _z: 9
@@ -53,3 +54,6 @@ MonoBehaviour:
   _maxVisiviilityRange: 50
   _centerPosition: {x: -46.6, y: 1, z: -43.7}
   _testEnemy: {fileID: 9201936745783884321, guid: 5ef73dada9987014a9a5feb985e5f79f, type: 3}
+  _deepOnes: {fileID: 8865830389490726247, guid: e6d24b3c74905f547ad444af061ed259, type: 3}
+  _spawnOfCthulhu: {fileID: 1502827998043956805, guid: 12d632861ee534348b7a8114133b23d5, type: 3}
+  _MiGo: {fileID: 2083930819845757192, guid: 1934123d9afe937408275cbfb70cb0bf, type: 3}

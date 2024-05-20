@@ -181,6 +181,8 @@ namespace Scenes.Ingame.Enemy
                     if (smallestWatchNum > visivilityAreaGrid[x][z].watchNum) { smallestWatchNum = visivilityAreaGrid[x][z].watchNum; }
                 }
             }
+
+            
             for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
             {
                 for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
@@ -197,7 +199,7 @@ namespace Scenes.Ingame.Enemy
             //最も近い要素を考える
             float nearDistance = float.MaxValue;
             byte nearPositionX = 0; byte nearPositionZ = 0;
-            for (byte i = 0; i < nextPositionX.Count; i++)
+            for (short i = 0; i < nextPositionX.Count; i++)
             {
                 if (nearDistance > Vector3.Magnitude(nowPosition - (centerPosition + new Vector3(nextPositionX[i], 0, nextPositionZ[i]) * gridRange)))
                 {
@@ -206,7 +208,7 @@ namespace Scenes.Ingame.Enemy
                     nearPositionZ = nextPositionZ[i];
                 }
             }
-
+            
             //実際に次ぎに行くべき座標を示す
             Vector3 nextPosition = (new Vector3(nearPositionX, 0, nearPositionZ) * gridRange) + centerPosition;
             if (debugMode)
