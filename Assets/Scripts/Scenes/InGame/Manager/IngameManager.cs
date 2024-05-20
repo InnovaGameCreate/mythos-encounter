@@ -30,7 +30,9 @@ namespace Scenes.Ingame.Manager
 
         [SerializeField]
         private int _escapeItemCount;//脱出までに必要な脱出アイテムの数
-        private int _getEscapeItemCount;//現在取得している脱出アイテムの数
+
+        private ReactiveProperty<int> _getEscapeItemCount = new ReactiveProperty<int>();
+        public IObservable<int> OnEscapeCount => _getEscapeItemCount; //現在取得している脱出アイテムの数
 
         void Awake()
         {
@@ -88,8 +90,8 @@ namespace Scenes.Ingame.Manager
         public void GetEscapeItem()
         {
             Debug.Log("脱出アイテムを獲得しました");
-            _getEscapeItemCount++;
-            if(_getEscapeItemCount >= _escapeItemCount)
+            _getEscapeItemCount.Value++;
+            if(_getEscapeItemCount.Value >= _escapeItemCount)
             {
                 _openEscapePointEvent.OnNext(default);
             }
