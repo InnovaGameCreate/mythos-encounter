@@ -349,18 +349,22 @@ namespace Scenes.Ingame.Enemy
             if (!(enemyPosition.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < enemyPosition.x))
             {
                 Debug.LogError("EnemyPosition.xが範囲外です");
+                return false;
             }
             if (!(enemyPosition.z < centerPosition.z + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < enemyPosition.z))
             {
                 Debug.LogError("EnemyPosition.zが範囲外です");
+                return false;
             }
             if (!(playerPosition.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < playerPosition.x))
             {
                 Debug.LogError("PlayerPosition.xが範囲外です");
+                return false;
             }
             if (!(playerPosition.z < centerPosition.z + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < playerPosition.z))
             {
                 Debug.LogError("EPlayerPosition.zが範囲外です");
+                return false;
             }
             //Enemyから見れる可能性のあるマスを取得
             byte enemyGridPositionX, enemyGridPositionZ;
