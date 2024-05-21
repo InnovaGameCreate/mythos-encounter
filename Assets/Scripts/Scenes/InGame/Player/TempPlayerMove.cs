@@ -22,6 +22,7 @@ namespace Scenes.Ingame.Player
 
         [SerializeField] private float moveSpeed;
         [Tooltip("スタミナの回復量(per 1sec)")][SerializeField] private int _recoverStamina;
+        [Tooltip("スタミナの回復量[スタミナ切れ時](per 1sec)")][SerializeField] private int _recoverStaminaOnlyTired;
         [Tooltip("スタミナの消費量(per 1sec)")][SerializeField] private int _expandStamina;
 
         private bool _isTiredPenalty = false;
@@ -218,17 +219,31 @@ namespace Scenes.Ingame.Player
 
         private IEnumerator IncreaseStamina()
         {
-            while (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Dash)
+            yield return null;
+
+            if(!_isTiredPenalty)
             {
-                yield return new WaitForSeconds(0.1f);
-                _myPlayerStatus.ChangeStamina(_recoverStamina / 10, "Heal"); 
+                while (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Dash)
+                {
+                    yield return new WaitForSeconds(0.1f);
+                    _myPlayerStatus.ChangeStamina(_recoverStamina / 10, "Heal");
+                }
+            }
+            else if(_isTiredPenalty)
+            {
+                yield return new WaitForSeconds(0.5f);
+                while (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Dash)
+                {
+                    yield return new WaitForSeconds(0.1f);
+                    _myPlayerStatus.ChangeStamina(_recoverStaminaOnlyTired / 10, "Heal");
+                }
             }
         }
 
         private IEnumerator CountTiredPenalty()
         { 
             _isTiredPenalty = true;
-            yield return new WaitUntil(() => _myPlayerStatus.nowStaminaValue > 10);//スタミナが10まで回復するのを待つ
+            yield return new WaitUntil(() => _myPlayerStatus.nowStaminaValue == 100);//スタミナが100まで回復するのを待つ
             _isTiredPenalty = false;
         }
 
