@@ -36,6 +36,7 @@ namespace Scenes.Ingame.Player
                     {
                         //詠唱中の移動速度50%Downを解除
                         myPlayerStatus.UseMagic(false);
+                        myPlayerStatus.ChangeSpeed();
 
                         //魔法を使う処理をキャンセル
                         _myMagic.cancelMagic = true;
@@ -69,6 +70,7 @@ namespace Scenes.Ingame.Player
                         {
                             //詠唱中は移動速度50%Down
                             myPlayerStatus.UseMagic(true);
+                            myPlayerStatus.ChangeSpeed();
 
                             //魔法を使う処理
                             _myMagic.MagicEffect();
@@ -84,6 +86,7 @@ namespace Scenes.Ingame.Player
                 {
                     //詠唱中の移動速度50%Downを解除
                     myPlayerStatus.UseMagic(false);
+                    myPlayerStatus.ChangeSpeed();
 
                     //魔法を使う処理をキャンセル
                     _myMagic.cancelMagic = true;
