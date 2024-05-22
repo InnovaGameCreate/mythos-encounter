@@ -11,13 +11,20 @@ namespace Scenes.Ingame.Player
     /// </summary>
     public abstract class Magic : MonoBehaviour
     {
-        [HideInInspector] public float coolTime;
-        [HideInInspector] public int consumeSanValue;
+        [HideInInspector] public float chantTime;//‰r¥ŠÔ
+        [HideInInspector] public float startTime;//‰r¥ŠJnŠÔ
+        [HideInInspector] public int consumeSanValue;//Á”ï‚·‚éSAN’l
 
+        [HideInInspector] public bool cancelMagic = false;
+
+        [HideInInspector] public PlayerStatus myPlayerStatus;
+        [HideInInspector] public PlayerMagic myPlayerMagic;
         public void Start()
         {
             ChangeFieldValue();
         }
+
+        
         /// <summary>
         /// ô•¶‚ÌŒø‰Ê‚ğÀ‘•‚·‚éŠÖ”
         /// </summary>

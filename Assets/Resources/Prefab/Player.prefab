@@ -168,9 +168,9 @@ GameObject:
   - component: {fileID: 123063826094000374}
   - component: {fileID: 7111757753802298086}
   - component: {fileID: 6449360652433016383}
-  - component: {fileID: 5250157038054447586}
-  - component: {fileID: 5211992742759411501}
   - component: {fileID: 3297469623762709221}
+  - component: {fileID: 5250157038054447586}
+  - component: {fileID: 2369455620874656604}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -447,33 +447,6 @@ MonoBehaviour:
   _mainCamera: {fileID: 1285542953524166243}
   _getItemRange: 3
   scrollSense: 10
---- !u!114 &5250157038054447586
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2481875681873542124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 888708c7cfc0fd9469b4e1de5edf0fd1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _myMagic: {fileID: 5211992742759411501}
---- !u!114 &5211992742759411501
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2481875681873542124}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23bb0690af145214c8ccd55ac3d0e01b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  coolTime: 0
-  consumeSanValue: 0
 --- !u!114 &3297469623762709221
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -486,6 +459,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: feb83e0083c920e468fd1150b5ee6c68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isBrainwashed:
+    value: 0
+--- !u!114 &5250157038054447586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2481875681873542124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 888708c7cfc0fd9469b4e1de5edf0fd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _myMagic: {fileID: 2369455620874656604}
+--- !u!114 &2369455620874656604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2481875681873542124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09457262dda4fcd4ea2980c92fbb8917, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chantTime: 0
+  startTime: 0
+  consumeSanValue: 0
+  cancelMagic: 0
+  myPlayerStatus: {fileID: 0}
+  myPlayerMagic: {fileID: 0}
 --- !u!1 &3845817263225331235
 GameObject:
   m_ObjectHideFlags: 0

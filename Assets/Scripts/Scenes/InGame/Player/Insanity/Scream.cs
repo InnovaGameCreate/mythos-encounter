@@ -16,6 +16,8 @@ namespace Scenes.Ingame.Player
         private PlayerItem _myPlayerItem;
 
         private bool _isSafetyBool = false;//もし叫んでいるときに手違いでSAN値が回復し、このスクリプトが破壊されたときに詰まない為のBool
+        private bool _isFirst = true;//初めて呼び出されたか
+
         public void Setup()
         {
             _myPlayerSoundManager = GetComponent<PlayerSoundManager>();
@@ -25,7 +27,11 @@ namespace Scenes.Ingame.Player
 
         public void Active()
         {
-            Setup();
+            if (_isFirst)
+            {
+                Setup();
+                _isFirst = false;
+            }
 
             //発狂中は行動不能になる
             _myPlayerMove.MoveControl(false);
@@ -50,7 +56,7 @@ namespace Scenes.Ingame.Player
                 _myPlayerItem.ChangeCanUseItem(true);
                 _myPlayerItem.ChangeCanChangeBringItem(true);
             }
-            Destroy(this);
+            
         }
 
         /// <summary>

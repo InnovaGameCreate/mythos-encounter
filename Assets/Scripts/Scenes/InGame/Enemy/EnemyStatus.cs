@@ -62,8 +62,6 @@ namespace Scenes.Ingame.Enemy
         [SerializeField] private bool _debugMode;
 
 
-
-
         private IntReactiveProperty _hp = new IntReactiveProperty();
         private FloatReactiveProperty _patolloringSpeed = new FloatReactiveProperty();
         private FloatReactiveProperty _searcSpeed = new FloatReactiveProperty();
@@ -78,6 +76,7 @@ namespace Scenes.Ingame.Enemy
         private IntReactiveProperty _horror = new IntReactiveProperty();
         private IntReactiveProperty _atackPower = new IntReactiveProperty();
 
+        private BoolReactiveProperty _isBind = new BoolReactiveProperty(false);//çSë©èÛë‘Ç≈Ç†ÇÈÇ©î€Ç©
 
         public IObservable<int> OnHpChange { get { return _hp; } }
         public IObservable<float> OnPatolloringSppedChange { get { return _patolloringSpeed; } }
@@ -91,6 +90,8 @@ namespace Scenes.Ingame.Enemy
 
         public IObservable<int> OnHorrorChange { get { return _horror; } }
         public IObservable<int> OnAtackPowerChange { get { return _atackPower; } }
+
+        public IObservable<bool> OnBindChange { get { return _isBind; } }
 
 
         //##########GetÇ∆Ç©SetÇÃÇ©ÇΩÇ‹ÇË
@@ -107,8 +108,9 @@ namespace Scenes.Ingame.Enemy
 
         public int ReturnHorror { get { return _horror.Value; } }
         public int ReturnAtackPower { get { return _atackPower.Value; } }
-        
-        
+        public bool ReturnBind { get { return _isBind.Value; } }
+
+
 
 
 
@@ -212,5 +214,9 @@ namespace Scenes.Ingame.Enemy
             _visual.active = true;
         }
 
+        public void ChangeBindBool(bool value)
+        {
+            _isBind.Value = value;
+        }
     }
 }

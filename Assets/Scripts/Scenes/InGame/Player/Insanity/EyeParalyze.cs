@@ -13,19 +13,25 @@ namespace Scenes.Ingame.Player
     /// </summary>
     public class EyeParalyze : MonoBehaviour, IInsanity
     {
+        private bool _isFirst = true;//‰‚ß‚ÄŒÄ‚Ño‚³‚ê‚½‚©
+
         public void Setup()
         { 
         
         }
 
         public void Active()
-        { 
-        
+        {
+            if (_isFirst)
+            {
+                Setup();
+                _isFirst = false;
+            }
         }
 
         public void Hide()
         {
-            Destroy(this);
+            
         }
     }
 }
