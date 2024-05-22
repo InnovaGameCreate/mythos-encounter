@@ -221,15 +221,7 @@ namespace Scenes.Ingame.Player
         {
             yield return null;
 
-            if(!_isTiredPenalty)
-            {
-                while (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Dash)
-                {
-                    yield return new WaitForSeconds(0.1f);
-                    _myPlayerStatus.ChangeStamina(_recoverStamina / 10, "Heal");
-                }
-            }
-            else if(_isTiredPenalty)
+            if (_isTiredPenalty)//スタミナ完全消費時
             {
                 yield return new WaitForSeconds(0.5f);
                 while (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Dash)
@@ -237,7 +229,15 @@ namespace Scenes.Ingame.Player
                     yield return new WaitForSeconds(0.1f);
                     _myPlayerStatus.ChangeStamina(_recoverStaminaOnlyTired / 10, "Heal");
                 }
+            }else//通常時
+            {
+                while (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Dash)
+                {
+                    yield return new WaitForSeconds(0.1f);
+                    _myPlayerStatus.ChangeStamina(_recoverStamina / 10, "Heal");
+                }
             }
+
         }
 
         private IEnumerator CountTiredPenalty()
