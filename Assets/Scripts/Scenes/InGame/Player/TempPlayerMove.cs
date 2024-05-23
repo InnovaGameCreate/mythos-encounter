@@ -148,7 +148,7 @@ namespace Scenes.Ingame.Player
 
             //Ž©—R—Ž‰º
             if (this.gameObject.transform.position.y > 0)
-                _characterController.Move(new Vector3(0, -9.8f * Time.deltaTime, 0) * moveSpeed * 10 * Time.deltaTime);
+                _characterController.Move(new Vector3(0, -9.8f * Time.deltaTime, 0));
         }
 
         private void Move()
