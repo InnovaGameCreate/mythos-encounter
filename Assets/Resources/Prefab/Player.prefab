@@ -360,6 +360,7 @@ MonoBehaviour:
   isCurcleSetting: 0
   moveSpeed: 0
   _recoverStamina: 20
+  _recoverStaminaOnlyTired: 60
   _expandStamina: 20
 --- !u!114 &123063826094000374
 MonoBehaviour:
@@ -443,7 +444,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   myRightHand: {fileID: 3845817263225331235}
   nowBringItem: {fileID: 0}
-  isCanChangeBringItem: 1
   _mainCamera: {fileID: 1285542953524166243}
   _getItemRange: 3
   scrollSense: 10
