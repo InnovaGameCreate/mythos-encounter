@@ -13,12 +13,10 @@ namespace Scenes.Ingame.InGameSystem.UI
     {
         [SerializeField, Tooltip("脱出アイテム数を表示")]
         TextMeshProUGUI _socreText;
-        [SerializeField, Tooltip("Ingame")]
-        GameObject ingameManager;
 
         void Start()
         {
-            IngameManager ingamemanager = ingameManager.GetComponent<IngameManager>();
+            IngameManager ingamemanager = IngameManager.Instance;
             ingamemanager.OnEscapeCount.Subscribe(x => {
                 _socreText.text = "脱出アイテム数: " + x;
             }).AddTo(this);
