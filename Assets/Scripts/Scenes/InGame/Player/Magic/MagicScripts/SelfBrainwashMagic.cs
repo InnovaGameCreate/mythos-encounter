@@ -55,6 +55,9 @@ namespace Scenes.Ingame.Player
 
                     //ô•¶‚ğg‚¦‚È‚¢‚æ‚¤‚É‚·‚é
                     myPlayerMagic.ChangeCanUseMagicBool(false);
+
+                    //¬Œ÷‚µ‚½‰r¥‚ÌI—¹‚ğ’Ê’m
+                    myPlayerMagic.OnPlayerFinishUseMagic.OnNext(default);
                     yield break;
                 }
             }

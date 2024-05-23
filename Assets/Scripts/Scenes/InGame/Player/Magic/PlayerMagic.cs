@@ -14,6 +14,10 @@ namespace Scenes.Ingame.Player
     {
         private bool _isCanUseMagic = true;//現在魔法が使えるか否か
         [SerializeField] private Magic _myMagic;//使用可能な魔法
+
+        private Subject<Unit> _FinishUseMagic = new Subject<Unit>();//魔法の詠唱が終わり、効果が発動したらイベントが発生.
+        public IObserver<Unit> OnPlayerFinishUseMagic { get { return _FinishUseMagic; } }//外部で_FinishUseMagicのOnNextを呼ぶためにIObserverを公開
+
         public void Start()
         {
             //自身のPlayerStatusを取得
@@ -27,6 +31,7 @@ namespace Scenes.Ingame.Player
             _myMagic.myPlayerMagic = this;
 
             //Qキーで呪文の詠唱を開始 or 中止させる処理
+            //100ms以内では中断不可
             this.UpdateAsObservable()
                 .Where(_ => _isCanUseMagic && Input.GetKeyDown(KeyCode.Q))
                 .ThrottleFirst(TimeSpan.FromMilliseconds(100))
@@ -91,6 +96,16 @@ namespace Scenes.Ingame.Player
                     //魔法を使う処理をキャンセル
                     _myMagic.cancelMagic = true;
                     Debug.Log("攻撃を受けたので詠唱中止！");
+                }).AddTo(this);
+
+
+            //呪文の詠唱が終了したら足の遅さを元に戻す。
+            _FinishUseMagic
+                .Subscribe(_ =>
+                {
+                    //詠唱中の移動速度50%Downを解除
+                    myPlayerStatus.UseMagic(false);
+                    myPlayerStatus.ChangeSpeed();
                 }).AddTo(this);
         }
 
