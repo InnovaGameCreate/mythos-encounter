@@ -65,7 +65,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3261112217613819774}
   m_Layer: 0
-  m_Name: 4x2Corridor_HH 1
+  m_Name: 4x2Corridor_HH
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
