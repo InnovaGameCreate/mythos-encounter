@@ -10,7 +10,7 @@ namespace Scenes.Ingame.Player
 
         private void Awake()
         {
-            _bullet = (GameObject)Resources.Load("Prefab/Bullet");
+            _bullet = (GameObject)Resources.Load("Prefab/Magic/Bullet");
         }
         public override void ChangeFieldValue()
         {

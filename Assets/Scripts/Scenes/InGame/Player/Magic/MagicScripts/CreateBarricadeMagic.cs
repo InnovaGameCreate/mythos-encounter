@@ -11,13 +11,17 @@ namespace Scenes.Ingame.Player
     /// </summary>
     public class CreateBarricadeMagic : Magic
     {
-        private bool _debugMode = false;
         private readonly float _tileLength = 5.85f;//１タイルの長さ
         private readonly float _wallLength = 5.8f;//壁の高さ
         private GameObject _mainCamera;
         private GameObject _barricadePrefab;
         [SerializeField] private GameObject _CreatedBarricade;
         [SerializeField] private bool isCanCreate = false;
+
+        //デバック関連の変数
+        [Header("デバック関連")]
+        private bool _debugMode = false;
+        [SerializeField] private Vector3 _leftPositoon , _rightPosition;
 
         public override void ChangeFieldValue()
         {
@@ -35,7 +39,7 @@ namespace Scenes.Ingame.Player
         private IEnumerator Magic()
         {
             _mainCamera = GetComponentInChildren<Camera>().gameObject;
-            _barricadePrefab = (GameObject)Resources.Load("Prefab/Barricade");
+            _barricadePrefab = (GameObject)Resources.Load("Prefab/Magic/Barricade");
 
             RaycastHit hit;
             RaycastHit leftHit, rightHit;
@@ -56,18 +60,21 @@ namespace Scenes.Ingame.Player
                 //床にぶつかっていた時
                 if (hit.collider != null)
                 {
-                    //着弾地点から左右にRayを飛ばす。Vector3.up * 0.1fはoffset
-                    Physics.Raycast(hit.point + Vector3.up * 0.1f, this.transform.right * -1, out leftHit, Mathf.Infinity, defaultlayerMask);
-                    Physics.Raycast(hit.point + Vector3.up * 0.1f, this.transform.right, out rightHit, Mathf.Infinity, defaultlayerMask);
+                    //着弾地点から左右にRayを飛ばす。Vector3.up * 0.1fはoffset(絨毯対策)
+                    Physics.Raycast(hit.point + Vector3.up * 0.15f, this.transform.right * -1, out leftHit, Mathf.Infinity, defaultlayerMask);
+                    Physics.Raycast(hit.point + Vector3.up * 0.15f, this.transform.right, out rightHit, Mathf.Infinity, defaultlayerMask);
 
-                    Debug.DrawRay(hit.point, this.transform.right * -100, Color.red);
-                    Debug.DrawRay(hit.point, this.transform.right * 100, Color.blue);
+                    Debug.DrawRay(hit.point + Vector3.up * 0.15f, this.transform.right * -100, Color.red);
+                    Debug.DrawRay(hit.point + Vector3.up * 0.15f, this.transform.right * 100, Color.blue);
 
                     //左右に障害物があったとき
                     if (leftHit.collider != null && rightHit.collider != null)
                     {
                         Vector3 center = (leftHit.point + rightHit.point) / 2 + new Vector3(0, _wallLength, 0) / 2;
                         isCanCreate = true;
+
+                        _leftPositoon = leftHit.point;
+                        _rightPosition = rightHit.point;
                     
                         //プレビューの作成・移動
                         if (_CreatedBarricade == null)//プレビューがないときは作成
@@ -82,7 +89,7 @@ namespace Scenes.Ingame.Player
                         //障壁の向きとサイズを調整
                         _CreatedBarricade.transform.rotation = this.gameObject.transform.rotation;
 
-                        if(Mathf.Abs(leftHit.point.x - rightHit.point.x) >= 1)//z軸方向にPlayerが向いているとき
+                        if(Mathf.Abs(leftHit.point.x - rightHit.point.x) >= _tileLength / 2)//z軸方向にPlayerが向いているとき
                             _CreatedBarricade.transform.localScale = new Vector3(Mathf.Abs(leftHit.point.x - rightHit.point.x), _wallLength, 1);
                         else//x軸方向にPlayerが向いているとき
                             _CreatedBarricade.transform.localScale = new Vector3(Mathf.Abs(leftHit.point.z - rightHit.point.z), _wallLength, 1);
