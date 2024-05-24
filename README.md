@@ -52,6 +52,7 @@ Request Changeを貰ったら内容に沿って修正を行なってください
 - TextMeshPro
 - UniRx
 - DoTween
+- QuickOutline
 ### モデル関係
 - Decrepit Dungeon LITE
 - Adventure Character
