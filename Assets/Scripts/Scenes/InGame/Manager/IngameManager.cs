@@ -20,11 +20,13 @@ namespace Scenes.Ingame.Manager
         private Subject<Unit> _openEscapePointEvent = new Subject<Unit>();
         private Subject<Unit> _resultEvent = new Subject<Unit>();
         private Subject<Unit> _outgameEvent = new Subject<Unit>();
+        private Subject<Unit> _finishStageGenerateEvent = new Subject<Unit>();
         public IObservable<Unit> OnInitial { get { return _initialEvent; } }
         public IObservable<Unit> OnIngame { get { return _ingameEvent; } }
         public IObservable<Unit> OnOpenEscapePointEvent { get { return _openEscapePointEvent; } }
         public IObservable<Unit> OnResult { get { return _resultEvent; } }
         public IObservable<Unit> OnOutgame { get { return _outgameEvent; } }
+        public IObservable<Unit> OnFinishStageGenerateEvent { get { return _finishStageGenerateEvent; } }
 
         public IngameState CurrentState { get => _currentState; }
 
@@ -74,6 +76,10 @@ namespace Scenes.Ingame.Manager
 
         public void SetReady(ReadyEnum ready)
         {
+            if(ready == ReadyEnum.StageReady)
+            {
+                _finishStageGenerateEvent.OnNext(default);
+            }
             _ingameReady.SetReady(ready);
         }
 
