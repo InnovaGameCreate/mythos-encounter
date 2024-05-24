@@ -55,7 +55,7 @@ namespace Scenes.Ingame.Player
                     for (int i = 0; i < escapeItems.Length; i++)
                     {
                         _createdDetectionBalls.Add( Instantiate(_detectionBallPrefab, spawnPosition, Quaternion.identity));
-                        _createdDetectionBalls[i].GetComponent<DetectionBall>().DetectionItem(escapeItems[i].transform.position , 1.0f);
+                        _createdDetectionBalls[i].GetComponent<DetectionBall>().DetectionItem(escapeItems[i].transform.position , 5.0f);
                     }
 
                     //アウトラインを無効化するためのコルーチンをスタート

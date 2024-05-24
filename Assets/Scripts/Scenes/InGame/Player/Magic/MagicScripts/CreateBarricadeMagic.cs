@@ -25,7 +25,7 @@ namespace Scenes.Ingame.Player
 
         public override void ChangeFieldValue()
         {
-            chantTime = 105f;
+            chantTime = 5f;
             consumeSanValue = 10;
             Debug.Log("装備している呪文名：CreateBarricadeMagic" + "\n装備してる呪文の詠唱時間：" + chantTime + "\n装備してる呪文のSAN値消費量：" + consumeSanValue);
         }
@@ -89,10 +89,13 @@ namespace Scenes.Ingame.Player
                         //障壁の向きとサイズを調整
                         _CreatedBarricade.transform.rotation = this.gameObject.transform.rotation;
 
+                        float distance = Vector3.Distance(leftHit.point, rightHit.point);
+
+
                         if(Mathf.Abs(leftHit.point.x - rightHit.point.x) >= _tileLength / 2)//z軸方向にPlayerが向いているとき
-                            _CreatedBarricade.transform.localScale = new Vector3(Mathf.Abs(leftHit.point.x - rightHit.point.x), _wallLength, 1);
+                            _CreatedBarricade.transform.localScale = new Vector3(distance, _wallLength, 1);
                         else//x軸方向にPlayerが向いているとき
-                            _CreatedBarricade.transform.localScale = new Vector3(Mathf.Abs(leftHit.point.z - rightHit.point.z), _wallLength, 1);
+                            _CreatedBarricade.transform.localScale = new Vector3(distance, _wallLength, 1);
 
                     }
 
@@ -113,7 +116,8 @@ namespace Scenes.Ingame.Player
                 }
 
                 //呪文発動
-                if (Time.time - startTime >= chantTime && isCanCreate)
+                //詠唱開始から5秒以上たっている & プレビューがある & 左クリック押す
+                if (Time.time - startTime >= chantTime && isCanCreate && Input.GetMouseButton(0))
                 {
                     Debug.Log("呪文発動！");
                     //効果発動

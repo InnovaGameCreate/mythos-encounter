@@ -35,13 +35,6 @@ namespace Scenes.Ingame.Enemy
             if (_myAgent == null) Debug.LogError("NavMeshAgent‚ª”FŽ¯‚Å‚«‚Ü‚¹‚ñ");
             _myAgent.destination = this.transform.position;
 
-            _enemyStatus.OnBindChange
-                .Skip(1)//‰Šú‰»‚ÌŽž‚Í–³Ž‹
-                .Where(x => x)//S‘©ó‘Ô‚É‚È‚Á‚½uŠÔ
-                .Subscribe(x =>
-                {
-                    _myAgent.speed /= 0.1f;
-                }).AddTo(this);
         }
 
         // Update is called once per frame

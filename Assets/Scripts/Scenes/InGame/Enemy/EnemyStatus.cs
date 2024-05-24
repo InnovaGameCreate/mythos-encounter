@@ -10,6 +10,7 @@ using Scenes.Ingame.InGameSystem;
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks.Triggers;
+using UnityEngine.AI;
 
 namespace Scenes.Ingame.Enemy
 {
@@ -112,7 +113,7 @@ namespace Scenes.Ingame.Enemy
 
 
 
-
+        private NavMeshAgent _myAgent;
 
 
         //##########UniRx‚É‚©‚©‚í‚ç‚È‚¢•Ï”
@@ -139,8 +140,34 @@ namespace Scenes.Ingame.Enemy
             {
                 FallBack();
             }).AddTo(this);
+
+
+            //S‘©ó‘Ô‚É‚È‚Á‚½uŠÔE‰ğ‚¯‚½uŠÔ‚É‘¬“x‚ğ•ÏX
+            _myAgent = GetComponent<NavMeshAgent>();
+            OnBindChange
+                .Skip(1)//‰Šú‰»‚Ì‚Í–³‹
+                .Subscribe(x =>
+                {
+                    if (x) { _searcSpeed.Value = _searchSpeedBase * 0.1f; _patolloringSpeed.Value = _patolloringSpeedBase * 0.1f; _cheseSpeed.Value = _chaseSpeedBase * 0.1f; }
+                    else { _searcSpeed.Value = _searchSpeedBase * 1f; _patolloringSpeed.Value = _patolloringSpeedBase * 1f; _cheseSpeed.Value = _chaseSpeedBase * 1f; }
+                    switch (ReturnEnemyState)
+                    {
+                        case EnemyState.Patorolling: _myAgent.speed = ReturnPatolloringSpeed; break;
+                        case EnemyState.Searching: _myAgent.speed = ReturnSearchSpeed; break;
+                        case EnemyState.Chese: _myAgent.speed = ReturnCheseSpeed; break;
+                        case EnemyState.Attack: _myAgent.speed = ReturnCheseSpeed; break;
+                    }
+                }).AddTo(this);
+
             return true;
         }
+
+        /*
+         if (x)//S‘©ó‘Ô‚É‚È‚Á‚½uŠÔ
+                        _myAgent.speed *= 0.1f;
+                    else//S‘©ó‘Ô‚ª‰ğ‚¯‚½uŠÔ
+                        _myAgent.speed *= 10;
+         */
 
         // Update is called once per frame
         void Update()
