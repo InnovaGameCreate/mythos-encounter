@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static UnityEditor.Progress;
 
 
@@ -348,18 +349,22 @@ namespace Scenes.Ingame.Enemy
             if (!(enemyPosition.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < enemyPosition.x))
             {
                 Debug.LogError("EnemyPosition.xが範囲外です");
+                return false;
             }
             if (!(enemyPosition.z < centerPosition.z + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < enemyPosition.z))
             {
                 Debug.LogError("EnemyPosition.zが範囲外です");
+                return false;
             }
             if (!(playerPosition.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < playerPosition.x))
             {
                 Debug.LogError("PlayerPosition.xが範囲外です");
+                return false;
             }
             if (!(playerPosition.z < centerPosition.z + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < playerPosition.z))
             {
                 Debug.LogError("EPlayerPosition.zが範囲外です");
+                return false;
             }
             //Enemyから見れる可能性のあるマスを取得
             byte enemyGridPositionX, enemyGridPositionZ;
@@ -514,15 +519,55 @@ namespace Scenes.Ingame.Enemy
 
 
 
+        /// <summary>
+        /// プレイヤーの周辺に最初近づかないようにするために使用
+        /// </summary>
+        public void DontApproachPlayer()
+        {
+            Vector3 playerPosition = GameObject.Find("Player").transform.position;
+            if (debugMode) Debug.Log("プレイヤーにスポーン直後接近しないように対処");
+            VisivilityArea newVisivilityArea;
+            if ((playerPosition.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < playerPosition.x))
+            {//x座標がマップの範囲内であるかどうか
+                if ((playerPosition.z < centerPosition.z + (visivilityAreaGrid[0].Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < playerPosition.z)) //z座標がマップの範囲内であるかどうか
+                {
+                    for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
+                    {
+                        for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
+                        {
+                            //マスが対象範囲(ハードコードで50にしてある)か調べる                          
+                            if (50 > Vector3.Magnitude(playerPosition - (centerPosition + new Vector3(x, 0, z) * gridRange)))
+                            {
+
+                                //対象内の場合見た回数を0とする
+                                newVisivilityArea = new VisivilityArea((byte)(visivilityAreaGrid[x][z].watchNum + 1), visivilityAreaGrid[x][z].canVisivleAreaPosition);
+                                visivilityAreaGrid[x][z] = newVisivilityArea;
+                                if (debugMode) { DrawCross((centerPosition + new Vector3(x, 0, z) * gridRange), 5, Color.magenta, 2f); }
+
+                            }
+                            else
+                            {
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (debugMode) Debug.Log("z座標がマップからはみ出ています");
+                }
+                if (debugMode) Debug.Log("x座標がマップからはみ出ています");
 
 
+            }
 
+        }
 
         private void DrawCross(Vector3 position, float size, Color color, float time)
         {
             Debug.DrawLine(position + new Vector3(size / 2, 0, size / 2), position + new Vector3(-size, 0, -size), color, time);
             Debug.DrawLine(position + new Vector3(-size / 2, 0, size / 2), position + new Vector3(size / 2, 0, -size / 2), color, time);
         }
+
 
     }
 }
