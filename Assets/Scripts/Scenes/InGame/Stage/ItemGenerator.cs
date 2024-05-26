@@ -15,14 +15,14 @@ namespace Scenes.Ingame.Stage
         private int _escapeItemCount = 4;
         [SerializeField, Tooltip("脱出アイテムの生成数")]
         private int _stageItemCount = 20;
-        [SerializeField, Tooltip("脱出アイテムのオブジェクト")]
+        [SerializeField, Tooltip("itemのprefab")]
         private List<GameObject> _stageItemPrefab;
-        [SerializeField, Tooltip("脱出アイテムのオブジェクト")]
+        [SerializeField, Tooltip("脱出アイテムのprefab")]
         private GameObject _escapeItemPrefab;
-        [SerializeField, Tooltip("脱出地点のオブジェクト")]
+        [SerializeField, Tooltip("脱出地点のprefab")]
         private GameObject _escapePointPrefab;
         private List<GameObject> _escapeItems;
-        void Awake()
+        void Start()
         {
             IngameManager.Instance.OnFinishStageGenerateEvent
                 .Subscribe(_ =>
