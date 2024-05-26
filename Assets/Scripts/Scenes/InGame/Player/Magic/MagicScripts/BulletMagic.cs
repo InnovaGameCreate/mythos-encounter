@@ -10,13 +10,12 @@ namespace Scenes.Ingame.Player
 
         private void Awake()
         {
-            _bullet = (GameObject)Resources.Load("Prefab/Bullet");
+            _bullet = (GameObject)Resources.Load("Prefab/Magic/Bullet");
         }
         public override void ChangeFieldValue()
         {
-            coolTime = 5.0f;
             consumeSanValue = 10;
-            Debug.Log("装備してる呪文のクールタイム：" + coolTime + "\n装備してる呪文のSAN値消費量：" + consumeSanValue);
+            
         }
 
         public override void MagicEffect()

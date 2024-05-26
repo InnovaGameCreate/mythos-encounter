@@ -20,6 +20,9 @@ namespace Scenes.Ingame.Player
         private GameObject _HallucinationPrefab;//幻覚用のGameObjectのプレハブ
 
         private ReactiveProperty<bool> _decideCoroutineBool = new ReactiveProperty<bool>(true);
+
+        private bool _isFirst = true;//初めて呼び出されたか
+
         public void Setup()
         {
             _soundManager = GetComponent<PlayerSoundManager>();
@@ -33,13 +36,16 @@ namespace Scenes.Ingame.Player
 
         public void Active()
         {
-            Setup();
-
+            if (_isFirst)
+            {
+                Setup();
+                _isFirst = false;
+            }
         }
 
         public void Hide()
         {
-            Destroy(this);
+            
         }
 
         /// <summary>

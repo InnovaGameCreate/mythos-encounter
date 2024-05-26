@@ -64,6 +64,7 @@ namespace Scenes.Ingame.Player
         public int playerID { get { return _playerID; } }
         public int stamina_max { get { return _staminaBase; } }
         public int nowStaminaValue { get { return _stamina.Value; } }
+        public int nowPlayerSanValue { get { return _san.Value; } }
         public int nowPlayerSpeed { get { return _speed.Value; } }
 
         public bool nowBleedingValue { get { return _bleeding.Value; } }
@@ -73,10 +74,13 @@ namespace Scenes.Ingame.Player
         public float nowPlayerWalkVolume { get { return _walkVolume.Value; } }
         public float nowPlayerRunVolume { get { return _runVolume.Value; } }
 
+        public bool nowPlayerUseMagic { get { return _isUseMagic; } }
+
         public int lastHP;//HPの変動前の数値を記録。比較に用いる
         public int lastSanValue;//SAN値の変動前の数値を記録。比較に用いる
         public int bleedingDamage = 1;//出血時に受けるダメージ
         private bool _isUseItem = false;
+        private bool _isUseMagic = false;
         private bool _isPulsationBleeding = false;
 
         private void Init()
@@ -188,7 +192,7 @@ namespace Scenes.Ingame.Player
         /// </summary>
         public void ChangeSpeed()
         {
-            _speed.Value = (int)(_speedBase * (_isUseItem ? 0.5f : 1));
+            _speed.Value = (int)(_speedBase * (_isUseItem ? 0.5f : 1) * (_isUseMagic ? 0.5f : 1));
         }
 
         /// <summary>
@@ -198,6 +202,15 @@ namespace Scenes.Ingame.Player
         public void UseItem(bool value)
         { 
             _isUseItem = value;
+        }
+
+        /// <summary>
+        /// 呪文を唱えているか管理するための関数
+        /// </summary>
+        /// <param name="value"></param>
+        public void UseMagic(bool value)
+        {
+            _isUseMagic = value;
         }
 
         /// <summary>

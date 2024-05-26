@@ -13,6 +13,10 @@ namespace Scenes.Ingame.Player
     {
         private PlayerStatus _myPlayerStatus;
         private TempPlayerMove _myPlayerMove;
+
+        private bool _isFirst = true;//初めて呼び出されたか
+
+
         public void Setup()
         {
             _myPlayerStatus = GetComponent<PlayerStatus>();
@@ -21,7 +25,11 @@ namespace Scenes.Ingame.Player
 
         public void Active()
         {
-            Setup();
+            if (_isFirst)
+            {
+                Setup();
+                _isFirst = false;
+            }
 
             //スタミナの消費速度が2倍に
             _myPlayerMove.Pulsation(true);
@@ -39,7 +47,6 @@ namespace Scenes.Ingame.Player
         {
             _myPlayerMove.Pulsation(false);
             _myPlayerStatus.PulsationBleeding(false);
-            Destroy(this);
         }
     }
 

@@ -72,7 +72,8 @@ namespace Scenes.Ingame.Player
                         RaycastHit hit;
                         if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, _getItemRange, layerMask))//設定した距離にあるアイテムを認知
                         {
-                            if(hit.collider.gameObject.TryGetComponent(out ItemEffect item))
+                            
+                            if (hit.collider.gameObject.TryGetComponent(out ItemEffect item))
                             {
                                 string name = item.GetItemData().itemName;
                                 _itemPopActive.OnNext(name);//アイテムポップが出現
