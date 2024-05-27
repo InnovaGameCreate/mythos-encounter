@@ -10,17 +10,18 @@ using static UnityEditor.Progress;
 
 namespace Scenes.Ingame.Stage
 {
+
     public class ItemGenerator : MonoBehaviour
     {
-        [SerializeField, Tooltip("’EoƒAƒCƒeƒ€‚Ì¶¬”")]
+        [SerializeField, Tooltip("è„±å‡ºã‚¢ã‚¤ãƒ†ãƒ ã®ç”Ÿæˆæ•°")]
         private int _escapeItemCount = 4;
-        [SerializeField, Tooltip("ƒXƒe[ƒWƒAƒCƒeƒ€‚Ì¶¬”")]
+        [SerializeField, Tooltip("ã‚¹ãƒ†ãƒ¼ã‚¸ã‚¢ã‚¤ãƒ†ãƒ ã®ç”Ÿæˆæ•°")]
         private int _stageItemCount = 20;
-        [SerializeField, Tooltip("item‚Ìprefab")]
+        [SerializeField, Tooltip("itemã®prefab")]
         private List<GameObject> _stageItemPrefab;
-        [SerializeField, Tooltip("’EoƒAƒCƒeƒ€‚Ìprefab")]
+        [SerializeField, Tooltip("è„±å‡ºã‚¢ã‚¤ãƒ†ãƒ ã®prefab")]
         private GameObject _escapeItemPrefab;
-        [SerializeField, Tooltip("’Eo’n“_‚Ìprefab")]
+        [SerializeField, Tooltip("è„±å‡ºåœ°ç‚¹ã®prefab")]
         private GameObject _escapePointPrefab;
         private List<GameObject> _itemMarker;
         void Start()
@@ -40,7 +41,7 @@ namespace Scenes.Ingame.Stage
         {
             if(_itemMarker.Count < _escapeItemCount)
             {
-                Debug.LogError("escapeMarker‚Ì”‚ª¶¬‚·‚éescapeItem‚Ì”‚æ‚è­‚È‚¢‚Å‚·");
+                Debug.LogError("escapeMarkerã®æ•°ãŒç”Ÿæˆã™ã‚‹escapeItemã®æ•°ã‚ˆã‚Šå°‘ãªã„ã§ã™");
                 return;
             }
             for (int i = 0; i < _escapeItemCount; i++)
@@ -54,12 +55,12 @@ namespace Scenes.Ingame.Stage
         {
             if(_itemMarker.Count < 1)
             {
-                Debug.LogError("escapeMarker‚Ì”‚ª‚ ‚è‚Ü‚¹‚ñ");
+                Debug.LogError("escapeMarkerã®æ•°ãŒã‚ã‚Šã¾ã›ã‚“");
                 return;
             }
             else if (_itemMarker.Count < _stageItemCount)
             {
-                Debug.LogWarning("escapeMarker‚Ì”‚ª­‚È‚¢‚½‚ßA¶¬”‚ğ’²®‚µ‚Ü‚·");
+                Debug.LogWarning("escapeMarkerã®æ•°ãŒå°‘ãªã„ãŸã‚ã€ç”Ÿæˆæ•°ã‚’èª¿æ•´ã—ã¾ã™");
                 _stageItemCount = _itemMarker.Count;
             }
             for (int i = 0; i < _stageItemCount; i++)
