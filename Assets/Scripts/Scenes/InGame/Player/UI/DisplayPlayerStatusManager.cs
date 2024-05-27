@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using TMPro;
 using System;
+using Scenes.Ingame.Manager;
 
 namespace Scenes.Ingame.Player
 {
@@ -25,22 +26,26 @@ namespace Scenes.Ingame.Player
 
         private void Start()
         {
-            //プレイヤーの数を数える。人数をもとに配列を作成。
-            //今後はここにある処理全てを「Playerのスポーンが完了した」イベントが発行されたら行うようにする。(PlayerSpawnerから参加人数を取得できるようにする)
-            _players = GameObject.FindGameObjectsWithTag("Player");
-            _playerStatuses = new PlayerStatus[_players.Length];
+            IngameManager.Instance.OnPlayerSpawnEvent
+                .Subscribe(_ =>
+                {
+                    //プレイヤーの数を数える。人数をもとに配列を作成。
+                    //今後はここにある処理全てを「Playerのスポーンが完了した」イベントが発行されたら行うようにする。(PlayerSpawnerから参加人数を取得できるようにする)
+                    _players = GameObject.FindGameObjectsWithTag("Player");
+                    _playerStatuses = new PlayerStatus[_players.Length];
 
-            //PlayerIDの昇順にソートを行う。
-            //今後IDは8桁の数字になるかも。その時は数の大きさで昇順にソートするようにせよ
-            foreach (var player in _players)
-            {
-                int myID = player.GetComponent<PlayerStatus>().playerID;
-                _playerStatuses[myID] = player.GetComponent<PlayerStatus>();
-            }
+                    //PlayerIDの昇順にソートを行う。
+                    //今後IDは8桁の数字になるかも。その時は数の大きさで昇順にソートするようにせよ
+                    foreach (var player in _players)
+                    {
+                        int myID = player.GetComponent<PlayerStatus>().playerID;
+                        _playerStatuses[myID] = player.GetComponent<PlayerStatus>();
+                    }
 
-            //配列のソート終了を通知する
-            _completeSort.OnNext(Unit.Default);
-            _completeSort.OnCompleted();
-        }       
+                    //配列のソート終了を通知する
+                    _completeSort.OnNext(Unit.Default);
+                    _completeSort.OnCompleted();
+                }).AddTo(this);
+        }
     }
 }

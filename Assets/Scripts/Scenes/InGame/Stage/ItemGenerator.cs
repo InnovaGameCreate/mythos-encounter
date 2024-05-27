@@ -25,7 +25,7 @@ namespace Scenes.Ingame.Stage
         private List<GameObject> _itemMarker;
         void Start()
         {
-            IngameManager.Instance.OnFinishStageGenerateEvent
+            IngameManager.Instance.OnStageGenerateEvent
                 .Subscribe(_ =>
                 {
                     _itemMarker = GameObject.FindGameObjectsWithTag("ItemSpawnPoint").ToList();

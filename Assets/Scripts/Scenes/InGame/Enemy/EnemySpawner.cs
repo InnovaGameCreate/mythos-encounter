@@ -70,7 +70,7 @@ namespace Scenes.Ingame.Enemy
 
             }
             else {
-                IngameManager.Instance.OnInitial.Subscribe(_ => InitialSpawn());
+                IngameManager.Instance.OnPlayerSpawnEvent.Subscribe(_ => InitialSpawn());
             }
 
             if (Instance == null)
@@ -90,7 +90,7 @@ namespace Scenes.Ingame.Enemy
             _enemyVisibilityMap.MapScan();
 
             //‚±‚±‚ÅEnemy§ì
-            EnemySpawn(EnemyName.TestEnemy,_enemySpawnPosition);
+            EnemySpawn(_enemyName, _enemySpawnPosition);
             //“G‚Ì•¦‚«‚ªŠ®—¹‚µ‚½‚±‚Æ‚ğ’m‚ç‚¹‚é
             IngameManager.Instance.SetReady(ReadyEnum.EnemyReady);
 

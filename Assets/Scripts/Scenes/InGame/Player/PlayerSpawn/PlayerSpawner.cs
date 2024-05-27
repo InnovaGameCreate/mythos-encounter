@@ -21,7 +21,6 @@ namespace Scenes.Ingame.Player
         private Vector3 _spawnPosition;
         private StageGenerator _stageGenerator;
         public readonly int _playerNum = 1;
-        // Start is called before the first frame update
         void Start()
         {
             if (Instance == null)
@@ -29,11 +28,15 @@ namespace Scenes.Ingame.Player
             else
                 Destroy(this.gameObject);
 
-            _stageGenerator = GameObject.FindObjectOfType<StageGenerator>();
-            _spawnPosition = _stageGenerator.spawnPosition;
-
-            IngameManager.Instance.OnInitial
-                .Subscribe(_ => SpawnPlayer());
+            Debug.Log("PlayerSpawn/Start");
+            IngameManager.Instance.OnStageGenerateEvent
+                .Subscribe(_ =>
+                {
+                    _stageGenerator = FindObjectOfType<StageGenerator>();
+                    Debug.Log("PlayerSpawnSuccess");
+                    _spawnPosition = _stageGenerator.spawnPosition;
+                    SpawnPlayer();
+                }).AddTo(this);
         }
 
 

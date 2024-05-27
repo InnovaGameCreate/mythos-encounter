@@ -183,7 +183,7 @@ namespace Scenes.Ingame.Enemy
                 }
             }
 
-            
+
             for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
             {
                 for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
@@ -209,7 +209,7 @@ namespace Scenes.Ingame.Enemy
                     nearPositionZ = nextPositionZ[i];
                 }
             }
-            
+
             //実際に次ぎに行くべき座標を示す
             Vector3 nextPosition = (new Vector3(nearPositionX, 0, nearPositionZ) * gridRange) + centerPosition;
             if (debugMode)
@@ -263,9 +263,10 @@ namespace Scenes.Ingame.Enemy
                 {
                     if (debugMode) Debug.Log("z座標がマップからはみ出ています");
                 }
-                
+
             }
-            else {
+            else
+            {
                 if (debugMode) Debug.Log("x座標がマップからはみ出ています");
             }
 
@@ -524,7 +525,7 @@ namespace Scenes.Ingame.Enemy
         /// </summary>
         public void DontApproachPlayer()
         {
-            Vector3 playerPosition = GameObject.Find("Player").transform.position;
+            Vector3 playerPosition = GameObject.FindWithTag("Player").transform.position;
             if (debugMode) Debug.Log("プレイヤーにスポーン直後接近しないように対処");
             VisivilityArea newVisivilityArea;
             if ((playerPosition.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < playerPosition.x))

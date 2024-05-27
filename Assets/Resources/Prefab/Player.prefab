@@ -482,8 +482,7 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2481875681873542124}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4223974ff82d2aa4ea5946132205be86, type: 3}
+  m_EditorHideFlags: 0  m_Script: {fileID: 11500000, guid: 4223974ff82d2aa4ea5946132205be86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   chantTime: 0
