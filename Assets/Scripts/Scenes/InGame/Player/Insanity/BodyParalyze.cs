@@ -16,6 +16,8 @@ namespace Scenes.Ingame.Player
         private TempPlayerMove _myPlayerMove;
 
         private ItemSlotStruct _unavailableSlot;
+        private bool _isFirst = true;//初めて呼び出されたか
+        
 
         public void Setup()
         {
@@ -39,7 +41,11 @@ namespace Scenes.Ingame.Player
 
         public void Active()
         {
-            Setup();
+            if (_isFirst)
+            {
+                Setup();
+                _isFirst = false;
+            }
 
             //「減らすスロットにアイテムが入っているとその場に落とす」処理の実装
             for (int i = 0; i < 2; i++)
@@ -82,8 +88,6 @@ namespace Scenes.Ingame.Player
             //「身体のマヒ」解除
             _myPlayerMove.Paralyze(false);
             _myPlayerMove.MoveControl(true);
-
-            Destroy(this);
         }
     }
 }

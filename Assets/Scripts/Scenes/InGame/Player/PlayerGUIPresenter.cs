@@ -174,7 +174,8 @@ namespace Scenes.Ingame.Player
                     _playerInsanityManager.OnInsanitiesAdd
                         .Subscribe(addEvent =>
                         {
-                            _insanityIcons[addEvent.Index].color += new Color(0, 0, 0, 1.0f);//不透明にする
+                            _insanityIcons[addEvent.Index].color += new Color(0, 0, 0, 1.0f);
+
                             switch (_playerInsanityManager.Insanities[addEvent.Index])
                             {
                                 case EyeParalyze:
@@ -204,6 +205,24 @@ namespace Scenes.Ingame.Player
                             _insanityIcons[removeEvent.Index].color -= new Color(0, 0, 0, 1.0f);//透明にする
                             _insanityIcons[removeEvent.Index].sprite = null;
                         }).AddTo(this);
+
+                    //洗脳状態に応じてアイコンを変化させる。
+                    _playerInsanityManager.OnPlayerBrainwashedChange
+                        .Skip(1)//初期化の時は無視
+                        .Subscribe(x =>
+                        {
+                            if (x)//洗脳状態になったとき
+                            {
+                                for (int i = 0; i < _insanityIcons.Length; i++)
+                                    _insanityIcons[i].color -= new Color(0, 0, 0, 1.0f);//透明にする
+                            }
+                            else//洗脳状態が解除されたとき
+                            {
+                                for (int i = 0; i < _insanityIcons.Length; i++)
+                                    _insanityIcons[i].color += new Color(0, 0, 0, 1.0f);//不透明にする
+                            }
+                        }).AddTo(this);
+                        
 
                 }).AddTo(this);
         }

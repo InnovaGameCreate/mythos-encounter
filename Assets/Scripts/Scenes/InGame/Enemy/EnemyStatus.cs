@@ -10,6 +10,7 @@ using Scenes.Ingame.InGameSystem;
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks.Triggers;
+using UnityEngine.AI;
 
 namespace Scenes.Ingame.Enemy
 {
@@ -62,8 +63,6 @@ namespace Scenes.Ingame.Enemy
         [SerializeField] private bool _debugMode;
 
 
-
-
         private IntReactiveProperty _hp = new IntReactiveProperty();
         private FloatReactiveProperty _patolloringSpeed = new FloatReactiveProperty();
         private FloatReactiveProperty _searcSpeed = new FloatReactiveProperty();
@@ -78,6 +77,7 @@ namespace Scenes.Ingame.Enemy
         private IntReactiveProperty _horror = new IntReactiveProperty();
         private IntReactiveProperty _atackPower = new IntReactiveProperty();
 
+        private BoolReactiveProperty _isBind = new BoolReactiveProperty(false);//çSë©èÛë‘Ç≈Ç†ÇÈÇ©î€Ç©
 
         public IObservable<int> OnHpChange { get { return _hp; } }
         public IObservable<float> OnPatolloringSppedChange { get { return _patolloringSpeed; } }
@@ -91,6 +91,8 @@ namespace Scenes.Ingame.Enemy
 
         public IObservable<int> OnHorrorChange { get { return _horror; } }
         public IObservable<int> OnAtackPowerChange { get { return _atackPower; } }
+
+        public IObservable<bool> OnBindChange { get { return _isBind; } }
 
 
         //##########GetÇ∆Ç©SetÇÃÇ©ÇΩÇ‹ÇË
@@ -107,10 +109,11 @@ namespace Scenes.Ingame.Enemy
 
         public int ReturnHorror { get { return _horror.Value; } }
         public int ReturnAtackPower { get { return _atackPower.Value; } }
-        
-        
+        public bool ReturnBind { get { return _isBind.Value; } }
 
 
+
+        private NavMeshAgent _myAgent;
 
 
         //##########UniRxÇ…Ç©Ç©ÇÌÇÁÇ»Ç¢ïœêî
@@ -137,8 +140,34 @@ namespace Scenes.Ingame.Enemy
             {
                 FallBack();
             }).AddTo(this);
+
+
+            //çSë©èÛë‘Ç…Ç»Ç¡ÇΩèuä‘ÅEâÇØÇΩèuä‘Ç…ë¨ìxÇïœçX
+            _myAgent = GetComponent<NavMeshAgent>();
+            OnBindChange
+                .Skip(1)//èâä˙âªÇÃéûÇÕñ≥éã
+                .Subscribe(x =>
+                {
+                    if (x) { _searcSpeed.Value = _searchSpeedBase * 0.1f; _patolloringSpeed.Value = _patolloringSpeedBase * 0.1f; _cheseSpeed.Value = _chaseSpeedBase * 0.1f; }
+                    else { _searcSpeed.Value = _searchSpeedBase * 1f; _patolloringSpeed.Value = _patolloringSpeedBase * 1f; _cheseSpeed.Value = _chaseSpeedBase * 1f; }
+                    switch (ReturnEnemyState)
+                    {
+                        case EnemyState.Patorolling: _myAgent.speed = ReturnPatolloringSpeed; break;
+                        case EnemyState.Searching: _myAgent.speed = ReturnSearchSpeed; break;
+                        case EnemyState.Chese: _myAgent.speed = ReturnCheseSpeed; break;
+                        case EnemyState.Attack: _myAgent.speed = ReturnCheseSpeed; break;
+                    }
+                }).AddTo(this);
+
             return true;
         }
+
+        /*
+         if (x)//çSë©èÛë‘Ç…Ç»Ç¡ÇΩèuä‘
+                        _myAgent.speed *= 0.1f;
+                    else//çSë©èÛë‘Ç™âÇØÇΩèuä‘
+                        _myAgent.speed *= 10;
+         */
 
         // Update is called once per frame
         void Update()
@@ -212,5 +241,9 @@ namespace Scenes.Ingame.Enemy
             _visual.active = true;
         }
 
+        public void ChangeBindBool(bool value)
+        {
+            _isBind.Value = value;
+        }
     }
 }

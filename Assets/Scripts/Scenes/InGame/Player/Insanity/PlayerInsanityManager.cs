@@ -19,6 +19,18 @@ namespace Scenes.Ingame.Player
         public List<IInsanity> Insanities { get { return _insanities.ToList(); } }//外部に_insanitiesの内容を公開する
 
         private List<int> _numbers = Enumerable.Range(0, 5).ToList();//0,1,2,3,4のリストを生成
+        /*
+         対応表
+         0.EyeParalyze
+         1.BodyParalyze
+         2.IncreasePulsation
+         3.Scream
+         4.Hallucination
+         */
+
+        [SerializeField] private BoolReactiveProperty _isBrainwashed = new BoolReactiveProperty(false);//洗脳中か否か
+        public IObservable<bool> OnPlayerBrainwashedChange { get { return _isBrainwashed; } }//洗脳状態が変化した際にイベントが発行
+        public bool nowPlayerBrainwashed { get { return _isBrainwashed.Value; } }
 
         private PlayerStatus _myPlayerStatus;
         // Start is called before the first frame update
@@ -68,37 +80,38 @@ namespace Scenes.Ingame.Player
             {
                 int random = _numbers[UnityEngine.Random.Range(0, _numbers.Count)];
                 //任意のIInsanity関連のスクリプトをアタッチ
-                IInsanity InsanityScript;
+                IInsanity InsanityScript = null;
                 switch (random)
                 {
                     case 0:
                         InsanityScript = this.AddComponent<EyeParalyze>();
                         _insanities.Add(InsanityScript);
-                        InsanityScript.Active();//アタッチしたスクリプトを発動
                         break;
                     case 1:
                         InsanityScript = this.AddComponent<BodyParalyze>();
                         _insanities.Add(InsanityScript);
-                        InsanityScript.Active();
                         break;
                     case 2:
                         InsanityScript = this.AddComponent<IncreasePulsation>();
                         _insanities.Add(InsanityScript);
-                        InsanityScript.Active();
                         break;
                     case 3:
                         InsanityScript = this.AddComponent<Scream>();
                         _insanities.Add(InsanityScript);
-                        InsanityScript.Active();
                         break;
                     case 4:
                         InsanityScript = this.AddComponent<Hallucination>();
                         _insanities.Add(InsanityScript);
-                        InsanityScript.Active();
                         break;
                     default:
                         Debug.Log("想定外の値です。");
                         break;
+                }
+
+                //洗脳状態で無ければ即座に発狂効果を発揮
+                if (InsanityScript != null && !_isBrainwashed.Value)
+                {
+                    InsanityScript.Active();
                 }
                 _numbers.Remove(random);
             }           
@@ -139,12 +152,37 @@ namespace Scenes.Ingame.Player
                 _numbers.Sort();
 
                 _insanities.Last().Hide();
+                Destroy((UnityEngine.Object)_insanities.Last());
                 _insanities.Remove(_insanities.Last());
 
                 //もうこれ以上回復する必要がないときは終了
                 if (_insanities.Count == 0)
                     break;
             }
+        }
+
+        /// <summary>
+        /// 洗脳状態になった際に行う処理をまとめたコルーチン
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerator SelfBrainwash()
+        {
+            //全ての発狂スクリプトを無効化
+            for (int i = 0; i < _insanities.Count; i++)
+            {
+                _insanities[i].Hide();
+            }
+            _isBrainwashed.Value = true;
+
+            //洗脳効果は60秒続く
+            yield return new WaitForSeconds(60f);
+
+            //全ての発狂スクリプトを有効にする
+            for (int i = 0; i < _insanities.Count; i++)
+            {
+                _insanities[i].Active();
+            }
+            _isBrainwashed.Value = false;
         }
 
         /// <summary>

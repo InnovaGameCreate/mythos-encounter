@@ -34,6 +34,7 @@ namespace Scenes.Ingame.Enemy
             _myAgent = GetComponent<NavMeshAgent>();
             if (_myAgent == null) Debug.LogError("NavMeshAgentが認識できません");
             _myAgent.destination = this.transform.position;
+
         }
 
         // Update is called once per frame
@@ -49,7 +50,7 @@ namespace Scenes.Ingame.Enemy
                 switch (_enemyStatus.ReturnEnemyState)
                 {
                     case EnemyState.Patorolling:
-                        _myAgent.speed = _enemyStatus.ReturnPatolloringSpeed;
+                        _myAgent.speed = _enemyStatus.ReturnPatolloringSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
                         { //スタミナが削れていたら
                             _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
@@ -60,7 +61,7 @@ namespace Scenes.Ingame.Enemy
                         }                       
                         break;
                     case EnemyState.Searching:
-                        _myAgent.speed = _enemyStatus.ReturnSearchSpeed;
+                        _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
                         { //スタミナが削れていたら
                             _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
@@ -107,11 +108,11 @@ namespace Scenes.Ingame.Enemy
                         }
                         if (_staminaOver)
                         {
-                            _myAgent.speed = _enemyStatus.ReturnSearchSpeed;
+                            _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         }
                         else
                         {
-                            _myAgent.speed = _enemyStatus.ReturnCheseSpeed;
+                            _myAgent.speed = _enemyStatus.ReturnCheseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         }
                         break;
                     case EnemyState.Attack:
@@ -150,11 +151,11 @@ namespace Scenes.Ingame.Enemy
                         }
                         if (_staminaOver)
                         {
-                            _myAgent.speed = _enemyStatus.ReturnSearchSpeed;
+                            _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         }
                         else
                         {
-                            _myAgent.speed = _enemyStatus.ReturnCheseSpeed;
+                            _myAgent.speed = _enemyStatus.ReturnCheseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         }
                         break;
                     case EnemyState.FallBack: 
