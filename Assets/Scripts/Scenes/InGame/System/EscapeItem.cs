@@ -1,47 +1,27 @@
 using UnityEngine;
-using UniRx;
-using Cysharp.Threading.Tasks;
-using System.Threading;
 using Scenes.Ingame.Manager;
+using Scenes.Ingame.Player;
 namespace Scenes.Ingame.InGameSystem
 {
-    public class EscapeItem : MonoBehaviour
+    public class EscapeItem : MonoBehaviour, IInteractable
     {
         IngameManager manager;
-        private bool _isActive = false;
         private bool _get = false;
-        CancellationTokenSource token;
         void Start()
         {
-            token = new CancellationTokenSource();
             manager = IngameManager.Instance;
-            manager.OnInitial.First().Subscribe(_ => _isActive = false).AddTo(this);
-            manager.OnIngame.First().Subscribe(_ =>
-            { 
-                _isActive = true;
-                GetItem(token.Token).Forget();
-            }).AddTo(this);
+        }
 
-        }
-        async UniTaskVoid GetItem(CancellationToken token)
+        public void Intract(PlayerStatus status)
         {
-            await UniTask.WaitUntil(() => _get);
-            manager.GetEscapeItem();
-            Destroy(gameObject, 0.5f);
-        }
-        private void OnTriggerEnter(Collider collision)
-        {
-            if (_isActive == false) return;
-            if (collision.gameObject.CompareTag("Player"))
+            Debug.Log("インタラクトしようとしています");
+            if (Input.GetMouseButtonDown(1) && !_get)
             {
+                Debug.Log("インタラクトしました");
                 _get = true;
+                manager.GetEscapeItem();
+                Destroy(gameObject, 0.5f);
             }
-
-        }
-        private void OnDestroy()
-        {
-            token.Cancel();
-            token.Dispose();
         }
     }
 }
