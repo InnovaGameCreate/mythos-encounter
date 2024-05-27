@@ -1,1 +1,1 @@
-* @mythos-reviewer
+* @octo-org/mythos-reviewer
