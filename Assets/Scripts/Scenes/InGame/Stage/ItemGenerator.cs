@@ -6,6 +6,7 @@ using UniRx;
 using System.Linq;
 using Scenes.Ingame.InGameSystem;
 using System.Diagnostics.Tracing;
+using static UnityEditor.Progress;
 
 namespace Scenes.Ingame.Stage
 {
@@ -13,7 +14,7 @@ namespace Scenes.Ingame.Stage
     {
         [SerializeField, Tooltip("脱出アイテムの生成数")]
         private int _escapeItemCount = 4;
-        [SerializeField, Tooltip("脱出アイテムの生成数")]
+        [SerializeField, Tooltip("ステージアイテムの生成数")]
         private int _stageItemCount = 20;
         [SerializeField, Tooltip("itemのprefab")]
         private List<GameObject> _stageItemPrefab;
@@ -21,14 +22,14 @@ namespace Scenes.Ingame.Stage
         private GameObject _escapeItemPrefab;
         [SerializeField, Tooltip("脱出地点のprefab")]
         private GameObject _escapePointPrefab;
-        private List<GameObject> _escapeItems;
+        private List<GameObject> _itemMarker;
         void Start()
         {
             IngameManager.Instance.OnFinishStageGenerateEvent
                 .Subscribe(_ =>
                 {
-                    _escapeItems = GameObject.FindGameObjectsWithTag("ItemSpawnPoint").ToList();
-                    Debug.Log($"_escapeItems = {_escapeItems.Count}");
+                    _itemMarker = GameObject.FindGameObjectsWithTag("ItemSpawnPoint").ToList();
+                    Debug.Log($"_escapeItems = {_itemMarker.Count}");
                     InstatiateEscapeItem();
                     RandomStageItemSet();
                     ClearList();
@@ -37,48 +38,48 @@ namespace Scenes.Ingame.Stage
 
         private void InstatiateEscapeItem()
         {
-            if(_escapeItems.Count < _escapeItemCount)
+            if(_itemMarker.Count < _escapeItemCount)
             {
                 Debug.LogError("escapeMarkerの数が生成するescapeItemの数より少ないです");
                 return;
             }
             for (int i = 0; i < _escapeItemCount; i++)
             {
-                int randomNumber = Random.Range(0, _escapeItems.Count);
-                Instantiate(_escapeItemPrefab, _escapeItems[randomNumber].transform.position, Quaternion.identity);
-                DeleteList(_escapeItems[randomNumber]);
+                int randomNumber = Random.Range(0, _itemMarker.Count);
+                Instantiate(_escapeItemPrefab, _itemMarker[randomNumber].transform.position, Quaternion.identity);
+                DeleteList(_itemMarker[randomNumber]);
             }
         }
         private void RandomStageItemSet()
         {
-            if(_escapeItems.Count < 1)
+            if(_itemMarker.Count < 1)
             {
                 Debug.LogError("escapeMarkerの数がありません");
                 return;
             }
-            else if (_escapeItems.Count < _stageItemCount)
+            else if (_itemMarker.Count < _stageItemCount)
             {
                 Debug.LogWarning("escapeMarkerの数が少ないため、生成数を調整します");
-                _stageItemCount = _escapeItems.Count;
+                _stageItemCount = _itemMarker.Count;
             }
             for (int i = 0; i < _stageItemCount; i++)
             {
-                int randomNumber = Random.Range(0, _escapeItems.Count);
+                int randomNumber = Random.Range(0, _itemMarker.Count);
                 int itemRandomNumber = Random.Range(0, _stageItemPrefab.Count);
-                Instantiate(_stageItemPrefab[itemRandomNumber], _escapeItems[randomNumber].transform.position, Quaternion.identity);
-                DeleteList(_escapeItems[randomNumber]);
+                Instantiate(_stageItemPrefab[itemRandomNumber], _itemMarker[randomNumber].transform.position, Quaternion.identity);
+                DeleteList(_itemMarker[randomNumber]);
             }
         }
         private void ClearList()
         {
-            foreach (var item in _escapeItems)
+            for (int i = 0; i < _itemMarker.Count; i++)
             {
-                DeleteList(item);
+                DeleteList(_itemMarker[i]);
             }
         }
         private void DeleteList(GameObject target)
         {
-            _escapeItems.Remove(target);
+            _itemMarker.Remove(target);
             Destroy(target);
         }
     }
