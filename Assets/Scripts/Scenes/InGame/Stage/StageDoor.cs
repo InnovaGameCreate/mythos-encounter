@@ -4,6 +4,7 @@ using DG.Tweening;
 
 namespace Scenes.Ingame.Stage
 {
+
     public class StageDoor : MonoBehaviour, IInteractable
     {
         [SerializeField]
