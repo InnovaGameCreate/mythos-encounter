@@ -33,7 +33,7 @@ namespace Scenes.Ingame.Stage
         const float TILESIZE = 5.85f;
         const int OFFSET = 2;//通路を作らない範囲
         private bool playerSpawnRoom = false;
-        private bool viewDebugLog = true;//確認用のデバックログを表示する
+        private bool viewDebugLog = false;//確認用のデバックログを表示する
         private CancellationTokenSource source = new CancellationTokenSource();
         [Header("Parent")]
         [SerializeField]
@@ -833,7 +833,7 @@ namespace Scenes.Ingame.Stage
                             RoomPlotId(RoomType.room3x3Stair, new Vector2(x, y), floor1fData);
                             RoomPlotId(RoomType.room3x3Stair, new Vector2(x, y), floor2fData);
                             _stairPosition.Add(ToVector2(x + 2, y + 1));
-                            Debug.Log("3x3階段の部屋に適した場所あり");
+                            if (viewDebugLog) Debug.Log("3x3階段の部屋に適した場所あり");
                         }
                     }
                 }

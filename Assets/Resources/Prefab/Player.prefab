@@ -193,7 +193,7 @@ Transform:
   - {fileID: 5305588858703421127}
   - {fileID: 5495451142414428879}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &1212518499987544778
 CharacterController:
@@ -258,7 +258,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -357,7 +357,7 @@ MonoBehaviour:
   _myPlayerSoundManager: {fileID: 7111757753802298086}
   _myCameraMove: {fileID: 2943275014606559026}
   _camera: {fileID: 2217506152449124184}
-  isCurcleSetting: 0
+  isCurcleSetting: 1
   moveSpeed: 0
   _recoverStamina: 20
   _recoverStaminaOnlyTired: 60

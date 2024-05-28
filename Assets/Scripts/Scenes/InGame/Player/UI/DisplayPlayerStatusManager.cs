@@ -24,7 +24,7 @@ namespace Scenes.Ingame.Player
         private Subject<Unit> _completeSort = new Subject<Unit>();
         public IObservable<Unit> OnCompleteSort { get { return _completeSort; } }//_playerStatuses配列を作成・ソートを終えた際にイベントが発行 
 
-        private void Start()
+        private void Awake()
         {
             IngameManager.Instance.OnPlayerSpawnEvent
                 .Subscribe(_ =>

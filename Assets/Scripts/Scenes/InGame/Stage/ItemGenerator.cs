@@ -7,6 +7,8 @@ using System.Linq;
 using Scenes.Ingame.InGameSystem;
 using System.Diagnostics.Tracing;
 using static UnityEditor.Progress;
+using static UnityEngine.GraphicsBuffer;
+using UnityEngine.UIElements;
 
 namespace Scenes.Ingame.Stage
 {
@@ -29,7 +31,6 @@ namespace Scenes.Ingame.Stage
                 .Subscribe(_ =>
                 {
                     _itemMarker = GameObject.FindGameObjectsWithTag("ItemSpawnPoint").ToList();
-                    Debug.Log($"_escapeItems = {_itemMarker.Count}");
                     InstatiateEscapeItem();
                     RandomStageItemSet();
                     ClearList();
@@ -72,10 +73,12 @@ namespace Scenes.Ingame.Stage
         }
         private void ClearList()
         {
-            for (int i = 0; i < _itemMarker.Count; i++)
+            List<GameObject> _clearList = _itemMarker;
+            foreach (GameObject item in _clearList)
             {
-                DeleteList(_itemMarker[i]);
+                Destroy(item);
             }
+            _itemMarker.Clear();
         }
         private void DeleteList(GameObject target)
         {

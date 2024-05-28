@@ -28,7 +28,6 @@ namespace Scenes.Ingame.Player
             else
                 Destroy(this.gameObject);
 
-            Debug.Log("PlayerSpawn/Start");
             IngameManager.Instance.OnStageGenerateEvent
                 .Subscribe(_ =>
                 {

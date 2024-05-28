@@ -3,6 +3,7 @@ using UniRx;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using Scenes.Ingame.Manager;
+using System.Runtime.CompilerServices;
 
 namespace Scenes.Ingame.InGameSystem
 {
@@ -18,9 +19,10 @@ namespace Scenes.Ingame.InGameSystem
         {
             token = new CancellationTokenSource();
             manager = IngameManager.Instance;
-            manager.OnInitial.Subscribe(_ => _isActive = false).AddTo(this);
+            _isActive = false;
             manager.OnOpenEscapePointEvent.Subscribe(_ =>
             {
+                Debug.Log("Active");
                 _isActive = true;
                 GetComponent<Renderer>().material = _activeMaterial;
                 GetItem(token.Token).Forget();
@@ -28,7 +30,7 @@ namespace Scenes.Ingame.InGameSystem
         }
         async UniTaskVoid GetItem(CancellationToken token)
         {
-            await UniTask.WaitUntil(() => _get);
+            await UniTask.WaitUntil(() => _get) ;
             manager.Escape();
             Destroy(gameObject, 0.5f);
         }

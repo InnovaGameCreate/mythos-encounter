@@ -104,8 +104,8 @@ namespace Scenes.Ingame.Manager
         //プレイヤーが脱出アイテムを入手した際の処理
         public void GetEscapeItem()
         {
-            Debug.Log("脱出アイテムを獲得しました");
             _getEscapeItemCount.Value++;
+            Debug.Log($"脱出アイテムを獲得しました。現在の個数は{_getEscapeItemCount.Value}個、必要な個数は{_escapeItemCount}個、解放状態は{_getEscapeItemCount.Value >= _escapeItemCount}");
             if (_getEscapeItemCount.Value >= _escapeItemCount)
             {
                 _openEscapePointEvent.OnNext(default);
