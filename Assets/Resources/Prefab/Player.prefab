@@ -170,6 +170,7 @@ GameObject:
   - component: {fileID: 6449360652433016383}
   - component: {fileID: 3297469623762709221}
   - component: {fileID: 5250157038054447586}
+  - component: {fileID: 3067620243571863701}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -472,7 +473,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 888708c7cfc0fd9469b4e1de5edf0fd1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _myMagic: {fileID: 0}
+  _myMagic: {fileID: 3067620243571863701}
+--- !u!114 &3067620243571863701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2481875681873542124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4223974ff82d2aa4ea5946132205be86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chantTime: 0
+  startTime: 0
+  consumeSanValue: 0
+  cancelMagic: 0
+  myPlayerStatus: {fileID: 0}
+  myPlayerMagic: {fileID: 0}
+  _CreatedBarricade: {fileID: 0}
+  isCanCreate: 0
+  _leftPositoon: {x: 0, y: 0, z: 0}
+  _rightPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &3845817263225331235
 GameObject:
   m_ObjectHideFlags: 0
