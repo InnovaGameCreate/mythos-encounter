@@ -11,7 +11,7 @@ public class EnemyBallet : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        this.transform.LookAt(GameObject.Find("Player").transform.position);
+        this.transform.LookAt(GameObject.FindWithTag("Player").transform.position);
         _rigidbody.velocity = transform.forward * _speed;
         Debug.Log("”­ŽË");
     }
