@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 542831747158774133}
   - component: {fileID: 6760607064581481970}
   - component: {fileID: 5350378578695068710}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Interior_Door_01_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 885652182001504964}
   - component: {fileID: 8684990779601187854}
   - component: {fileID: 4431803374685663683}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Interior_Door_01_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: 1663916691681373643}
   m_Layer: 0
   m_Name: Interior_Door_01
-  m_TagString: Item
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -198,7 +198,7 @@ Transform:
   - {fileID: 9046867247989947475}
   - {fileID: 8487802535040024505}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!205 &1663916691681373643
 LODGroup:
@@ -395,9 +395,10 @@ GameObject:
   - component: {fileID: 2388603429384119576}
   - component: {fileID: 5378808974993455103}
   - component: {fileID: 5838029529641695308}
-  m_Layer: 10
+  - component: {fileID: 564242923870804985}
+  m_Layer: 11
   m_Name: Interior_Door_01_LOD0
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -522,3 +523,21 @@ MonoBehaviour:
   m_IgnoreFromBuild: 1
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!114 &564242923870804985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8786052494129313613}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

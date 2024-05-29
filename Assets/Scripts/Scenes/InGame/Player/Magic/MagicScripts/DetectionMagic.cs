@@ -1,4 +1,5 @@
 using Scenes.Ingame.Enemy;
+using Scenes.Ingame.InGameSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -48,7 +49,7 @@ namespace Scenes.Ingame.Player
                     Debug.Log("呪文発動！");
                     //効果発動
                     _detectionBallPrefab = (GameObject)Resources.Load("Prefab/Magic/DetectionBall");
-                    GameObject[] escapeItems = GameObject.FindGameObjectsWithTag("ItemSpawnPoint");
+                    EscapeItem[] escapeItems = FindObjectsOfType<EscapeItem>();
 
                     Vector3 spawnPosition = this.transform.position + this.transform.forward * 2 + Vector3.up * 2;
                     //光の玉を脱出アイテムの数だけ生成
@@ -79,7 +80,7 @@ namespace Scenes.Ingame.Player
         /// </summary>
         /// <param name="escapeItems">脱出アイテムの配列</param>
         /// <returns></returns>
-        private IEnumerator CancelOutline(GameObject[] escapeItems)
+        private IEnumerator CancelOutline(EscapeItem[] escapeItems)
         {
             yield return new WaitForSeconds(60f);
             for (int i = 0; i < escapeItems.Length; i++)
@@ -88,7 +89,7 @@ namespace Scenes.Ingame.Player
                 if (escapeItems[i] == null)
                     continue;
                 else
-                    escapeItems[i].GetComponent<Outline>().enabled = false;
+                    escapeItems[i].gameObject.GetComponent<Outline>().enabled = false;
             }
         }
 
