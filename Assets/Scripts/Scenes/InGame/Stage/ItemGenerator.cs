@@ -1,14 +1,8 @@
 using Scenes.Ingame.Manager;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using System.Linq;
-using Scenes.Ingame.InGameSystem;
-using System.Diagnostics.Tracing;
-using static UnityEditor.Progress;
-using static UnityEngine.GraphicsBuffer;
-using UnityEngine.UIElements;
 
 namespace Scenes.Ingame.Stage
 {

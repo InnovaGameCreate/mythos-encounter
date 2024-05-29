@@ -5,11 +5,8 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using Scenes.Ingame.Manager;
 using Scenes.Ingame.InGameSystem;
-using Unity.AI;
 using UniRx;
 using Unity.AI.Navigation;
-using UnityEditor.SceneManagement;
-using Unity.VisualScripting;
 
 namespace Scenes.Ingame.Stage
 {
