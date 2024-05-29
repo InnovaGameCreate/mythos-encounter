@@ -21,7 +21,7 @@ namespace Scenes.Ingame.Player
         public void OnTriggerEnter(Collider other)
         {
             //脱出アイテムに触れたらアウトラインを表示させる（デモ版）
-            if (other.gameObject.CompareTag("ItemSpawnPoint"))
+            if (other.gameObject.CompareTag("Item"))
             {
                 var outline = other.gameObject.GetComponent<Outline>();
                 outline.enabled = true;

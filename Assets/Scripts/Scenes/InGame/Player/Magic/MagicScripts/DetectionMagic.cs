@@ -48,7 +48,7 @@ namespace Scenes.Ingame.Player
                     Debug.Log("呪文発動！");
                     //効果発動
                     _detectionBallPrefab = (GameObject)Resources.Load("Prefab/Magic/DetectionBall");
-                    GameObject[] escapeItems = GameObject.FindGameObjectsWithTag("ItemSpawnPoint");
+                    GameObject[] escapeItems = GameObject.FindGameObjectsWithTag("Item");
 
                     Vector3 spawnPosition = this.transform.position + this.transform.forward * 2 + Vector3.up * 2;
                     //光の玉を脱出アイテムの数だけ生成
