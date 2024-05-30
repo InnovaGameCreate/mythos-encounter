@@ -77,10 +77,6 @@ namespace Scenes.Ingame.Player
                                 string name = item.GetItemData().itemName;
                                 _itemPopActive.OnNext(name);//アイテムポップが出現
                             }
-                            else if (hit.collider.gameObject.TryGetComponent(out InteractObjectName interactObject))
-                            {
-                                _itemPopActive.OnNext(interactObject.getName);//名前ポップが出現
-                            }
                             //TryGetComponentを行う。
                             if (hit.collider.gameObject.TryGetComponent(out IInteractable intract))
                             {
