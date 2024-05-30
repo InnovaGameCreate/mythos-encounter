@@ -228,9 +228,9 @@ namespace Scenes.Ingame.Enemy
         {
             if (debugMode) Debug.Log("視界の通りをチェック");
             VisivilityArea newVisivilityArea;
-            if ((nowPosition.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < nowPosition.x))
+            if ((nowPosition.x < centerPosition.x + (visivilityAreaGrid.Count - 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < nowPosition.x))
             {//x座標がマップの範囲内であるかどうか
-                if ((nowPosition.z < centerPosition.z + (visivilityAreaGrid[0].Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < nowPosition.z)) //z座標がマップの範囲内であるかどうか
+                if ((nowPosition.z < centerPosition.z + (visivilityAreaGrid[0].Count - 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < nowPosition.z)) //z座標がマップの範囲内であるかどうか
                 {
                     if (debugMode) Debug.Log("マップの範囲内です");
                     byte myPositionx, myPositionz;//自分がどこのグリッドにいるかを確認する
@@ -261,12 +261,12 @@ namespace Scenes.Ingame.Enemy
                 }
                 else
                 {
-                    if (debugMode) Debug.Log("z座標がマップからはみ出ています");
+                    Debug.LogError("z座標がマップからはみ出ています");
                 }
                 
             }
             else {
-                if (debugMode) Debug.Log("x座標がマップからはみ出ています");
+                Debug.LogError("x座標がマップからはみ出ています");
             }
 
             if (debugMode)
@@ -298,9 +298,9 @@ namespace Scenes.Ingame.Enemy
         {
             if (debugMode) Debug.Log("特定位置から聞こえてきた音について対処");
             VisivilityArea newVisivilityArea;
-            if ((position.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < position.x))
+            if ((position.x < centerPosition.x + (visivilityAreaGrid.Count - 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < position.x))
             {//x座標がマップの範囲内であるかどうか
-                if ((position.z < centerPosition.z + (visivilityAreaGrid[0].Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < position.z)) //z座標がマップの範囲内であるかどうか
+                if ((position.z < centerPosition.z + (visivilityAreaGrid[0].Count - 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < position.z)) //z座標がマップの範囲内であるかどうか
                 {
                     for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
                     {
@@ -329,9 +329,9 @@ namespace Scenes.Ingame.Enemy
                 }
                 else
                 {
-                    if (debugMode) Debug.Log("z座標がマップからはみ出ています");
+                    Debug.LogError("z座標がマップからはみ出ています");
                 }
-                if (debugMode) Debug.Log("x座標がマップからはみ出ています");
+                 Debug.LogError("x座標がマップからはみ出ています");
             }
         }
 
@@ -346,22 +346,22 @@ namespace Scenes.Ingame.Enemy
         /// <returns>光は見えたかどうか</returns>
         public bool RightCheck(Vector3 enemyPosition, Vector3 playerPosition, float visivilityRange, float lightRange, ref Vector3 NextPosition)
         {
-            if (!(enemyPosition.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < enemyPosition.x))
+            if (!((enemyPosition.x < centerPosition.x + (visivilityAreaGrid.Count - 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < enemyPosition.x)))
             {
                 Debug.LogError("EnemyPosition.xが範囲外です");
                 return false;
             }
-            if (!(enemyPosition.z < centerPosition.z + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < enemyPosition.z))
+            if (!((enemyPosition.z < centerPosition.z + (visivilityAreaGrid.Count - 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < enemyPosition.z)))
             {
                 Debug.LogError("EnemyPosition.zが範囲外です");
                 return false;
             }
-            if (!(playerPosition.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < playerPosition.x))
+            if (!((playerPosition.x < centerPosition.x + (visivilityAreaGrid.Count - 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < playerPosition.x)))
             {
                 Debug.LogError("PlayerPosition.xが範囲外です");
                 return false;
             }
-            if (!(playerPosition.z < centerPosition.z + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < playerPosition.z))
+            if (!((playerPosition.z < centerPosition.z + (visivilityAreaGrid.Count - 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < playerPosition.z)))
             {
                 Debug.LogError("EPlayerPosition.zが範囲外です");
                 return false;
