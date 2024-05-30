@@ -445,7 +445,7 @@ MonoBehaviour:
   myRightHand: {fileID: 3845817263225331235}
   nowBringItem: {fileID: 0}
   _mainCamera: {fileID: 1285542953524166243}
-  _getItemRange: 3
+  _getItemRange: 4
   scrollSense: 10
 --- !u!114 &3297469623762709221
 MonoBehaviour:
@@ -482,7 +482,6 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2481875681873542124}
   m_Enabled: 1
-
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5999619490f39ee4295ed19c8be505ba, type: 3}
   m_Name: 

@@ -78,6 +78,10 @@ namespace Scenes.Ingame.Player
                                 string name = item.GetItemData().itemName;
                                 _itemPopActive.OnNext(name);//アイテムポップが出現
                             }
+                            else if (hit.collider.gameObject.TryGetComponent(out InteractObjectName interactObject))
+                            {
+                                _itemPopActive.OnNext(interactObject.getName);//名前ポップが出現
+                            }
                             //TryGetComponentを行う。
                             if (hit.collider.gameObject.TryGetComponent(out IInteractable intract))
                             {
@@ -150,7 +154,7 @@ namespace Scenes.Ingame.Player
                         //マウスホールのみの入力時
                         if (ItemNumberKeyDown() == 0)
                         {
-                            scrollValue += Input.GetAxis("Mouse ScrollWheel") * scrollSense;
+                            scrollValue -= Input.GetAxis("Mouse ScrollWheel") * scrollSense;
                             scrollValue = Mathf.Clamp(scrollValue,0,6);
 
                             if(_itemSlot[(int)scrollValue].myItemSlotStatus != ItemSlotStatus.unavailable)
