@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using Scenes.Ingame.Manager;
 using TMPro;
-using UnityEngine.UI;
 
 namespace Scenes.Ingame.InGameSystem.UI
 {
@@ -17,7 +14,8 @@ namespace Scenes.Ingame.InGameSystem.UI
         void Start()
         {
             IngameManager ingamemanager = IngameManager.Instance;
-            ingamemanager.OnEscapeCount.Subscribe(x => {
+            ingamemanager.OnEscapeCount.Subscribe(x =>
+            {
                 _socreText.text = "脱出アイテム数: " + x;
             }).AddTo(this);
         }

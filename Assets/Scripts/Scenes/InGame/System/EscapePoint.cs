@@ -3,7 +3,6 @@ using UniRx;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using Scenes.Ingame.Manager;
-using System.Runtime.CompilerServices;
 
 namespace Scenes.Ingame.InGameSystem
 {
@@ -30,7 +29,7 @@ namespace Scenes.Ingame.InGameSystem
         }
         async UniTaskVoid GetItem(CancellationToken token)
         {
-            await UniTask.WaitUntil(() => _get) ;
+            await UniTask.WaitUntil(() => _get);
             manager.Escape();
             Destroy(gameObject, 0.5f);
         }

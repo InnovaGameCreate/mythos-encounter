@@ -5,7 +5,6 @@ using UniRx;
 using UniRx.Triggers;
 using System;
 using System.Linq;
-using Unity.VisualScripting;
 
 namespace Scenes.Ingame.Player
 {

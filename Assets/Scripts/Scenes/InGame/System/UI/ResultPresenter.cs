@@ -12,7 +12,7 @@ namespace Scenes.Ingame.InGameSystem.UI
     public class ResultPresenter : MonoBehaviour
     {
         private Sequence _sequence;
-        [SerializeField,Tooltip("リザルト用のキャンバス")]
+        [SerializeField, Tooltip("リザルト用のキャンバス")]
         private GameObject _resultCanvas;
         [SerializeField, Tooltip("脱出成功のテキスト")]
         private TextMeshProUGUI _successEscape;
@@ -41,7 +41,7 @@ namespace Scenes.Ingame.InGameSystem.UI
                 .Subscribe(value =>
                 {
                     Display(value);
-                }).AddTo(this);           
+                }).AddTo(this);
         }
         private void OnEnable()
         {

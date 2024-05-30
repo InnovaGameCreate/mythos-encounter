@@ -1,11 +1,10 @@
-using Scenes.Ingame.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scenes.Ingame.Player
 {
-    public class ItemInstract : MonoBehaviour,IInteractable
+    public class ItemInstract : MonoBehaviour, IInteractable
     {
         public void Intract(PlayerStatus status)
         {

@@ -33,7 +33,7 @@ namespace Scenes.Ingame.Stage
 
         private void InstatiateEscapeItem()
         {
-            if(_itemMarker.Count < _escapeItemCount)
+            if (_itemMarker.Count < _escapeItemCount)
             {
                 Debug.LogError("escapeMarker‚Ì”‚ª¶¬‚·‚éescapeItem‚Ì”‚æ‚è­‚È‚¢‚Å‚·");
                 return;
@@ -47,7 +47,7 @@ namespace Scenes.Ingame.Stage
         }
         private void RandomStageItemSet()
         {
-            if(_itemMarker.Count < 1)
+            if (_itemMarker.Count < 1)
             {
                 Debug.LogError("escapeMarker‚Ì”‚ª‚ ‚è‚Ü‚¹‚ñ");
                 return;

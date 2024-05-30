@@ -35,7 +35,7 @@ namespace Scenes.Ingame.Stage
         void Awake()
         {
             _doorCollider = GetComponent<BoxCollider>();
-            if(_initialStateOpen)
+            if (_initialStateOpen)
             {
                 _doorCollider.isTrigger = false;
                 DoorOpen();
