@@ -42,7 +42,7 @@ namespace Scenes.Ingame.Stage
             if (_initialStateOpen)
             {
                 _doorCollider.isTrigger = false;
-                InitialDoorOpen();
+                QuickDoorOpen();
                 _isOpen = true;
             }
         }
@@ -63,13 +63,42 @@ namespace Scenes.Ingame.Stage
             });
         }
 
-        private void InitialDoorOpen()
+        private void QuickDoorOpen()
         {
             transform.DORotate(OPENVALUE, 0).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(() =>
             {
                 _doorCollider.isTrigger = false;
                 _isAnimation = false;
             });
+        }
+
+        private void QuickDoorClose()
+        {
+            transform.DORotate(-OPENVALUE, 0).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(() =>
+            {
+                _doorCollider.isTrigger = false;
+                _isAnimation = false;
+            });
+        }
+
+        public void ChangeDoorOpen (bool open){
+            if (_isAnimation) {
+                Debug.LogWarning("アニメーション中です");
+                if (open)
+                {
+                    if (!_isOpen) {
+                        QuickDoorClose();
+                        _isOpen = false;
+                    }
+                }
+                else { 
+                    if (_isOpen)
+                    {
+                        QuickDoorClose();
+                        _isOpen = false;
+                    }
+                }
+            }
         }
     }
 }
