@@ -100,6 +100,12 @@ namespace Scenes.Ingame.Enemy
                 }
             }
 
+            //全てのドアが動き終わったか確認する
+            for (int i = 0; i < _doors.Count; i++)
+            {
+                await UniTask.WaitWhile(() => !_doors[i].ReturnIsOpen);
+            }
+
             //全てのドアを閉める
             for (int i = 0 ; i < _doors.Count;i++) {
                 _doors[i].ChangeDoorOpen(false);
