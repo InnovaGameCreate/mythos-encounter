@@ -40,6 +40,15 @@ namespace Scenes.Ingame.Enemy
                 needOpenDoor = new List<StageDoor>();
                 needCloseDoor = new List<StageDoor>();
             }
+
+            public DoubleByteAndMonoFloat(byte sX, byte sZ, float sRange,List<StageDoor> sNeedOpenDoor, List<StageDoor> sNeedCloseDoor)
+            {
+                x = sX;
+                z = sZ;
+                range = sRange;
+                needOpenDoor = sNeedOpenDoor;
+                needCloseDoor = sNeedCloseDoor;
+            }
         }
 
         /// <summary>
@@ -219,8 +228,13 @@ namespace Scenes.Ingame.Enemy
             copy.visivilityAreaGrid = new List<List<VisivilityArea>>();
             foreach (List<VisivilityArea> item in visivilityAreaGrid)//二次元リストをコピー
             {
+                List<VisivilityArea> secondVisivilityArea = new List<VisivilityArea>();
                 copy.visivilityAreaGrid.Add(new List<VisivilityArea>(item));
             }
+
+
+
+
             copy.gridRange = gridRange;
             copy.maxVisivilityRange = maxVisivilityRange;
             copy.debugMode = debugMode;
