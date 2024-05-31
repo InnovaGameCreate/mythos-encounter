@@ -23,11 +23,16 @@ namespace Scenes.Ingame.Enemy
             public byte z;
             public float range;
 
+            public List<Door> needOpenDoor;
+            public List<Door> needCloseDoor;
+
             public DoubleByteAndMonoFloat(byte sX, byte sZ, float sRange)
             {
                 x = sX;
                 z = sZ;
                 range = sRange;
+                needOpenDoor = new List<Door>();
+                needCloseDoor = new List<Door>();
             }
         }
 
@@ -128,6 +133,22 @@ namespace Scenes.Ingame.Enemy
             //ここまで来てマップスキャンが終わる
             if (debugMode) Debug.Log("マップのスキャンが完了しました");
         }
+
+        /// <summary>
+        /// ドアをスキャンして解放状態でないと視界の通らない判定を作る
+        /// </summary>
+        public void NeedOpenDoorScan() { 
+        
+        }
+
+        /// <summary>
+        /// ドアをスキャンして閉鎖状態でないと視界の通らない判定を作る
+        /// </summary>
+        public void NeedCloseDoorScan()
+        {
+
+        }
+
 
         /// <summary>
         /// 自身のディープコピーを作成して返す
