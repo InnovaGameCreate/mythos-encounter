@@ -87,11 +87,37 @@ namespace Scenes.Ingame.Stage
                 if (open)
                 {
                     if (!_isOpen) {
-                        QuickDoorClose();
+                        QuickDoorOpen();
                         _isOpen = false;
                     }
                 }
                 else { 
+                    if (_isOpen)
+                    {
+                        QuickDoorClose();
+                        _isOpen = false;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// ドアを設定されていた初期状態に戻す
+        /// </summary>
+        public void ChangeDoorInitial() {
+            if (_isAnimation)
+            {
+                Debug.LogWarning("アニメーション中です");
+                if (_initialStateOpen)
+                {
+                    if (!_isOpen)
+                    {
+                        QuickDoorOpen();
+                        _isOpen = false;
+                    }
+                }
+                else
+                {
                     if (_isOpen)
                     {
                         QuickDoorClose();
