@@ -58,4 +58,5 @@ Request Changeを貰ったら内容に沿って修正を行なってください
 - Adventure Character
 - Horror House
 - Creature Insect
+- Horror Creatures
   
