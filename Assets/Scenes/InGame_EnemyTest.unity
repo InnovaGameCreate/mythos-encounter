@@ -2382,6 +2382,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4668709961553768920, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+      propertyPath: m_TagString
+      value: Door
+      objectReference: {fileID: 0}
     - target: {fileID: 5976628622673026179, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -3513,6 +3517,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1645984328}
     m_Modifications:
+    - target: {fileID: 759214003993549900, guid: 8457aec2305875b45b017bcb1dee3ab9, type: 3}
+      propertyPath: m_TagString
+      value: Door
+      objectReference: {fileID: 0}
     - target: {fileID: 1779647484347248919, guid: 8457aec2305875b45b017bcb1dee3ab9, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
