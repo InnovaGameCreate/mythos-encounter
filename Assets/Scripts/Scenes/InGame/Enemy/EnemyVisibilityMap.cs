@@ -1,5 +1,7 @@
+using Scenes.Ingame.Stage;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 
 
@@ -23,16 +25,16 @@ namespace Scenes.Ingame.Enemy
             public byte z;
             public float range;
 
-            public List<Door> needOpenDoor;
-            public List<Door> needCloseDoor;
+            public List<StageDoor> needOpenDoor;
+            public List<StageDoor> needCloseDoor;
 
             public DoubleByteAndMonoFloat(byte sX, byte sZ, float sRange)
             {
                 x = sX;
                 z = sZ;
                 range = sRange;
-                needOpenDoor = new List<Door>();
-                needCloseDoor = new List<Door>();
+                needOpenDoor = new List<StageDoor>();
+                needCloseDoor = new List<StageDoor>();
             }
         }
 
@@ -137,8 +139,33 @@ namespace Scenes.Ingame.Enemy
         /// <summary>
         /// ドアをスキャンして解放状態でないと視界の通らない判定を作る
         /// </summary>
-        public void NeedOpenDoorScan() { 
-        
+        public void NeedOpenDoorScan() {
+            for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
+            {
+                for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
+                {
+                    foreach (DoubleByteAndMonoFloat visivilityAreaPosition in visivilityAreaGrid[x][z].canVisivleAreaPosition)//各マス目ごとの見えるであろうマスにアクセス
+                    {
+
+                        float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaPosition.x) * 5.8f, 2) + Mathf.Pow((z - visivilityAreaPosition.z) * 5.8f, 2));
+
+
+                        //各エリアのグリッドにアクセス
+                        Ray ray = new Ray(centerPosition + new Vector3(x * gridRange, 1, z * gridRange), new Vector3(visivilityAreaPosition.x - x, 0, visivilityAreaPosition.z - z));
+
+
+                        foreach (RaycastHit doorHit in Physics.RaycastAll(ray.origin, ray.direction, range, 4096, QueryTriggerInteraction.Collide).ToArray<RaycastHit>()) {//命中したすべてのドアにアクセス
+                            if (doorHit.collider.gameObject.TryGetComponent<StageDoor>(out StageDoor stageDoorCs))
+                            {
+                                if (debugMode) Debug.DrawRay(ray.origin + Vector3.up * 0.5f, ray.direction * range, Color.red, 10);
+                                visivilityAreaPosition.needOpenDoor.Add(stageDoorCs);
+
+                            }
+                            else { Debug.LogWarning("ドアのタグが付いているのにStageDoor.csが付いていないオブジェクトがある"); }
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -146,7 +173,33 @@ namespace Scenes.Ingame.Enemy
         /// </summary>
         public void NeedCloseDoorScan()
         {
+            for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
+            {
+                for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
+                {
+                    foreach (DoubleByteAndMonoFloat visivilityAreaPosition in visivilityAreaGrid[x][z].canVisivleAreaPosition)//各マス目ごとの見えるであろうマスにアクセス
+                    {
 
+                        float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaPosition.x) * 5.8f, 2) + Mathf.Pow((z - visivilityAreaPosition.z) * 5.8f, 2));
+
+
+                        //各エリアのグリッドにアクセス
+                        Ray ray = new Ray(centerPosition + new Vector3(x * gridRange, 1, z * gridRange), new Vector3(visivilityAreaPosition.x - x, 0, visivilityAreaPosition.z - z));
+
+
+                        foreach (RaycastHit doorHit in Physics.RaycastAll(ray.origin, ray.direction, range, 4096, QueryTriggerInteraction.Collide).ToArray<RaycastHit>())
+                        {//命中したすべてのドアにアクセス
+                            if (doorHit.collider.gameObject.TryGetComponent<StageDoor>(out StageDoor stageDoorCs))
+                            {
+                                if (debugMode) Debug.DrawRay(ray.origin + Vector3.up * 0.5f, ray.direction * range, Color.blue, 10);
+                                visivilityAreaPosition.needCloseDoor.Add(stageDoorCs);
+
+                            }
+                            else { Debug.LogWarning("ドアのタグが付いているのにStageDoor.csが付いていないオブジェクトがある"); }
+                        }
+                    }
+                }
+            }
         }
 
 

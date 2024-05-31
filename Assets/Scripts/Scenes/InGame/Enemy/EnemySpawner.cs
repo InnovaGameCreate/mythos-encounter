@@ -69,7 +69,6 @@ namespace Scenes.Ingame.Enemy
             _cancellationTokenSource = new CancellationTokenSource();
             if (_nonInGameManagerMode)
             {
-               
                 InitialSpawn(_cancellationTokenSource.Token).Forget();
             }
             else {
@@ -80,7 +79,6 @@ namespace Scenes.Ingame.Enemy
                 Instance = this;
             else
                 Destroy(this.gameObject);
-
         }
 
 
@@ -122,10 +120,10 @@ namespace Scenes.Ingame.Enemy
             _enemyVisibilityMap = new EnemyVisibilityMap();
             _enemyVisibilityMap.debugMode = _debugMode;
             _enemyVisibilityMap.maxVisivilityRange = _maxVisiviilityRange;
-            _enemyVisibilityMap.GridMake(_x, _z, _range, _centerPosition);
+            _enemyVisibilityMap.GridMake(_x, _z, _range, _centerPosition);              
             _enemyVisibilityMap.MapScan();
 
-            _enemyVisibilityMap.NeedCloseDoorScan();
+            _enemyVisibilityMap.NeedOpenDoorScan();
 
 
             //全てのドアを開ける
@@ -140,7 +138,7 @@ namespace Scenes.Ingame.Enemy
                 await UniTask.WaitWhile(() => !_doors[i].ReturnIsOpen);
             }
 
-            _enemyVisibilityMap.NeedOpenDoorScan();
+            _enemyVisibilityMap.NeedCloseDoorScan();
 
 
             //全てのドアを初期状態にする
