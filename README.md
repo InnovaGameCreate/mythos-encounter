@@ -56,4 +56,10 @@ Request Changeを貰ったら内容に沿って修正を行なってください
 ### モデル関係
 - Decrepit Dungeon LITE
 - Adventure Character
+- Horror House
+- Creature Insect
+- Horror Creatures
+- Monster Underwater 01
+- Monster Underwater 04（Animationは01と共用）
+- ModularCreepyAbandonedHospital
   
