@@ -12,6 +12,10 @@ namespace Scenes.Ingame.Stage
         private bool _isAnimation = false;
         private Vector3 OPENVALUE = new Vector3(0, 90, 0);
         private BoxCollider _doorCollider;
+
+        public bool ReturnIsOpen { get { return _isOpen; } }
+        public bool ReturnIsAnimation { get { return _isAnimation; } }
+
         public void Intract(PlayerStatus status)
         {
             if (Input.GetMouseButtonDown(1) && _isAnimation == false)
@@ -38,7 +42,7 @@ namespace Scenes.Ingame.Stage
             if (_initialStateOpen)
             {
                 _doorCollider.isTrigger = false;
-                DoorOpen();
+                InitialDoorOpen();
                 _isOpen = true;
             }
         }
@@ -53,6 +57,15 @@ namespace Scenes.Ingame.Stage
         private void DoorClose()
         {
             transform.DORotate(-OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(() =>
+            {
+                _doorCollider.isTrigger = false;
+                _isAnimation = false;
+            });
+        }
+
+        private void InitialDoorOpen()
+        {
+            transform.DORotate(OPENVALUE, 0).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(() =>
             {
                 _doorCollider.isTrigger = false;
                 _isAnimation = false;
