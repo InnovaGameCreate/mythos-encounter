@@ -108,7 +108,7 @@ namespace Scenes.Ingame.Enemy
 
             //全てのドアを閉める
             for (int i = 0 ; i < _doors.Count;i++) {
-                _doors[i].ChangeDoorOpen(false);
+                _doors[i].ChangeDoorQuickOpen(false);
             }
 
             //全てのドアが動き終わったか確認する
@@ -125,8 +125,29 @@ namespace Scenes.Ingame.Enemy
             _enemyVisibilityMap.GridMake(_x, _z, _range, _centerPosition);
             _enemyVisibilityMap.MapScan();
 
-            await UniTask.Delay(1000, cancellationToken: token).SuppressCancellationThrow();
+            _enemyVisibilityMap.NeedCloseDoorScan();
 
+
+            //全てのドアを開ける
+            for (int i = 0; i < _doors.Count; i++)
+            {
+                _doors[i].ChangeDoorQuickOpen(true);
+            }
+
+            //全てのドアが動き終わったか確認する
+            for (int i = 0; i < _doors.Count; i++)
+            {
+                await UniTask.WaitWhile(() => !_doors[i].ReturnIsOpen);
+            }
+
+            _enemyVisibilityMap.NeedOpenDoorScan();
+
+
+            //全てのドアを初期状態にする
+            for (int i = 0; i < _doors.Count; i++)
+            {
+                _doors[i].ChangeDoorQuickOpen(false);
+            }
 
             if (_nonInGameManagerMode)
             {

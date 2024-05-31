@@ -81,7 +81,7 @@ namespace Scenes.Ingame.Stage
             });
         }
 
-        public void ChangeDoorOpen (bool open){
+        public void ChangeDoorQuickOpen (bool open){
             if (_isAnimation) {
                 Debug.LogWarning("アニメーション中です");
                 if (open)
