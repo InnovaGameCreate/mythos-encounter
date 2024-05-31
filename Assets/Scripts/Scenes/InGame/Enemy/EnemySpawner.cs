@@ -66,17 +66,7 @@ namespace Scenes.Ingame.Enemy
             _cancellationTokenSource = new CancellationTokenSource();
             if (_nonInGameManagerMode)
             {
-                //マップをスキャン
-                _enemyVisibilityMap = new EnemyVisibilityMap();
-                _enemyVisibilityMap.debugMode = _debugMode;
-                _enemyVisibilityMap.maxVisivilityRange = _maxVisiviilityRange;
-                _enemyVisibilityMap.GridMake(_x, _z, _range, _centerPosition);
-                _enemyVisibilityMap.MapScan();
-
-                await UniTask.Delay(1000, cancellationToken: _cancellationTokenSource.Token).SuppressCancellationThrow(); 
-
-                //テストとしてここでEnemy制作を依頼している
-                EnemySpawn(EnemyName.TestEnemy, new Vector3(-10, _centerPosition.y + 3, -10));
+                InitialSpawn(_cancellationTokenSource.Token).Forget();
 
             }
             else {
@@ -103,17 +93,19 @@ namespace Scenes.Ingame.Enemy
 
             await UniTask.Delay(1000, cancellationToken: token).SuppressCancellationThrow();
 
-            //テストとしてここでEnemy制作を依頼している
-            EnemySpawn(EnemyName.TestEnemy, new Vector3(-10, _centerPosition.y + 3, -10));
-            
-           
+
+            if (_nonInGameManagerMode)
+            {
+                EnemySpawn(EnemyName.TestEnemy, new Vector3(-10, _centerPosition.y + 3, -10));
+            }
+            else {
+
+
                 //ここでEnemy制作
                 EnemySpawn(_enemyName, _enemySpawnPosition);
                 //敵の沸きが完了したことを知らせる
                 IngameManager.Instance.SetReady(ReadyEnum.EnemyReady);
-            
-
-
+            }
         }
 
 
