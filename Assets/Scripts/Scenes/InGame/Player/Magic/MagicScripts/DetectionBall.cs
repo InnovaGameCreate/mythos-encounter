@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Scenes.Ingame.InGameSystem;
 
 namespace Scenes.Ingame.Player
 {
@@ -20,7 +21,7 @@ namespace Scenes.Ingame.Player
         public void OnTriggerEnter(Collider other)
         {
             //脱出アイテムに触れたらアウトラインを表示させる（デモ版）
-            if (other.gameObject.CompareTag("Item"))
+            if (other.gameObject.CompareTag("Item") && other.gameObject.GetComponent<EscapeItem>())
             {
                 var outline = other.gameObject.GetComponent<Outline>();
                 outline.enabled = true;
