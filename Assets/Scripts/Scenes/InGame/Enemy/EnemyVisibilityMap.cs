@@ -18,6 +18,9 @@ namespace Scenes.Ingame.Enemy
         public float gridRange;
         public Vector3 centerPosition;//いちばん左下のグリッドの中央
 
+        //メモ、これら構造体はもはや巨大化しすぎておりクラスにした方が高速であると考えられる
+
+
         /// <summary>マス目の位置を2つのbyteで表し疎のマス目までの距離をfoatであらわしている</summary>
         public struct DoubleByteAndMonoFloat
         {//位置と距離
@@ -157,7 +160,7 @@ namespace Scenes.Ingame.Enemy
                         foreach (RaycastHit doorHit in Physics.RaycastAll(ray.origin, ray.direction, range, 4096, QueryTriggerInteraction.Collide).ToArray<RaycastHit>()) {//命中したすべてのドアにアクセス
                             if (doorHit.collider.gameObject.TryGetComponent<StageDoor>(out StageDoor stageDoorCs))
                             {
-                                if (debugMode) Debug.DrawRay(ray.origin + Vector3.up * 0.5f, ray.direction * range, Color.red, 10);
+                                if (debugMode) Debug.DrawRay(ray.origin , ray.direction * range, Color.red, 10);
                                 visivilityAreaPosition.needOpenDoor.Add(stageDoorCs);
 
                             }
@@ -191,7 +194,7 @@ namespace Scenes.Ingame.Enemy
                         {//命中したすべてのドアにアクセス
                             if (doorHit.collider.gameObject.TryGetComponent<StageDoor>(out StageDoor stageDoorCs))
                             {
-                                if (debugMode) Debug.DrawRay(ray.origin + Vector3.up * 0.5f, ray.direction * range, Color.blue, 10);
+                                if (debugMode) Debug.DrawRay(ray.origin , ray.direction * range, Color.blue, 10);
                                 visivilityAreaPosition.needCloseDoor.Add(stageDoorCs);
 
                             }

@@ -98,23 +98,65 @@ namespace Scenes.Ingame.Enemy
                 }
             }
 
+            Debug.Log("ここまで");
+
+            Debug.Log(_doors[0].gameObject.transform.rotation);
+
+
+            //全てのドアが動き終わったか確認する
+            Debug.Log("ここまで2");
+            bool stop = false;
+            while (!stop) { 
+                stop = true;
+                //全てのドアが動き終わったか確認する
+                for (int i = 0; i < _doors.Count; i++)
+                {
+                    if (_doors[i].ReturnIsAnimation) { 
+                        stop = false;
+                    }
+                    if(!stop)await UniTask.Delay(100,cancellationToken : token);
+
+                    
+                }
+            }
+            
+            
+            /*      なぜこれが上手くいかんのだ！？
             //全てのドアが動き終わったか確認する
             for (int i = 0; i < _doors.Count; i++)
             {
-                await UniTask.WaitWhile(() => !_doors[i].ReturnIsOpen);
+                Debug.Log("ここまで2");
+                await UniTask.WaitWhile(() => !_doors[i].ReturnIsAnimation);
+                Debug.Log("ここまで3");
             }
+
+            */
+
 
             //全てのドアを閉める
             for (int i = 0 ; i < _doors.Count;i++) {
                 _doors[i].ChangeDoorQuickOpen(false);
             }
 
-            //全てのドアが動き終わったか確認する
-            for (int i = 0; i < _doors.Count; i++)
-            {
-                await UniTask.WaitWhile(() => !_doors[i].ReturnIsOpen);
-            }
 
+            //全てのドアが動き終わったか確認する
+            Debug.Log("ここまで2");
+            stop = false;
+            while (!stop)
+            {
+                stop = true;
+                //全てのドアが動き終わったか確認する
+                for (int i = 0; i < _doors.Count; i++)
+                {
+                    Debug.Log("ドアが動いているかどうかを確認、開ける前" + _doors[i].ReturnIsAnimation);
+                    if (_doors[i].ReturnIsAnimation)
+                    {
+                        stop = false;
+                    }
+                    if (!stop) await UniTask.Delay(100, cancellationToken: token);
+                }
+            }
+            Debug.Log("ドアの状況確認、移動状態" + _doors[0].ReturnIsAnimation + "開閉状態" + _doors[0].ReturnIsOpen);
 
             //マップをスキャン
             _enemyVisibilityMap = new EnemyVisibilityMap();
@@ -123,6 +165,12 @@ namespace Scenes.Ingame.Enemy
             _enemyVisibilityMap.GridMake(_x, _z, _range, _centerPosition);              
             _enemyVisibilityMap.MapScan();
 
+
+            //_doors[0].gameObject.transform.position = _doors[0].gameObject.transform.position + new Vector3(5,0,5);
+
+
+            //コライダーの更新を待つ
+            await UniTask.DelayFrame(2, PlayerLoopTiming.FixedUpdate,token);
             _enemyVisibilityMap.NeedOpenDoorScan();
 
 
@@ -131,20 +179,37 @@ namespace Scenes.Ingame.Enemy
             {
                 _doors[i].ChangeDoorQuickOpen(true);
             }
+            Debug.Log("ドアの開閉命令後の状況確認、移動状態" + _doors[0].ReturnIsAnimation + "開閉状態" + _doors[0].ReturnIsOpen);
 
             //全てのドアが動き終わったか確認する
-            for (int i = 0; i < _doors.Count; i++)
+            Debug.Log("ここまで2");
+            stop = false;
+            while (!stop)
             {
-                await UniTask.WaitWhile(() => !_doors[i].ReturnIsOpen);
+                stop = true;
+                //全てのドアが動き終わったか確認する
+                for (int i = 0; i < _doors.Count; i++)
+                {
+                    if (_doors[i].ReturnIsAnimation)
+                    {
+                        stop = false;
+                    }
+                    if (!stop) await UniTask.Delay(100, cancellationToken: token);
+                }
             }
 
+            Debug.Log("ドアの開閉命令後かつ移動の確認後の状況確認、移動状態" + _doors[0].ReturnIsAnimation + "開閉状態" + _doors[0].ReturnIsOpen);
+            Debug.Log(_doors[0].gameObject.transform.rotation);
+
+            //コライダーの更新を待つ
+            await UniTask.DelayFrame(2, PlayerLoopTiming.FixedUpdate, token);
             _enemyVisibilityMap.NeedCloseDoorScan();
 
 
             //全てのドアを初期状態にする
             for (int i = 0; i < _doors.Count; i++)
             {
-                _doors[i].ChangeDoorQuickOpen(false);
+                _doors[i].ChangeDoorInitial();
             }
 
             if (_nonInGameManagerMode)

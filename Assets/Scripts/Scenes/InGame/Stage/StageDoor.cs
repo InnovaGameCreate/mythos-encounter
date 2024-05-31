@@ -9,7 +9,7 @@ namespace Scenes.Ingame.Stage
         [SerializeField]
         private bool _initialStateOpen = true;
         private bool _isOpen = false;
-        private bool _isAnimation = false;
+        [SerializeField]private bool _isAnimation = false;
         private Vector3 OPENVALUE = new Vector3(0, 90, 0);
         private BoxCollider _doorCollider;
 
@@ -41,6 +41,7 @@ namespace Scenes.Ingame.Stage
             _doorCollider = GetComponent<BoxCollider>();
             if (_initialStateOpen)
             {
+                _isAnimation = true;
                 _doorCollider.isTrigger = false;
                 QuickDoorOpen();
                 _isOpen = true;
@@ -82,18 +83,29 @@ namespace Scenes.Ingame.Stage
         }
 
         public void ChangeDoorQuickOpen (bool open){
-            if (_isAnimation) {
+            Debug.Log("命令" + open );
+
+            if (_isAnimation)
+            {
                 Debug.LogWarning("アニメーション中です");
+ 
+            }
+            else {
+                
                 if (open)
                 {
-                    if (!_isOpen) {
+                    if (!_isOpen)
+                    {
+                        _isAnimation = true;
                         QuickDoorOpen();
-                        _isOpen = false;
+                        _isOpen = true;
                     }
                 }
-                else { 
+                else
+                {
                     if (_isOpen)
                     {
+                        _isAnimation = true;
                         QuickDoorClose();
                         _isOpen = false;
                     }
@@ -108,18 +120,23 @@ namespace Scenes.Ingame.Stage
             if (_isAnimation)
             {
                 Debug.LogWarning("アニメーション中です");
+
+            }
+            else {
                 if (_initialStateOpen)
                 {
                     if (!_isOpen)
                     {
+                        _isAnimation = true;
                         QuickDoorOpen();
-                        _isOpen = false;
+                        _isOpen = true;
                     }
                 }
                 else
                 {
                     if (_isOpen)
                     {
+                        _isAnimation = true;
                         QuickDoorClose();
                         _isOpen = false;
                     }
