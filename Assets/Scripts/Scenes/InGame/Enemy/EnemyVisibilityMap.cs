@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 
 namespace Scenes.Ingame.Enemy
@@ -314,16 +315,39 @@ namespace Scenes.Ingame.Enemy
                     {
                         if (item.range < visivilityRange)
                         { //見える距離
-                            //見た回数を足す。ただし構造体をListのFor文の中でいじれないのでコピーしていじって書き換える。オーバーフローしない場合
-                            if ((byte)(visivilityAreaGrid[item.x][item.z].watchNum) < byte.MaxValue)
+                            //ドアに関連して見える条件にあるか調べる
+                            bool noDoor = true;
+                            foreach (StageDoor needOpen in item.needOpenDoor) //開いていなければならないドアは開いているかチェック
                             {
-                                newVisivilityArea = new VisivilityArea((byte)(visivilityAreaGrid[item.x][item.z].watchNum + 1), visivilityAreaGrid[item.x][item.z].canVisivleAreaPosition);
-                                visivilityAreaGrid[item.x][item.z] = newVisivilityArea;
+                                if (needOpen.ReturnIsOpen == false) 
+                                {
+                                    noDoor = false; break; 
+                                }
                             }
-                            if (debugMode)
-                            {//見たエリアを線で表示
-                                Debug.DrawLine(centerPosition + new Vector3(myPositionx, 0, myPositionz) * gridRange, centerPosition + new Vector3(item.x, 0, item.z) * gridRange, Color.green, 1f);
+                            if (noDoor) {
+                                foreach (StageDoor needClose in item.needCloseDoor)//閉じていなければならないドアは閉じているかチェック
+                                {
+                                    if (needClose.ReturnIsOpen == true) 
+                                    { 
+                                        noDoor = false;
+                                        break;
+                                    }
+                                }
                             }
+                            
+                            if (noDoor) {
+                                //見た回数を足す。ただし構造体をListのFor文の中でいじれないのでコピーしていじって書き換える。オーバーフローしない場合
+                                if ((byte)(visivilityAreaGrid[item.x][item.z].watchNum) < byte.MaxValue)
+                                {
+                                    newVisivilityArea = new VisivilityArea((byte)(visivilityAreaGrid[item.x][item.z].watchNum + 1), visivilityAreaGrid[item.x][item.z].canVisivleAreaPosition);
+                                    visivilityAreaGrid[item.x][item.z] = newVisivilityArea;
+                                }
+                                if (debugMode)
+                                {//見たエリアを線で表示
+                                    Debug.DrawLine(centerPosition + new Vector3(myPositionx, 0, myPositionz) * gridRange, centerPosition + new Vector3(item.x, 0, item.z) * gridRange, Color.green, 1f);
+                                }
+                            }
+
                         }
                     }
                     //自分が今いる場所に見た回数を足す。ただし構造体をListのFor文の中でいじれないのでコピーしていじって書き換える
@@ -445,7 +469,41 @@ namespace Scenes.Ingame.Enemy
             byte enemyGridPositionX, enemyGridPositionZ;
             enemyGridPositionX = (byte)Mathf.FloorToInt((float)(enemyPosition.x - centerPosition.x + 0.5 * gridRange) / gridRange);
             enemyGridPositionZ = (byte)Mathf.FloorToInt((float)(enemyPosition.z - centerPosition.z + 0.5 * gridRange) / gridRange);
-            List<DoubleByteAndMonoFloat> enemyVisivilityGridPosition = visivilityAreaGrid[enemyGridPositionX][enemyGridPositionZ].canVisivleAreaPosition;
+
+            List<DoubleByteAndMonoFloat> enemyVisivilityGridPosition = new List<DoubleByteAndMonoFloat> ();//今してることはこの先において敵からドアの問題なく見えるマスだけを抽出すること
+
+            foreach (DoubleByteAndMonoFloat item    in visivilityAreaGrid[enemyGridPositionX][enemyGridPositionZ].canVisivleAreaPosition) {
+                //ドアに関連して見える条件にあるか調べる
+                bool noDoor = true;
+                foreach (StageDoor needOpen in item.needOpenDoor) //開いていなければならないドアは開いているかチェック
+                {
+                    if (needOpen.ReturnIsOpen == false)
+                    {
+                        noDoor = false; break;
+                    }
+                }
+                if (noDoor)
+                {
+                    foreach (StageDoor needClose in item.needCloseDoor)//閉じていなければならないドアは閉じているかチェック
+                    {
+                        if (needClose.ReturnIsOpen == true)
+                        {
+                            noDoor = false;
+                            break;
+                        }
+                    }
+                }
+                if (noDoor) {
+                    enemyVisivilityGridPosition.Add(item);
+                }
+            }
+
+
+
+
+
+
+
             if (debugMode)
             {
                 for (byte e = 0; e < enemyVisivilityGridPosition.Count; e++)
@@ -458,8 +516,37 @@ namespace Scenes.Ingame.Enemy
             byte rightGridPositionX, rightGridPositionZ;
             rightGridPositionX = (byte)Mathf.FloorToInt((float)(playerPosition.x - centerPosition.x + 0.5 * gridRange) / gridRange);
             rightGridPositionZ = (byte)Mathf.FloorToInt((float)(playerPosition.z - centerPosition.z + 0.5 * gridRange) / gridRange);
-            List<DoubleByteAndMonoFloat> rightingGridPosition = visivilityAreaGrid[rightGridPositionX][rightGridPositionZ].canVisivleAreaPosition;
-            if (debugMode)
+            List<DoubleByteAndMonoFloat> rightingGridPosition = new List<DoubleByteAndMonoFloat>();//今してることはこの先においてプレイヤーからドアの問題なく見えるマスだけを抽出すること
+            foreach (DoubleByteAndMonoFloat item in visivilityAreaGrid[rightGridPositionX][rightGridPositionZ].canVisivleAreaPosition)
+            {
+                //ドアに関連して見える条件にあるか調べる
+                bool noDoor = true;
+                foreach (StageDoor needOpen in item.needOpenDoor) //開いていなければならないドアは開いているかチェック
+                {
+                    if (needOpen.ReturnIsOpen == false)
+                    {
+                        noDoor = false; break;
+                    }
+                }
+                if (noDoor)
+                {
+                    foreach (StageDoor needClose in item.needCloseDoor)//閉じていなければならないドアは閉じているかチェック
+                    {
+                        if (needClose.ReturnIsOpen == true)
+                        {
+                            noDoor = false;
+                            break;
+                        }
+                    }
+                }
+                if (noDoor)
+                {
+                    rightingGridPosition.Add(item);
+                }
+            }
+
+
+            if (debugMode)//光を描画
             {
                 for (byte r = 0; r < rightingGridPosition.Count; r++)
                 {
@@ -467,6 +554,12 @@ namespace Scenes.Ingame.Enemy
                     Debug.DrawLine((new Vector3(rightGridPositionX, 0, rightGridPositionZ) * gridRange) + centerPosition, (new Vector3(rightingGridPosition[r].x, 0, rightingGridPosition[r].z) * gridRange) + centerPosition, Color.yellow, 1f);
                 }
             }
+
+         
+
+
+
+
 
             //見ることのできる最も明るいマスを決定
             bool canLookLight = false;
