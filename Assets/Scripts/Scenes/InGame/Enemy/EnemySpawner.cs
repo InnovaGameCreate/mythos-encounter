@@ -10,6 +10,7 @@ using Scenes.Ingame.InGameSystem;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using Scenes.Ingame.Stage;
 
 
 
@@ -58,6 +59,8 @@ namespace Scenes.Ingame.Enemy
         [SerializeField] private Vector3 _enemySpawnPosition;
 
 
+        private List<StageDoor> _doors = new List<StageDoor>();
+
         private CancellationTokenSource _cancellationTokenSource;
 
         // Start is called before the first frame update
@@ -66,8 +69,8 @@ namespace Scenes.Ingame.Enemy
             _cancellationTokenSource = new CancellationTokenSource();
             if (_nonInGameManagerMode)
             {
+               
                 InitialSpawn(_cancellationTokenSource.Token).Forget();
-
             }
             else {
                 IngameManager.Instance.OnPlayerSpawnEvent.Subscribe(_ => InitialSpawn(_cancellationTokenSource.Token).Forget());//プレイヤースポーンはマップが完成してから行われる
@@ -83,6 +86,31 @@ namespace Scenes.Ingame.Enemy
 
 
         private async UniTaskVoid InitialSpawn(CancellationToken token) {
+            //ドアを入手
+            foreach (var doorObject in GameObject.FindGameObjectsWithTag("Cube").ToArray<GameObject>())
+            {
+                StageDoor getDoorCs;
+                if (doorObject.TryGetComponent<StageDoor>(out getDoorCs))
+                {
+                    _doors.Add(getDoorCs);
+                }
+                else
+                {
+                    Debug.LogWarning("Door.csを持たないDoorタグのオブジェクト「" + doorObject + "」があります");
+                }
+            }
+
+            //全てのドアを閉める
+            for (int i = 0 ; i < _doors.Count;i++) {
+                _doors[i].ChangeDoorOpen(false);
+            }
+
+            //全てのドアが動き終わったか確認する
+            for (int i = 0; i < _doors.Count; i++)
+            {
+                await UniTask.WaitWhile(() => !_doors[i].ReturnIsOpen);
+            }
+
 
             //マップをスキャン
             _enemyVisibilityMap = new EnemyVisibilityMap();
