@@ -33,12 +33,12 @@ namespace Scenes.Ingame.Player
         [SerializeField] private Image _staminaGaugeBackGround;//個人のスタミナゲージ
         [SerializeField] private RectTransform _staminaGaugeFrontRect;//個人のスタミナゲージ
         [SerializeField] private Image _staminaGaugeFrontImage;//個人のスタミナゲージ
+        [SerializeField] private GameObject _pop;//ポップ
+        [SerializeField] private TMP_Text _pop_Text;//ポップに記述するテキスト
 
         [Header("アイテム関係")]//アイテム系
         [SerializeField] private Image[] _itemSlots;//アイテムスロット(7個)
         [SerializeField] private Image[] _itemImages;//アイテムの画像(7個)
-        [SerializeField] private GameObject _itemPop;//アイテムポップ
-        [SerializeField] private TMP_Text _itemPop_Text;//アイテムポップ
 
         [Header("発狂関係")]
         [SerializeField] private Image[] _insanityIcons;//発狂アイコン(5個)
@@ -120,19 +120,19 @@ namespace Scenes.Ingame.Player
                             _itemSlots[x].color = Color.red;
                         }).AddTo(this);
 
-                    //目線の先にアイテムがあるとアイテムポップを表示させる
-                    _playerItem.OnItemPopActive
+                    //目線の先にアイテムかIntractオブジェクトがあるとアイテムポップを表示させる
+                    _playerItem.PopActive
                         .Subscribe(x =>
                         {
                             if (x != null)
                             {
-                                _itemPop_Text.text = x;
-                                _itemPop.SetActive(true);
+                                _pop_Text.text = x;
+                                _pop.SetActive(true);
                             }
                             else
                             {
-                                _itemPop_Text.text = null;
-                                _itemPop.SetActive(false);
+                                _pop_Text.text = null;
+                                _pop.SetActive(false);
                             }
 
                         });
