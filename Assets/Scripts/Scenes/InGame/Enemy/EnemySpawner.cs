@@ -98,13 +98,9 @@ namespace Scenes.Ingame.Enemy
                 }
             }
 
-            Debug.Log("ここまで");
-
-            Debug.Log(_doors[0].gameObject.transform.rotation);
 
 
             //全てのドアが動き終わったか確認する
-            Debug.Log("ここまで2");
             bool stop = false;
             while (!stop) { 
                 stop = true;
@@ -140,7 +136,6 @@ namespace Scenes.Ingame.Enemy
 
 
             //全てのドアが動き終わったか確認する
-            Debug.Log("ここまで2");
             stop = false;
             while (!stop)
             {
@@ -148,7 +143,6 @@ namespace Scenes.Ingame.Enemy
                 //全てのドアが動き終わったか確認する
                 for (int i = 0; i < _doors.Count; i++)
                 {
-                    Debug.Log("ドアが動いているかどうかを確認、開ける前" + _doors[i].ReturnIsAnimation);
                     if (_doors[i].ReturnIsAnimation)
                     {
                         stop = false;
@@ -156,7 +150,6 @@ namespace Scenes.Ingame.Enemy
                     if (!stop) await UniTask.Delay(100, cancellationToken: token);
                 }
             }
-            Debug.Log("ドアの状況確認、移動状態" + _doors[0].ReturnIsAnimation + "開閉状態" + _doors[0].ReturnIsOpen);
 
             //マップをスキャン
             _enemyVisibilityMap = new EnemyVisibilityMap();
@@ -179,10 +172,8 @@ namespace Scenes.Ingame.Enemy
             {
                 _doors[i].ChangeDoorQuickOpen(true);
             }
-            Debug.Log("ドアの開閉命令後の状況確認、移動状態" + _doors[0].ReturnIsAnimation + "開閉状態" + _doors[0].ReturnIsOpen);
 
             //全てのドアが動き終わったか確認する
-            Debug.Log("ここまで2");
             stop = false;
             while (!stop)
             {
@@ -197,9 +188,6 @@ namespace Scenes.Ingame.Enemy
                     if (!stop) await UniTask.Delay(100, cancellationToken: token);
                 }
             }
-
-            Debug.Log("ドアの開閉命令後かつ移動の確認後の状況確認、移動状態" + _doors[0].ReturnIsAnimation + "開閉状態" + _doors[0].ReturnIsOpen);
-            Debug.Log(_doors[0].gameObject.transform.rotation);
 
             //コライダーの更新を待つ
             await UniTask.DelayFrame(2, PlayerLoopTiming.FixedUpdate, token);

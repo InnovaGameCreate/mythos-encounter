@@ -83,7 +83,6 @@ namespace Scenes.Ingame.Stage
         }
 
         public void ChangeDoorQuickOpen (bool open){
-            Debug.Log("–½—ß" + open );
 
             if (_isAnimation)
             {
