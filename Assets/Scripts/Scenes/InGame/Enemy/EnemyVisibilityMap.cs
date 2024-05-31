@@ -116,7 +116,7 @@ namespace Scenes.Ingame.Enemy
                                     //éãäEÇ™í ÇÈÇ©ÅÅRayÇ™í ÇÈÇ©
                                     bool hit;
                                     Ray ray = new Ray(centerPosition + new Vector3(x * gridRange, 1, z * gridRange), new Vector3(vX - x, 0, vZ - z));
-                                    hit = Physics.Raycast(ray, out RaycastHit hitInfo, range, -1, QueryTriggerInteraction.Collide);
+                                    hit = Physics.Raycast(ray, out RaycastHit hitInfo, range,  2048, QueryTriggerInteraction.Collide);
                                     if (!hit)
                                     { //âΩÇ…Ç‡Ç†ÇΩÇ¡ÇƒÇ¢Ç»Ç©Ç¡ÇΩèÍçá
                                         if (debugMode) Debug.DrawRay(ray.origin, ray.direction * range, Color.green, 10);

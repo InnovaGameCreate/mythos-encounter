@@ -101,7 +101,7 @@ namespace Scenes.Ingame.Enemy
             _enemyVisibilityMap.GridMake(_x, _z, _range, _centerPosition);
             _enemyVisibilityMap.MapScan();
 
-            //await UniTask.Delay(1000, cancellationToken: token).SuppressCancellationThrow();
+            await UniTask.Delay(1000, cancellationToken: token).SuppressCancellationThrow();
 
             //ƒeƒXƒg‚Æ‚µ‚Ä‚±‚±‚ÅEnemy§ì‚ğˆË—Š‚µ‚Ä‚¢‚é
             EnemySpawn(EnemyName.TestEnemy, new Vector3(-10, _centerPosition.y + 3, -10));
