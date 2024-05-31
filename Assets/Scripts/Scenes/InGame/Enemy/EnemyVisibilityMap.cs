@@ -2,6 +2,7 @@ using Scenes.Ingame.Stage;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.Progress;
 
@@ -228,8 +229,22 @@ namespace Scenes.Ingame.Enemy
             copy.visivilityAreaGrid = new List<List<VisivilityArea>>();
             foreach (List<VisivilityArea> item in visivilityAreaGrid)//二次元リストをコピー
             {
-                List<VisivilityArea> secondVisivilityArea = new List<VisivilityArea>();
-                copy.visivilityAreaGrid.Add(new List<VisivilityArea>(item));
+                List<VisivilityArea> secondVisivilityArea = new List<VisivilityArea>();//二層目
+                foreach (VisivilityArea item2 in item) {
+                    List<DoubleByteAndMonoFloat> addCanVisivilityAndMonoFloat = new List<DoubleByteAndMonoFloat>();
+                    foreach (DoubleByteAndMonoFloat value in item2.canVisivleAreaPosition) { 
+                        addCanVisivilityAndMonoFloat.Add(new DoubleByteAndMonoFloat(value.x,value.z,value.range,new List<StageDoor>(value.needOpenDoor), new List<StageDoor>(value.needCloseDoor)));
+                    }
+
+                    secondVisivilityArea.Add(new VisivilityArea(item2.watchNum,addCanVisivilityAndMonoFloat));
+
+                }
+
+                
+
+
+
+                copy.visivilityAreaGrid.Add(new List<VisivilityArea>(secondVisivilityArea));//二層目のListを一層目にAddする
             }
 
 
