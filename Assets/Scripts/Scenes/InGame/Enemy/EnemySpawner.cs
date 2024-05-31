@@ -7,6 +7,10 @@ using UnityEngine;
 using UniRx;
 using Scenes.Ingame.Manager;
 using Scenes.Ingame.InGameSystem;
+using System.Linq;
+using Cysharp.Threading.Tasks;
+using System.Threading;
+
 
 
 
@@ -53,9 +57,13 @@ namespace Scenes.Ingame.Enemy
         [Header("生成する際の設定")]
         [SerializeField] private Vector3 _enemySpawnPosition;
 
+
+        private CancellationTokenSource _cancellationTokenSource;
+
         // Start is called before the first frame update
-        void Start()
+        async void Start()
         {
+            _cancellationTokenSource = new CancellationTokenSource();
             if (_nonInGameManagerMode)
             {
                 //マップをスキャン
@@ -65,12 +73,14 @@ namespace Scenes.Ingame.Enemy
                 _enemyVisibilityMap.GridMake(_x, _z, _range, _centerPosition);
                 _enemyVisibilityMap.MapScan();
 
+                await UniTask.Delay(1000, cancellationToken: _cancellationTokenSource.Token);
+
                 //テストとしてここでEnemy制作を依頼している
                 EnemySpawn(EnemyName.TestEnemy, new Vector3(-10, _centerPosition.y + 3, -10));
 
             }
             else {
-                IngameManager.Instance.OnPlayerSpawnEvent.Subscribe(_ => InitialSpawn());
+                IngameManager.Instance.OnPlayerSpawnEvent.Subscribe(_ => InitialSpawn(_cancellationTokenSource.Token).Forget());//プレイヤースポーンはマップが完成してから行われる
             }
 
             if (Instance == null)
@@ -80,7 +90,9 @@ namespace Scenes.Ingame.Enemy
 
         }
 
-        public void InitialSpawn() {
+
+
+        private async UniTaskVoid InitialSpawn(CancellationToken token) {
 
             //マップをスキャン
             _enemyVisibilityMap = new EnemyVisibilityMap();
@@ -89,10 +101,18 @@ namespace Scenes.Ingame.Enemy
             _enemyVisibilityMap.GridMake(_x, _z, _range, _centerPosition);
             _enemyVisibilityMap.MapScan();
 
-            //ここでEnemy制作
-            EnemySpawn(_enemyName, _enemySpawnPosition);
-            //敵の沸きが完了したことを知らせる
-            IngameManager.Instance.SetReady(ReadyEnum.EnemyReady);
+            //await UniTask.Delay(1000, cancellationToken: token);
+
+                //テストとしてここでEnemy制作を依頼している
+                EnemySpawn(EnemyName.TestEnemy, new Vector3(-10, _centerPosition.y + 3, -10));
+            
+           
+                //ここでEnemy制作
+                EnemySpawn(_enemyName, _enemySpawnPosition);
+                //敵の沸きが完了したことを知らせる
+                IngameManager.Instance.SetReady(ReadyEnum.EnemyReady);
+            
+
 
         }
 
@@ -134,6 +154,12 @@ namespace Scenes.Ingame.Enemy
 
             }
 
+        }
+
+        private void OnDestroy()
+        {
+            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Dispose();
         }
 
     }
