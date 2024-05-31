@@ -43,7 +43,6 @@ namespace Scenes.Ingame.Stage
                     _isOpen = true;
                     break;
                 case false:
-                    DoorClose();
                     _isOpen = false;
                     break;
             }
