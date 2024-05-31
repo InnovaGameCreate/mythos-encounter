@@ -87,7 +87,7 @@ namespace Scenes.Ingame.Enemy
 
         private async UniTaskVoid InitialSpawn(CancellationToken token) {
             //ƒhƒA‚ð“üŽè
-            foreach (var doorObject in GameObject.FindGameObjectsWithTag("Cube").ToArray<GameObject>())
+            foreach (var doorObject in GameObject.FindGameObjectsWithTag("Door").ToArray<GameObject>())
             {
                 StageDoor getDoorCs;
                 if (doorObject.TryGetComponent<StageDoor>(out getDoorCs))
