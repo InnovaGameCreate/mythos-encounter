@@ -73,7 +73,7 @@ namespace Scenes.Ingame.Enemy
                 _enemyVisibilityMap.GridMake(_x, _z, _range, _centerPosition);
                 _enemyVisibilityMap.MapScan();
 
-                await UniTask.Delay(1000, cancellationToken: _cancellationTokenSource.Token);
+                await UniTask.Delay(1000, cancellationToken: _cancellationTokenSource.Token).SuppressCancellationThrow(); 
 
                 //テストとしてここでEnemy制作を依頼している
                 EnemySpawn(EnemyName.TestEnemy, new Vector3(-10, _centerPosition.y + 3, -10));
@@ -101,10 +101,10 @@ namespace Scenes.Ingame.Enemy
             _enemyVisibilityMap.GridMake(_x, _z, _range, _centerPosition);
             _enemyVisibilityMap.MapScan();
 
-            //await UniTask.Delay(1000, cancellationToken: token);
+            //await UniTask.Delay(1000, cancellationToken: token).SuppressCancellationThrow();
 
-                //テストとしてここでEnemy制作を依頼している
-                EnemySpawn(EnemyName.TestEnemy, new Vector3(-10, _centerPosition.y + 3, -10));
+            //テストとしてここでEnemy制作を依頼している
+            EnemySpawn(EnemyName.TestEnemy, new Vector3(-10, _centerPosition.y + 3, -10));
             
            
                 //ここでEnemy制作
