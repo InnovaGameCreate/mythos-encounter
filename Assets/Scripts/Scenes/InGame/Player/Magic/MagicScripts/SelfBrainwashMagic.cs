@@ -33,7 +33,7 @@ namespace Scenes.Ingame.Player
             {
                 yield return null;
 
-                if(_debugMode)
+                if (_debugMode)
                     Debug.Log(Time.time - startTime);
 
                 //攻撃を食らった際にこのコルーチンを破棄              

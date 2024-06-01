@@ -65,7 +65,7 @@ namespace Scenes.Ingame.Enemy
             _atackPower = _enemyStatus.ReturnAtackPower;
             _audiomaterPower = _enemyStatus.ReturnAudiomaterPower;
 
-            _player = GameObject.Find("Player");
+            _player = GameObject.FindWithTag("Player");
             if (_player == null) { Debug.LogWarning("プレイヤーが認識できません"); }
             _playerStatus = _player.GetComponent<PlayerStatus>();
             if (_playerStatus == null) { Debug.LogWarning("プレイヤーステータスが認識できません"); }

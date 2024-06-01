@@ -9,7 +9,7 @@ namespace Scenes.Ingame.Player
     /// 1.プレイヤーは5秒間声を上げて発狂する。このとき頭を抱えるアニメーションに移行
     /// 2.一切の行動が不可
     /// </summary>
-    public class Scream : MonoBehaviour,IInsanity
+    public class Scream : MonoBehaviour, IInsanity
     {
         private PlayerSoundManager _myPlayerSoundManager;
         private TempPlayerMove _myPlayerMove;
@@ -56,7 +56,7 @@ namespace Scenes.Ingame.Player
                 _myPlayerItem.ChangeCanUseItem(true);
                 _myPlayerItem.ChangeCanChangeBringItem(true);
             }
-            
+
         }
 
         /// <summary>

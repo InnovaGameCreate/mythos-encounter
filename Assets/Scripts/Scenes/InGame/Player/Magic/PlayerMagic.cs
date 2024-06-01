@@ -67,7 +67,7 @@ namespace Scenes.Ingame.Player
                                     Debug.Log("呪文を使う必要がありません");
                                 }
                                 break;
-                            default: 
+                            default:
                                 break;
                         }
 
@@ -81,7 +81,7 @@ namespace Scenes.Ingame.Player
                             _myMagic.MagicEffect();
                             Debug.Log("呪文の詠唱開始");
                         }
-                    }                   
+                    }
                 });
 
             //攻撃くらったときを示すBoolがTrueになったときに呪文詠唱を中断

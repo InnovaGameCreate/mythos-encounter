@@ -59,8 +59,6 @@ MonoBehaviour:
   _staminaGaugeBackGround: {fileID: 43118518052469723}
   _staminaGaugeFrontRect: {fileID: 2464763787387186431}
   _staminaGaugeFrontImage: {fileID: 814158108117991342}
-  _pop: {fileID: 576009123235549415}
-  _pop_Text: {fileID: 7343221210242194201}
   _itemSlots:
   - {fileID: 967040225495875426}
   - {fileID: 7457872460824601599}
@@ -77,6 +75,8 @@ MonoBehaviour:
   - {fileID: 3320816428773317309}
   - {fileID: 3589434647315111485}
   - {fileID: 1662999515359232642}
+  _itemPop: {fileID: 576009123235549415}
+  _itemPop_Text: {fileID: 7343221210242194201}
   _insanityIcons:
   - {fileID: 7300652877108665004}
   - {fileID: 6993381078842468533}

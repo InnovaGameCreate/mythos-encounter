@@ -13,7 +13,7 @@ namespace Scenes.Ingame.Player
         /// </summary>
         /// <param name="itemPosition">アイテムがある座標</param>
         /// <param name="duration">移動にかける時間</param>
-        public void DetectionItem(Vector3 itemPosition , float duration)
+        public void DetectionItem(Vector3 itemPosition, float duration)
         {
             this.transform.DOMove(itemPosition, duration).SetDelay(1.0f);
         }

@@ -5,7 +5,6 @@ using UniRx;
 using UniRx.Triggers;
 using System;
 using System.Linq;
-using Unity.VisualScripting;
 
 namespace Scenes.Ingame.Player
 {
@@ -36,7 +35,7 @@ namespace Scenes.Ingame.Player
         private bool _isCanUseItem = true;
 
         //UniRx関係
-        private Subject<String> _popActive = new Subject<String>();
+        private Subject<String> _itemPopActive = new Subject<String>();
         private ReactiveCollection<ItemSlotStruct> _itemSlot = new ReactiveCollection<ItemSlotStruct>();//現在所持しているアイテムのリスト
 
         public List<ItemSlotStruct> ItemSlots { get { return _itemSlot.ToList(); } }//外部に_itemSlotの内容を公開する
@@ -44,14 +43,14 @@ namespace Scenes.Ingame.Player
 
 
         public IObservable<int> OnNowIndexChange { get { return _nowIndex; } }//外部で_nowIndexの値が変更されたときに行う処理を登録できるようにする
-        public IObservable<String> PopActive { get { return _popActive; } }
+        public IObservable<String> OnItemPopActive { get { return _itemPopActive; } }
         public IObservable<CollectionReplaceEvent<ItemSlotStruct>> OnItemSlotReplace => _itemSlot.ObserveReplace();//外部に_itemSlotの要素が変更されたときに行う処理を登録できるようにする
 
 
         // Start is called before the first frame update
         void Start()
         {
-            int layerMask = LayerMask.GetMask("Item") | LayerMask.GetMask("StageIntract");//Item, StageIntractというレイヤーにあるGameObjectにしかrayが当たらないようにする
+            int layerMask = LayerMask.GetMask("Item");//ItemというレイヤーにあるGameObjectにしかrayが当たらないようにする
             _myPlayerStatus = GetComponent<PlayerStatus>();
 
             //今後はingame前のアイテムの所持状況を代入させる。α版は初期化
@@ -65,46 +64,28 @@ namespace Scenes.Ingame.Player
             //色々な変数の初期化
             scrollValue = 0;
 
-
-            RaycastHit hit = new RaycastHit();
-            GameObject hitObject = null;
             //視線の先にアイテムがあるか確認。あれば右クリックで拾得できるようにする
-            //ドアなどのIntractでアクションを行うObjectは拾得できない
             this.UpdateAsObservable()
                     .Subscribe(_ =>
                     {
+                        RaycastHit hit;
                         if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, _getItemRange, layerMask))//設定した距離にあるアイテムを認知
                         {
-                            //Rayに当たったゲームオブジェクトを保存
-                            hitObject = hit.collider.gameObject;
-
-                            //ステージ設置アイテムの処理
-                            if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out ItemEffect item) && hit.collider.gameObject.TryGetComponent(out IInteractable itemIntract))
+                            
+                            if (hit.collider.gameObject.TryGetComponent(out ItemEffect item))
                             {
                                 string name = item.GetItemData().itemName;
-                                _popActive.OnNext(name);//ポップが出現
-                                item.gameObject.GetComponent<Outline>().enabled = true;
-
-                                itemIntract.Intract(_myPlayerStatus);
+                                _itemPopActive.OnNext(name);//アイテムポップが出現
                             }
-
-                            //ステージ上のIntractオブジェクト（ドアなど）の処理
                             //TryGetComponentを行う。
-                            if (hit.collider.gameObject.CompareTag("StageIntract") && hit.collider.gameObject.TryGetComponent(out IInteractable intract))
+                            if (hit.collider.gameObject.TryGetComponent(out IInteractable intract))
                             {
-                                hit.collider.gameObject.GetComponent<Outline>().enabled = true;
-                                _popActive.OnNext("Action");//ポップが出現
                                 intract.Intract(_myPlayerStatus);
                             }
                         }
-                        else//目線の先にアイテムもIntractオブジェクトもなかった時
+                        else
                         {
-                            //Rayに当たっていたゲームオブジェクトに関する上の処理を初期化
-                            if (hitObject != null)
-                            {
-                                _popActive.OnNext(null);//ポップを非アクティブ化
-                                hitObject.GetComponent<Outline>().enabled = false;
-                            }
+                            _itemPopActive.OnNext(null);//アイテムポップを非アクティブ化
                         }
                     });
 
@@ -168,7 +149,7 @@ namespace Scenes.Ingame.Player
                         //マウスホールのみの入力時
                         if (ItemNumberKeyDown() == 0)
                         {
-                            scrollValue += Input.GetAxis("Mouse ScrollWheel") * scrollSense;
+                            scrollValue -= Input.GetAxis("Mouse ScrollWheel") * scrollSense;
                             scrollValue = Mathf.Clamp(scrollValue,0,6);
 
                             if(_itemSlot[(int)scrollValue].myItemSlotStatus != ItemSlotStatus.unavailable)

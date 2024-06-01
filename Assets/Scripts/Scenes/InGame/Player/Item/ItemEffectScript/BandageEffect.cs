@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using UniRx.Triggers;
 
 namespace Scenes.Ingame.Player
 {
@@ -30,7 +29,7 @@ namespace Scenes.Ingame.Player
         public IEnumerator UseBandage()
         {
             Debug.Log("包帯使う");
-            
+
             //アイテム使用直後にステータス変更を行う
             ownerPlayerStatus.UseItem(true);
             ownerPlayerStatus.ChangeSpeed();
@@ -39,7 +38,7 @@ namespace Scenes.Ingame.Player
 
             _startTime = Time.time;
             Debug.Log(_startTime);
-                       
+
             while (true)
             {
                 yield return null;
@@ -53,8 +52,8 @@ namespace Scenes.Ingame.Player
                     ownerPlayerItem.ChangeCanChangeBringItem(false);
                     yield break;
                 }
-               
-                if (Time.time - _startTime >= 10.0f) 
+
+                if (Time.time - _startTime >= 10.0f)
                 {
                     ownerPlayerStatus.ChangeBleedingBool(false);
                     ownerPlayerStatus.UseItem(false);
@@ -62,9 +61,9 @@ namespace Scenes.Ingame.Player
                     ownerPlayerItem.ThrowItem(ownerPlayerItem.nowIndex);
                     ownerPlayerItem.ChangeCanChangeBringItem(true);
                     yield break;
-                }               
-            }            
+                }
+            }
         }
     }
 }
-   
+

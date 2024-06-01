@@ -20,13 +20,15 @@ namespace Scenes.Ingame.Manager
         private Subject<Unit> _openEscapePointEvent = new Subject<Unit>();
         private Subject<Unit> _resultEvent = new Subject<Unit>();
         private Subject<Unit> _outgameEvent = new Subject<Unit>();
-        private Subject<Unit> _finishStageGenerateEvent = new Subject<Unit>();
+        private Subject<Unit> _stageGenerateEvent = new Subject<Unit>();
+        private Subject<Unit> _playerSpawnEvent = new Subject<Unit>();
         public IObservable<Unit> OnInitial { get { return _initialEvent; } }
         public IObservable<Unit> OnIngame { get { return _ingameEvent; } }
         public IObservable<Unit> OnOpenEscapePointEvent { get { return _openEscapePointEvent; } }
         public IObservable<Unit> OnResult { get { return _resultEvent; } }
         public IObservable<Unit> OnOutgame { get { return _outgameEvent; } }
-        public IObservable<Unit> OnFinishStageGenerateEvent { get { return _finishStageGenerateEvent; } }
+        public IObservable<Unit> OnStageGenerateEvent { get { return _stageGenerateEvent; } }
+        public IObservable<Unit> OnPlayerSpawnEvent { get { return _playerSpawnEvent; } }
 
         public IngameState CurrentState { get => _currentState; }
 
@@ -38,20 +40,19 @@ namespace Scenes.Ingame.Manager
         void Awake()
         {
             Instance = this;
-            _ingameReady.Initialize();
             OnInitial.Subscribe(_ => InitialState().Forget()).AddTo(this);
             OnIngame.Subscribe(_ => InGameState()).AddTo(this);
             OnResult.Subscribe(_ => ResultState()).AddTo(this);
             OnOutgame.Subscribe(_ => OutGameState()).AddTo(this);
         }
-        private void Start()
+        private async void Start()
         {
-            _ingameReady.Initialize();
+            await Task.Delay(500);
+            _initialEvent.OnNext(default);
+            Debug.Log("Current State is Initial!");
         }
         private async UniTaskVoid InitialState()
         {
-            await Task.Delay(500);
-            Debug.Log("Current State is Initial!");
             _currentState = IngameState.Initial;
             await UniTask.WaitUntil(_ingameReady.Ready);
             _ingameEvent.OnNext(default);
@@ -76,9 +77,19 @@ namespace Scenes.Ingame.Manager
 
         public void SetReady(ReadyEnum ready)
         {
-            if(ready == ReadyEnum.StageReady)
+            Debug.Log($"SetReady.value = {ready}");
+            switch (ready)
             {
-                _finishStageGenerateEvent.OnNext(default);
+                case ReadyEnum.StageReady:
+                    _stageGenerateEvent.OnNext(default);
+                    break;
+                case ReadyEnum.PlayerReady:
+                    _playerSpawnEvent.OnNext(default);
+                    break;
+                case ReadyEnum.EnemyReady:
+                    break;
+                default:
+                    break;
             }
             _ingameReady.SetReady(ready);
         }
@@ -89,13 +100,13 @@ namespace Scenes.Ingame.Manager
             Debug.Log("脱出しました");
             _resultEvent.OnNext(default);
         }
-        
+
         //プレイヤーが脱出アイテムを入手した際の処理
         public void GetEscapeItem()
         {
-            Debug.Log("脱出アイテムを獲得しました");
             _getEscapeItemCount.Value++;
-            if(_getEscapeItemCount.Value >= _escapeItemCount)
+            Debug.Log($"脱出アイテムを獲得しました。現在の個数は{_getEscapeItemCount.Value}個、必要な個数は{_escapeItemCount}個、解放状態は{_getEscapeItemCount.Value >= _escapeItemCount}");
+            if (_getEscapeItemCount.Value >= _escapeItemCount)
             {
                 _openEscapePointEvent.OnNext(default);
             }

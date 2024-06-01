@@ -1,12 +1,8 @@
 using Scenes.Ingame.Manager;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using System.Linq;
-using Scenes.Ingame.InGameSystem;
-using System.Diagnostics.Tracing;
-using static UnityEditor.Progress;
 
 namespace Scenes.Ingame.Stage
 {
@@ -25,11 +21,10 @@ namespace Scenes.Ingame.Stage
         private List<GameObject> _itemMarker;
         void Start()
         {
-            IngameManager.Instance.OnFinishStageGenerateEvent
+            IngameManager.Instance.OnStageGenerateEvent
                 .Subscribe(_ =>
                 {
                     _itemMarker = GameObject.FindGameObjectsWithTag("ItemSpawnPoint").ToList();
-                    Debug.Log($"_escapeItems = {_itemMarker.Count}");
                     InstatiateEscapeItem();
                     RandomStageItemSet();
                     ClearList();
@@ -38,7 +33,7 @@ namespace Scenes.Ingame.Stage
 
         private void InstatiateEscapeItem()
         {
-            if(_itemMarker.Count < _escapeItemCount)
+            if (_itemMarker.Count < _escapeItemCount)
             {
                 Debug.LogError("escapeMarker‚Ì”‚ª¶¬‚·‚éescapeItem‚Ì”‚æ‚è­‚È‚¢‚Å‚·");
                 return;
@@ -52,7 +47,7 @@ namespace Scenes.Ingame.Stage
         }
         private void RandomStageItemSet()
         {
-            if(_itemMarker.Count < 1)
+            if (_itemMarker.Count < 1)
             {
                 Debug.LogError("escapeMarker‚Ì”‚ª‚ ‚è‚Ü‚¹‚ñ");
                 return;
@@ -72,10 +67,12 @@ namespace Scenes.Ingame.Stage
         }
         private void ClearList()
         {
-            for (int i = 0; i < _itemMarker.Count; i++)
+            List<GameObject> _clearList = _itemMarker;
+            foreach (GameObject item in _clearList)
             {
-                DeleteList(_itemMarker[i]);
+                Destroy(item);
             }
+            _itemMarker.Clear();
         }
         private void DeleteList(GameObject target)
         {

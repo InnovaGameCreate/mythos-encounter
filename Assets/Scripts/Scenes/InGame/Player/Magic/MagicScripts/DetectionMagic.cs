@@ -1,4 +1,3 @@
-using Scenes.Ingame.Enemy;
 using Scenes.Ingame.InGameSystem;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,7 +12,7 @@ namespace Scenes.Ingame.Player
     {
         private bool _debugMode = false;
         private GameObject _detectionBallPrefab;
-        [SerializeField]private List<GameObject> _createdDetectionBalls;
+        [SerializeField] private List<GameObject> _createdDetectionBalls;
         public override void ChangeFieldValue()
         {
             chantTime = 5f;
@@ -49,14 +48,15 @@ namespace Scenes.Ingame.Player
                     Debug.Log("呪文発動！");
                     //効果発動
                     _detectionBallPrefab = (GameObject)Resources.Load("Prefab/Magic/DetectionBall");
+
                     EscapeItem[] escapeItems = FindObjectsOfType<EscapeItem>();
 
                     Vector3 spawnPosition = this.transform.position + this.transform.forward * 2 + Vector3.up * 2;
                     //光の玉を脱出アイテムの数だけ生成
                     for (int i = 0; i < escapeItems.Length; i++)
                     {
-                        _createdDetectionBalls.Add( Instantiate(_detectionBallPrefab, spawnPosition, Quaternion.identity));
-                        _createdDetectionBalls[i].GetComponent<DetectionBall>().DetectionItem(escapeItems[i].transform.position , 5.0f);
+                        _createdDetectionBalls.Add(Instantiate(_detectionBallPrefab, spawnPosition, Quaternion.identity));
+                        _createdDetectionBalls[i].GetComponent<DetectionBall>().DetectionItem(escapeItems[i].transform.position, 5.0f);
                     }
 
                     //アウトラインを無効化するためのコルーチンをスタート

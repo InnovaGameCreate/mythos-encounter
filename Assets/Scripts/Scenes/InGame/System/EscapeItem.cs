@@ -14,10 +14,8 @@ namespace Scenes.Ingame.InGameSystem
 
         public void Intract(PlayerStatus status)
         {
-            Debug.Log("インタラクトしようとしています");
             if (Input.GetMouseButtonDown(1) && !_get)
             {
-                Debug.Log("インタラクトしました");
                 _get = true;
                 manager.GetEscapeItem();
                 Destroy(gameObject, 0.5f);
