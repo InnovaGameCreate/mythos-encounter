@@ -102,7 +102,7 @@ namespace Scenes.Ingame.Player
         {
             //初期化
             Init();
-            _health.Subscribe(x => CheckHealth(x,_playerID));//体力が変化したときにゲーム内で変更を加える
+            _health.Subscribe(x => CheckHealth(x, _playerID));//体力が変化したときにゲーム内で変更を加える
             _stamina.Subscribe(x => CheckStamina(x, _playerID));//スタミナが変化したときにゲーム内で変更を加える
             _san.Subscribe(x => CheckSanValue(x, _playerID));//SAN値が変化したときにゲーム内で変更を加える
             _bleeding.
@@ -181,10 +181,10 @@ namespace Scenes.Ingame.Player
             }
 
             else if (mode == "Damage")
-            { 
+            {
                 lastSanValue = _san.Value;
                 _san.Value = Mathf.Max(0, _san.Value - value);
-            }                
+            }
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace Scenes.Ingame.Player
         /// </summary>
         /// <param name="value"></param>
         public void UseItem(bool value)
-        { 
+        {
             _isUseItem = value;
         }
 
@@ -246,11 +246,11 @@ namespace Scenes.Ingame.Player
             {
                 yield return new WaitForSeconds(1.0f);
                 if (_bleeding.Value)
-                { 
+                {
                     ChangeHealth(damage * (_isPulsationBleeding ? 2 : 1), "Damage");
                     Debug.Log("出血ダメージが入りました。");
-                }                   
-                else 
+                }
+                else
                     yield break;
             }
         }
@@ -263,7 +263,7 @@ namespace Scenes.Ingame.Player
         {
             //Debug.Log("残り体力：" + health);
 
-            
+
             if (health <= 0)
                 _survive.Value = false;
         }

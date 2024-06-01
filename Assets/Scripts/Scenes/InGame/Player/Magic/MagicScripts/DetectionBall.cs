@@ -13,7 +13,7 @@ namespace Scenes.Ingame.Player
         /// </summary>
         /// <param name="itemPosition">アイテムがある座標</param>
         /// <param name="duration">移動にかける時間</param>
-        public void DetectionItem(Vector3 itemPosition , float duration)
+        public void DetectionItem(Vector3 itemPosition, float duration)
         {
             this.transform.DOMove(itemPosition, duration).SetDelay(1.0f);
         }
@@ -21,7 +21,7 @@ namespace Scenes.Ingame.Player
         public void OnTriggerEnter(Collider other)
         {
             //脱出アイテムに触れたらアウトラインを表示させる（デモ版）
-            if (other.gameObject.CompareTag("ItemSpawnPoint"))
+            if (other.gameObject.CompareTag("Item") && other.gameObject.GetComponent<EscapeItem>())
             {
                 var outline = other.gameObject.GetComponent<Outline>();
                 outline.enabled = true;

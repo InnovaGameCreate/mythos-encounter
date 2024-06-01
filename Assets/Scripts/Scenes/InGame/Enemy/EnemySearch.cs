@@ -3,9 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using Unity.VisualScripting;
-using static Scenes.Ingame.Enemy.EnemyVisibilityMap;
-using Cysharp.Threading.Tasks.Triggers;
 
 namespace Scenes.Ingame.Enemy
 {
@@ -45,7 +42,7 @@ namespace Scenes.Ingame.Enemy
         public void Init(EnemyVisibilityMap setVisivilityMap)
         {
             _myVisivilityMap = setVisivilityMap;
-            _player = GameObject.Find("Player");
+            _player = GameObject.FindWithTag("Player");
             if (_player == null) { Debug.LogWarning("プレイヤーが認識できません"); }
             _playerStatus = _player.GetComponent<PlayerStatus>();
             if (_playerStatus == null) { Debug.LogWarning("プレイヤーステータスが認識できません"); }

@@ -5,11 +5,8 @@ using Cysharp.Threading.Tasks;
 using System.Threading;
 using Scenes.Ingame.Manager;
 using Scenes.Ingame.InGameSystem;
-using Unity.AI;
 using UniRx;
 using Unity.AI.Navigation;
-using UnityEditor.SceneManagement;
-using Unity.VisualScripting;
 
 namespace Scenes.Ingame.Stage
 {
@@ -93,12 +90,18 @@ namespace Scenes.Ingame.Stage
             _secondFloorData = new RoomData[(int)_stageSize.x, (int)_stageSize.y];
             if (viewDebugLog) Debug.Log($"StageSize => x = {_firsrFloorData.GetLength(0)},y = {_firsrFloorData.GetLength(1)}, total = {_firsrFloorData.Length}");
 
+            if (viewDebugLog) Debug.Log("Stage.Start");
             IngameManager.Instance.OnInitial
-                .Subscribe(_ => InitialSet()).AddTo(this);
-            Generate(token).Forget();
+                .Subscribe(_ =>
+                {
+                    if (viewDebugLog) Debug.Log("Stage.OnInitial");
+                    InitialSet();
+                    Generate(token).Forget();
+                }).AddTo(this);
         }
         private async UniTaskVoid Generate(CancellationToken token)
         {
+            if (viewDebugLog) Debug.Log("Stage.Generate");
             //ステージデータの計算
             for (int floor = 1; floor <= 2; floor++)
             {
@@ -797,8 +800,8 @@ namespace Scenes.Ingame.Stage
                     {
                         continue;
                     }
-                    if (floor1fData[x, y].RoomType == RoomType.room2x2 && 
-                        floor1fData[x, y].RoomId == floor1fData[x + 1, y].RoomId && 
+                    if (floor1fData[x, y].RoomType == RoomType.room2x2 &&
+                        floor1fData[x, y].RoomId == floor1fData[x + 1, y].RoomId &&
                         floor1fData[x, y].RoomId == floor1fData[x, y + 1].RoomId)
                     {
                         if (floor2fData[x, y].RoomType == RoomType.room2x2 &&
@@ -807,7 +810,7 @@ namespace Scenes.Ingame.Stage
                         {
                             RoomPlotId(RoomType.room2x2Stair, new Vector2(x, y), floor1fData);
                             RoomPlotId(RoomType.room2x2Stair, new Vector2(x, y), floor2fData);
-                            _stairPosition.Add(ToVector2(x+1,y+1));
+                            _stairPosition.Add(ToVector2(x + 1, y + 1));
                             Debug.Log("2x2階段の部屋に適した場所あり");
                         }
                     }
@@ -827,7 +830,7 @@ namespace Scenes.Ingame.Stage
                             RoomPlotId(RoomType.room3x3Stair, new Vector2(x, y), floor1fData);
                             RoomPlotId(RoomType.room3x3Stair, new Vector2(x, y), floor2fData);
                             _stairPosition.Add(ToVector2(x + 2, y + 1));
-                            Debug.Log("3x3階段の部屋に適した場所あり");
+                            if (viewDebugLog) Debug.Log("3x3階段の部屋に適した場所あり");
                         }
                     }
                 }

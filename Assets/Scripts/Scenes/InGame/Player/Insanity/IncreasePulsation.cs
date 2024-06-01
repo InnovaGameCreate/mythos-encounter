@@ -9,7 +9,7 @@ namespace Scenes.Ingame.Player
     /// 1.スタミナの消費速度と出血で受けるダメージの減少速度が2倍になる.
     /// 2.発症するとプレイヤーが1秒に1度のペースで白い息を吐くようになる.心拍数の増加
     /// </summary>
-    public class IncreasePulsation : MonoBehaviour,IInsanity
+    public class IncreasePulsation : MonoBehaviour, IInsanity
     {
         private PlayerStatus _myPlayerStatus;
         private TempPlayerMove _myPlayerMove;
