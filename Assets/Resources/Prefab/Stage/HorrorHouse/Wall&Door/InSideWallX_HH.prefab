@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7038028934820508515}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: InSideWallX_HH
-  m_TagString: Untagged
+  m_TagString: Stage
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -41,7 +41,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1643680734926749663}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,6 +134,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Interior_Wall_1x3m (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4451822175611040403, guid: 2fe1095a13bb6a141aefc8a9e2015e67, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -211,6 +215,10 @@ PrefabInstance:
     - target: {fileID: 988879718906860233, guid: 64cbd954f48e2dd448c0a906b2dfcdf9, type: 3}
       propertyPath: m_Name
       value: Interior_Wall_4x3m
+      objectReference: {fileID: 0}
+    - target: {fileID: 988879718906860233, guid: 64cbd954f48e2dd448c0a906b2dfcdf9, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 1637560586049401628, guid: 64cbd954f48e2dd448c0a906b2dfcdf9, type: 3}
       propertyPath: m_CastShadows
@@ -301,6 +309,10 @@ PrefabInstance:
     - target: {fileID: 4451822175611040403, guid: 2fe1095a13bb6a141aefc8a9e2015e67, type: 3}
       propertyPath: m_Name
       value: Interior_Wall_1x3m
+      objectReference: {fileID: 0}
+    - target: {fileID: 4451822175611040403, guid: 2fe1095a13bb6a141aefc8a9e2015e67, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

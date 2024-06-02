@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 namespace Scenes.Ingame.Player
 {
@@ -45,6 +46,12 @@ namespace Scenes.Ingame.Player
             effect.ownerPlayerItem = PlayerItem;
             effect.OnPickUp();//各アイテムの拾った時の処理を実行させる
             PlayerItem.nowBringItem.GetComponent<Rigidbody>().useGravity = false;//アイテムを持った時に重力の影響を受けないようにする
+        }
+
+        public string ReturnPopString()
+        {
+            //このスクリプトでは使わない
+            return null;
         }
     }
 }
