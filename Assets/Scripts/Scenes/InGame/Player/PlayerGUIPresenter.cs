@@ -124,7 +124,7 @@ namespace Scenes.Ingame.Player
                             _itemSlots[x].color = Color.red;
                         }).AddTo(this);
 
-                    //目線の先にアイテムがあるとアイテムポップを表示させる
+                    //目線の先にアイテムかStageIntractがあるとポップを表示させる
                     _playerItem.OnPopActive
                         .Subscribe(x =>
                         {

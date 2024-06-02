@@ -246,7 +246,7 @@ GameObject:
   - component: {fileID: 4966670689092970595}
   m_Layer: 8
   m_Name: Internal_Wall_Door_01
-  m_TagString: Stage
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

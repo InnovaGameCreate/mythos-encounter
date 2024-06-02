@@ -75,7 +75,7 @@ namespace Scenes.Ingame.Player
                         if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, _getItemRange, layerMask))//設定した距離にあるアイテムを認知
                         {
                             //Rayに当たったゲームオブジェクトを格納(壁に当たった場合は別処理)
-                            if(hit.collider.gameObject.CompareTag("Stage"))
+                            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
                             {
                                 _popActive.OnNext(null);
                                 if (hitObject != null)
@@ -88,10 +88,9 @@ namespace Scenes.Ingame.Player
                                     hitObject = null;
                                 }
                             }
-                            else if (!hit.collider.gameObject.CompareTag("Stage"))
+                            else
                             {
                                 hitObject = hit.collider.gameObject;
-                                Debug.Log(hitObject.name);
                             }
 
                             //脱出アイテムだった時
@@ -121,6 +120,7 @@ namespace Scenes.Ingame.Player
                         }
                         else
                         {
+                            _popActive.OnNext(null);
                             //Rayに何も当たらなかった時の処理
                             if (hitObject != null)
                             {
@@ -131,8 +131,6 @@ namespace Scenes.Ingame.Player
 
                                 hitObject = null; 
                             }
-
-                            _popActive.OnNext(null);
                         }
                     });
 
