@@ -19,12 +19,15 @@ namespace Scenes.Ingame.Stage
         [SerializeField, Tooltip("íEèoínì_ÇÃprefab")]
         private GameObject _escapePointPrefab;
         private List<GameObject> _itemMarker;
+        private GameObject[] _escapePointMarker;
         void Start()
         {
             IngameManager.Instance.OnStageGenerateEvent
                 .Subscribe(_ =>
                 {
                     _itemMarker = GameObject.FindGameObjectsWithTag("ItemSpawnPoint").ToList();
+                    _escapePointMarker = GameObject.FindGameObjectsWithTag("EscapePoint");
+                    InstatiateEscapePoint();
                     InstatiateEscapeItem();
                     RandomStageItemSet();
                     ClearList();
@@ -43,6 +46,15 @@ namespace Scenes.Ingame.Stage
                 int randomNumber = Random.Range(0, _itemMarker.Count);
                 Instantiate(_escapeItemPrefab, _itemMarker[randomNumber].transform.position, Quaternion.identity);
                 DeleteList(_itemMarker[randomNumber]);
+            }
+        }
+        private void InstatiateEscapePoint()
+        {
+            var targetPoint = _escapePointMarker[Random.Range(0, _escapePointMarker.Length)];
+            Instantiate(_escapePointPrefab, targetPoint.transform.position, targetPoint.transform.rotation);
+            foreach (var item in _escapePointMarker)
+            {
+                Destroy(item);
             }
         }
         private void RandomStageItemSet()
