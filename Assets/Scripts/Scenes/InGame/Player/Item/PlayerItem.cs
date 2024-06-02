@@ -155,6 +155,7 @@ namespace Scenes.Ingame.Player
                         //アイテムを近くに投げ捨てる
                         nowBringItem.transform.parent = null;
                         rb.useGravity = true;
+                        rb.isKinematic = false;
                         rb.AddForce(_mainCamera.transform.forward * 300);
                         
                         //アイテムスロットのListを更新
