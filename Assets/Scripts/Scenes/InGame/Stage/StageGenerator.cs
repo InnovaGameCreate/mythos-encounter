@@ -94,7 +94,7 @@ namespace Scenes.Ingame.Stage
                 RoomData[,] targetFloor = floor == 1 ? _firsrFloorData : _secondFloorData;
                 await GenerateStage(token, targetFloor, floor - 1);                             //部屋の生成
                 //TODO:要調整：生成位置のずれ
-                //await CorridorShaping(token, targetFloor, floor - 1);                           //通路の装飾
+                await CorridorShaping(token, targetFloor, floor - 1);                         //通路の装飾
                 await GenerateWall(token, targetFloor, floor - 1);                              //壁の生成
             }
             floorObject.GetComponent<NavMeshSurface>().BuildNavMesh();                          //NavMeshのbake
@@ -284,7 +284,7 @@ namespace Scenes.Ingame.Stage
         private void RoomPlotId(RoomType plotRoomType, Vector2 plotPosition, RoomData[,] stage)
         {
             roomId++;
-            Vector2 plotRoomSize = Vector2.zero;
+            Vector2 plotRoomSize = Vector2.one;
             int plotX = (int)plotPosition.x;
             int plotY = (int)plotPosition.y;
             switch (plotRoomType)
@@ -398,7 +398,7 @@ namespace Scenes.Ingame.Stage
             return candidatePositions;
         }
         /// <summary>
-        /// 孤立した部屋を検索するための関数
+        /// 広い通路を検索するための関数
         /// </summary>
         private List<Vector2> candidateCorridorPosition(RoomData[,] stage, int offsetX = 0, int offsetY = 0)
         {
@@ -419,7 +419,9 @@ namespace Scenes.Ingame.Stage
                     }
                     if (RoomIdEqual(ToVector2(x, y), Vector2.zero, 0, stage) &&
                         RoomIdEqual(ToVector2(x, y), ToVector2(0, offsetY), 0, stage) &&
-                        RoomIdEqual(ToVector2(x, y), ToVector2(offsetX, 0), 0, stage))
+                        RoomIdEqual(ToVector2(x, y), ToVector2(offsetX, 0), 0, stage) &&
+                        RoomIdEqual(ToVector2(x, y), ToVector2(offsetX, offsetY), 0, stage)
+                        )
                     {
                         setPosition = ToVector2(x, y);
                         candidatePositions.Add(setPosition);
@@ -881,7 +883,7 @@ namespace Scenes.Ingame.Stage
             {
                 for (int x = 0; x < target.GetLength(0); x++)
                 {
-                    if (target[x, y].RoomId < 10) printData += $"[ {target[x, y].RoomId}]";
+                    if (target[x, y].RoomId < 10) printData += $"[ {target[x, y].RoomId} ]";
                     else printData += $"[{target[x, y].RoomId}]";
                 }
                 printData += "\n";

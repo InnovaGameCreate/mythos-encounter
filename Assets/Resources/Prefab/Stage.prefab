@@ -329,6 +329,9 @@ MonoBehaviour:
   _2x2RoomStair2fPrefab: {fileID: 8786186942910803785, guid: 9927de378745c4d40b866fc0ff5fe914, type: 3}
   _3x3RoomStair1fPrefab: {fileID: 7734731353070572643, guid: 3f13c2282eb5b334eb06d64d3d8ab88a, type: 3}
   _3x3RoomStair2fPrefab: {fileID: 7734731353070572643, guid: 6355104395274464fa377c93d3eb663c, type: 3}
+  _2x4CorridorPrefab: {fileID: 7104717311803946632, guid: f38c06f79a308e740b622eea7ba9fd9e, type: 3}
+  _4x2CorridorPrefab: {fileID: 7104717311803946632, guid: eea40fcafa20b384e929f8454bcf05ae, type: 3}
+  _2x2CorridorPrefab: {fileID: 8786186942910803785, guid: 248bd6a9ba5451f41a5e22e3995f2c3d, type: 3}
 --- !u!1 &8953441585888980059
 GameObject:
   m_ObjectHideFlags: 0
