@@ -30,7 +30,7 @@ namespace Scenes.Ingame.Stage
         const float TILESIZE = 5.85f;
         const int OFFSET = 2;//通路を作らない範囲
         private bool playerSpawnRoom = false;
-        private bool viewDebugLog = true;//確認用のデバックログを表示する
+        private bool viewDebugLog = false;//確認用のデバックログを表示する
         private CancellationTokenSource source = new CancellationTokenSource();
         [Header("Parent")]
         [SerializeField]
@@ -417,11 +417,20 @@ namespace Scenes.Ingame.Stage
                     {
                         if (RoomIdEqual(ToVector2(x, y), ToVector2(0, -1), 0, stage)) continue;
                     }
-                    if (RoomIdEqual(ToVector2(x, y), Vector2.zero, 0, stage) &&
-                        RoomIdEqual(ToVector2(x, y), ToVector2(0, offsetY), 0, stage) &&
-                        RoomIdEqual(ToVector2(x, y), ToVector2(offsetX, 0), 0, stage) &&
-                        RoomIdEqual(ToVector2(x, y), ToVector2(offsetX, offsetY), 0, stage)
-                        )
+                    bool existCorridor = true;
+                    for (int i = 0; i <= offsetX; i++)
+                    {
+                        for (int j = 0; j <= offsetY; j++)
+                        {
+                            if (!RoomIdEqual(ToVector2(x, y), ToVector2(i, j), 0, stage))
+                            {
+                                existCorridor = false;
+                                break;
+                            }
+                        }
+                        if (!existCorridor) break;
+                    }
+                    if (existCorridor)
                     {
                         setPosition = ToVector2(x, y);
                         candidatePositions.Add(setPosition);
