@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
@@ -30,28 +28,24 @@ namespace Scenes.Ingame.InGameSystem.UI
                 .First()
                 .Subscribe(_ =>
                 {
-                    _progress++;
                     UpdateSlider();
                 }).AddTo(this);
             IngameManager.Instance.OnStageGenerateEvent
                 .First()
                 .Subscribe(_ =>
                 {
-                    _progress++;
                     UpdateSlider();
                 }).AddTo(this);
             IngameManager.Instance.OnPlayerSpawnEvent
                 .First()
                 .Subscribe(_ =>
                 {
-                    _progress++;
                     UpdateSlider();
                 }).AddTo(this);
             IngameManager.Instance.OnIngame
                 .First()
                 .Subscribe(_ =>
                 {
-                    _progress++;
                     UpdateSlider();
                     _progressSlderCanvas.enabled = false;
                     _backgroundImage.DOFade(0, FADESPEED)
@@ -61,6 +55,7 @@ namespace Scenes.Ingame.InGameSystem.UI
         }
         private void UpdateSlider()
         {
+            _progress++;
             _progressSlider.value = _progress / MAXPROGRESS;
         }
         private void CanvasFade()
