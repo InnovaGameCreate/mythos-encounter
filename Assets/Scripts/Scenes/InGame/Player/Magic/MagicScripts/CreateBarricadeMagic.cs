@@ -112,6 +112,7 @@ namespace Scenes.Ingame.Player
                 if (cancelMagic == true)
                 {
                     cancelMagic = false;
+                    Destroy(_CreatedBarricade);
                     yield break;
                 }
 

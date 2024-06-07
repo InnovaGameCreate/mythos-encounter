@@ -21,5 +21,10 @@ namespace Scenes.Ingame.InGameSystem
                 Destroy(gameObject, 0.5f);
             }
         }
+
+        public string ReturnPopString()
+        {
+            return null;
+        }
     }
 }

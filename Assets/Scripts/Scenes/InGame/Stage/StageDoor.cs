@@ -58,5 +58,13 @@ namespace Scenes.Ingame.Stage
                 _isAnimation = false;
             });
         }
+
+        public string ReturnPopString()
+        {
+            if (_isOpen)
+                return "Close";
+            else
+                return "Open";
+        }
     }
 }
