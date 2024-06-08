@@ -13,7 +13,6 @@ namespace Scenes.Ingame.Player
 
     public class PlayerStatus : MonoBehaviour
     {
-        public static PlayerStatus Instance;
         //プレイヤーのデータベース(仮置き)
         [Header("プレーヤーのデータベース")]
         [SerializeField] private int _playerID = 0;
@@ -99,7 +98,6 @@ namespace Scenes.Ingame.Player
         {
             //初期化
             Init();
-            Instance = this;//インスタンスの初期化
             _health.Subscribe(x => CheckHealth(x,_playerID));//体力が変化したときにゲーム内で変更を加える
             _stamina.Subscribe(x => CheckStamina(x, _playerID));//スタミナが変化したときにゲーム内で変更を加える
             _san.Subscribe(x => CheckSanValue(x, _playerID));//SAN値が変化したときにゲーム内で変更を加える
