@@ -12,11 +12,13 @@ GameObject:
   - component: {fileID: 4132454062066361269}
   - component: {fileID: 8490649666817770418}
   - component: {fileID: 7339136677838048826}
+  - component: {fileID: 4793320862519991132}
   - component: {fileID: 3548154770079673015}
-  - component: {fileID: 3970408117104837516}
-  m_Layer: 0
+  - component: {fileID: 3004748567630928741}
+  - component: {fileID: 3079383861247687367}
+  m_Layer: 10
   m_Name: escapePoint
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,6 +102,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _activeMaterial: {fileID: 2100000, guid: 52ef39ec6a824ed469933efbce9e416d, type: 2}
+--- !u!64 &4793320862519991132
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 62901747889602305}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!54 &3548154770079673015
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -127,8 +151,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
---- !u!64 &3970408117104837516
-MeshCollider:
+--- !u!65 &3004748567630928741
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -145,10 +169,27 @@ MeshCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  serializedVersion: 3
+  m_Size: {x: 0.8, y: 2, z: 0.8}
+  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+--- !u!114 &3079383861247687367
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 62901747889602305}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &1690282733977306187
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -160,6 +201,10 @@ PrefabInstance:
     - target: {fileID: 489416909458921226, guid: 7c22d5ea1229bbd4ea20d19722a8cf1a, type: 3}
       propertyPath: m_Name
       value: Blood_Decals_10
+      objectReference: {fileID: 0}
+    - target: {fileID: 489416909458921226, guid: 7c22d5ea1229bbd4ea20d19722a8cf1a, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 973079587010252208, guid: 7c22d5ea1229bbd4ea20d19722a8cf1a, type: 3}
       propertyPath: m_RootOrder

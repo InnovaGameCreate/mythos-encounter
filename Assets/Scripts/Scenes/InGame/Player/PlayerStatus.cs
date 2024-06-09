@@ -81,6 +81,7 @@ namespace Scenes.Ingame.Player
         public int bleedingDamage = 1;//出血時に受けるダメージ
         private bool _isUseItem = false;
         private bool _isUseMagic = false;
+        private bool _isUseEscapePoint = false;
         private bool _isPulsationBleeding = false;
 
         private void Init()
@@ -192,7 +193,7 @@ namespace Scenes.Ingame.Player
         /// </summary>
         public void ChangeSpeed()
         {
-            _speed.Value = (int)(_speedBase * (_isUseItem ? 0.5f : 1) * (_isUseMagic ? 0.5f : 1));
+            _speed.Value = (int)(_speedBase * (_isUseItem ? 0.5f : 1) * (_isUseMagic ? 0.5f : 1) * (_isUseEscapePoint ? 0.5f : 1));
         }
 
         /// <summary>
@@ -211,6 +212,14 @@ namespace Scenes.Ingame.Player
         public void UseMagic(bool value)
         {
             _isUseMagic = value;
+        }
+        /// <summary>
+        /// 呪文を唱えているか管理するための関数
+        /// </summary>
+        /// <param name="value"></param>
+        public void UseEscapePoint(bool value)
+        {
+            _isUseEscapePoint = value;
         }
 
         /// <summary>
