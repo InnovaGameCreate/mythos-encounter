@@ -54,7 +54,7 @@ namespace Scenes.Ingame.Manager
         private async UniTaskVoid InitialState()
         {
             _currentState = IngameState.Initial;
-            await UniTask.WaitUntil(_ingameReady.Ready);
+            await UniTask.WaitUntil(() => _ingameReady.Ready());
             _ingameEvent.OnNext(default);
         }
 
@@ -75,9 +75,10 @@ namespace Scenes.Ingame.Manager
             _currentState = IngameState.Outgame;
         }
 
-        public void SetReady(ReadyEnum ready)
+        public async void SetReady(ReadyEnum ready)
         {
             Debug.Log($"SetReady.value = {ready}");
+            //await Task.Delay(500);//LoadViewのデバック用
             switch (ready)
             {
                 case ReadyEnum.StageReady:
