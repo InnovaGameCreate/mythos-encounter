@@ -32,7 +32,7 @@ namespace Scenes.Ingame.InGameSystem
                     Debug.Log("Active");
                     _isActive = true;
                 }).AddTo(this);
-            _isActive = true;
+            if(viewDebugLog) _isActive = true;
         }
         private void OnDestroy()
         {
@@ -48,7 +48,7 @@ namespace Scenes.Ingame.InGameSystem
                 !_isAnimation &&
                 _isActive)
             {
-                status.UseEscapePoint(true);
+                status.UseEscapePoint(true, CASTTIME);
                 status.ChangeSpeed();
                 await Ritual(token.Token);
                 status.UseEscapePoint(false);
@@ -75,7 +75,7 @@ namespace Scenes.Ingame.InGameSystem
         }
         public string ReturnPopString()
         {
-            if (_escpaeItemCount >= _progress)
+            if (_escpaeItemCount > _progress)
             {
                 return RITUAL;
             }
