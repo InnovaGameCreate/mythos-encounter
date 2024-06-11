@@ -14,7 +14,7 @@ namespace Scenes.Ingame.InGameSystem
         private bool _isAnimation = false;
         private bool _isActive = false;
         CancellationTokenSource token;
-        private bool viewDebugLog = false;//確認用のデバックログを表示する
+        private bool viewDebugLog = true;//確認用のデバックログを表示する
 
         private int _escpaeItemCount = 0;
         private int _progress = 0;
@@ -47,8 +47,10 @@ namespace Scenes.Ingame.InGameSystem
             if (Input.GetMouseButtonDown(1) &&
                 _escpaeItemCount >= _progress &&
                 !_isAnimation &&
-                _isActive&&
-                manager.GetEscapeItemCurrentCount > _progress)
+                _isActive &&
+                (manager.GetEscapeItemCurrentCount > _progress ||
+                manager.GetEscapeItemCurrentCount == manager.GetEscapeItemMaxCount
+                ))
             {
                 status.UseEscapePoint(true, CASTTIME);
                 status.ChangeSpeed();
@@ -78,7 +80,11 @@ namespace Scenes.Ingame.InGameSystem
         }
         public string ReturnPopString()
         {
-            if(manager.GetEscapeItemCurrentCount <=  _progress)
+            if (manager.GetEscapeItemMaxCount == _progress)
+            {
+                return ESCAPE;
+            }
+            else if (manager.GetEscapeItemCurrentCount <= _progress)
             {
                 return CANT;
             }
@@ -86,9 +92,8 @@ namespace Scenes.Ingame.InGameSystem
             {
                 return RITUAL;
             }
-            else
-            {
-                return ESCAPE;
+            else {
+                return "ERROR";
             }
         }
     }
