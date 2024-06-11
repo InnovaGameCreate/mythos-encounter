@@ -240,18 +240,18 @@ namespace Scenes.Ingame.Player
             _staminaGaugeFrontRect.sizeDelta = new Vector2(_defaulStaminaGaugetWidth * fillAmount, _staminaGaugeFrontRect.sizeDelta.y);
 
             //スタミナゲージの色変更
-            Renderer renderer = _staminaGaugeFrontImage.GetComponent<Renderer>();
+            Image image = _staminaGaugeFrontImage.GetComponent<Image>();
             if (0 <= fillAmount && fillAmount <= 0.1)
             {
-                renderer.material.DOColor(Color.red, 0f);
+                image.DOColor(Color.red, 0f);
             }
             else if (0.1 < fillAmount && fillAmount <= 0.5)
             {
-                renderer.material.DOColor(new Color(1.0f, 0.5f, 0.0f), 0f);
+                image.DOColor(new Color(1.0f, 0.5f, 0.0f), 0f);
             }
             else
             {
-                renderer.material.DOColor(Color.white, 0f);
+                image.DOColor(Color.white, 0f);
             }
         }
 
