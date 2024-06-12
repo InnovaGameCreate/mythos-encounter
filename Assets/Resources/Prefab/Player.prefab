@@ -28,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2217506152449124184}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.62, z: 0.15}
+  m_LocalPosition: {x: 0, y: 2.5764, z: 0.2416}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -172,6 +172,7 @@ GameObject:
   - component: {fileID: 5250157038054447586}
   - component: {fileID: 7668576711120778884}
   - component: {fileID: 7624726815507419214}
+  - component: {fileID: 3828261050524690517}
   m_Layer: 3
   m_Name: Player
   m_TagString: Player
@@ -359,6 +360,7 @@ MonoBehaviour:
   _myCameraMove: {fileID: 2943275014606559026}
   _camera: {fileID: 2217506152449124184}
   isCurcleSetting: 1
+  _animator: {fileID: 3828261050524690517}
   moveSpeed: 0
   _recoverStamina: 20
   _recoverStaminaOnlyTired: 60
@@ -516,6 +518,27 @@ MonoBehaviour:
   isCanCreate: 0
   _leftPositoon: {x: 0, y: 0, z: 0}
   _rightPosition: {x: 0, y: 0, z: 0}
+--- !u!95 &3828261050524690517
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2481875681873542124}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: b8a7488d12adc39498433d60811eab1a, type: 3}
+  m_Controller: {fileID: 9100000, guid: c8881dee10db831459b0c85db7c12280, type: 2}
+  m_CullingMode: 1
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 1
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3845817263225331235
 GameObject:
   m_ObjectHideFlags: 0
@@ -619,6 +642,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Visual
       objectReference: {fileID: 0}
+    - target: {fileID: 8340921455869514200, guid: 3337803862b6b624490717c3325d5ace, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8340921455869514200, guid: 3337803862b6b624490717c3325d5ace, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: c8881dee10db831459b0c85db7c12280, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
