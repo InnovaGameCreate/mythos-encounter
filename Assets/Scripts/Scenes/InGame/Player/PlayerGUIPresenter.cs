@@ -267,6 +267,21 @@ namespace Scenes.Ingame.Player
             //スタミナの値を0～1の値に補正
             float fillAmount = (float)value / _playerStatuses[_myPlayerID].stamina_max;
             _staminaGaugeFrontRect.sizeDelta = new Vector2(_defaulStaminaGaugetWidth * fillAmount, _staminaGaugeFrontRect.sizeDelta.y);
+
+            //スタミナゲージの色変更
+            Image image = _staminaGaugeFrontImage.GetComponent<Image>();
+            if (0 <= fillAmount && fillAmount <= 0.1)
+            {
+                image.DOColor(Color.red, 0f);
+            }
+            else if (0.1 < fillAmount && fillAmount <= 0.5)
+            {
+                image.DOColor(new Color(1.0f, 0.5f, 0.0f), 0f);
+            }
+            else
+            {
+                image.DOColor(Color.white, 0f);
+            }
         }
 
 
