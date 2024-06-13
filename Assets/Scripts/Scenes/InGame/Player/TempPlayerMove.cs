@@ -20,6 +20,9 @@ namespace Scenes.Ingame.Player
         [SerializeField] private bool isCurcleSetting;
         private Vector3 _nowCameraAngle;
 
+        [Header("アニメーション関係")]
+        [SerializeField]private Animator _animator;
+
         [SerializeField] private float moveSpeed;
         [Tooltip("スタミナの回復量(per 1sec)")][SerializeField] private int _recoverStamina;
         [Tooltip("スタミナの回復量[スタミナ切れ時](per 1sec)")][SerializeField] private int _recoverStaminaOnlyTired;
@@ -205,7 +208,9 @@ namespace Scenes.Ingame.Player
                     break;
                 default:
                     break;
-            }            
+            }
+
+            _animator.SetFloat("MovementSpeed", _characterController.velocity.magnitude);
         }
 
         private IEnumerator DecreaseStamina()

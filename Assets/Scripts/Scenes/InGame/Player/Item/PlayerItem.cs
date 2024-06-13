@@ -28,6 +28,7 @@ namespace Scenes.Ingame.Player
         //Ray関連
         [SerializeField] Camera _mainCamera;//playerの目線を担うカメラ
         [SerializeField] private float _getItemRange;//アイテムを入手できる距離
+        private bool _debugMode = false;
 
         //アイテムスロット（UI）の操作関連
         private float scrollValue;
@@ -74,6 +75,11 @@ namespace Scenes.Ingame.Player
                     {
                         if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, _getItemRange, layerMask))//設定した距離にあるアイテムを認知
                         {
+                            if (_debugMode)
+                            {
+                                Debug.DrawRay(_mainCamera.transform.position, _mainCamera.transform.forward, Color.black);
+                            }
+
                             //Rayに当たったゲームオブジェクトを格納(壁に当たった場合は別処理)
                             if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
                             {
