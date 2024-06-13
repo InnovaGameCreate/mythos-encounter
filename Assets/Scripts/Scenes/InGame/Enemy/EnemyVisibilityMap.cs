@@ -30,6 +30,15 @@ namespace Scenes.Ingame.Enemy
                 range = sRange;
             }
         }
+        
+
+        //#############################
+        ///ここをいじる。
+        ///まず第一に見れるエリアのデータのリストを2つにする。片方は非同期型で視界データを再計算してをチェンジするのに利用する（foreachしていない場所で再計算のデータを実際に使うデータへと放り込む）
+        ///次に見た回数を別の場所に保存する。これはこのリストをシャローコピーで別別の敵で共有して上手く使うためである。
+        ///つまるところドアの変化におる視界の変化はただ一つのスクリプトの実体においてのみ演算されて、うまくいかせるのである。
+        ///
+        //#############################
 
         /// <summary>
         /// マス目が何度見られたかをbyteで記録し、このマス目から視線の通るマス目をListで記録している
@@ -37,7 +46,7 @@ namespace Scenes.Ingame.Enemy
         public struct VisivilityArea
         {
             public byte watchNum;//このエリアを見た回数
-            public List<DoubleByteAndMonoFloat> canVisivleAreaPosition;
+            public List<DoubleByteAndMonoFloat> canVisivleAreaPosition;//このエリアから見ることのできるエリア
             public VisivilityArea(byte sWatchNum)
             {
                 watchNum = sWatchNum;
