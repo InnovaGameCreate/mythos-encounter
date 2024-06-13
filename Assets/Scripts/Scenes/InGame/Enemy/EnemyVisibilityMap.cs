@@ -23,16 +23,11 @@ namespace Scenes.Ingame.Enemy
             public byte z;
             public float range;
 
-            public List<Door> needOpenDoor;
-            public List<Door> needCloseDoor;
-
             public DoubleByteAndMonoFloat(byte sX, byte sZ, float sRange)
             {
                 x = sX;
                 z = sZ;
                 range = sRange;
-                needOpenDoor = new List<Door>();
-                needCloseDoor = new List<Door>();
             }
         }
 
