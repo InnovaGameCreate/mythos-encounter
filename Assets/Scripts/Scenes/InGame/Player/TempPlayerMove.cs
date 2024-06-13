@@ -19,6 +19,7 @@ namespace Scenes.Ingame.Player
         [SerializeField] private GameObject _camera;
         [SerializeField] private bool isCurcleSetting;
         private Vector3 _nowCameraAngle;
+        public Vector3 NowCameraAngle { get { return _nowCameraAngle; } }
 
         [SerializeField] private float moveSpeed;
         [Tooltip("スタミナの回復量(per 1sec)")][SerializeField] private int _recoverStamina;
