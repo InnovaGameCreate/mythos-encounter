@@ -11,6 +11,7 @@ namespace Scenes.Ingame.Enemy
     public class EnemyVisibilityMap : MonoBehaviour
     {
         public List<List<VisivilityArea>> visivilityAreaGrid;//Unityの座標系を優先、一個目がx軸二個目がy軸のイメージ左下が[0][0]左上が[0][max]
+        public List<List<byte>> areaWatchNumGrid;
         public float maxVisivilityRange;//この距離を超えているエリアは見えることはないものとする
         public bool debugMode;
         public float gridRange;
@@ -41,20 +42,15 @@ namespace Scenes.Ingame.Enemy
         //#############################
 
         /// <summary>
-        /// マス目が何度見られたかをbyteで記録し、このマス目から視線の通るマス目をListで記録している
+        /// このマス目から視線の通るマス目をListで記録している
         /// </summary>
         public struct VisivilityArea
         {
-            public byte watchNum;//このエリアを見た回数
+            //public byte watchNum;//このエリアを見た回数
             public List<DoubleByteAndMonoFloat> canVisivleAreaPosition;//このエリアから見ることのできるエリア
-            public VisivilityArea(byte sWatchNum)
+            public VisivilityArea( List<DoubleByteAndMonoFloat> sDoubleByteAndFloat)
             {
-                watchNum = sWatchNum;
-                canVisivleAreaPosition = new List<DoubleByteAndMonoFloat>();
-            }
-            public VisivilityArea(byte sWatchNum, List<DoubleByteAndMonoFloat> sDoubleByteAndFloat)
-            {
-                watchNum = sWatchNum;
+                //watchNum = sWatchNum;
                 canVisivleAreaPosition = new List<DoubleByteAndMonoFloat>(sDoubleByteAndFloat);
             }
         }
@@ -85,14 +81,31 @@ namespace Scenes.Ingame.Enemy
                 List<VisivilityArea> item = new List<VisivilityArea>();
                 for (byte j = 0; j < z; j++)
                 {
-                    item.Add(new VisivilityArea(0));
+                    item.Add(new VisivilityArea());
 
                     if (debugMode) Debug.DrawLine(setCenterPosition + new Vector3(i, 0, j) * range, setCenterPosition + new Vector3(i, 0, j) * range + new Vector3(0, 10, 0), Color.yellow, 10);//グリッドの位置を表示
                 }
                 visivilityAreaGrid.Add(item);
             }
+
+            areaWatchNumGrid = new List<List<byte>>();
+            //見た回数に関する配列の要素を作成
+            for (byte i = 0; i < x; i++)
+            { //配列の要素を作成
+                List<byte> item = new List<byte>();
+                for (byte j = 0; j < z; j++)
+                {
+                    item.Add(0);
+                }
+                areaWatchNumGrid.Add(item);
+            }
+
+
             if (debugMode) Debug.Log("firstSize(x)" + visivilityAreaGrid.Count());
             if (debugMode) Debug.Log("SecondSize(z)" + visivilityAreaGrid[0].Count());
+
+            if (debugMode) Debug.Log("watchNumFirstSize(x)" + areaWatchNumGrid.Count());
+            if (debugMode) Debug.Log("watchNumSecondSize(z)" + areaWatchNumGrid[0].Count());
         }
 
         /// <summary>
@@ -168,6 +181,10 @@ namespace Scenes.Ingame.Enemy
             {
                 copy.visivilityAreaGrid.Add(new List<VisivilityArea>(item));
             }
+            foreach (List<byte> item in areaWatchNumGrid) { 
+                copy.areaWatchNumGrid.Add(new List<byte>(item));
+            }
+
             copy.gridRange = gridRange;
             copy.maxVisivilityRange = maxVisivilityRange;
             copy.debugMode = debugMode;
@@ -201,7 +218,7 @@ namespace Scenes.Ingame.Enemy
             {
                 for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
                 {
-                    if (smallestWatchNum > visivilityAreaGrid[x][z].watchNum) { smallestWatchNum = visivilityAreaGrid[x][z].watchNum; }
+                    if (smallestWatchNum > areaWatchNumGrid[x][z]) { smallestWatchNum = areaWatchNumGrid[x][z]; }
                 }
             }
 
@@ -210,13 +227,12 @@ namespace Scenes.Ingame.Enemy
             {
                 for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
                 {
-                    if (visivilityAreaGrid[x][z].watchNum == smallestWatchNum)
+                    if (areaWatchNumGrid[x][z] == smallestWatchNum)
                     { //最も小さい場合
                         nextPositionX.Add(x);
                         nextPositionZ.Add(z);
                     }
-                    VisivilityArea newVisivilityArea = new VisivilityArea((byte)(visivilityAreaGrid[x][z].watchNum - smallestWatchNum), visivilityAreaGrid[x][z].canVisivleAreaPosition); ;
-                    visivilityAreaGrid[x][z] = newVisivilityArea;
+                    areaWatchNumGrid[x][z] = (byte)(areaWatchNumGrid[x][z] - 1);
                 }
             }
             //最も近い要素を考える
@@ -262,12 +278,13 @@ namespace Scenes.Ingame.Enemy
                     {
                         if (item.range < visivilityRange)
                         { //見える距離
+
                             //見た回数を足す。ただし構造体をListのFor文の中でいじれないのでコピーしていじって書き換える。オーバーフローしない場合
-                            if ((byte)(visivilityAreaGrid[item.x][item.z].watchNum) < byte.MaxValue)
+                            if (areaWatchNumGrid[item.x][item.z]< byte.MaxValue)
                             {
-                                newVisivilityArea = new VisivilityArea((byte)(visivilityAreaGrid[item.x][item.z].watchNum + 1), visivilityAreaGrid[item.x][item.z].canVisivleAreaPosition);
-                                visivilityAreaGrid[item.x][item.z] = newVisivilityArea;
+                                areaWatchNumGrid[item.x][item.z] = (byte)(areaWatchNumGrid[item.x][item.z] + 1);
                             }
+
                             if (debugMode)
                             {//見たエリアを線で表示
                                 Debug.DrawLine(centerPosition + new Vector3(myPositionx, 0, myPositionz) * gridRange, centerPosition + new Vector3(item.x, 0, item.z) * gridRange, Color.green, 1f);
@@ -275,10 +292,9 @@ namespace Scenes.Ingame.Enemy
                         }
                     }
                     //自分が今いる場所に見た回数を足す。ただし構造体をListのFor文の中でいじれないのでコピーしていじって書き換える
-                    if ((byte)(visivilityAreaGrid[myPositionx][myPositionz].watchNum) < byte.MaxValue)
+                    if (areaWatchNumGrid[myPositionx][myPositionz] < byte.MaxValue)
                     {
-                        newVisivilityArea = new VisivilityArea((byte)(visivilityAreaGrid[myPositionx][myPositionz].watchNum + 1), visivilityAreaGrid[myPositionx][myPositionz].canVisivleAreaPosition);
-                        visivilityAreaGrid[myPositionx][myPositionz] = newVisivilityArea;
+                        areaWatchNumGrid[myPositionx][myPositionz] = (byte)(areaWatchNumGrid[myPositionx][myPositionz] + 1);
                     }
                 }
                 else
@@ -299,7 +315,7 @@ namespace Scenes.Ingame.Enemy
                     for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
                     {
                         Color drawColor;
-                        if (visivilityAreaGrid[x][z].watchNum < 25) { drawColor = new Color32((byte)(10 * visivilityAreaGrid[x][z].watchNum), 0, (byte)(byte.MaxValue - (10 * visivilityAreaGrid[x][z].watchNum)), byte.MaxValue); }
+                        if (areaWatchNumGrid[x][z] < 25) { drawColor = new Color32((byte)(10 * areaWatchNumGrid[x][z]), 0, (byte)(byte.MaxValue - (10 * areaWatchNumGrid[x][z])), byte.MaxValue); }
                         else
                         {
                             drawColor = Color.red;
@@ -333,8 +349,7 @@ namespace Scenes.Ingame.Enemy
                             if (resetRange > Vector3.Magnitude(position - (centerPosition + new Vector3(x, 0, z) * gridRange)))
                             {
                                 //対象内の場合見た回数を0とする
-                                newVisivilityArea = new VisivilityArea((byte)(0), visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                                visivilityAreaGrid[x][z] = newVisivilityArea;
+                                areaWatchNumGrid[x][z] = 0;
                                 if (debugMode) { DrawCross((centerPosition + new Vector3(x, 0, z) * gridRange), 5, Color.magenta, 2f); }
 
                             }
@@ -343,8 +358,7 @@ namespace Scenes.Ingame.Enemy
                                 //対象でない場合見た回数を1追加する(何度も音を聞いた場合に最も新しい音を対象とするため)
                                 if (periodic)
                                 {//細かく走りまくることで音のしていないエリアが極端に捜索先にならないようにするグリッチの対策
-                                    newVisivilityArea = new VisivilityArea((byte)(visivilityAreaGrid[x][z].watchNum + 1), visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                                    visivilityAreaGrid[x][z] = newVisivilityArea;
+                                    areaWatchNumGrid[x][z] = (byte)(areaWatchNumGrid[x][z] + 1);
                                 }
                             }
                         }
@@ -469,28 +483,24 @@ namespace Scenes.Ingame.Enemy
                 {
                     if (plus)
                     {
-                        if ((byte)(visivilityAreaGrid[x][z].watchNum) < byte.MaxValue - change)
+                        if ((byte)(areaWatchNumGrid[x][z]) < byte.MaxValue - change)
                         {
-                            newVisivilityArea = new VisivilityArea((byte)(visivilityAreaGrid[x][z].watchNum + change), visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                            visivilityAreaGrid[x][z] = newVisivilityArea;
+                            areaWatchNumGrid[x][z] = (byte)(areaWatchNumGrid[x][z] + change);
                         }
                         else
                         {
-                            newVisivilityArea = new VisivilityArea(byte.MaxValue, visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                            visivilityAreaGrid[x][z] = newVisivilityArea;
+                            areaWatchNumGrid[x][z] = byte.MaxValue;
                         }
                     }
                     else
                     {
-                        if ((byte)(visivilityAreaGrid[x][z].watchNum) < byte.MinValue + change)
+                        if ((byte)(areaWatchNumGrid[x][z]) < byte.MinValue + change)
                         {
-                            newVisivilityArea = new VisivilityArea((byte)(visivilityAreaGrid[x][z].watchNum - change), visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                            visivilityAreaGrid[x][z] = newVisivilityArea;
+                            areaWatchNumGrid[x][z] = (byte)(areaWatchNumGrid[x][z] - change);
                         }
                         else
                         {
-                            newVisivilityArea = new VisivilityArea(byte.MinValue, visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                            visivilityAreaGrid[x][z] = newVisivilityArea;
+                            areaWatchNumGrid[x][z] = byte.MinValue;
                         }
 
                     }
@@ -511,8 +521,7 @@ namespace Scenes.Ingame.Enemy
             {
                 for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
                 {
-                    newVisivilityArea = new VisivilityArea(num, visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                    visivilityAreaGrid[x][z] = newVisivilityArea;
+                    areaWatchNumGrid[x][z] = num;
                 }
             }
         }
@@ -536,8 +545,7 @@ namespace Scenes.Ingame.Enemy
             byte gridPositionX, gridPositionZ;
             gridPositionX = (byte)Mathf.FloorToInt((float)(position.x - centerPosition.x + 0.5 * gridRange) / gridRange);
             gridPositionZ = (byte)Mathf.FloorToInt((float)(position.z - centerPosition.z + 0.5 * gridRange) / gridRange);
-            newVisivilityArea = new VisivilityArea(num, visivilityAreaGrid[gridPositionX][gridPositionZ].canVisivleAreaPosition);
-            visivilityAreaGrid[gridPositionX][gridPositionZ] = newVisivilityArea;
+            areaWatchNumGrid[gridPositionX][gridPositionZ] = num;
         }
 
 
@@ -563,8 +571,7 @@ namespace Scenes.Ingame.Enemy
                             {
 
                                 //対象内の場合見た回数を0とする
-                                newVisivilityArea = new VisivilityArea((byte)(visivilityAreaGrid[x][z].watchNum + 1), visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                                visivilityAreaGrid[x][z] = newVisivilityArea;
+                                areaWatchNumGrid[x][z] = (byte)(areaWatchNumGrid[x][z] + 1); 
                                 if (debugMode) { DrawCross((centerPosition + new Vector3(x, 0, z) * gridRange), 5, Color.magenta, 2f); }
 
                             }
