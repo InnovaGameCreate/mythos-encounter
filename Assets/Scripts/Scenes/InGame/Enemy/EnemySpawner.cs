@@ -66,7 +66,7 @@ namespace Scenes.Ingame.Enemy
                 _enemyVisibilityMap.MapScan();
 
                 //ƒeƒXƒg‚Æ‚µ‚Ä‚±‚±‚ÅEnemy§ì‚ğˆË—Š‚µ‚Ä‚¢‚é
-                EnemySpawn(EnemyName.TestEnemy, new Vector3(-10, _centerPosition.y + 3, -10));
+                EnemySpawn(_enemyName, new Vector3(-10, _centerPosition.y + 3, -10));
 
             }
             else {
