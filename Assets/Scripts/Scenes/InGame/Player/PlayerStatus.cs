@@ -58,7 +58,8 @@ namespace Scenes.Ingame.Player
         public IObservable<float> OnWalkVolumeChange { get { return _walkVolume; } }//プレイヤーの歩く音が届く距離が変化した場合にイベントが発行
         public IObservable<float> OnRunVolumeChange { get { return _runVolume; } }//プレイヤーの走る音が届く距離が変化した場合にイベントが発行
 
-        public IObservable<Unit> OnEnemyAttackedMe { get { return _enemyAttackedMe; } }//敵から攻撃を受けた際にイベントが発行
+        public IObservable<Unit> OnEnemyAttackedMe { get { return _enemyAttackedMe; } }//敵から攻撃を受けた際のイベントを登録させる
+        public IObserver<Unit> OnEnemyAttackedMeEvent { get { return _enemyAttackedMe; } }//敵から攻撃を受けた際にイベントが発行
 
         //一部情報の開示
         public int playerID { get { return _playerID; } }
