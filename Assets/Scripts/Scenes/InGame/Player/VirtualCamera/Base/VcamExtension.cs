@@ -4,12 +4,13 @@ using UnityEngine;
 using Cinemachine;
 using Scenes.Ingame.Player;
 
-
-public class CinemachineExtensionsSneak : CinemachineExtension 
+public class VcamExtension : CinemachineExtension 
 {
-    private GameObject _player;
-    TempPlayerMove _tempPlayerMove;
-    PlayerStatus _playerStatus;
+    static private GameObject _player;   
+    static private TempPlayerMove _tempPlayerMove;
+    static private PlayerStatus _playerStatus;
+    static public GameObject Player { get { return _player; } }
+    static public PlayerStatus PlayerStatus { get {  return _playerStatus; } }
 
     private void Start()
     {
@@ -17,34 +18,22 @@ public class CinemachineExtensionsSneak : CinemachineExtension
         _tempPlayerMove = _player.GetComponent<TempPlayerMove>();
         _playerStatus = _player.GetComponent<PlayerStatus>();
     }
-
+    /// <summary>
+    /// ヴァーチャルカメラの自動計算処理の中に自分の好きなコマンドを追加できるメソッド
+    /// 
+    /// </summary>
+    /// <param name="vcam"></param>
+    /// <param name="stage"></param>
+    /// <param name="state"></param>
+    /// <param name="deltaTime"></param>
     protected override void PostPipelineStageCallback(CinemachineVirtualCameraBase vcam, CinemachineCore.Stage stage, ref CameraState state, float deltaTime)
     {
-        if (_player != null)
-        {
-            if (stage == CinemachineCore.Stage.Aim)
-            {
+        if (_player != null) {
+            if (stage == CinemachineCore.Stage.Aim) {        
                 var eulerAngles = state.RawOrientation.eulerAngles;
                 eulerAngles.x = _tempPlayerMove.NowCameraAngle.x;
                 state.RawOrientation = Quaternion.Euler(eulerAngles);
             }
-            else if (stage == CinemachineCore.Stage.Finalize)
-            {
-
-                if (_playerStatus.nowPlayerActionState == PlayerActionState.Sneak)
-                {
-                    vcam.m_Priority = 10;
-
-                }
-                else
-                {
-                    vcam.m_Priority = 0;
-                }
-            }
- 
         }
-        
-
     }
-
 }

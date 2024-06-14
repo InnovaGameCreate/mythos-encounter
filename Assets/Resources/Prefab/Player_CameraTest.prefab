@@ -569,7 +569,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5847435930969654424}
   - component: {fileID: 3419547310027917924}
-  - component: {fileID: 3565464024910605099}
+  - component: {fileID: 7877437023900516260}
   m_Layer: 0
   m_Name: Virtual Camera_Sneak
   m_TagString: Untagged
@@ -632,7 +632,7 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 1033810947941733785}
---- !u!114 &3565464024910605099
+--- !u!114 &7877437023900516260
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -641,7 +641,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2549213173307523570}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 44ec984e1c3e7e74fbd12ab2792fc424, type: 3}
+  m_Script: {fileID: 11500000, guid: 57512bdd6b4bf714696ba4144ac5e40e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3845817263225331235
@@ -883,7 +883,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3094965768256747217}
   - component: {fileID: 7251772328709175083}
-  - component: {fileID: 4116460730729053858}
+  - component: {fileID: 6227761570482964968}
   m_Layer: 0
   m_Name: Virtual Camera_Idle
   m_TagString: Untagged
@@ -946,7 +946,7 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 3644373932373216606}
---- !u!114 &4116460730729053858
+--- !u!114 &6227761570482964968
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -955,7 +955,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5267165500439744354}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cec41661c1fb61d45a665aace855ab92, type: 3}
+  m_Script: {fileID: 11500000, guid: d49de4acc5337a54fb8b48efa5b4ffa7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6190772555763418863
@@ -1152,7 +1152,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7010928711956821919}
   - component: {fileID: 8728118243518579173}
-  - component: {fileID: 1881814008154409119}
+  - component: {fileID: 7116962813612179853}
   m_Layer: 0
   m_Name: Virtual Camera_Walk
   m_TagString: Untagged
@@ -1215,7 +1215,7 @@ MonoBehaviour:
         m_Calls: []
   m_LegacyBlendHint: 0
   m_ComponentOwner: {fileID: 5244309053086787342}
---- !u!114 &1881814008154409119
+--- !u!114 &7116962813612179853
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1224,7 +1224,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7845582878029475925}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67befd408fd3a2b488ce50465dc693fe, type: 3}
+  m_Script: {fileID: 11500000, guid: d954849242567194a8197e79cb0c4455, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8571642183222114100
