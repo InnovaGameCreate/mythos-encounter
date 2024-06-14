@@ -56,4 +56,5 @@ Request Changeを貰ったら内容に沿って修正を行なってください
 ### モデル関係
 - Decrepit Dungeon LITE
 - Adventure Character
+- Medieval Weapons PBR Pack
   
