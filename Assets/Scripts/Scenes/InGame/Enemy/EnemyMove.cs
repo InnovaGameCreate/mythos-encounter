@@ -15,10 +15,11 @@ namespace Scenes.Ingame.Enemy
     {
         public bool endMove;
         private NavMeshAgent _myAgent;
+        private Animator _animator;
         [SerializeField] EnemyStatus _enemyStatus;
 
         [SerializeField] private bool _staminaOver = false;
-
+        [SerializeField] GameObject _visual;
 
 
         private float _stuminaChangeCount = 0;//スタミナを毎秒減らすのに使用
@@ -31,6 +32,7 @@ namespace Scenes.Ingame.Enemy
         /// 初期化処理外部から呼び出す
         /// </summary>
         public void Init() {
+            _animator = _visual.GetComponent<Animator>();
             _myAgent = GetComponent<NavMeshAgent>();
             if (_myAgent == null) Debug.LogError("NavMeshAgentが認識できません");
             _myAgent.destination = this.transform.position;
@@ -50,6 +52,7 @@ namespace Scenes.Ingame.Enemy
                 switch (_enemyStatus.ReturnEnemyState)
                 {
                     case EnemyState.Patorolling:
+                        _animator.SetTrigger("isPatrolling");
                         _myAgent.speed = _enemyStatus.ReturnPatolloringSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
                         { //スタミナが削れていたら
@@ -61,6 +64,7 @@ namespace Scenes.Ingame.Enemy
                         }                       
                         break;
                     case EnemyState.Searching:
+                        _animator.SetTrigger("isSearching");
                         _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
                         { //スタミナが削れていたら
@@ -72,6 +76,7 @@ namespace Scenes.Ingame.Enemy
                         }
                         break;
                     case EnemyState.Chese:
+                        _animator.SetTrigger("isChase");
                         //スタミナ周りの処理をする
                         if (_staminaOver)
                         { //スタミナが切れ切ったかどうか
