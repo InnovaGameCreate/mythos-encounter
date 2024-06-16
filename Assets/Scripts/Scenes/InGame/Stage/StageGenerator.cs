@@ -836,7 +836,7 @@ namespace Scenes.Ingame.Stage
                             RoomPlotId(RoomType.room2x2Stair, new Vector2(x, y), floor1fData);
                             RoomPlotId(RoomType.room2x2Stair, new Vector2(x, y), floor2fData);
                             _stairPosition.Add(ToVector2(x + 1, y + 1));
-                            Debug.Log("2x2階段の部屋に適した場所あり");
+                            if (viewDebugLog) Debug.Log("2x2階段の部屋に適した場所あり");
                         }
                     }
                     //3x3のstairRoomについて

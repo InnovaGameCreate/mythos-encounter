@@ -48,6 +48,9 @@ namespace Scenes.Ingame.Player
         [SerializeField] private Image[] _insanityIcons;//発狂アイコン(5個)
         [SerializeField] private Sprite[] _insanityIconSprites;//発狂アイコンの元画像.EyeParalyze,BodyParalyze,IncreasePulsation,Scream,Hallucination の順番で
 
+        [Header("呪文詠唱関係")]
+        [SerializeField] private Canvas _castGauge;
+        [SerializeField] private Image _castGaugeImage;
         private int _myPlayerID = 0;
 
         //スタミナゲージ関連のフィールド
@@ -56,6 +59,7 @@ namespace Scenes.Ingame.Player
         // Start is called before the first frame update
         void Awake()
         {
+            _castGauge.enabled = false;
             _defaulStaminaGaugetWidth = _staminaGaugeFrontRect.sizeDelta.x;
 
             //プレイヤーの作成が終わり、配列のソートが終了したら叩かれる
@@ -103,6 +107,18 @@ namespace Scenes.Ingame.Player
                              }
                                 
                          }).AddTo(this);
+
+
+                    _playerStatuses[0].OnCastEvente
+                    .Subscribe(time =>
+                    {
+                        _castGauge.enabled = true;
+                        DOTween.Sequence()
+                            .Append(_castGaugeImage.DOFillAmount(1, time))
+                            .SetDelay(0.5f)
+                            .Append(_castGaugeImage.DOFillAmount(0, 0))
+                            .OnComplete(() => _castGauge.enabled = false);
+                    }).AddTo(this);
 
                     //アイテム関係の処理の追加
                     //PlayerItemスクリプトの取得.マルチ実装のときはinputAuthorityを持つキャラクターのみに指定

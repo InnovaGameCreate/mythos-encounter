@@ -41,6 +41,8 @@ namespace Scenes.Ingame.Player
         [SerializeField] private FloatReactiveProperty _walkVolume = new FloatReactiveProperty();//しゃがみ時の音量
         [SerializeField] private FloatReactiveProperty _runVolume = new FloatReactiveProperty();//しゃがみ時の音量
 
+        private Subject<float> castEvent = new Subject<float>();//呪文の詠唱時間を発行
+
         //その他のSubject
         private Subject<Unit> _enemyAttackedMe = new Subject<Unit>();//敵から攻撃を食らったときのイベント
 
@@ -59,6 +61,7 @@ namespace Scenes.Ingame.Player
         public IObservable<float> OnRunVolumeChange { get { return _runVolume; } }//プレイヤーの走る音が届く距離が変化した場合にイベントが発行
 
         public IObservable<Unit> OnEnemyAttackedMe { get { return _enemyAttackedMe; } }//敵から攻撃を受けた際にイベントが発行
+        public IObservable<float> OnCastEvente { get { return castEvent; } }//敵から攻撃を受けた際にイベントが発行
 
         //一部情報の開示
         public int playerID { get { return _playerID; } }
@@ -81,6 +84,7 @@ namespace Scenes.Ingame.Player
         public int bleedingDamage = 1;//出血時に受けるダメージ
         private bool _isUseItem = false;
         private bool _isUseMagic = false;
+        private bool _isUseEscapePoint = false;
         private bool _isPulsationBleeding = false;
 
         private void Init()
@@ -192,7 +196,7 @@ namespace Scenes.Ingame.Player
         /// </summary>
         public void ChangeSpeed()
         {
-            _speed.Value = (int)(_speedBase * (_isUseItem ? 0.5f : 1) * (_isUseMagic ? 0.5f : 1));
+            _speed.Value = (int)(_speedBase * (_isUseItem ? 0.5f : 1) * (_isUseMagic ? 0.5f : 1) * (_isUseEscapePoint ? 0.5f : 1));
         }
 
         /// <summary>
@@ -211,6 +215,18 @@ namespace Scenes.Ingame.Player
         public void UseMagic(bool value)
         {
             _isUseMagic = value;
+        }
+        /// <summary>
+        /// 呪文を唱えているか管理するための関数
+        /// </summary>
+        /// <param name="value"></param>
+        public void UseEscapePoint(bool value,float time = 0)
+        {
+            if (value)
+            {
+                castEvent.OnNext(time);
+            }
+            _isUseEscapePoint = value;
         }
 
         /// <summary>

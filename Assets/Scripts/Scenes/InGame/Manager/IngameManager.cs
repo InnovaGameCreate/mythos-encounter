@@ -37,6 +37,9 @@ namespace Scenes.Ingame.Manager
         private ReactiveProperty<int> _getEscapeItemCount = new ReactiveProperty<int>();
         public IObservable<int> OnEscapeCount => _getEscapeItemCount; //現在取得している脱出アイテムの数
 
+        public int GetEscapeItemCurrentCount { get => _getEscapeItemCount.Value; }
+        public int GetEscapeItemMaxCount { get => _escapeItemCount; }
+
         void Awake()
         {
             Instance = this;
