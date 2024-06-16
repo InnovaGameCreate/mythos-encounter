@@ -12,10 +12,15 @@ namespace Scenes.Ingame.Player
             
         }
 
+        public override void OnThrow()
+        {
+            
+        }
+
         public override void Effect()
         {
             ownerPlayerStatus.ChangeHealth(100, "Heal");
-            ownerPlayerItem.ThrowItem(ownerPlayerItem.nowIndex);
+            ownerPlayerItem.ConsumeItem(ownerPlayerItem.nowIndex);
         }
 
     }

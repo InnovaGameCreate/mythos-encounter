@@ -23,6 +23,11 @@ namespace Scenes.Ingame.Player
         public abstract void OnPickUp();
 
         /// <summary>
+        /// アイテムを捨てるときに実行される処理を記述
+        /// </summary>
+        public abstract void OnThrow();
+
+        /// <summary>
         /// アイテムの効果を実装する関数
         /// アイテムを使い終わったら「ownerPlayerItem.ThrowItem(ownerPlayerItem.nowIndex);」を記述すること
         /// </summary>

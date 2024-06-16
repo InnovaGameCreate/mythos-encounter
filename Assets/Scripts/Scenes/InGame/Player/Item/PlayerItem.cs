@@ -156,9 +156,12 @@ namespace Scenes.Ingame.Player
                     .Where(_ => _itemSlot[_nowIndex.Value].myItemData != null && Input.GetKeyDown(KeyCode.H) && _isCanUseItem)
                     .Subscribe(_ =>
                     {
+                        //アイテム捨てるときの処理
+                        nowBringItem.GetComponent<ItemEffect>().OnThrow();
+
+                        //アイテムを近くに投げ捨てる
                         var rb = nowBringItem.GetComponent<Rigidbody>();
                         nowBringItem.GetComponent<Collider>().enabled = true;
-                        //アイテムを近くに投げ捨てる
                         nowBringItem.transform.parent = null;
                         rb.useGravity = true;
                         rb.isKinematic = false;
@@ -250,10 +253,10 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// アイテムを捨てる・使い切るときに呼び出す。Listの変更（初期化）に使う
+        /// アイテムを使い切るときに呼び出す。Listの変更（初期化）に使う
         /// </summary>
         /// <param name="index">変更したいリストの順番</param>
-        public void ThrowItem(int index)
+        public void ConsumeItem(int index)
         {
             if(nowBringItem != null)
                 Destroy(nowBringItem);
