@@ -51,9 +51,9 @@ namespace Scenes.Ingame.Enemy
                 _stuminaChangeCount -= 1;
                 switch (_enemyStatus.ReturnEnemyState)
                 {
-                    case EnemyState.Patorolling:
+                    case EnemyState.Patrolling:
                         _animator.SetTrigger("isPatrolling");
-                        _myAgent.speed = _enemyStatus.ReturnPatolloringSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
+                        _myAgent.speed = _enemyStatus.ReturnPatrollingSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
                         { //スタミナが削れていたら
                             _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
@@ -75,7 +75,7 @@ namespace Scenes.Ingame.Enemy
                             _staminaOver = false;
                         }
                         break;
-                    case EnemyState.Chese:
+                    case EnemyState.Chase:
                         _animator.SetTrigger("isChase");
                         //スタミナ周りの処理をする
                         if (_staminaOver)

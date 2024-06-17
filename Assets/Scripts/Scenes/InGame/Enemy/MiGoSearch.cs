@@ -17,7 +17,7 @@ namespace Scenes.Ingame.Enemy
                     Debug.LogError("マップ情報がありません、_myVisivilityMapを作成してください");
                     return;
                 }
-                if (_enemyStatus.ReturnEnemyState == EnemyState.Patorolling || _enemyStatus.ReturnEnemyState == EnemyState.Searching)
+                if (_enemyStatus.ReturnEnemyState == EnemyState.Patrolling || _enemyStatus.ReturnEnemyState == EnemyState.Searching)
                 { //巡回状態または捜索状態の場合
                     //定期的に視界情報を調べる
                     _checkTimeCount += Time.deltaTime;
@@ -45,7 +45,7 @@ namespace Scenes.Ingame.Enemy
                         if (CheckCanPlayerVisivlleCheck())
                         { //プレイヤーの姿が見えるか調べる
                             _myEneyMove.SetMovePosition(_player.transform.position);
-                            _enemyStatus.SetEnemyState(EnemyState.Chese);
+                            _enemyStatus.SetEnemyState(EnemyState.Chase);
                         }
                         else
                         {
@@ -67,7 +67,7 @@ namespace Scenes.Ingame.Enemy
                                 if (_myEneyMove.endMove)//移動が終わっている場合
                                 {
                                     //痕跡のあった場所まで来たが何もいなかった場合ここが実行されるのでStatusを書き換える
-                                    _enemyStatus.SetEnemyState(EnemyState.Patorolling);
+                                    _enemyStatus.SetEnemyState(EnemyState.Patrolling);
                                 }
                             }
                         }
