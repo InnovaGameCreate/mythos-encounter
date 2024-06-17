@@ -15,14 +15,12 @@ namespace Scenes.Ingame.Enemy
     {
         public bool endMove;
         private NavMeshAgent _myAgent;
-        private Animator _animator;
         [SerializeField] EnemyStatus _enemyStatus;
 
         [SerializeField] private bool _staminaOver = false;
-        [SerializeField] GameObject _visual;
 
 
-        private float _stuminaChangeCount = 0;//スタミナを毎秒減らすのに使用
+        private float _staminaChangeCount = 0;//スタミナを毎秒減らすのに使用
        
 
 
@@ -32,7 +30,6 @@ namespace Scenes.Ingame.Enemy
         /// 初期化処理外部から呼び出す
         /// </summary>
         public void Init() {
-            _animator = _visual.GetComponent<Animator>();
             _myAgent = GetComponent<NavMeshAgent>();
             if (_myAgent == null) Debug.LogError("NavMeshAgentが認識できません");
             _myAgent.destination = this.transform.position;
@@ -44,15 +41,14 @@ namespace Scenes.Ingame.Enemy
         {
             if (Vector3.Magnitude(this.transform.position - _myAgent.destination) < 1.5f) { endMove = true; } else { endMove = false; }
 
-            _stuminaChangeCount += Time.deltaTime;
-            if (_stuminaChangeCount > 1) 
+            _staminaChangeCount += Time.deltaTime;
+            if (_staminaChangeCount > 1) 
             {//毎秒処理
                 Debug.Log(_enemyStatus.Stamina);
-                _stuminaChangeCount -= 1;
+                _staminaChangeCount -= 1;
                 switch (_enemyStatus.ReturnEnemyState)
                 {
                     case EnemyState.Patrolling:
-                        _animator.SetTrigger("isPatrolling");
                         _myAgent.speed = _enemyStatus.ReturnPatrollingSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
                         { //スタミナが削れていたら
@@ -64,7 +60,6 @@ namespace Scenes.Ingame.Enemy
                         }                       
                         break;
                     case EnemyState.Searching:
-                        _animator.SetTrigger("isSearching");
                         _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
                         { //スタミナが削れていたら
@@ -76,7 +71,6 @@ namespace Scenes.Ingame.Enemy
                         }
                         break;
                     case EnemyState.Chase:
-                        _animator.SetTrigger("isChase");
                         //スタミナ周りの処理をする
                         if (_staminaOver)
                         { //スタミナが切れ切ったかどうか
