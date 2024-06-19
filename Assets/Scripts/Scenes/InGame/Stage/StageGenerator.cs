@@ -117,8 +117,8 @@ namespace Scenes.Ingame.Stage
         {
             Vector3 instantiatePosition = Vector3.zero;
             Vector3 checkPosition = Vector3.zero;
-            Vector3 tileXoffset = new Vector3(TILESIZE, 0, 0);
-            Vector3 tileZoffset = new Vector3(0, 0, TILESIZE);
+            Vector3 tileXoffset = new Vector3(TILESIZE - 0.5f, 0, 0);
+            Vector3 tileZoffset = new Vector3(0, 0, TILESIZE - 0.5f);
             bool[] roomFlag = new bool[roomId + 1];
             for (int i = 0; i <= roomId; i++)
             {
@@ -836,7 +836,7 @@ namespace Scenes.Ingame.Stage
                             RoomPlotId(RoomType.room2x2Stair, new Vector2(x, y), floor1fData);
                             RoomPlotId(RoomType.room2x2Stair, new Vector2(x, y), floor2fData);
                             _stairPosition.Add(ToVector2(x + 1, y + 1));
-                            Debug.Log("2x2階段の部屋に適した場所あり");
+                            if (viewDebugLog) Debug.Log("2x2階段の部屋に適した場所あり");
                         }
                     }
                     //3x3のstairRoomについて
