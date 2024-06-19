@@ -15,7 +15,7 @@ namespace Scenes.Ingame.Enemy
         [Header("このスクリプトを制御する変数")]
         [SerializeField][Tooltip("何秒ごとに視界の状態、攻撃可能性、SANをチェックするか")] private float _checkRate;
         [SerializeField][Tooltip("戦闘時の視界の広さ")] private float _visivilityRange;//仕様上視界範囲は全て同一？じゃなかったらこれはEnemyStatusに送り込むよ
-        [SerializeField] [Tooltip("見失ったとしてもどれだけの時間頑張って探そうとするかどうか")]private float _brindChaseTime;
+        [SerializeField] [Tooltip("見失ったとしてもどれだけの時間頑張って探そうとするかどうか")]private float _blindChaseTime;
         [SerializeField][Tooltip("デバッグするかどうか")] private bool _debugMode;
 
 
@@ -50,7 +50,7 @@ namespace Scenes.Ingame.Enemy
         private float _shotTimeCount;
         private float _audiomaterPower;//聞く力
         private float _checkTimeCount;//前回チェックしてからの時間を計測
-         float _brindChaseTimeCount;
+         float _blindChaseTimeCount;
         private EnemyVisibilityMap _myVisivilityMap;
         private EnemyState _lastEnemyState = EnemyState.None;
         Vector3 nextPositionCandidate = new Vector3(0, 0, 0);
@@ -108,7 +108,7 @@ namespace Scenes.Ingame.Enemy
                         {
                             _myVisivilityMap.ChangeEveryGridWatchNum(1, true);
                             _myVisivilityMap.SetGridWatchNum(_player.transform.position, 0);
-                            _brindChaseTimeCount = 0;//見えたのであきらめるまでのカウントはリセット
+                            _blindChaseTimeCount = 0;//見えたのであきらめるまでのカウントはリセット
                                                      //移動目標をプレイヤーの座標にする
                             _enemyMove.SetMovePosition(_player.transform.position);
                             if (_playerDistance < _atackRange)//近接攻撃の射程内か確認する
@@ -145,8 +145,8 @@ namespace Scenes.Ingame.Enemy
                     }
                     else
                     { //敵が見えないならせめてなんとかいそうなエリアへ行こうとする
-                        _brindChaseTimeCount += _checkRate;
-                        if (_brindChaseTimeCount > _brindChaseTime)
+                        _blindChaseTimeCount += _checkRate;
+                        if (_blindChaseTimeCount > _blindChaseTime)
                         { //あきらめるかどうかの判定
                             _enemyStatus.SetEnemyState(EnemyState.Searching);//追っかけるのあきらめた
                         }
