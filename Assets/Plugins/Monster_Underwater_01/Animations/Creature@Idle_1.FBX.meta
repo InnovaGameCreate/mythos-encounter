@@ -581,7 +581,7 @@ ModelImporter:
     second: mannequin_geo_calf_l
   - first:
       74: 7400000
-    second: Idle_1
+    second: Idle
   - first:
       95: 9500000
     second: //RootNode
@@ -668,7 +668,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Idle_1
+      name: Idle
       takeName: Take 001
       internalID: 7400000
       firstFrame: -60
