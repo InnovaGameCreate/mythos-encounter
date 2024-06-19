@@ -56,5 +56,9 @@ Request Changeを貰ったら内容に沿って修正を行なってください
 ### モデル関係
 - Decrepit Dungeon LITE
 - Adventure Character
+- Creep Horror Creature
+- Retro PSX Horror Healing Item Pack
+- Baseball Bats – Pack
+- Vintage rifle - Western model
 - Medieval Weapons PBR Pack
   
