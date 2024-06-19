@@ -4,7 +4,7 @@ using DG.Tweening;
 
 namespace Scenes.Ingame.Stage
 {
-    public class StageRack : MonoBehaviour, IInteractable
+    public class StageRack_Left : MonoBehaviour, IInteractable
     {
         [SerializeField]
         private bool _initialStateOpen = true;

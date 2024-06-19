@@ -213,7 +213,6 @@ GameObject:
   - component: {fileID: 3096116025734979672}
   - component: {fileID: 5452567282840294294}
   - component: {fileID: 9148680502894630887}
-  - component: {fileID: 2807328895843970048}
   m_Layer: 0
   m_Name: Kitchen_Module_03_Door_LOD0
   m_TagString: Untagged
@@ -308,19 +307,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.057510372, y: 0.71482223, z: 0.5474451}
   m_Center: {x: 0.028755186, y: 0.357411, z: 0.2673725}
---- !u!114 &2807328895843970048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1379433644522986562}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8c42b0ddf104834eba065e2435c2642, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _initialStateOpen: 0
 --- !u!1 &2098398672080803382
 GameObject:
   m_ObjectHideFlags: 0
