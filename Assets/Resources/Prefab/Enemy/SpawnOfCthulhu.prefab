@@ -53,7 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _checkRate: 0.5
   _visivilityRange: 10
-  _brindChaseTime: 0
+  _blindChaseTime: 10
   _debugMode: 1
   _attackTime: 5
   _atackRange: 5
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hpBase: 10
-  _patrollingSpeedBase: 0
+  _patrollingSpeedBase: 10
   _searchSpeedBase: 10
   _chaseSpeedBase: 14
   _audiometerPowerBase: 100
