@@ -111,7 +111,7 @@ namespace Scenes.Ingame.Enemy
                         }
                         else
                         {
-                            _myAgent.speed = _enemyStatus.ReturnCheseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
+                            _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         }
                         break;
                     case EnemyState.Attack:
@@ -154,7 +154,7 @@ namespace Scenes.Ingame.Enemy
                         }
                         else
                         {
-                            _myAgent.speed = _enemyStatus.ReturnCheseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
+                            _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         }
                         break;
                     case EnemyState.FallBack: 

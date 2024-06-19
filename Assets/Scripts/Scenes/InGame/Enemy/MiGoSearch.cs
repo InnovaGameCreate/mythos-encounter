@@ -7,11 +7,11 @@ namespace Scenes.Ingame.Enemy
 {
     public class MiGoSearch : EnemySearch
     {
-        [SerializeField]private bool _uniqueChese;//特殊なチェイスをするかどうか
+        [SerializeField]private bool _uniqueChase;//特殊なチェイスをするかどうか
 
         protected override void FixedUpdate()
         {
-            if (_uniqueChese) {
+            if (_uniqueChase) {
                 if (_myVisivilityMap != null)//索敵の準備ができていない場合
                 {
                     Debug.LogError("マップ情報がありません、_myVisivilityMapを作成してください");
@@ -80,8 +80,8 @@ namespace Scenes.Ingame.Enemy
 
         }
 
-        public void ChangeUniqueChese(bool uniqueChese) { 
-            _uniqueChese = uniqueChese;
+        public void ChangeUniqueChase(bool uniqueChase) { 
+            _uniqueChase = uniqueChase;
         }
 
     }

@@ -66,7 +66,7 @@ namespace Scenes.Ingame.Enemy
         private IntReactiveProperty _hp = new IntReactiveProperty();
         private FloatReactiveProperty _patrollingSpeed = new FloatReactiveProperty();
         private FloatReactiveProperty _searcSpeed = new FloatReactiveProperty();
-        private FloatReactiveProperty _cheseSpeed = new FloatReactiveProperty();
+        private FloatReactiveProperty _chaseSpeed = new FloatReactiveProperty();
         private FloatReactiveProperty _audiometerPower = new FloatReactiveProperty();
         private BoolReactiveProperty _reactToLight = new BoolReactiveProperty();
         private BoolReactiveProperty _flying = new BoolReactiveProperty();
@@ -82,7 +82,7 @@ namespace Scenes.Ingame.Enemy
         public IObservable<int> OnHpChange { get { return _hp; } }
         public IObservable<float> OnPatrollingSpeedChange { get { return _patrollingSpeed; } }
         public IObservable<float> OnSearchSpeedChange { get { return _searcSpeed; } }
-        public IObservable<float> OnCheseSpeedChange { get { return _cheseSpeed; } }
+        public IObservable<float> OnChaseSpeedChange { get { return _chaseSpeed; } }
         public IObservable<float> OnAudiometerPowerChange { get { return _audiometerPower; } }
         public IObservable<bool> OnReactToLightChange { get { return _reactToLight; } }
         public IObservable<bool> OnFlyingChange { get { return _flying; } }
@@ -98,7 +98,7 @@ namespace Scenes.Ingame.Enemy
         //##########Get‚Æ‚©Set‚Ì‚©‚½‚Ü‚è
         public float ReturnPatrollingSpeed { get { return _patrollingSpeed.Value; } }
         public float ReturnSearchSpeed { get { return _searcSpeed.Value; } }
-        public float ReturnCheseSpeed { get { return _cheseSpeed.Value; } }
+        public float ReturnChaseSpeed { get { return _chaseSpeed.Value; } }
 
         public int ReturnStaminaBase { get { return _staminaBase; } }
         public int Stamina { get { return _stamina.Value; } }
@@ -148,14 +148,14 @@ namespace Scenes.Ingame.Enemy
                 .Skip(1)//‰Šú‰»‚ÌŽž‚Í–³Ž‹
                 .Subscribe(x =>
                 {
-                    if (x) { _searcSpeed.Value = _searchSpeedBase * 0.1f; _patrollingSpeed.Value = _patrollingSpeedBase * 0.1f; _cheseSpeed.Value = _chaseSpeedBase * 0.1f; }
-                    else { _searcSpeed.Value = _searchSpeedBase * 1f; _patrollingSpeed.Value = _patrollingSpeedBase * 1f; _cheseSpeed.Value = _chaseSpeedBase * 1f; }
+                    if (x) { _searcSpeed.Value = _searchSpeedBase * 0.1f; _patrollingSpeed.Value = _patrollingSpeedBase * 0.1f; _chaseSpeed.Value = _chaseSpeedBase * 0.1f; }
+                    else { _searcSpeed.Value = _searchSpeedBase * 1f; _patrollingSpeed.Value = _patrollingSpeedBase * 1f; _chaseSpeed.Value = _chaseSpeedBase * 1f; }
                     switch (ReturnEnemyState)
                     {
                         case EnemyState.Patrolling: _myAgent.speed = ReturnPatrollingSpeed; break;
                         case EnemyState.Searching: _myAgent.speed = ReturnSearchSpeed; break;
-                        case EnemyState.Chase: _myAgent.speed = ReturnCheseSpeed; break;
-                        case EnemyState.Attack: _myAgent.speed = ReturnCheseSpeed; break;
+                        case EnemyState.Chase: _myAgent.speed = ReturnChaseSpeed; break;
+                        case EnemyState.Attack: _myAgent.speed = ReturnChaseSpeed; break;
                     }
                 }).AddTo(this);
 
@@ -188,7 +188,7 @@ namespace Scenes.Ingame.Enemy
             _patrollingSpeed.Value = _patrollingSpeedBase;
             _searcSpeed.Value = _searchSpeedBase;
             _searcSpeed.Value = _searchSpeedBase;
-            _cheseSpeed.Value = _chaseSpeedBase;
+            _chaseSpeed.Value = _chaseSpeedBase;
             _atackPower.Value = _atackPowerBase;
             _audiometerPower.Value = _audiometerPowerBase;
             _reactToLight.Value = _reactToLightBase;
