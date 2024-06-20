@@ -58,6 +58,7 @@ namespace Scenes.Ingame.Stage
             {
                 _doorCollider.isTrigger = false;
                 _isAnimation = false;
+                _changeDoorOpen.OnNext(Unit.Default);
             });
         }
         private void DoorClose()
@@ -66,6 +67,7 @@ namespace Scenes.Ingame.Stage
             {
                 _doorCollider.isTrigger = false;
                 _isAnimation = false;
+                _changeDoorOpen.OnNext(Unit.Default);
             });
         }
     }
