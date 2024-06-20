@@ -13,7 +13,7 @@ namespace Scenes.Ingame.Enemy
         /// <summary>
         /// „‰ñ
         /// </summary>
-        Patorolling,
+        Patrolling,
         /// <summary>
         /// õ“G
         /// </summary>
@@ -21,7 +21,7 @@ namespace Scenes.Ingame.Enemy
         /// <summary>
         /// ’ÇÕ
         /// </summary>
-        Chese,
+        Chase,
         /// <summary>
         /// UŒ‚
         /// </summary>
