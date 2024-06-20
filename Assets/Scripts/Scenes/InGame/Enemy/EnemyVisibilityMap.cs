@@ -237,15 +237,18 @@ namespace Scenes.Ingame.Enemy
 
             foreach (GameObject door in doors)
             {
+                Debug.LogWarning(door);
                 if (door.TryGetComponent<StageDoor>(out StageDoor sd))
                 {
                     _stageDoors.Add(sd);
+                    
                 }
                 else {
                     Debug.Log(door.name +  "はTgはDoorですがStageDoorがない");
                 }
                
             }
+            _stageDoors[0].OnChangeDoorOpen.Subscribe(_ => Debug.Log("いいいいいいいいいいいいいいいいいいいいいいいいいいいいい")).AddTo(this);
 
             //デフォルトに情報をコピー
             for (byte i = 0; i < visivilityAreaGrid[0].Count;i++) {
@@ -261,6 +264,8 @@ namespace Scenes.Ingame.Enemy
             Debug.LogWarning(_stageDoors.Count);
             foreach (StageDoor stageDoorCs in _stageDoors)
             {
+                Debug.LogWarning("サブスクライブ一歩手前");
+                Debug.LogWarning(_stageDoors.Count);
                 stageDoorCs.OnChangeDoorOpen.Subscribe(_ =>
                 {
                     Debug.LogWarning("ドアの変更を検知した");

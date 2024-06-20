@@ -22,6 +22,7 @@ namespace Scenes.Ingame.Stage
         public IObservable<Unit> OnChangeDoorOpen{ get { return _changeDoorOpen; } }
 
 
+
         public void Intract(PlayerStatus status)
         {
             if (Input.GetMouseButtonDown(1) && _isAnimation == false)
@@ -50,7 +51,11 @@ namespace Scenes.Ingame.Stage
                 _doorCollider.isTrigger = false;
                 DoorOpen();
                 _isOpen = true;
+
             }
+
+            OnChangeDoorOpen.Subscribe(_ => Debug.Log("Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†Ç†")).AddTo(this);
+            _changeDoorOpen.OnNext(Unit.Default);
         }
         private void DoorOpen()
         {
@@ -61,7 +66,6 @@ namespace Scenes.Ingame.Stage
                 Debug.Log("Ç®ÇÒÇÀÇ≠Ç∑Ç∆Å[");
                 _changeDoorOpen.OnNext(Unit.Default);
             });
-            _changeDoorOpen.OnNext(Unit.Default);
         }
         private void DoorClose()
         {
