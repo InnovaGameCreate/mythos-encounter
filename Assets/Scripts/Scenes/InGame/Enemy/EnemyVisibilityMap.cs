@@ -235,7 +235,28 @@ namespace Scenes.Ingame.Enemy
             {
                 stageDoorCs.OnChangeDoorOpen.Subscribe(_ =>
                 {
-                    
+                    //見えないところを見えないようにする
+                    for (byte i = 0; i < visivilityAreaGrid[0].Count; i++)
+                    {
+                        for (byte j = 0; j < visivilityAreaGrid[i].Count; j++)
+                        {
+                            for (byte a = 0; i < visivilityAreaGrid[i][j].canVisivleAreaPosition.Count; a++)
+                            {
+                                visivilityAreaGrid[i][j].canVisivleAreaPosition = new List<DoubleByteAndMonoFloat>();
+
+                                visivilityAreaGrid[i][j].defaultCanVisivilityAreaPosition.Add(visivilityAreaGrid[i][j].canVisivleAreaPosition[a]);
+                            }
+
+                        }
+                    }
+
+
+
+
+
+
+
+
                 }).AddTo(this);
             }
             //デフォルトに情報をコピー
