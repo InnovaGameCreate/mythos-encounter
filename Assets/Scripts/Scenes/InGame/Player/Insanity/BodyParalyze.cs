@@ -56,6 +56,8 @@ namespace Scenes.Ingame.Player
                     //今手に持っているアイテムだった時
                     if (_randoms[i] == _myPlayerItem.nowIndex)
                     {
+                        _myPlayerItem.nowBringItem.GetComponent<ItemEffect>().OnThrow();
+
                         //アイテムを真下に落とす
                         _myPlayerItem.nowBringItem.transform.parent = null;
                         var rb = _myPlayerItem.nowBringItem.GetComponent<Rigidbody>();
@@ -65,7 +67,8 @@ namespace Scenes.Ingame.Player
                     }
                     else //手に持っていないアイテムだった時
                     {
-                        Instantiate(itemSlot.myItemData.prefab, this.gameObject.transform.position + new Vector3(0,1,0), itemSlot.myItemData.prefab.transform.rotation);
+                        var obj = Instantiate(itemSlot.myItemData.prefab, this.gameObject.transform.position + new Vector3(0,1,0), itemSlot.myItemData.prefab.transform.rotation);
+                        obj.GetComponent<ItemEffect>().OnThrow();
                     }
                 }
 
@@ -79,7 +82,7 @@ namespace Scenes.Ingame.Player
 
         public void Hide()
         {
-            //減らすスロットにアイテムが入っているとその場に落とす」処理の解除
+            //減らすスロットにアイテムが入っているとその場に落とす処理の解除
             for (int i = 0; i < 2; i++)
             {
                 _myPlayerItem.ChangeListValue(_randoms[i], new ItemSlotStruct(null, ItemSlotStatus.available));

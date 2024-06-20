@@ -18,6 +18,11 @@ namespace Scenes.Ingame.Player
                 .Subscribe(_ => _stopCoroutineBool = true).AddTo(this);
         }
 
+        public override void OnThrow()
+        {
+
+        }
+
         public override void Effect()
         {
             if (ownerPlayerStatus.nowBleedingValue)
@@ -49,7 +54,7 @@ namespace Scenes.Ingame.Player
                     _stopCoroutineBool = false;
                     ownerPlayerStatus.UseItem(false);
                     ownerPlayerStatus.ChangeSpeed();
-                    ownerPlayerItem.ChangeCanChangeBringItem(false);
+                    ownerPlayerItem.ChangeCanChangeBringItem(true);
                     yield break;
                 }
 
@@ -58,7 +63,7 @@ namespace Scenes.Ingame.Player
                     ownerPlayerStatus.ChangeBleedingBool(false);
                     ownerPlayerStatus.UseItem(false);
                     ownerPlayerStatus.ChangeSpeed();
-                    ownerPlayerItem.ThrowItem(ownerPlayerItem.nowIndex);
+                    ownerPlayerItem.ConsumeItem(ownerPlayerItem.nowIndex);
                     ownerPlayerItem.ChangeCanChangeBringItem(true);
                     yield break;
                 }
