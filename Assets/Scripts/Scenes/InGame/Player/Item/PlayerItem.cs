@@ -50,7 +50,8 @@ namespace Scenes.Ingame.Player
         // Start is called before the first frame update
         void Start()
         {
-            int layerMask = LayerMask.GetMask("Item");//ItemというレイヤーにあるGameObjectにしかrayが当たらないようにする
+            
+            int layerMask = LayerMask.GetMask("Item" , "Door");//ItemというレイヤーにあるGameObjectにしかrayが当たらないようにする
             _myPlayerStatus = GetComponent<PlayerStatus>();
 
             //今後はingame前のアイテムの所持状況を代入させる。α版は初期化

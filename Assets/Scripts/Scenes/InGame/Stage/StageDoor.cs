@@ -58,8 +58,10 @@ namespace Scenes.Ingame.Stage
             {
                 _doorCollider.isTrigger = false;
                 _isAnimation = false;
+                Debug.Log("Ç®ÇÒÇÀÇ≠Ç∑Ç∆Å[");
                 _changeDoorOpen.OnNext(Unit.Default);
             });
+            _changeDoorOpen.OnNext(Unit.Default);
         }
         private void DoorClose()
         {
