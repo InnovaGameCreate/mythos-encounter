@@ -55,6 +55,11 @@ namespace Scenes.Ingame.Enemy
             //public byte watchNum;//このエリアを見た回数
             public List<DoubleByteAndMonoFloat> canVisivleAreaPosition;//このエリアから見ることのできるエリア
             public List<DoubleByteAndMonoFloat> defaultCanVisivilityAreaPosition;
+
+            public VisivilityArea(List<DoubleByteAndMonoFloat> setCanVisivleAreaPosition, List<DoubleByteAndMonoFloat> setDefaultCanVisivilityAreaPosition) { 
+                canVisivleAreaPosition = setCanVisivleAreaPosition;
+                defaultCanVisivilityAreaPosition = setDefaultCanVisivilityAreaPosition;
+            }
         }
 
         private void Start()
@@ -240,10 +245,14 @@ namespace Scenes.Ingame.Enemy
                     {
                         for (byte j = 0; j < visivilityAreaGrid[i].Count; j++)
                         {
-                            for (byte a = 0; i < visivilityAreaGrid[i][j].canVisivleAreaPosition.Count; a++)
+                            //一旦見える部分をリセット
+                            visivilityAreaGrid[i][j] = new VisivilityArea(new List<DoubleByteAndMonoFloat>(), visivilityAreaGrid[i][j].defaultCanVisivilityAreaPosition);
+                            
+                            for (byte a = 0; i < visivilityAreaGrid[i][j].canVisivleAreaPosition.Count; a++)//実際に見える部分のみ見えるように変更してゆく
                             {
-                                visivilityAreaGrid[i][j].canVisivleAreaPosition = new List<DoubleByteAndMonoFloat>();
+                               
 
+                                
                                 visivilityAreaGrid[i][j].defaultCanVisivilityAreaPosition.Add(visivilityAreaGrid[i][j].canVisivleAreaPosition[a]);
                             }
 
