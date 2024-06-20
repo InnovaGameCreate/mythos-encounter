@@ -310,6 +310,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1432767599649012117}
     m_Modifications:
+    - target: {fileID: 2236167086597270455, guid: 7d1424a14fad8ce4c845abab6cfa920f, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2236655390796698949, guid: 7d1424a14fad8ce4c845abab6cfa920f, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 2603702774634092084, guid: 7d1424a14fad8ce4c845abab6cfa920f, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
@@ -393,6 +401,14 @@ PrefabInstance:
     - target: {fileID: 8487802535040024505, guid: 7d1424a14fad8ce4c845abab6cfa920f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.086785
+      objectReference: {fileID: 0}
+    - target: {fileID: 8786052494129313613, guid: 7d1424a14fad8ce4c845abab6cfa920f, type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8786052494129313613, guid: 7d1424a14fad8ce4c845abab6cfa920f, type: 3}
+      propertyPath: m_TagString
+      value: Door
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
