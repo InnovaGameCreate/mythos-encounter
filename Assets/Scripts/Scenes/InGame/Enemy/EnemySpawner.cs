@@ -122,7 +122,7 @@ namespace Scenes.Ingame.Enemy
         {
             GameObject createEnemy;
             EnemyStatus createEnemyStatus;
-            EnemyVisibilityMap createEnemyVisiviityMap = _enemyVisibilityMap.DeepCopy();
+            EnemyVisibilityMap createEnemyVisiviityMap = _enemyVisibilityMap.Copy();
             switch (enemeyName)
             {
 

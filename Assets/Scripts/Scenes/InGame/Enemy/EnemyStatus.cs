@@ -131,7 +131,7 @@ namespace Scenes.Ingame.Enemy
 
             //自身についているメソッドの初期化
             _enemySearch.Init(visivilityMap);
-            _enemyAttack.Init(visivilityMap.DeepCopy());//Atackはサーチの後にInit
+            _enemyAttack.Init(visivilityMap.Copy());//Atackはサーチの後にInit
             _enemyMove.Init();
             _enemyUniqueAction.Init(_actionCoolTime.Value);
 

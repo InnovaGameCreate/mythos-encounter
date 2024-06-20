@@ -81,7 +81,9 @@ namespace Scenes.Ingame.Enemy
                 List<VisivilityArea> item = new List<VisivilityArea>();
                 for (byte j = 0; j < z; j++)
                 {
-                    item.Add(new VisivilityArea());
+                    VisivilityArea addArea = new VisivilityArea();
+                    addArea.canVisivleAreaPosition = new List<DoubleByteAndMonoFloat>();
+                    item.Add(addArea);
 
                     if (debugMode) Debug.DrawLine(setCenterPosition + new Vector3(i, 0, j) * range, setCenterPosition + new Vector3(i, 0, j) * range + new Vector3(0, 10, 0), Color.yellow, 10);//グリッドの位置を表示
                 }
@@ -151,44 +153,37 @@ namespace Scenes.Ingame.Enemy
             if (debugMode) Debug.Log("マップのスキャンが完了しました");
         }
 
-        /// <summary>
-        /// ドアをスキャンして解放状態でないと視界の通らない判定を作る
-        /// </summary>
-        public void NeedOpenDoorScan() { 
-        
-        }
-
-        /// <summary>
-        /// ドアをスキャンして閉鎖状態でないと視界の通らない判定を作る
-        /// </summary>
-        public void NeedCloseDoorScan()
-        {
-
-        }
 
 
         /// <summary>
-        /// 自身のディープコピーを作成して返す
+        /// 自身の見た回数のみを独立させたコピーを作成して返す
         /// </summary>
         /// <returns>自身のディープコピー</returns>
-        public EnemyVisibilityMap DeepCopy()
+        public EnemyVisibilityMap Copy()
         {
-            if (debugMode) Debug.Log("ディープコピー開始");
+            
             EnemyVisibilityMap copy;
             copy = new EnemyVisibilityMap();
-            copy.visivilityAreaGrid = new List<List<VisivilityArea>>();
-            foreach (List<VisivilityArea> item in visivilityAreaGrid)//二次元リストをコピー
-            {
-                copy.visivilityAreaGrid.Add(new List<VisivilityArea>(item));
-            }
-            foreach (List<byte> item in areaWatchNumGrid) { 
-                copy.areaWatchNumGrid.Add(new List<byte>(item));
-            }
+            copy.visivilityAreaGrid = visivilityAreaGrid;
 
             copy.gridRange = gridRange;
             copy.maxVisivilityRange = maxVisivilityRange;
             copy.debugMode = debugMode;
             copy.centerPosition = centerPosition;
+
+            copy.areaWatchNumGrid = new List<List<byte>>();
+            //見た回数に関する配列の要素を作成
+            for (byte i = 0; i < copy.visivilityAreaGrid.Count; i++)
+            { //配列の要素を作成
+                List<byte> item = new List<byte>();
+                for (byte j = 0; j < copy.visivilityAreaGrid[0].Count; j++)
+                {
+                    item.Add(0);
+                }
+                copy.areaWatchNumGrid.Add(item);
+            }
+
+
             if (debugMode)
             { //マス目の情報が正常にコピーできているかを表示する
                 for (byte x = 0; x < copy.visivilityAreaGrid.Count(); x++)
@@ -200,6 +195,25 @@ namespace Scenes.Ingame.Enemy
                 }
             }
             return copy;
+        }
+
+
+
+        /// <summary>
+        /// 見た回数のリストを完全に独立したものにします。
+        /// </summary>
+        public void OriginWatchNum() {
+            areaWatchNumGrid = new List<List<byte>>();
+            //見た回数に関する配列の要素を作成
+            for (byte i = 0; i < visivilityAreaGrid.Count; i++)
+            { //配列の要素を作成
+                List<byte> item = new List<byte>();
+                for (byte j = 0; j < visivilityAreaGrid[0].Count; j++)
+                {
+                    item.Add(0);
+                }
+                areaWatchNumGrid.Add(item);
+            }
         }
 
 
@@ -591,6 +605,7 @@ namespace Scenes.Ingame.Enemy
             }
 
         }
+
 
         private void DrawCross(Vector3 position, float size, Color color, float time)
         {
