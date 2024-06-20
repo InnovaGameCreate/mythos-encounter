@@ -1,9 +1,14 @@
 using Scenes.Ingame.Player;
 using UnityEngine;
 using DG.Tweening;
+using System;
+using UniRx;
 
 namespace Scenes.Ingame.Stage
 {
+
+
+
     public class StageDoor : MonoBehaviour, IInteractable
     {
         [SerializeField]
@@ -12,6 +17,11 @@ namespace Scenes.Ingame.Stage
         private bool _isAnimation = false;
         private Vector3 OPENVALUE = new Vector3(0, 90, 0);
         private BoxCollider _doorCollider;
+
+        private Subject<Unit> _changeDoorOpen = new Subject<Unit>();
+        public IObservable<Unit> OnChangeDoorOpen{ get { return _changeDoorOpen; } }
+
+
         public void Intract(PlayerStatus status)
         {
             if (Input.GetMouseButtonDown(1) && _isAnimation == false)

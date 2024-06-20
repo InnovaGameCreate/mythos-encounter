@@ -72,6 +72,8 @@ namespace Scenes.Ingame.Enemy
                 _enemyVisibilityMap.maxVisivilityRange = _maxVisiviilityRange;
                 _enemyVisibilityMap.GridMake(_x, _z, _range, _centerPosition);
                 _enemyVisibilityMap.MapScan();
+                _enemyVisibilityMap.BeScanner();
+
 
                 await UniTask.Delay(1000, cancellationToken: _cancellationTokenSource.Token).SuppressCancellationThrow(); 
 
@@ -100,6 +102,7 @@ namespace Scenes.Ingame.Enemy
             _enemyVisibilityMap.maxVisivilityRange = _maxVisiviilityRange;
             _enemyVisibilityMap.GridMake(_x, _z, _range, _centerPosition);
             _enemyVisibilityMap.MapScan();
+            _enemyVisibilityMap.BeScanner();
 
             await UniTask.Delay(1000, cancellationToken: token).SuppressCancellationThrow();
 

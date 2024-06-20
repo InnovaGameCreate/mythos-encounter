@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Scenes.Ingame.Stage;
+using UniRx;
 
 
 namespace Scenes.Ingame.Enemy
@@ -16,6 +18,10 @@ namespace Scenes.Ingame.Enemy
         public bool debugMode;
         public float gridRange;
         public Vector3 centerPosition;//いちばん左下のグリッドの中央
+
+        private List<StageDoor> _stageDoors;//ステージ
+
+
 
         /// <summary>マス目の位置を2つのbyteで表し疎のマス目までの距離をfoatであらわしている</summary>
         public struct DoubleByteAndMonoFloat
@@ -216,6 +222,26 @@ namespace Scenes.Ingame.Enemy
             }
         }
 
+        /// <summary>
+        /// ドアをスキャンする
+        /// </summary>
+        public void BeScanner()
+        {
+            Debug.Log("スキャン開始");
+            List<GameObject> doors = new List<GameObject>();
+            doors = GameObject.FindGameObjectsWithTag("Door").ToList();
+            foreach (GameObject door in doors)
+            {
+                _stageDoors.Add(door.GetComponent<StageDoor>());
+            }
+            foreach (StageDoor stageDoorCs in _stageDoors)
+            {
+                stageDoorCs.OnChangeDoorOpen.Subscribe(_ =>
+                {
+
+                }).AddTo(this);
+            }
+        }
 
         /// <summary>
         /// 次に確認すべき最も見ておらず最も近い位置を取得。
