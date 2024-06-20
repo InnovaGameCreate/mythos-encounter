@@ -66,8 +66,6 @@ namespace Scenes.Ingame.Player
 
                     //足音の種類を決定・鳴らす
                     _myPlayerSoundManager.FootSound(state);
-                    //移動による視点の変化の仕方を設定
-                    _myCameraMove.ChangeViewPoint(_myPlayerSoundManager.GetClipLength());
                 }).AddTo(this);
 
             //待機状態に切り替え

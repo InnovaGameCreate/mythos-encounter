@@ -412,9 +412,17 @@ PrefabInstance:
       propertyPath: field of view
       value: 60.000004
       objectReference: {fileID: 0}
+    - target: {fileID: 1628902767302707794, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
+      propertyPath: _vcamList.Array.size
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 2481875681873542124, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
       propertyPath: m_Name
       value: Player_CameraTest
+      objectReference: {fileID: 0}
+    - target: {fileID: 2507036017193056109, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 2943275014606559026, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
       propertyPath: m_Enabled
@@ -467,6 +475,10 @@ PrefabInstance:
     - target: {fileID: 5495451142414428879, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
       propertyPath: m_LocalRotation.z
       value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5847435930969654424, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 7010928711956821919, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -523,4 +535,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67befd408fd3a2b488ce50465dc693fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  VirtualCameraWalk: {fileID: 0}
