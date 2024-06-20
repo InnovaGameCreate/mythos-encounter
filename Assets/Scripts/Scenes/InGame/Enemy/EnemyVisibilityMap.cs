@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using Scenes.Ingame.Stage;
 using UniRx;
+using UnityEngine.UIElements;
 
 
 namespace Scenes.Ingame.Enemy
@@ -241,21 +242,27 @@ namespace Scenes.Ingame.Enemy
                 stageDoorCs.OnChangeDoorOpen.Subscribe(_ =>
                 {
                     //見えないところを見えないようにする
-                    for (byte i = 0; i < visivilityAreaGrid[0].Count; i++)
+                    for (byte x = 0; x < visivilityAreaGrid[0].Count; x++)
                     {
-                        for (byte j = 0; j < visivilityAreaGrid[i].Count; j++)
+                        for (byte z = 0; z < visivilityAreaGrid[x].Count; z++)
                         {
                             //一旦見える部分をリセット
-                            visivilityAreaGrid[i][j] = new VisivilityArea(new List<DoubleByteAndMonoFloat>(), visivilityAreaGrid[i][j].defaultCanVisivilityAreaPosition);
+                            visivilityAreaGrid[x][z] = new VisivilityArea(new List<DoubleByteAndMonoFloat>(), visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition);
                             
-                            for (byte a = 0; i < visivilityAreaGrid[i][j].canVisivleAreaPosition.Count; a++)//実際に見える部分のみ見えるように変更してゆく
+                            for (byte a = 0; x < visivilityAreaGrid[x][z].canVisivleAreaPosition.Count; a++)//実際に見える部分のみ見えるように変更してゆく
                             {
-                               
-
-                                
-                                visivilityAreaGrid[i][j].defaultCanVisivilityAreaPosition.Add(visivilityAreaGrid[i][j].canVisivleAreaPosition[a]);
+                                float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaGrid[x][z].canVisivleAreaPosition[a].x) * gridRange,2) + Mathf.Pow((z - visivilityAreaGrid[x][z].canVisivleAreaPosition[a].z) * gridRange, 2));
+                                Ray ray = new Ray(centerPosition + new Vector3(x * gridRange,1,z * gridRange) , new Vector3(x - visivilityAreaGrid[x][z].canVisivleAreaPosition[a].x,0, z - visivilityAreaGrid[x][z].canVisivleAreaPosition[a].z));
+                                bool hit = Physics.Raycast(ray,out RaycastHit hitInfo,range ,4098,QueryTriggerInteraction.Collide);
+                                if (hit) {
+                                    if (debugMode) {
+                                        Debug.DrawLine(centerPosition + new Vector3(x * gridRange, 1, z * gridRange), centerPosition + new Vector3(visivilityAreaGrid[x][z].canVisivleAreaPosition[a].x * gridRange, 1, visivilityAreaGrid[x][z].canVisivleAreaPosition[a].z * gridRange), Color.red, 1);
+                                    }
+                                }else
+                                {
+                                    visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Add(visivilityAreaGrid[x][z].canVisivleAreaPosition[a]);
+                                }
                             }
-
                         }
                     }
 
