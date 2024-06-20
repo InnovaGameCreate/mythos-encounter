@@ -29,7 +29,7 @@ namespace Scenes.Ingame.Enemy
             public byte x;
             public byte z;
             public float range;
-
+            
             public DoubleByteAndMonoFloat(byte sX, byte sZ, float sRange)
             {
                 x = sX;
@@ -54,11 +54,7 @@ namespace Scenes.Ingame.Enemy
         {
             //public byte watchNum;//このエリアを見た回数
             public List<DoubleByteAndMonoFloat> canVisivleAreaPosition;//このエリアから見ることのできるエリア
-            public VisivilityArea( List<DoubleByteAndMonoFloat> sDoubleByteAndFloat)
-            {
-                //watchNum = sWatchNum;
-                canVisivleAreaPosition = new List<DoubleByteAndMonoFloat>(sDoubleByteAndFloat);
-            }
+            public List<DoubleByteAndMonoFloat> defaultCanVisivilityAreaPosition;
         }
 
         private void Start()
@@ -230,6 +226,7 @@ namespace Scenes.Ingame.Enemy
             Debug.Log("スキャン開始");
             List<GameObject> doors = new List<GameObject>();
             doors = GameObject.FindGameObjectsWithTag("Door").ToList();
+
             foreach (GameObject door in doors)
             {
                 _stageDoors.Add(door.GetComponent<StageDoor>());
@@ -238,9 +235,21 @@ namespace Scenes.Ingame.Enemy
             {
                 stageDoorCs.OnChangeDoorOpen.Subscribe(_ =>
                 {
-
+                    
                 }).AddTo(this);
             }
+            //デフォルトに情報をコピー
+            for (byte i = 0; i < visivilityAreaGrid[0].Count;i++) {
+                for (byte j = 0; j < visivilityAreaGrid[i].Count; j++)
+                {
+                    for (byte a = 0; i < visivilityAreaGrid[i][j].canVisivleAreaPosition.Count; a++) {
+                        visivilityAreaGrid[i][j].defaultCanVisivilityAreaPosition.Add(visivilityAreaGrid[i][j].canVisivleAreaPosition[a]);
+                    }
+
+                }
+            }
+
+
         }
 
         /// <summary>
