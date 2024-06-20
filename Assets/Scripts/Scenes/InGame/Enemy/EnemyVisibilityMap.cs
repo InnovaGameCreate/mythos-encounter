@@ -161,7 +161,7 @@ namespace Scenes.Ingame.Enemy
         /// <returns>自身のディープコピー</returns>
         public EnemyVisibilityMap Copy()
         {
-            
+            if (debugMode) Debug.Log("コピー開始");
             EnemyVisibilityMap copy;
             copy = new EnemyVisibilityMap();
             copy.visivilityAreaGrid = visivilityAreaGrid;
@@ -246,7 +246,7 @@ namespace Scenes.Ingame.Enemy
                         nextPositionX.Add(x);
                         nextPositionZ.Add(z);
                     }
-                    areaWatchNumGrid[x][z] = (byte)(areaWatchNumGrid[x][z] - 1);
+                    areaWatchNumGrid[x][z] = (byte)(areaWatchNumGrid[x][z] - smallestWatchNum);
                 }
             }
             //最も近い要素を考える
