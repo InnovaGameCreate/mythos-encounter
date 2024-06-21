@@ -92,6 +92,13 @@ namespace Scenes.Ingame.Stage
             }
             AnimationcComplete();
         }
+        public string ReturnPopString()
+        {
+            if (_isOpen)
+                return "Close";
+            else
+                return "Open";
+        }
     }
 }
 
