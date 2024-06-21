@@ -43,7 +43,7 @@ namespace Scenes.Ingame.Player
 
             RaycastHit hit;
             RaycastHit leftHit, rightHit;
-            int defaultlayerMask = LayerMask.GetMask("Default");//主要なLayer以外に反応するようにする
+            int defaultlayerMask = LayerMask.GetMask("Default") | LayerMask.GetMask("Wall");//主要なLayer以外・壁に反応するようにする
             int floorlayerMask = LayerMask.GetMask("Floor");//床にだけ反応するようにする
 
             while (true)

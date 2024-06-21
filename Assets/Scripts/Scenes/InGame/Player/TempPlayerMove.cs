@@ -17,7 +17,6 @@ namespace Scenes.Ingame.Player
         [Header("カメラ関係")]
         [SerializeField] private CameraMove _myCameraMove;
         [SerializeField] private GameObject _camera;
-        [SerializeField] private bool isCurcleSetting;
         private Vector3 _nowCameraAngle;
 
         [Header("アニメーション関係")]
@@ -39,9 +38,6 @@ namespace Scenes.Ingame.Player
 
         void Start()
         {
-            if (isCurcleSetting)
-                CursorSetting();
-
             _nowCameraAngle = _camera.transform.localEulerAngles;
 
             //キーバインドの設定
@@ -130,15 +126,6 @@ namespace Scenes.Ingame.Player
             #endregion
 
             StartCoroutine(CheckParalyze());
-        }
-
-        /// <summary>
-        /// カーソルの設定をしてくれる
-        /// </summary>
-        private void CursorSetting()
-        {
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
         }
 
         void Update()
