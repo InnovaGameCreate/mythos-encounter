@@ -10,46 +10,37 @@ namespace Scenes.Ingame.Manager
 {
     public class ResultManager : MonoBehaviour
     {
-        private int _ingameTimer = 0;
         private CancellationTokenSource _token;
         private CancellationTokenSource _timerToken;
         public static ResultManager Instance;
         private ResultValue _resultValue;
         private Subject<ResultValue> _result = new Subject<ResultValue>();
         public IObservable<ResultValue> OnResultValue { get { return _result; } }
+        EventManager eventManager;
         private void Awake()
         {
             Instance = this;
         }
         void Start()
         {
+            eventManager = EventManager.Instance;
             _resultValue = new ResultValue();
             _token = new CancellationTokenSource();
             _timerToken = new CancellationTokenSource();
 
-            IngameManager.Instance.OnIngame
-                .Subscribe(_ =>
-                {
-                    Timer(_timerToken.Token).Forget();
-                }).AddTo(this);
             IngameManager.Instance.OnResult
                 .Subscribe(_ =>
                 {
                     _timerToken.Cancel();
                     _timerToken.Dispose();
-                    Time();
+                    _resultValue.time = eventManager.GetGameTime;
                     EnemyLevel();
-                    UniqueItemBonus();
-                    FirstContactBonus();
+                    _resultValue.getUnique = eventManager.GetUniqueItem;
+                    _resultValue.firstContact = eventManager.GetContact;//TODO:現状は敵に発見されたかどうかを入れている。（最終的にはデータベースから過去に遭遇したことあるかどうかで判断する）
                     _resultValue.totalMoney = Bonus();
                     _result.OnNext(_resultValue);
                 }).AddTo(this);
 
-        }
-
-        private void Time()
-        {
-            _resultValue.time = _ingameTimer;
         }
         /// <summary>
         /// マップ内の神話生物に合わせた倍率
@@ -58,19 +49,6 @@ namespace Scenes.Ingame.Manager
         private void EnemyLevel()
         {
             _resultValue.level = 2;
-        }
-        //ユニークアイテムの獲得
-        private void UniqueItemBonus()
-        {
-            _resultValue.getUnique = false;
-        }
-        /// <summary>
-        /// 遭遇状況(初回のみ加算)
-        /// TODO：今後データベースが実装されたら書き直す。
-        /// </summary>
-        private void FirstContactBonus()
-        {
-            _resultValue.firstContact = true;
         }
         private int Bonus()
         {
@@ -81,14 +59,6 @@ namespace Scenes.Ingame.Manager
             money += _resultValue.firstContact ? 100 : 0;
             return money;
 
-        }
-        private async UniTaskVoid Timer(CancellationToken token)
-        {
-            while (true)
-            {
-                await UniTask.Delay(1000, cancellationToken: token);
-                _ingameTimer++;
-            }
         }
 
         private void OnDestroy()
