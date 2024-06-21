@@ -244,5 +244,10 @@ namespace Scenes.Ingame.Enemy
                 }
             }
         }
+
+        private void OnDestroy()
+        {
+            _myVisivilityMap.Dispose();
+        }
     }
 }

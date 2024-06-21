@@ -22,7 +22,7 @@ namespace Scenes.Ingame.Enemy
 
         private List<StageDoor> _stageDoors;//ステージ
 
-
+        private readonly CompositeDisposable _compositeDisposable = new();
 
         /// <summary>マス目の位置を2つのbyteで表し疎のマス目までの距離をfoatであらわしている</summary>
         public struct DoubleByteAndMonoFloat
@@ -241,14 +241,12 @@ namespace Scenes.Ingame.Enemy
                 if (door.TryGetComponent<StageDoor>(out StageDoor sd))
                 {
                     _stageDoors.Add(sd);
-                    
                 }
                 else {
                     Debug.Log(door.name +  "はTgはDoorですがStageDoorがない");
                 }
                
             }
-            _stageDoors[0].OnChangeDoorOpen.Subscribe(_ => Debug.Log("いいいいいいいいいいいいいいいいいいいいいいいいいいいいい")).AddTo(this);
 
             //デフォルトに情報をコピー
             for (byte i = 0; i < visivilityAreaGrid[0].Count;i++) {
@@ -296,7 +294,7 @@ namespace Scenes.Ingame.Enemy
                             }
                         }
                     }
-                }).AddTo(this);
+                }).AddTo(_compositeDisposable);
             }
             //見えないところを見えないようにする
             for (byte x = 0; x < visivilityAreaGrid[0].Count; x++)
@@ -725,6 +723,13 @@ namespace Scenes.Ingame.Enemy
             Debug.DrawLine(position + new Vector3(-size / 2, 0, size / 2), position + new Vector3(size / 2, 0, -size / 2), color, time);
         }
 
+
+        /// <summary>
+        /// UniRxの購読を終了する
+        /// </summary>
+        public void Dispose() { 
+            _compositeDisposable.Dispose();
+        }
 
     }
 }

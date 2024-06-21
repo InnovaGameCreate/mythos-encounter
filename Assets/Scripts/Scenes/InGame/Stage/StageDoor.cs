@@ -63,7 +63,6 @@ namespace Scenes.Ingame.Stage
             {
                 _doorCollider.isTrigger = false;
                 _isAnimation = false;
-                Debug.Log("Ç®ÇÒÇÀÇ≠Ç∑Ç∆Å[");
                 _changeDoorOpen.OnNext(Unit.Default);
             });
         }
@@ -76,5 +75,13 @@ namespace Scenes.Ingame.Stage
                 _changeDoorOpen.OnNext(Unit.Default);
             });
         }
+
+        private void OnDestroy()
+        {
+            _changeDoorOpen.Dispose();
+        }
+
     }
+
+    
 }

@@ -163,6 +163,7 @@ namespace Scenes.Ingame.Enemy
         {
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource.Dispose();
+            _enemyVisibilityMap.Dispose();
         }
 
     }
