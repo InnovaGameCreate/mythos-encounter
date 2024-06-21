@@ -62,6 +62,7 @@ namespace Scenes.Ingame.Player
                     ownerPlayerStatus.ChangeSpeed();
                     ownerPlayerItem.ConsumeItem(ownerPlayerItem.nowIndex);
                     ownerPlayerItem.ChangeCanChangeBringItem(true);
+                    StopCoroutine(ownerPlayerStatus.BuffAdrenaline());
                     ownerPlayerStatus.StartBuff();//アドレナリン状態を変化させるためのコマンド
                     yield break;
                 }

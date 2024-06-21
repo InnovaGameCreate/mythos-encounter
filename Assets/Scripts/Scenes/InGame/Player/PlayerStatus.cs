@@ -247,7 +247,7 @@ namespace Scenes.Ingame.Player
         /// <summary>
         /// アドレナリン上昇状態を変化させるための関数
         /// </summary>
-        private IEnumerator BuffAdrenaline()
+        public IEnumerator BuffAdrenaline()
         {
             _isBuffedAdrenaline = true;
             yield return new WaitForSeconds(15.0f);
