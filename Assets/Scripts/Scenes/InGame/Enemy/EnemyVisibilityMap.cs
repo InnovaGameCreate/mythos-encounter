@@ -268,28 +268,28 @@ namespace Scenes.Ingame.Enemy
                 {
                     Debug.LogWarning("ドアの変更を検知した");
                     //見えないところを見えないようにする
-                    for (byte x = 0; x < visivilityAreaGrid[0].Count; x++)
+                    for (byte x = 0; x < visivilityAreaGrid.Count; x++)
                     {
                         for (byte z = 0; z < visivilityAreaGrid[x].Count; z++)
                         {
                             //一旦見える部分をリセット
                             visivilityAreaGrid[x][z] = new VisivilityArea(new List<DoubleByteAndMonoFloat>(), visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition);
 
-                            for (byte a = 0; x < visivilityAreaGrid[x][z].canVisivleAreaPosition.Count; a++)//実際に見える部分のみ見えるように変更してゆく
+                            for (byte a = 0; a < visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Count; a++)//実際に見える部分のみ見えるように変更してゆく
                             {
-                                float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaGrid[x][z].canVisivleAreaPosition[a].x) * gridRange, 2) + Mathf.Pow((z - visivilityAreaGrid[x][z].canVisivleAreaPosition[a].z) * gridRange, 2));
-                                Ray ray = new Ray(centerPosition + new Vector3(x * gridRange, 1, z * gridRange), new Vector3(x - visivilityAreaGrid[x][z].canVisivleAreaPosition[a].x, 0, z - visivilityAreaGrid[x][z].canVisivleAreaPosition[a].z));
+                                float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x) * gridRange, 2) + Mathf.Pow((z - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z) * gridRange, 2));
+                                Ray ray = new Ray(centerPosition + new Vector3(x * gridRange, 1, z * gridRange), new Vector3(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x - x, 0, visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z - z) * range);
                                 bool hit = Physics.Raycast(ray, out RaycastHit hitInfo, range, 4098, QueryTriggerInteraction.Collide);
                                 if (hit)
                                 {
                                     if (debugMode)
                                     {
-                                        Debug.DrawLine(centerPosition + new Vector3(x * gridRange, 1, z * gridRange), centerPosition + new Vector3(visivilityAreaGrid[x][z].canVisivleAreaPosition[a].x * gridRange, 1, visivilityAreaGrid[x][z].canVisivleAreaPosition[a].z * gridRange), Color.red, 1);
+                                        Debug.DrawRay(ray.origin,ray.direction * range,Color.red,2);
                                     }
                                 }
                                 else
                                 {
-                                    visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Add(visivilityAreaGrid[x][z].canVisivleAreaPosition[a]);
+                                    visivilityAreaGrid[x][z].canVisivleAreaPosition.Add(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a]);
                                 }
                             }
                         }
@@ -297,28 +297,28 @@ namespace Scenes.Ingame.Enemy
                 }).AddTo(_compositeDisposable);
             }
             //見えないところを見えないようにする
-            for (byte x = 0; x < visivilityAreaGrid[0].Count; x++)
+            for (byte x = 0; x < visivilityAreaGrid.Count; x++)
             {
                 for (byte z = 0; z < visivilityAreaGrid[x].Count; z++)
                 {
                     //一旦見える部分をリセット
                     visivilityAreaGrid[x][z] = new VisivilityArea(new List<DoubleByteAndMonoFloat>(), visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition);
 
-                    for (byte a = 0; x < visivilityAreaGrid[x][z].canVisivleAreaPosition.Count; a++)//実際に見える部分のみ見えるように変更してゆく
+                    for (byte a = 0; a < visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Count; a++)//実際に見える部分のみ見えるように変更してゆく
                     {
-                        float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaGrid[x][z].canVisivleAreaPosition[a].x) * gridRange, 2) + Mathf.Pow((z - visivilityAreaGrid[x][z].canVisivleAreaPosition[a].z) * gridRange, 2));
-                        Ray ray = new Ray(centerPosition + new Vector3(x * gridRange, 1, z * gridRange), new Vector3(x - visivilityAreaGrid[x][z].canVisivleAreaPosition[a].x, 0, z - visivilityAreaGrid[x][z].canVisivleAreaPosition[a].z));
+                        float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x) * gridRange, 2) + Mathf.Pow((z - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z) * gridRange, 2));
+                        Ray ray = new Ray(centerPosition + new Vector3(x * gridRange, 1, z * gridRange), new Vector3(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x - x, 0, visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z - z) * range);
                         bool hit = Physics.Raycast(ray, out RaycastHit hitInfo, range, 4098, QueryTriggerInteraction.Collide);
                         if (hit)
                         {
                             if (debugMode)
                             {
-                                Debug.DrawLine(centerPosition + new Vector3(x * gridRange, 1, z * gridRange), centerPosition + new Vector3(visivilityAreaGrid[x][z].canVisivleAreaPosition[a].x * gridRange, 1, visivilityAreaGrid[x][z].canVisivleAreaPosition[a].z * gridRange), Color.red, 1);
+                                Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 2);
                             }
                         }
                         else
                         {
-                            visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Add(visivilityAreaGrid[x][z].canVisivleAreaPosition[a]);
+                            visivilityAreaGrid[x][z].canVisivleAreaPosition.Add(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a]);
                         }
                     }
                 }
