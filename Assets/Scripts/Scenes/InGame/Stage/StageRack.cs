@@ -53,59 +53,44 @@ namespace Scenes.Ingame.Stage
                 _isOpen = true;
             }
         }
+
+        private void AnimationcComplete()
+        {
+            _rackCollider.isTrigger = false;
+            _isAnimation = false;
+        }
+
         private void RackOpen()
         {
             if (drawType == DrawType.RightOpen)
             {
-                transform.DORotate(R_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(() =>
-                {
-                    _rackCollider.isTrigger = false;
-                    _isAnimation = false;
-                });
+                transform.DORotate(R_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine);
             }
             else if (drawType == DrawType.LeftOpen)
             {
-                transform.DORotate(L_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(() =>
-                {
-                    _rackCollider.isTrigger = false;
-                    _isAnimation = false;
-                });
+                transform.DORotate(L_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine);
             }
             else if (drawType == DrawType.DrawOpen)
             {
-                transform.DOMove(0.3f * D_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(() =>
-                {
-                    _rackCollider.isTrigger = false;
-                    _isAnimation = false;
-                });
+                transform.DOMove(0.3f * D_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine);
             }
+            AnimationcComplete();
         }
         private void RackClose()
         {
             if (drawType == DrawType.RightOpen)
             {
-                transform.DORotate(-R_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(() =>
-                {
-                    _rackCollider.isTrigger = false;
-                    _isAnimation = false;
-                });
+                transform.DORotate(-R_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine);
             }
             if (drawType == DrawType.LeftOpen)
             {
-                transform.DORotate(-L_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(() =>
-                {
-                    _rackCollider.isTrigger = false;
-                    _isAnimation = false;
-                });
+                transform.DORotate(-L_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine);
             }
             if (drawType == DrawType.DrawOpen)
             {
-                transform.DOMove(0.3f * -D_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(() =>
-                {
-                    _rackCollider.isTrigger = false;
-                    _isAnimation = false;
-                });
+                transform.DOMove(0.3f * -D_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine);
             }
+            AnimationcComplete();
         }
     }
 }
