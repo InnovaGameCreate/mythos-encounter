@@ -87,6 +87,7 @@ namespace Scenes.Ingame.Player
         private bool _isUseItem = false;
         private bool _isUseMagic = false;
         private bool _isUseEscapePoint = false;
+        private bool _isBuffedAdrenaline = false;
         private bool _isPulsationBleeding = false;
 
         private void Init()
@@ -138,6 +139,14 @@ namespace Scenes.Ingame.Player
             {
                 _enemyAttackedMe.OnNext(default);
             }
+
+            if (Input.GetKeyDown(KeyCode.M)) {
+                Debug.Log($"_isアドレナリンは{_isBuffedAdrenaline}");
+            }
+
+            if (Input.GetKeyDown(KeyCode.N)) {
+    
+            }
 #endif           
         }
 
@@ -170,7 +179,7 @@ namespace Scenes.Ingame.Player
             if (mode == "Heal")
                 _stamina.Value = Mathf.Min(100, _stamina.Value + value);
             else if (mode == "Damage")
-                _stamina.Value = Mathf.Max(0, _stamina.Value - value);
+                _stamina.Value = Mathf.Max(0, _stamina.Value - (int)(value * (_isBuffedAdrenaline ? 0.5f : 1)));
         }
 
         /// <summary>
@@ -230,6 +239,21 @@ namespace Scenes.Ingame.Player
             }
             _isUseEscapePoint = value;
         }
+        
+        public void StartBuff()
+        {
+            StartCoroutine(BuffAdrenaline());
+        }
+        /// <summary>
+        /// アドレナリン上昇状態を変化させるための関数
+        /// </summary>
+        private IEnumerator BuffAdrenaline()
+        {
+            _isBuffedAdrenaline = true;
+            yield return new WaitForSeconds(15.0f);
+            _isBuffedAdrenaline = false;
+            yield break;
+        }
 
         /// <summary>
         /// 心拍数に応じて出血状態時の出血量を変化させる関数
@@ -237,6 +261,7 @@ namespace Scenes.Ingame.Player
         /// <param name="value"></param>
         public void PulsationBleeding(bool value)
         {
+
             _isPulsationBleeding = value;
         }
 
@@ -307,6 +332,8 @@ namespace Scenes.Ingame.Player
             if (sanValue <= 0)
                 _survive.Value = false;
         }
+
+  
     }
 }
 

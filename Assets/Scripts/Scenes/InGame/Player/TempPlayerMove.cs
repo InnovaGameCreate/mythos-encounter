@@ -36,6 +36,7 @@ namespace Scenes.Ingame.Player
         //主に外部スクリプトで扱うフィールド
         private bool _isParalyzed = false;//身体の麻痺.BodyParalyze.Csで使用
         private bool _isPulsation = false;//心拍数増加.IncreasePulsation.Csで使用
+        
 
         void Start()
         {
@@ -218,7 +219,7 @@ namespace Scenes.Ingame.Player
             while (_myPlayerStatus.nowPlayerActionState == PlayerActionState.Dash)
             { 
                 yield return new WaitForSeconds(0.1f);
-                _myPlayerStatus.ChangeStamina(_expandStamina / 10 * (_isPulsation ? 2 : 1), "Damage");
+                _myPlayerStatus.ChangeStamina((_expandStamina / 10 * (_isPulsation ? 2 : 1)), "Damage");
             }           
         }
 
@@ -305,6 +306,8 @@ namespace Scenes.Ingame.Player
         { 
             _isCanMove = value;
         }
+
+
 
 
     }
