@@ -27,6 +27,7 @@ namespace Scenes.Ingame.Player
 
         private KeyCode _mapKey = KeyCode.M;
         private GameObject _player;
+        [SerializeField]private MeshRenderer[] _fogMeshRenderers = new MeshRenderer[2];
         // Start is called before the first frame update
         void Start()
         {
@@ -60,14 +61,19 @@ namespace Scenes.Ingame.Player
                         PlayerGUIPresenter.Instance.CursorSetting(false);
 
                         //Player‚ÌêŠ‚É‰‚¶‚Äƒ}ƒbƒv‚ğØ‚è‘Ö‚¦‚é
-                        if (_player.transform.position.y < WALLSIZE)
+                        if (_player.transform.position.y < WALLSIZE)//1ŠK‚É‚¢‚éê‡
                         {
                             _mapCamera.transform.localPosition = new Vector3(_mapCamera.transform.localPosition.x, FLOOR_1F, _mapCamera.transform.localPosition.z);
+                            _fogMeshRenderers[0].enabled = true;
+                            _fogMeshRenderers[1].enabled = false;
                             _nowViewFloor = 1;
+                            
                         }
-                        else if (WALLSIZE <= _player.transform.position.y)
+                        else if (WALLSIZE <= _player.transform.position.y)//2ŠK‚É‚¢‚éê‡
                         {
                             _mapCamera.transform.localPosition = new Vector3(_mapCamera.transform.localPosition.x, FLOOR_2F, _mapCamera.transform.localPosition.z);
+                            _fogMeshRenderers[0].enabled = false;
+                            _fogMeshRenderers[1].enabled = true;
                             _nowViewFloor = 2;
                         }
 
@@ -88,15 +94,24 @@ namespace Scenes.Ingame.Player
             if (_nowViewFloor == 1)
             {
                 _mapCamera.transform.localPosition = new Vector3(_mapCamera.transform.localPosition.x, FLOOR_2F, _mapCamera.transform.localPosition.z);
+                _fogMeshRenderers[0].enabled = false;
+                _fogMeshRenderers[1].enabled = true;
                 _nowViewFloor = 2;
                 _mapText.text = "Floor2";
             }
             else if (_nowViewFloor == 2)
             {
                 _mapCamera.transform.localPosition = new Vector3(_mapCamera.transform.localPosition.x, FLOOR_1F, _mapCamera.transform.localPosition.z);
+                _fogMeshRenderers[0].enabled = true;
+                _fogMeshRenderers[1].enabled = false;
                 _nowViewFloor = 1;
                 _mapText.text = "Floor1";
             }
+        }
+
+        public void SetFogs(int floor, MeshRenderer obj)
+        {
+            _fogMeshRenderers[floor - 1] = obj;
         }
     }
 }
