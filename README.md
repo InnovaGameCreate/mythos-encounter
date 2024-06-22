@@ -61,4 +61,10 @@ Request Changeを貰ったら内容に沿って修正を行なってください
 - Baseball Bats – Pack
 - Vintage rifle - Western model
 - Medieval Weapons PBR Pack
-  
+- Horror House
+- Horror Mansion
+- Creature Insect
+- Horror Creatures
+- Monster Underwater 01
+- Monster Underwater 04（Animationは01と共用）
+- ModularCreepyAbandonedHospital
