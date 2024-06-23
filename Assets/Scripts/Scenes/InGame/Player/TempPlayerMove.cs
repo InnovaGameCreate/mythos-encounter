@@ -15,7 +15,6 @@ namespace Scenes.Ingame.Player
         Vector3 _moveVelocity;
 
         [Header("ƒJƒƒ‰ŠÖŒW")]
-        [SerializeField] private CameraMove _myCameraMove;
         [SerializeField] private GameObject _camera;
         [SerializeField] private bool isCurcleSetting;
         private Vector3 _nowCameraAngle;
