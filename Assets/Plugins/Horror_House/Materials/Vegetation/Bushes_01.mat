@@ -9,13 +9,16 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Bushes_01
   m_Shader: {fileID: 4800000, guid: b9e2206000f063e4482138f005c8e6e1, type: 3}
-  m_ShaderKeywords: _ALPHATEST_ON
-  m_LightmapFlags: 2
+  m_ShaderKeywords: _ADD_PRECOMPUTED_VELOCITY _ALPHATEST_ON _DOUBLESIDED_ON
+  m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
+  m_DoubleSidedGI: 1
+  m_CustomRenderQueue: 2450
+  stringTagMap:
+    MotionVector: User
+    RenderType: TransparentCutout
+  disabledShaderPasses:
+  - TransparentBackface
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -93,17 +96,27 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Floats:
     - _ASEOutlineWidth: 0
+    - _AddPrecomputedVelocity: 1
     - _AlphaCutoff: 0.5
+    - _AlphaCutoffEnable: 1
+    - _AlphaDstBlend: 0
+    - _AlphaSrcBlend: 1
     - _AmbientOcclusion: 0
-    - _Ambient_Occlusion: 0.92
+    - _Ambient_Occlusion: 2.22
     - _Amplitude: 0.15
+    - _BlendMode: 0
     - _BumpScale: 1
-    - _Cutoff: 0.59
+    - _CullMode: 0
+    - _CullModeForward: 0
+    - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
+    - _DoubleSidedEnable: 1
+    - _DoubleSidedNormalMode: 2
     - _DstBlend: 0
     - _Emmisive_Power: 0.569
     - _Emmive_Power: 0.08
-    - _Float0: 0
+    - _EnableFogOnTransparent: 1
+    - _Float0: 1.49
     - _Float1: 0.08
     - _Float2: 1.49
     - _GlossMapScale: 1
@@ -116,38 +129,59 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _Power_Normal: 0.49
+    - _ReceivesSSR: 1
+    - _RenderQueueType: 1
+    - _RequireSplitLighting: 0
     - _SmoothnesMin: 0
     - _Smoothness: 0.2
     - _SmoothnessTextureChannel: 0
     - _Smoothness_Power: 0.46
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _StencilRef: 0
+    - _StencilRefDepth: 8
+    - _StencilRefDistortionVec: 4
+    - _StencilRefGBuffer: 10
+    - _StencilRefMV: 40
+    - _StencilWriteMask: 6
+    - _StencilWriteMaskDepth: 8
+    - _StencilWriteMaskDistortionVec: 4
+    - _StencilWriteMaskGBuffer: 14
+    - _StencilWriteMaskMV: 40
+    - _SurfaceType: 0
+    - _Tilling: 1.49
     - _Tilling_Color: 1.49
     - _TransAmbient: 0.2
     - _TransDirect: 1
-    - _TransNormal: 0.5
     - _TransNormalDistortion: 0.1
     - _TransScattering: 2
     - _TransShadow: 0.9
-    - _TransStrength: 1
     - _Translucency: 1
-    - _TransmissionShadow: 0.5
+    - _TransparentBackfaceEnable: 0
+    - _TransparentCullMode: 2
+    - _TransparentSortPriority: 0
+    - _TransparentZWrite: 1
     - _UVSec: 0
     - _UltraDetailScale: 702
+    - _UseShadowThreshold: 0
     - _Wind: 2.24
     - _WindPower: 0.162
     - _WindScale: 0.371
     - _WindSpeed: 0.208
     - _Wind_Size: 0.366
     - _Wind_Speed: 1.31
+    - _ZTestDepthEqualForOpaque: 3
+    - _ZTestGBuffer: 3
+    - _ZTestTransparent: 4
     - _ZWrite: 1
     - __dirty: 0
     m_Colors:
     - _ASEOutlineColor: {r: 0, g: 0, b: 0, a: 0}
     - _AlbedoColor: {r: 1, g: 1, b: 1, a: 0}
     - _Color: {r: 0.8544411, g: 0.8584906, b: 0.85499984, a: 1}
-    - _Color_Tilling: {r: 0.6603774, g: 0.5756119, b: 0.40806332, a: 0}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Color_Tilling: {r: 0.6603774, g: 0.57561195, b: 0.40806338, a: 0}
+    - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _Emissive: {r: 0, g: 0, b: 0, a: 0}
     - _SubSurfColor: {r: 0.6792453, g: 0.6792453, b: 0.6792453, a: 1}
     - _Tilling: {r: 0, g: 0, b: 0, a: 0}

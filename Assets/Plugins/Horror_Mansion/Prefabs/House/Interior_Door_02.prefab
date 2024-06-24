@@ -62,7 +62,7 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 5179e9c573c8a4545ad3e88267b56c35, type: 2}
-  - {fileID: 2100000, guid: d2bd6d41cc06bf846aade6f04c301cd7, type: 2}
+  - {fileID: 2100000, guid: 5179e9c573c8a4545ad3e88267b56c35, type: 2}
   - {fileID: 2100000, guid: 1bab28d664f0b1b4cae2174b763197af, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -149,6 +149,7 @@ LODGroup:
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 1048561876686117186}
+    - renderer: {fileID: 3719851933511096900}
   m_Enabled: 1
 --- !u!1 &2391347323180012580
 GameObject:
@@ -265,7 +266,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   smooth: 2
   DoorOpenAngle: 90
-  txt: {fileID: 8057050384760974268, guid: c129f1f930e536e4980cc7ddc2937399, type: 3}
+  txt: {fileID: 0}
 --- !u!65 &2213543497508120783
 BoxCollider:
   m_ObjectHideFlags: 0
