@@ -43,7 +43,7 @@ namespace Scenes.Ingame.Manager
         {
             EnemyStatus enemyStatus = FindObjectOfType<EnemyStatus>();
             enemyStatus.OnEnemyStateChange
-                .Where(state => state == EnemyState.Chese)
+                .Where(state => state == EnemyState.Chase)
                 .Subscribe(_ =>
                 {
                     _chaseCount++;
