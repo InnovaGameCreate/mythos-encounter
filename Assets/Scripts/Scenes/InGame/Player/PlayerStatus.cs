@@ -86,6 +86,7 @@ namespace Scenes.Ingame.Player
         public int bleedingDamage = 1;//出血時に受けるダメージ
         private bool _isUseItem = false;
         private bool _isUseMagic = false;
+        private bool _isHaveCharm = false;
         private bool _isUseEscapePoint = false;
         private bool _isPulsationBleeding = false;
 
@@ -138,6 +139,7 @@ namespace Scenes.Ingame.Player
             {
                 _enemyAttackedMe.OnNext(default);
             }
+
 #endif           
         }
 
@@ -189,7 +191,7 @@ namespace Scenes.Ingame.Player
             else if (mode == "Damage")
             {
                 lastSanValue = _san.Value;
-                _san.Value = Mathf.Max(0, _san.Value - value);
+                _san.Value = Mathf.Max(0, _san.Value - value / (_isHaveCharm ? 2 : 1));
             }
         }
 
@@ -217,6 +219,15 @@ namespace Scenes.Ingame.Player
         public void UseMagic(bool value)
         {
             _isUseMagic = value;
+        }
+
+        /// <summary>
+        /// お守りがアイテムスロットにあるか判定する関数
+        /// </summary>
+        /// <param name="value"></param>
+        public void HaveCharm(bool value)
+        {
+            _isHaveCharm = value;
         }
         /// <summary>
         /// 呪文を唱えているか管理するための関数

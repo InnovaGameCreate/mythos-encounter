@@ -224,6 +224,20 @@ namespace Scenes.Ingame.Player
                     });
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.P)) {
+                int y = 0;
+                foreach(var x in _itemSlot) {
+                    if(x.myItemData != null) {
+                        y += 1;
+                    }
+                }
+                Debug.Log($"アイテム所持数：{y}");
+            }
+
+        }
+
         /// <summary>
         /// 数字キーが押されたかの確認
         /// </summary>
