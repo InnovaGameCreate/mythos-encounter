@@ -15,10 +15,10 @@ namespace Scenes.Ingame.Player
         Vector3 _moveVelocity;
 
         [Header("カメラ関係")]
-        [SerializeField] private CameraMove _myCameraMove;
         [SerializeField] private GameObject _camera;
         [SerializeField] private bool isCurcleSetting;
         private Vector3 _nowCameraAngle;
+        public Vector3 NowCameraAngle { get { return _nowCameraAngle; } }
 
         [Header("アニメーション関係")]
         [SerializeField]private Animator _animator;
@@ -68,8 +68,6 @@ namespace Scenes.Ingame.Player
 
                     //足音の種類を決定・鳴らす
                     _myPlayerSoundManager.FootSound(state);
-                    //移動による視点の変化の仕方を設定
-                    _myCameraMove.ChangeViewPoint(_myPlayerSoundManager.GetClipLength());
                 }).AddTo(this);
 
             //待機状態に切り替え
