@@ -329,7 +329,11 @@ namespace Scenes.Ingame.Enemy
                 {
                     Debug.LogError("z座標がマップからはみ出ています");
                 }
-                 Debug.LogError("x座標がマップからはみ出ています");
+                
+            }
+            else
+            {
+                Debug.LogError("x座標がマップからはみ出ています");
             }
         }
 
