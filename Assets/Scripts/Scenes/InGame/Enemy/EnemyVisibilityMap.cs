@@ -102,7 +102,7 @@ namespace Scenes.Ingame.Enemy
                 {
                     item.Add(new VisivilityArea(0));
 
-                    if (debugMode) Debug.DrawLine(setCenterPosition + new Vector3(i, 0, j) * range, setCenterPosition + ToVector3(i, 0, j) * range + ToVector3(0, 10, 0), Color.yellow, 10);//グリッドの位置を表示
+                    if (debugMode) Debug.DrawLine(setCenterPosition + ToVector3(i, 0, j) * range, setCenterPosition + ToVector3(i, 0, j) * range + ToVector3(0, 10, 0), Color.yellow, 10);//グリッドの位置を表示
                 }
                 visivilityAreaGrid.Add(item);
             }
