@@ -229,20 +229,18 @@ namespace Scenes.Ingame.Enemy
         /// </summary>
         public void BeScanner()
         {
-            Debug.Log("スキャン開始");
             List<GameObject> doors = new List<GameObject>();
             _stageDoors = new List<StageDoor>();
             doors = GameObject.FindGameObjectsWithTag("Door").ToList();
 
             foreach (GameObject door in doors)
             {
-                Debug.LogWarning(door);
                 if (door.TryGetComponent<StageDoor>(out StageDoor sd))
                 {
                     _stageDoors.Add(sd);
                 }
                 else {
-                    Debug.Log(door.name +  "はTgはDoorですがStageDoorがない");
+                    Debug.LogError(door.name +  "はTgはDoorですがStageDoorがない");
                 }
                
             }
@@ -258,14 +256,11 @@ namespace Scenes.Ingame.Enemy
 
                 }
             }
-            Debug.LogWarning(_stageDoors.Count);
             foreach (StageDoor stageDoorCs in _stageDoors)
             {
-                Debug.LogWarning("サブスクライブ一歩手前");
-                Debug.LogWarning(_stageDoors.Count);
                 stageDoorCs.OnChangeDoorOpen.Subscribe(_ =>
                 {
-                    Debug.LogWarning("ドアの変更を検知した");
+                    if(debugMode)Debug.Log("ドアの変更を検知した");
                     //見えないところを見えないようにする
                     for (byte x = 0; x < visivilityAreaGrid.Count; x++)
                     {
