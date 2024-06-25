@@ -4,7 +4,7 @@ using UnityEngine;
 using Scenes.Ingame.Stage;
 using UniRx;
 using UnityEngine.UIElements;
-
+using UnityEditor.Experimental.GraphView;
 
 namespace Scenes.Ingame.Enemy
 {
@@ -143,8 +143,7 @@ namespace Scenes.Ingame.Enemy
                                     float range = Mathf.Sqrt(range2);//平方根を求めるのはすごくコストが重いらしいので確実に計算が必要になってからしてます
                                     //視界が通るか＝Rayが通るか
                                     bool hit;
-                                    Ray ray = new Ray(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(vX - x, 0, vZ - z));
-                                    hit = Physics.Raycast(ray, out RaycastHit hitInfo, range,  2048, QueryTriggerInteraction.Collide);
+                                    hit = Physics.Raycast(ToRay(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(vX - x, 0, vZ - z)), out RaycastHit hitInfo, range,  2048, QueryTriggerInteraction.Collide);
                                     if (!hit)
                                     { //何にもあたっていなかった場合
                                         if (debugMode) Debug.DrawRay(ray.origin, ray.direction * range, Color.green, 10);
@@ -278,8 +277,7 @@ namespace Scenes.Ingame.Enemy
                             for (byte a = 0; a < visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Count; a++)//実際に見える部分のみ見えるように変更してゆく
                             {
                                 float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x) * gridRange, 2) + Mathf.Pow((z - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z) * gridRange, 2));
-                                Ray ray = new Ray(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x - x, 0, visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z - z) * range);
-                                bool hit = Physics.Raycast(ray, out RaycastHit hitInfo, range, 4098, QueryTriggerInteraction.Collide);
+                                bool hit = Physics.Raycast(ToRay(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x - x, 0, visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z - z) * range), out RaycastHit hitInfo, range, 4098, QueryTriggerInteraction.Collide);
                                 if (hit)
                                 {
                                     if (debugMode)
@@ -307,8 +305,7 @@ namespace Scenes.Ingame.Enemy
                     for (byte a = 0; a < visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Count; a++)//実際に見える部分のみ見えるように変更してゆく
                     {
                         float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x) * gridRange, 2) + Mathf.Pow((z - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z) * gridRange, 2));
-                        Ray ray = new Ray(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x - x, 0, visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z - z) * range);
-                        bool hit = Physics.Raycast(ray, out RaycastHit hitInfo, range, 4098, QueryTriggerInteraction.Collide);
+                        bool hit = Physics.Raycast(ToRay(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x - x, 0, visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z - z) * range), out RaycastHit hitInfo, range, 4098, QueryTriggerInteraction.Collide);
                         if (hit)
                         {
                             if (debugMode)
@@ -737,11 +734,19 @@ namespace Scenes.Ingame.Enemy
         }
 
         DoubleByteAndMonoFloat translationDoubleByteAndMonoFloat = new DoubleByteAndMonoFloat();
-        public DoubleByteAndMonoFloat ToDoubleByteAndMonoFloat(byte sX, byte sZ, float sRange) {
+        private DoubleByteAndMonoFloat ToDoubleByteAndMonoFloat(byte sX, byte sZ, float sRange) {
             translationDoubleByteAndMonoFloat.x = sX;
             translationDoubleByteAndMonoFloat.z = sZ;
             translationDoubleByteAndMonoFloat.range = sRange;
             return translationDoubleByteAndMonoFloat;
+        }
+
+        Ray ray = new Ray();
+
+        private Ray ToRay(Vector3 origin,Vector3 direction) {
+            ray.origin = origin;
+            ray.direction = direction;
+            return ray;
         }
 
 
