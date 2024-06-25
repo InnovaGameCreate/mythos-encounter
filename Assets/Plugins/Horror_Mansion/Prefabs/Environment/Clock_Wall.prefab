@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0a5aa6d04247b47a92d1c1349f3169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  x: 0.0005
+  x: 0.01
   y: 0
   z: 0
 --- !u!1 &1103698077978273430
@@ -278,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c0a5aa6d04247b47a92d1c1349f3169, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  x: 0.003
+  x: 0.02
   y: 0
   z: 0
 --- !u!1 &1524168674571660545
