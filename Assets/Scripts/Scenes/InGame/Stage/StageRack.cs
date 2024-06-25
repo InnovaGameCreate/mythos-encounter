@@ -72,7 +72,7 @@ namespace Scenes.Ingame.Stage
             }
             else if (drawType == DrawType.DrawOpen)
             {
-                transform.DOMove(0.3f * D_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine);
+                transform.DOLocalMove(0.3f * D_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine);
             }
             AnimationcComplete();
         }
@@ -88,7 +88,7 @@ namespace Scenes.Ingame.Stage
             }
             if (drawType == DrawType.DrawOpen)
             {
-                transform.DOMove(0.3f * -D_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine);
+                transform.DOLocalMove(0.3f * -D_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine);
             }
             AnimationcComplete();
         }
