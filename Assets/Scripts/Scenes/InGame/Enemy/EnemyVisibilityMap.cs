@@ -788,8 +788,11 @@ namespace Scenes.Ingame.Enemy
         /// </summary>
         public void Dispose() { 
             _compositeDisposable.Dispose();
-            _doorScanTokenSource.Cancel();
-            _doorScanTokenSource.Dispose();
+            if (_doorScanTokenSource != null) {
+                _doorScanTokenSource.Cancel();
+                _doorScanTokenSource.Dispose();
+            }
+
         }
 
     }
