@@ -274,75 +274,70 @@ namespace Scenes.Ingame.Enemy
                     if(debugMode)Debug.Log("ドアの変更を検知した");
                     _doorScanTokenSource.Cancel();//以前の処理が行われていた場合中断する
                     //見えないところを見えないようにする
-                    for (byte x = 0; x < visivilityAreaGrid.Count; x++)
-                    {
-                        for (byte z = 0; z < visivilityAreaGrid[x].Count; z++)
-                        {
 
+                   //UniTask.Run(() => ScanDoor(x, z, _doorScanTokenSource.Token).Forget());
+                   ScanDoor(_doorScanTokenSource.Token).Forget();
 
-
-
-                            UniTask.Run(() => ScanDoor(x, z, _doorScanTokenSource.Token).Forget());
-                            //ScanDoor(x, z, _doorScanTokenSource.Token).Forget();
-
-                        }
-                    }
                 }).AddTo(_compositeDisposable);
             }
 
-            //最初のスキャン
-            for (byte x = 0; x < visivilityAreaGrid.Count; x++)
-            {
-                for (byte z = 0; z < visivilityAreaGrid[x].Count; z++)
-                {
 
 
 
 
-                    UniTask.Run(() => ScanDoor(x, z, _doorScanTokenSource.Token).Forget());
-                    //ScanDoor(x, z, _doorScanTokenSource.Token).Forget();
+                    //UniTask.Run(() => ScanDoor(x, z, _doorScanTokenSource.Token).Forget());
+                    ScanDoor(_doorScanTokenSource.Token).Forget();
 
-                }
-            }
+
 
 
         //UniTask.Run(() => ScanDoor(1, 1, _doorScanTokenSource.Token).Forget());
         //UniTask.Run(() => ScanDoor(1, 2, _doorScanTokenSource.Token).Forget());
     }
 
-        private async UniTaskVoid ScanDoor(byte x,byte z,CancellationToken token) {
+        private async UniTaskVoid ScanDoor(CancellationToken token) {
 
-            byte a;
-            //代入用のstructを作成
-            //visivilityAreaGrid[x][z] = new VisivilityArea(new List<DoubleByteAndMonoFloat>(), visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition);
-            await UniTask.SwitchToThreadPool();
-
-            List<DoubleByteAndMonoFloat> newCanVisivilityAreaPosition = new List<DoubleByteAndMonoFloat>();
-
-            //Debug.Log("ドアスキャン" + visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Count);
-
-            for (a = 0; a < visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Count; a++)//実際に見える部分のみ見えるように変更してゆく
+            for (byte x = 0; x < visivilityAreaGrid.Count; x++)
             {
-                Debug.Log("ドアのforのa" + a);
-                await UniTask.Yield(cancellationToken: token);
-                float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x) * gridRange, 2) + Mathf.Pow((z - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z) * gridRange, 2));
-                bool hit = Physics.Raycast(ToRay(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x - x, 0, visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z - z) * range), out RaycastHit hitInfo, range, 4098, QueryTriggerInteraction.Collide);
-                if (hit)
+                for (byte z = 0; z < visivilityAreaGrid[x].Count; z++)
                 {
-                    if (debugMode)
+
+                    List<DoubleByteAndMonoFloat> newCanVisivilityAreaPosition = new List<DoubleByteAndMonoFloat>();
+
+                    //Debug.Log("ドアスキャン" + visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Count);
+                    //await UniTask.DelayFrame(1, cancellationToken: token);
+                    for (byte a = 0; a < visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Count; a++)//実際に見える部分のみ見えるように変更してゆく
                     {
-                        Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 2);
+                        Debug.Log("ドアのforのa" + a);
+                        //await UniTask.Yield(cancellationToken: token);
+                        float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x) * gridRange, 2) + Mathf.Pow((z - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z) * gridRange, 2));
+                        bool hit = Physics.Raycast(ToRay(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x - x, 0, visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z - z) * range), out RaycastHit hitInfo, range, 4098, QueryTriggerInteraction.Collide);
+                        if (hit)
+                        {
+                            if (debugMode)
+                            {
+
+                                Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 2);
+                            }
+                        }
+                        else
+                        {
+                            //await UniTask.Yield(cancellationToken: token);
+                            newCanVisivilityAreaPosition.Add(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a]);
+                        }
                     }
-                }
-                else
-                {
-                    await UniTask.Yield(cancellationToken: token);
-                    newCanVisivilityAreaPosition.Add(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a]);
+                    visivilityAreaGrid[x][z] = new VisivilityArea(newCanVisivilityAreaPosition, visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition);
+
                 }
             }
 
-            await UniTask.Yield(cancellationToken: token);//foreach中にlistが書き換わることがないようにメインスレッドに戻す
-            visivilityAreaGrid[x][z] = new VisivilityArea(newCanVisivilityAreaPosition, visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition);
+
+
+            //代入用のstructを作成
+            //visivilityAreaGrid[x][z] = new VisivilityArea(new List<DoubleByteAndMonoFloat>(), visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition);
+            //await UniTask.SwitchToThreadPool();
+
+            
 
 
         }
