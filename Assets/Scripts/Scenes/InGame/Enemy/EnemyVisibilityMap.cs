@@ -283,16 +283,32 @@ namespace Scenes.Ingame.Enemy
 
 
                             UniTask.Run(() => ScanDoor(x, z, _doorScanTokenSource.Token).Forget());
-
+                            //ScanDoor(x, z, _doorScanTokenSource.Token).Forget();
 
                         }
                     }
                 }).AddTo(_compositeDisposable);
             }
 
-            //UniTask.Run(() => ScanDoor(1, 1, _doorScanTokenSource.Token).Forget());
-            //UniTask.Run(() => ScanDoor(1, 2, _doorScanTokenSource.Token).Forget());
-        }
+            //ç≈èâÇÃÉXÉLÉÉÉì
+            for (byte x = 0; x < visivilityAreaGrid.Count; x++)
+            {
+                for (byte z = 0; z < visivilityAreaGrid[x].Count; z++)
+                {
+
+
+
+
+                    UniTask.Run(() => ScanDoor(x, z, _doorScanTokenSource.Token).Forget());
+                    //ScanDoor(x, z, _doorScanTokenSource.Token).Forget();
+
+                }
+            }
+
+
+        //UniTask.Run(() => ScanDoor(1, 1, _doorScanTokenSource.Token).Forget());
+        //UniTask.Run(() => ScanDoor(1, 2, _doorScanTokenSource.Token).Forget());
+    }
 
         private async UniTaskVoid ScanDoor(byte x,byte z,CancellationToken token) {
 
