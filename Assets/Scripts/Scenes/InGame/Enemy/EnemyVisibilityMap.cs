@@ -300,6 +300,10 @@ namespace Scenes.Ingame.Enemy
                     }
                 }).AddTo(_compositeDisposable);
             }
+
+
+            _doorScanTokenSource.Cancel();//以前の処理が行われていた場合中断する
+
             //見えないところを見えないようにする
             for (byte x = 0; x < visivilityAreaGrid.Count; x++)
             {
@@ -780,10 +784,12 @@ namespace Scenes.Ingame.Enemy
 
 
         /// <summary>
-        /// UniRxの購読を終了する
+        /// UniRxの購読を終了する。UniTaskを破棄する
         /// </summary>
         public void Dispose() { 
             _compositeDisposable.Dispose();
+            _doorScanTokenSource.Cancel();
+            _doorScanTokenSource.Dispose();
         }
 
     }
