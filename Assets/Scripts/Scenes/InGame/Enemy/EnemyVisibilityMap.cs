@@ -296,6 +296,7 @@ namespace Scenes.Ingame.Enemy
 
         private async UniTaskVoid ScanDoor(byte x,byte z,CancellationToken token) {
 
+            byte a;
             //代入用のstructを作成
             //visivilityAreaGrid[x][z] = new VisivilityArea(new List<DoubleByteAndMonoFloat>(), visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition);
             await UniTask.SwitchToThreadPool();
@@ -304,10 +305,12 @@ namespace Scenes.Ingame.Enemy
 
             //Debug.Log("ドアスキャン" + visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Count);
 
-            foreach (DoubleByteAndMonoFloat item in visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition) {
+            for (a = 0; a < visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Count; a++)//実際に見える部分のみ見えるように変更してゆく
+            {
+                Debug.Log("ドアのforのa" + a);
                 await UniTask.Yield(cancellationToken: token);
-                float range = Mathf.Sqrt(Mathf.Pow((x - item.x) * gridRange, 2) + Mathf.Pow((z - item.z) * gridRange, 2));
-                bool hit = Physics.Raycast(ToRay(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(item.x - x, 0, item.z - z) * range), out RaycastHit hitInfo, range, 4098, QueryTriggerInteraction.Collide);
+                float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x) * gridRange, 2) + Mathf.Pow((z - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z) * gridRange, 2));
+                bool hit = Physics.Raycast(ToRay(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x - x, 0, visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z - z) * range), out RaycastHit hitInfo, range, 4098, QueryTriggerInteraction.Collide);
                 if (hit)
                 {
                     if (debugMode)
@@ -318,9 +321,8 @@ namespace Scenes.Ingame.Enemy
                 else
                 {
                     await UniTask.Yield(cancellationToken: token);
-                    newCanVisivilityAreaPosition.Add(item);
+                    newCanVisivilityAreaPosition.Add(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a]);
                 }
-                await UniTask.Yield(cancellationToken: token);
             }
 
             await UniTask.Yield(cancellationToken: token);//foreach中にlistが書き換わることがないようにメインスレッドに戻す
