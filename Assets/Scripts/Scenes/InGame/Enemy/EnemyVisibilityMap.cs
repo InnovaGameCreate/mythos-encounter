@@ -5,6 +5,9 @@ using Scenes.Ingame.Stage;
 using UniRx;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
+using Cysharp.Threading.Tasks;
+using static Unity.VisualScripting.Member;
+using System.Threading;
 
 namespace Scenes.Ingame.Enemy
 {
@@ -23,6 +26,8 @@ namespace Scenes.Ingame.Enemy
         private List<StageDoor> _stageDoors;//ステージ
 
         private readonly CompositeDisposable _compositeDisposable = new();
+
+        CancellationTokenSource _doorScanTokenSource;
 
         /// <summary>マス目の位置を2つのbyteで表し疎のマス目までの距離をfoatであらわしている</summary>
         public struct DoubleByteAndMonoFloat
@@ -166,7 +171,7 @@ namespace Scenes.Ingame.Enemy
         /// <summary>
         /// 自身の見た回数のみを独立させたコピーを作成して返す
         /// </summary>
-        /// <returns>自身のディープコピー</returns>
+        /// <returns>自身の見た回数のみを独立させたコピー</returns>
         public EnemyVisibilityMap Copy()
         {
             if (debugMode) Debug.Log("コピー開始");
@@ -229,6 +234,12 @@ namespace Scenes.Ingame.Enemy
         /// </summary>
         public void BeScanner()
         {
+
+            _doorScanTokenSource = new CancellationTokenSource();
+
+
+
+
             List<GameObject> doors = new List<GameObject>();
             _stageDoors = new List<StageDoor>();
             doors = GameObject.FindGameObjectsWithTag("Door").ToList();
@@ -294,30 +305,52 @@ namespace Scenes.Ingame.Enemy
             {
                 for (byte z = 0; z < visivilityAreaGrid[x].Count; z++)
                 {
-                    //一旦見える部分をリセット
-                    visivilityAreaGrid[x][z] = new VisivilityArea(new List<DoubleByteAndMonoFloat>(), visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition);
+                    UniTask.Run(() => ScanDoor(x, z, _doorScanTokenSource.Token).Forget());
+                }
+            }
+        }
 
-                    for (byte a = 0; a < visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Count; a++)//実際に見える部分のみ見えるように変更してゆく
+        private async UniTaskVoid ScanDoor(byte x,byte z,CancellationToken token) {
+
+            //代入用のstructを作成
+            //visivilityAreaGrid[x][z] = new VisivilityArea(new List<DoubleByteAndMonoFloat>(), visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition);
+
+            await UniTask.SwitchToThreadPool();
+
+            List<DoubleByteAndMonoFloat> newCanVisivilityAreaPosition = new List<DoubleByteAndMonoFloat>();
+
+            for (byte a = 0; a < visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Count; a++)//実際に見える部分のみ見えるように変更してゆく
+            {
+                await UniTask.Yield(cancellationToken: token);
+                float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x) * gridRange, 2) + Mathf.Pow((z - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z) * gridRange, 2));
+                bool hit = Physics.Raycast(ToRay(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x - x, 0, visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z - z) * range), out RaycastHit hitInfo, range, 4098, QueryTriggerInteraction.Collide);
+                if (hit)
+                {
+                    if (debugMode)
                     {
-                        float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x) * gridRange, 2) + Mathf.Pow((z - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z) * gridRange, 2));
-                        bool hit = Physics.Raycast(ToRay(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x - x, 0, visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z - z) * range), out RaycastHit hitInfo, range, 4098, QueryTriggerInteraction.Collide);
-                        if (hit)
-                        {
-                            if (debugMode)
-                            {
-                                Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 2);
-                            }
-                        }
-                        else
-                        {
-                            visivilityAreaGrid[x][z].canVisivleAreaPosition.Add(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a]);
-                        }
+                        Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 2);
                     }
+                }
+                else
+                {
+                    await UniTask.Yield(cancellationToken: token);
+                    newCanVisivilityAreaPosition.Add(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a]);
                 }
             }
 
+            await UniTask.Yield(cancellationToken: token);//foreach中にlistが書き換わることがないようにメインスレッドに戻す
+            visivilityAreaGrid[x][z] = new VisivilityArea(newCanVisivilityAreaPosition, visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition);
+
 
         }
+
+
+
+
+
+
+
+
 
         /// <summary>
         /// 次に確認すべき最も見ておらず最も近い位置を取得。
