@@ -272,62 +272,42 @@ namespace Scenes.Ingame.Enemy
                 stageDoorCs.OnChangeDoorOpen.Subscribe(_ =>
                 {
                     if(debugMode)Debug.Log("ドアの変更を検知した");
+                    _doorScanTokenSource.Cancel();//以前の処理が行われていた場合中断する
                     //見えないところを見えないようにする
                     for (byte x = 0; x < visivilityAreaGrid.Count; x++)
                     {
                         for (byte z = 0; z < visivilityAreaGrid[x].Count; z++)
                         {
-                            //一旦見える部分をリセット
-                            visivilityAreaGrid[x][z] = new VisivilityArea(new List<DoubleByteAndMonoFloat>(), visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition);
 
-                            for (byte a = 0; a < visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Count; a++)//実際に見える部分のみ見えるように変更してゆく
-                            {
-                                float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x) * gridRange, 2) + Mathf.Pow((z - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z) * gridRange, 2));
-                                bool hit = Physics.Raycast(ToRay(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x - x, 0, visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z - z) * range), out RaycastHit hitInfo, range, 4098, QueryTriggerInteraction.Collide);
-                                if (hit)
-                                {
-                                    if (debugMode)
-                                    {
-                                        Debug.DrawRay(ray.origin,ray.direction * range,Color.red,2);
-                                    }
-                                }
-                                else
-                                {
-                                    visivilityAreaGrid[x][z].canVisivleAreaPosition.Add(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a]);
-                                }
-                            }
+
+
+
+                            UniTask.Run(() => ScanDoor(x, z, _doorScanTokenSource.Token).Forget());
+
+
                         }
                     }
                 }).AddTo(_compositeDisposable);
             }
 
-
-            _doorScanTokenSource.Cancel();//以前の処理が行われていた場合中断する
-
-            //見えないところを見えないようにする
-            for (byte x = 0; x < visivilityAreaGrid.Count; x++)
-            {
-                for (byte z = 0; z < visivilityAreaGrid[x].Count; z++)
-                {
-                    UniTask.Run(() => ScanDoor(x, z, _doorScanTokenSource.Token).Forget());
-                }
-            }
+            //UniTask.Run(() => ScanDoor(1, 1, _doorScanTokenSource.Token).Forget());
+            //UniTask.Run(() => ScanDoor(1, 2, _doorScanTokenSource.Token).Forget());
         }
 
         private async UniTaskVoid ScanDoor(byte x,byte z,CancellationToken token) {
 
             //代入用のstructを作成
             //visivilityAreaGrid[x][z] = new VisivilityArea(new List<DoubleByteAndMonoFloat>(), visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition);
-
             await UniTask.SwitchToThreadPool();
 
             List<DoubleByteAndMonoFloat> newCanVisivilityAreaPosition = new List<DoubleByteAndMonoFloat>();
 
-            for (byte a = 0; a < visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Count; a++)//実際に見える部分のみ見えるように変更してゆく
-            {
+            //Debug.Log("ドアスキャン" + visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition.Count);
+
+            foreach (DoubleByteAndMonoFloat item in visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition) {
                 await UniTask.Yield(cancellationToken: token);
-                float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x) * gridRange, 2) + Mathf.Pow((z - visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z) * gridRange, 2));
-                bool hit = Physics.Raycast(ToRay(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].x - x, 0, visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a].z - z) * range), out RaycastHit hitInfo, range, 4098, QueryTriggerInteraction.Collide);
+                float range = Mathf.Sqrt(Mathf.Pow((x - item.x) * gridRange, 2) + Mathf.Pow((z - item.z) * gridRange, 2));
+                bool hit = Physics.Raycast(ToRay(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(item.x - x, 0, item.z - z) * range), out RaycastHit hitInfo, range, 4098, QueryTriggerInteraction.Collide);
                 if (hit)
                 {
                     if (debugMode)
@@ -338,8 +318,9 @@ namespace Scenes.Ingame.Enemy
                 else
                 {
                     await UniTask.Yield(cancellationToken: token);
-                    newCanVisivilityAreaPosition.Add(visivilityAreaGrid[x][z].defaultCanVisivilityAreaPosition[a]);
+                    newCanVisivilityAreaPosition.Add(item);
                 }
+                await UniTask.Yield(cancellationToken: token);
             }
 
             await UniTask.Yield(cancellationToken: token);//foreach中にlistが書き換わることがないようにメインスレッドに戻す
