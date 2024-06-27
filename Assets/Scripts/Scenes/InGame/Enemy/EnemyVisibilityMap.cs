@@ -15,7 +15,7 @@ namespace Scenes.Ingame.Enemy
     /// </summary>
     public class EnemyVisibilityMap : MonoBehaviour
     {
-        public List<List<VisivilityArea>> visivilityAreaGrid;//Unityの座標系を優先、一個目がx軸二個目がy軸のイメージ左下が[0][0]左上が[0][max]
+        public List<List<List<VisivilityArea>>> visivilityAreaGrid;//Unityの座標系を優先、一個目がx軸二個目がy軸二個目がz軸のイメージ左下が[0][0]左上が[0][max]
         public float maxVisivilityRange;//この距離を超えているエリアは見えることはないものとする
         public bool debugMode;
         public float gridRange;
@@ -26,27 +26,30 @@ namespace Scenes.Ingame.Enemy
 
         /// <summary>マス目の位置を2つのbyteで表し疎のマス目までの距離をfoatであらわしている</summary>
         [StructLayout(LayoutKind.Auto)]
-        public struct DoubleByteAndMonoFloat
+        public struct TripleByteAndMonoFloat
         {//位置と距離
             public byte x;
+            public byte y;
             public byte z;
             public float range;
 
             public List<StageDoor> needOpenDoor;
             public List<StageDoor> needCloseDoor;
 
-            public DoubleByteAndMonoFloat(byte sX, byte sZ, float sRange)
+            public TripleByteAndMonoFloat(byte sX, byte sY,byte sZ, float sRange)
             {
                 x = sX;
+                y = sY;
                 z = sZ;
                 range = sRange;
                 needOpenDoor = new List<StageDoor>();
                 needCloseDoor = new List<StageDoor>();
             }
 
-            public DoubleByteAndMonoFloat(byte sX, byte sZ, float sRange,List<StageDoor> sNeedOpenDoor, List<StageDoor> sNeedCloseDoor)
+            public TripleByteAndMonoFloat(byte sX, byte sY,byte sZ, float sRange,List<StageDoor> sNeedOpenDoor, List<StageDoor> sNeedCloseDoor)
             {
                 x = sX;
+                y = sY;
                 z = sZ;
                 range = sRange;
                 needOpenDoor = sNeedOpenDoor;
@@ -61,16 +64,16 @@ namespace Scenes.Ingame.Enemy
         public struct VisivilityArea
         {
             public byte watchNum;//このエリアを見た回数
-            public List<DoubleByteAndMonoFloat> canVisivleAreaPosition;
+            public List<TripleByteAndMonoFloat> canVisivleAreaPosition;
             public VisivilityArea(byte sWatchNum)
             {
                 watchNum = sWatchNum;
-                canVisivleAreaPosition = new List<DoubleByteAndMonoFloat>();
+                canVisivleAreaPosition = new List<TripleByteAndMonoFloat>();
             }
-            public VisivilityArea(byte sWatchNum, List<DoubleByteAndMonoFloat> sDoubleByteAndFloat)
+            public VisivilityArea(byte sWatchNum, List<TripleByteAndMonoFloat> sDoubleByteAndFloat)
             {
                 watchNum = sWatchNum;
-                canVisivleAreaPosition = new List<DoubleByteAndMonoFloat>(sDoubleByteAndFloat);
+                canVisivleAreaPosition = new List<TripleByteAndMonoFloat>(sDoubleByteAndFloat);
             }
         }
 
@@ -89,25 +92,31 @@ namespace Scenes.Ingame.Enemy
         /// <param name="z">z座標方向にマス目をいくつ並べるか</param>
         /// <param name="range">この距離以上の視線は通らないものと考えてシミュレートされる距離</param>
         /// <param name="setCenterPosition">左下のマス目の中心位置</param>
-        public void GridMake(byte x, byte z, float range, Vector3 setCenterPosition)
+        public void GridMake(byte x,byte y, byte z, float range, Vector3 setCenterPosition)
         { //マップを作成。xとzはグリッドの配置数。rangeはグリッドの距離。centerPositionは左下の位置
             if (debugMode) Debug.Log("グリッド作成開始");
-            visivilityAreaGrid = new List<List<VisivilityArea>>();
+            visivilityAreaGrid = new List<List<List<VisivilityArea>>>();
             gridRange = range;
             centerPosition = setCenterPosition;
             for (byte i = 0; i < x; i++)
             { //配列の要素を作成
-                List<VisivilityArea> item = new List<VisivilityArea>();
-                for (byte j = 0; j < z; j++)
+               
+                List<List<VisivilityArea>> itemy = new List<List<VisivilityArea>>();
+                for (byte j = 0; j < y; j++)
                 {
-                    item.Add(new VisivilityArea(0));
+                    List<VisivilityArea> itemz = new List<VisivilityArea>();
+                    for (byte k=0;k < z;k++) {
 
-                    if (debugMode) Debug.DrawLine(setCenterPosition + ToVector3(i, 0, j) * range, setCenterPosition + ToVector3(i, 0, j) * range + ToVector3(0, 10, 0), Color.yellow, 10);//グリッドの位置を表示
+                        if (debugMode) Debug.DrawLine(setCenterPosition + ToVector3(i, j, k) * range, setCenterPosition + ToVector3(i, j, k) * range + ToVector3(0, 10, 0), Color.yellow, 10);//グリッドの位置を表示
+                        itemz.Add(new VisivilityArea(0));
+                    }
+                    itemy.Add(itemz);
                 }
-                visivilityAreaGrid.Add(item);
+                visivilityAreaGrid.Add(itemy);
             }
             if (debugMode) Debug.Log("firstSize(x)" + visivilityAreaGrid.Count());
-            if (debugMode) Debug.Log("SecondSize(z)" + visivilityAreaGrid[0].Count());
+            if (debugMode) Debug.Log("SecondSize(y)" + visivilityAreaGrid[0].Count());
+            if (debugMode) Debug.Log("SecondSize(z)" + visivilityAreaGrid[0][0].Count());
         }
 
         /// <summary>
@@ -119,35 +128,43 @@ namespace Scenes.Ingame.Enemy
             //各マス目へとアクセス
             for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
             {
-                for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
-                {
-                    //対象のマスから他のマス目が見えるかを確認
-                    for (byte vX = 0; vX < visivilityAreaGrid.Count(); vX++)
+                for (byte y =0;y < visivilityAreaGrid[0].Count(); y++) {
+
+                    for (byte z = 0; z < visivilityAreaGrid[0][0].Count(); z++)
                     {
-                        for (byte vZ = 0; vZ < visivilityAreaGrid.Count(); vZ++)
+
+                        //対象のマスから他のマス目が見えるかを確認
+                        for (byte vX = 0; vX < visivilityAreaGrid.Count(); vX++)
                         {
-                            if ((x != vX) || (z != vZ))
-                            { //自分自身ではない場合                               
-                                float range2 = Mathf.Pow((x - vX) * 5.8f, 2) + Mathf.Pow((z - vZ) * 5.8f, 2);
-                                if (range2 <= Mathf.Pow(maxVisivilityRange, 2))
-                                { //視界が通るとされる距離でない場合
-                                    float range = Mathf.Sqrt(range2);//平方根を求めるのはすごくコストが重いらしいので確実に計算が必要になってからしてます
-                                    //視界が通るか＝Rayが通るか
-                                    bool hit;
-                                    Ray ray = new Ray(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(vX - x, 0, vZ - z));
-                                    hit = Physics.Raycast(ray, out RaycastHit hitInfo, range,  2048, QueryTriggerInteraction.Collide);
-                                    if (!hit)
-                                    { //何にもあたっていなかった場合
-                                        if (debugMode) Debug.DrawRay(ray.origin, ray.direction * range, Color.green, 10);
-                                        visivilityAreaGrid[x][z].canVisivleAreaPosition.Add(new DoubleByteAndMonoFloat(vX, vZ, range));
+                            for (byte vY = 0; vY < visivilityAreaGrid[0].Count(); vY++)
+                            {
+                                for (byte vZ = 0; vZ < visivilityAreaGrid[0][0].Count(); vZ++)
+                                {
+                                    if ((x != vX) || (y != vY)||(z != vZ))
+                                    { //自分自身ではない場合                               
+                                        float range2 = Mathf.Pow((x - vX) * gridRange, 2) + Mathf.Pow((y - vY) * gridRange, 2) + Mathf.Pow((z - vZ) * gridRange, 2);
+                                        if (range2 <= Mathf.Pow(maxVisivilityRange, 2))
+                                        { //視界が通るとされる距離でない場合
+                                            float range = Mathf.Sqrt(range2);//平方根を求めるのはすごくコストが重いらしいので確実に計算が必要になってからしてます
+                                                                             //視界が通るか＝Rayが通るか
+                                            bool hit;
+                                            Ray ray = new Ray(centerPosition + ToVector3(x * gridRange, y * gridRange, z * gridRange), ToVector3(vX - x, vY - y, vZ - z));
+                                            hit = Physics.Raycast(ray, out RaycastHit hitInfo, range, 2048, QueryTriggerInteraction.Collide);
+                                            if (!hit)
+                                            { //何にもあたっていなかった場合
+                                                if (debugMode) Debug.DrawRay(ray.origin, ray.direction * range, Color.green, 10);
+                                                visivilityAreaGrid[x][y][z].canVisivleAreaPosition.Add(new TripleByteAndMonoFloat(vX,vY, vZ, range));
+                                            }
+
+                                        }
                                     }
 
                                 }
                             }
-
                         }
                     }
                 }
+                
             }
             //ここまで来てマップスキャンが終わる
             if (debugMode) Debug.Log("マップのスキャンが完了しました");
@@ -159,29 +176,35 @@ namespace Scenes.Ingame.Enemy
         public void NeedOpenDoorScan() {
             for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
             {
-                for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
-                {
-                    foreach (DoubleByteAndMonoFloat visivilityAreaPosition in visivilityAreaGrid[x][z].canVisivleAreaPosition)//各マス目ごとの見えるであろうマスにアクセス
+                for (byte y =0;y < visivilityAreaGrid[0].Count();y++) {
+                    for (byte z = 0; z < visivilityAreaGrid[0][0].Count(); z++)
                     {
 
-                        float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaPosition.x) * 5.8f, 2) + Mathf.Pow((z - visivilityAreaPosition.z) * 5.8f, 2));
+                        foreach (TripleByteAndMonoFloat visivilityAreaPosition in visivilityAreaGrid[x][y][z].canVisivleAreaPosition)//各マス目ごとの見えるであろうマスにアクセス
+                        {
+
+                            float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaPosition.x) * gridRange, 2) + Mathf.Pow((y - visivilityAreaPosition.y) * gridRange, 2) + Mathf.Pow((z - visivilityAreaPosition.z) * gridRange, 2));
 
 
-                        //各エリアのグリッドにアクセス
-                        Ray ray = new Ray(centerPosition +  ToVector3(x * gridRange, 1, z * gridRange) , ToVector3(visivilityAreaPosition.x - x, 0, visivilityAreaPosition.z - z));
+                            //各エリアのグリッドにアクセス
+                            Ray ray = new Ray(centerPosition + ToVector3(x * gridRange, y * gridRange, z * gridRange), ToVector3(visivilityAreaPosition.x - x, visivilityAreaPosition.y - y, visivilityAreaPosition.z - z));
 
 
-                        foreach (RaycastHit doorHit in Physics.RaycastAll(ray.origin, ray.direction, range, 4096, QueryTriggerInteraction.Collide).ToArray<RaycastHit>()) {//命中したすべてのドアにアクセス
-                            if (doorHit.collider.gameObject.TryGetComponent<StageDoor>(out StageDoor stageDoorCs))
-                            {
-                                if (debugMode) Debug.DrawRay(ray.origin , ray.direction * range, Color.red, 10);
-                                visivilityAreaPosition.needOpenDoor.Add(stageDoorCs);
+                            foreach (RaycastHit doorHit in Physics.RaycastAll(ray.origin, ray.direction, range, 4096, QueryTriggerInteraction.Collide).ToArray<RaycastHit>())
+                            {//命中したすべてのドアにアクセス
+                                if (doorHit.collider.gameObject.TryGetComponent<StageDoor>(out StageDoor stageDoorCs))
+                                {
+                                    if (debugMode) Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10);
+                                    visivilityAreaPosition.needOpenDoor.Add(stageDoorCs);
 
+                                }
+                                else { Debug.LogWarning("ドアのタグが付いているのにStageDoor.csが付いていないオブジェクトがある"); }
                             }
-                            else { Debug.LogWarning("ドアのタグが付いているのにStageDoor.csが付いていないオブジェクトがある"); }
                         }
                     }
                 }
+
+
             }
         }
 
@@ -192,27 +215,32 @@ namespace Scenes.Ingame.Enemy
         {
             for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
             {
-                for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
+                for (byte y = 0; y < visivilityAreaGrid[0].Count(); y++)
                 {
-                    foreach (DoubleByteAndMonoFloat visivilityAreaPosition in visivilityAreaGrid[x][z].canVisivleAreaPosition)//各マス目ごとの見えるであろうマスにアクセス
+
+
+                    for (byte z = 0; z < visivilityAreaGrid[0][0].Count(); z++)
                     {
+                        foreach (TripleByteAndMonoFloat visivilityAreaPosition in visivilityAreaGrid[x][y][z].canVisivleAreaPosition)//各マス目ごとの見えるであろうマスにアクセス
+                        {
 
-                        float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaPosition.x) * 5.8f, 2) + Mathf.Pow((z - visivilityAreaPosition.z) * 5.8f, 2));
-
-
-                        //各エリアのグリッドにアクセス
-                        Ray ray = new Ray(centerPosition + ToVector3(x * gridRange, 1, z * gridRange), ToVector3(visivilityAreaPosition.x - x, 0, visivilityAreaPosition.z - z));
+                            float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaPosition.x) * gridRange, 2) + Mathf.Pow((y - visivilityAreaPosition.y) * gridRange, 2) + Mathf.Pow((z - visivilityAreaPosition.z) * gridRange, 2));
 
 
-                        foreach (RaycastHit doorHit in Physics.RaycastAll(ray.origin, ray.direction, range, 4096, QueryTriggerInteraction.Collide).ToArray<RaycastHit>())
-                        {//命中したすべてのドアにアクセス
-                            if (doorHit.collider.gameObject.TryGetComponent<StageDoor>(out StageDoor stageDoorCs))
-                            {
-                                if (debugMode) Debug.DrawRay(ray.origin , ray.direction * range, Color.blue, 10);
-                                visivilityAreaPosition.needCloseDoor.Add(stageDoorCs);
+                            //各エリアのグリッドにアクセス
+                            Ray ray = new Ray(centerPosition + ToVector3(x * gridRange, y*gridRange, z * gridRange), ToVector3(visivilityAreaPosition.x - x, visivilityAreaPosition.y - y, visivilityAreaPosition.z - z));
 
+
+                            foreach (RaycastHit doorHit in Physics.RaycastAll(ray.origin, ray.direction, range, 4096, QueryTriggerInteraction.Collide).ToArray<RaycastHit>())
+                            {//命中したすべてのドアにアクセス
+                                if (doorHit.collider.gameObject.TryGetComponent<StageDoor>(out StageDoor stageDoorCs))
+                                {
+                                    if (debugMode) Debug.DrawRay(ray.origin, ray.direction * range, Color.blue, 10);
+                                    visivilityAreaPosition.needCloseDoor.Add(stageDoorCs);
+
+                                }
+                                else { Debug.LogWarning("ドアのタグが付いているのにStageDoor.csが付いていないオブジェクトがある"); }
                             }
-                            else { Debug.LogWarning("ドアのタグが付いているのにStageDoor.csが付いていないオブジェクトがある"); }
                         }
                     }
                 }
@@ -229,25 +257,25 @@ namespace Scenes.Ingame.Enemy
             if (debugMode) Debug.Log("ディープコピー開始");
             EnemyVisibilityMap copy;
             copy = new EnemyVisibilityMap();
-            copy.visivilityAreaGrid = new List<List<VisivilityArea>>();
-            foreach (List<VisivilityArea> item in visivilityAreaGrid)//二次元リストをコピー
+            copy.visivilityAreaGrid = new List<List<List<VisivilityArea>>>();
+            foreach (List<List<VisivilityArea>> item in visivilityAreaGrid)//3次元リストをコピー
             {
-                List<VisivilityArea> secondVisivilityArea = new List<VisivilityArea>();//二層目
-                foreach (VisivilityArea item2 in item) {
-                    List<DoubleByteAndMonoFloat> addCanVisivilityAndMonoFloat = new List<DoubleByteAndMonoFloat>();
-                    foreach (DoubleByteAndMonoFloat value in item2.canVisivleAreaPosition) { 
-                        addCanVisivilityAndMonoFloat.Add(new DoubleByteAndMonoFloat(value.x,value.z,value.range,new List<StageDoor>(value.needOpenDoor), new List<StageDoor>(value.needCloseDoor)));
+                List<List<VisivilityArea>> secondVisivilityArea = new List<List<VisivilityArea>>();//二次元配列
+                foreach (List<VisivilityArea> item2 in item) {
+                    List<VisivilityArea> therdVisivilityarea = new List<VisivilityArea>();
+                    foreach (VisivilityArea item3 in item2) {
+                        List<TripleByteAndMonoFloat> addCanVisivilityAndMonoFloat = new List<TripleByteAndMonoFloat>();
+                        foreach (TripleByteAndMonoFloat value in item3.canVisivleAreaPosition)
+                        {
+
+
+                            addCanVisivilityAndMonoFloat.Add(new TripleByteAndMonoFloat(value.x, value.y,value.z, value.range, new List<StageDoor>(value.needOpenDoor), new List<StageDoor>(value.needCloseDoor)));
+                        }
+                        therdVisivilityarea.Add(new VisivilityArea(item3.watchNum, addCanVisivilityAndMonoFloat));
                     }
-
-                    secondVisivilityArea.Add(new VisivilityArea(item2.watchNum,addCanVisivilityAndMonoFloat));
-
+                    secondVisivilityArea.Add(therdVisivilityarea);
                 }
-
-                
-
-
-
-                copy.visivilityAreaGrid.Add(new List<VisivilityArea>(secondVisivilityArea));//二層目のListを一層目にAddする
+                copy.visivilityAreaGrid.Add(secondVisivilityArea);//二次元Listを三次元にAddする
             }
 
 
@@ -343,7 +371,7 @@ namespace Scenes.Ingame.Enemy
                     byte myPositionx, myPositionz;//自分がどこのグリッドにいるかを確認する
                     myPositionx = (byte)Mathf.FloorToInt((float)(nowPosition.x - centerPosition.x + 0.5 * gridRange) / gridRange);
                     myPositionz = (byte)Mathf.FloorToInt((float)(nowPosition.z - centerPosition.z + 0.5 * gridRange) / gridRange);
-                    foreach (DoubleByteAndMonoFloat item in visivilityAreaGrid[myPositionx][myPositionz].canVisivleAreaPosition)
+                    foreach (TripleByteAndMonoFloat item in visivilityAreaGrid[myPositionx][myPositionz].canVisivleAreaPosition)
                     {
                         if (item.range < visivilityRange)
                         { //見える距離
@@ -502,9 +530,9 @@ namespace Scenes.Ingame.Enemy
             enemyGridPositionX = (byte)Mathf.FloorToInt((float)(enemyPosition.x - centerPosition.x + 0.5 * gridRange) / gridRange);
             enemyGridPositionZ = (byte)Mathf.FloorToInt((float)(enemyPosition.z - centerPosition.z + 0.5 * gridRange) / gridRange);
 
-            List<DoubleByteAndMonoFloat> enemyVisivilityGridPosition = new List<DoubleByteAndMonoFloat> ();//今してることはこの先において敵からドアの問題なく見えるマスだけを抽出すること
+            List<TripleByteAndMonoFloat> enemyVisivilityGridPosition = new List<TripleByteAndMonoFloat> ();//今してることはこの先において敵からドアの問題なく見えるマスだけを抽出すること
 
-            foreach (DoubleByteAndMonoFloat item    in visivilityAreaGrid[enemyGridPositionX][enemyGridPositionZ].canVisivleAreaPosition) {
+            foreach (TripleByteAndMonoFloat item    in visivilityAreaGrid[enemyGridPositionX][enemyGridPositionZ].canVisivleAreaPosition) {
                 //ドアに関連して見える条件にあるか調べる
                 bool noDoor = true;
                 foreach (StageDoor needOpen in item.needOpenDoor) //開いていなければならないドアは開いているかチェック
@@ -548,8 +576,8 @@ namespace Scenes.Ingame.Enemy
             byte rightGridPositionX, rightGridPositionZ;
             rightGridPositionX = (byte)Mathf.FloorToInt((float)(playerPosition.x - centerPosition.x + 0.5 * gridRange) / gridRange);
             rightGridPositionZ = (byte)Mathf.FloorToInt((float)(playerPosition.z - centerPosition.z + 0.5 * gridRange) / gridRange);
-            List<DoubleByteAndMonoFloat> rightingGridPosition = new List<DoubleByteAndMonoFloat>();//今してることはこの先においてプレイヤーからドアの問題なく見えるマスだけを抽出すること
-            foreach (DoubleByteAndMonoFloat item in visivilityAreaGrid[rightGridPositionX][rightGridPositionZ].canVisivleAreaPosition)
+            List<TripleByteAndMonoFloat> rightingGridPosition = new List<TripleByteAndMonoFloat>();//今してることはこの先においてプレイヤーからドアの問題なく見えるマスだけを抽出すること
+            foreach (TripleByteAndMonoFloat item in visivilityAreaGrid[rightGridPositionX][rightGridPositionZ].canVisivleAreaPosition)
             {
                 //ドアに関連して見える条件にあるか調べる
                 bool noDoor = true;
@@ -781,7 +809,7 @@ namespace Scenes.Ingame.Enemy
             translation3.z = z;
             return translation3;
         }
-        private VisivilityArea ToVisivilityArea(byte setNum,List<DoubleByteAndMonoFloat> setList)
+        private VisivilityArea ToVisivilityArea(byte setNum,List<TripleByteAndMonoFloat> setList)
         {
             vA.watchNum = setNum;
             vA.canVisivleAreaPosition = setList;
