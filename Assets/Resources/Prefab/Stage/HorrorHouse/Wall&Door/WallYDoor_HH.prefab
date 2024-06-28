@@ -386,6 +386,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Interior_Door_01
       objectReference: {fileID: 0}
+    - target: {fileID: 7770260601085221398, guid: 7d1424a14fad8ce4c845abab6cfa920f, type: 3}
+      propertyPath: m_TagString
+      value: Stage
+      objectReference: {fileID: 0}
     - target: {fileID: 8487802535040024505, guid: 7d1424a14fad8ce4c845abab6cfa920f, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.8678435

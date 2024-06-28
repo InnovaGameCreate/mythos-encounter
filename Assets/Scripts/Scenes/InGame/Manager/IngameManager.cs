@@ -37,6 +37,9 @@ namespace Scenes.Ingame.Manager
         private ReactiveProperty<int> _getEscapeItemCount = new ReactiveProperty<int>();
         public IObservable<int> OnEscapeCount => _getEscapeItemCount; //現在取得している脱出アイテムの数
 
+        public int GetEscapeItemCurrentCount { get => _getEscapeItemCount.Value; }
+        public int GetEscapeItemMaxCount { get => _escapeItemCount; }
+
         void Awake()
         {
             Instance = this;
@@ -54,7 +57,7 @@ namespace Scenes.Ingame.Manager
         private async UniTaskVoid InitialState()
         {
             _currentState = IngameState.Initial;
-            await UniTask.WaitUntil(_ingameReady.Ready);
+            await UniTask.WaitUntil(() => _ingameReady.Ready());
             _ingameEvent.OnNext(default);
         }
 
@@ -75,9 +78,10 @@ namespace Scenes.Ingame.Manager
             _currentState = IngameState.Outgame;
         }
 
-        public void SetReady(ReadyEnum ready)
+        public async void SetReady(ReadyEnum ready)
         {
             Debug.Log($"SetReady.value = {ready}");
+            //await Task.Delay(500);//LoadViewのデバック用
             switch (ready)
             {
                 case ReadyEnum.StageReady:

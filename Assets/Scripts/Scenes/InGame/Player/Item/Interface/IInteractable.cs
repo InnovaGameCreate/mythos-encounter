@@ -12,5 +12,11 @@ namespace Scenes.Ingame.Player
     {
         //やること
         void Intract(PlayerStatus status);
+
+        /// <summary>
+        /// ポップに入れる言葉を取得する(主にStageIntractにのみ使う)
+        /// </summary>
+        /// <returns></returns>
+        string ReturnPopString();
     }
 }

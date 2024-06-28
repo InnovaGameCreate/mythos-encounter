@@ -15,6 +15,9 @@ namespace Scenes.Ingame.Player
     /// </summary>
     public class PlayerGUIPresenter : MonoBehaviour
     {
+        //Instance
+        public static PlayerGUIPresenter Instance;
+
         //model
         [SerializeField] private PlayerStatus[] _playerStatuses;
         [SerializeField] private PlayerItem _playerItem;//マルチの時はスクリプト内でinputAuthority持ってるplayerのを代入させる
@@ -34,16 +37,20 @@ namespace Scenes.Ingame.Player
         [SerializeField] private RectTransform _staminaGaugeFrontRect;//個人のスタミナゲージ
         [SerializeField] private Image _staminaGaugeFrontImage;//個人のスタミナゲージ
 
+        [SerializeField] private GameObject _pop;//アイテムポップ
+        [SerializeField] private TMP_Text _pop_Text;//アイテムポップ
+
         [Header("アイテム関係")]//アイテム系
         [SerializeField] private Image[] _itemSlots;//アイテムスロット(7個)
         [SerializeField] private Image[] _itemImages;//アイテムの画像(7個)
-        [SerializeField] private GameObject _itemPop;//アイテムポップ
-        [SerializeField] private TMP_Text _itemPop_Text;//アイテムポップ
 
         [Header("発狂関係")]
         [SerializeField] private Image[] _insanityIcons;//発狂アイコン(5個)
         [SerializeField] private Sprite[] _insanityIconSprites;//発狂アイコンの元画像.EyeParalyze,BodyParalyze,IncreasePulsation,Scream,Hallucination の順番で
 
+        [Header("呪文詠唱関係")]
+        [SerializeField] private Canvas _castGauge;
+        [SerializeField] private Image _castGaugeImage;
         private int _myPlayerID = 0;
 
         //スタミナゲージ関連のフィールド
@@ -52,6 +59,7 @@ namespace Scenes.Ingame.Player
         // Start is called before the first frame update
         void Awake()
         {
+            _castGauge.enabled = false;
             _defaulStaminaGaugetWidth = _staminaGaugeFrontRect.sizeDelta.x;
 
             //プレイヤーの作成が終わり、配列のソートが終了したら叩かれる
@@ -100,6 +108,18 @@ namespace Scenes.Ingame.Player
                                 
                          }).AddTo(this);
 
+
+                    _playerStatuses[0].OnCastEvente
+                    .Subscribe(time =>
+                    {
+                        _castGauge.enabled = true;
+                        DOTween.Sequence()
+                            .Append(_castGaugeImage.DOFillAmount(1, time))
+                            .SetDelay(0.5f)
+                            .Append(_castGaugeImage.DOFillAmount(0, 0))
+                            .OnComplete(() => _castGauge.enabled = false);
+                    }).AddTo(this);
+
                     //アイテム関係の処理の追加
                     //PlayerItemスクリプトの取得.マルチ実装のときはinputAuthorityを持つキャラクターのみに指定
                     _playerItem = GameObject.FindWithTag("Player").GetComponent<PlayerItem>();
@@ -120,19 +140,19 @@ namespace Scenes.Ingame.Player
                             _itemSlots[x].color = Color.red;
                         }).AddTo(this);
 
-                    //目線の先にアイテムがあるとアイテムポップを表示させる
-                    _playerItem.OnItemPopActive
+                    //目線の先にアイテムかStageIntractがあるとポップを表示させる
+                    _playerItem.OnPopActive
                         .Subscribe(x =>
                         {
                             if (x != null)
                             {
-                                _itemPop_Text.text = x;
-                                _itemPop.SetActive(true);
+                                _pop_Text.text = x;
+                                _pop.SetActive(true);
                             }
                             else
                             {
-                                _itemPop_Text.text = null;
-                                _itemPop.SetActive(false);
+                                _pop_Text.text = null;
+                                _pop.SetActive(false);
                             }
 
                         });
@@ -225,6 +245,12 @@ namespace Scenes.Ingame.Player
                         
 
                 }).AddTo(this);
+
+            //インスタンスの設定
+            if (Instance == null)
+                Instance = this;
+            else
+                Destroy(this);
         }
 
         /// <summary>
@@ -257,6 +283,21 @@ namespace Scenes.Ingame.Player
             //スタミナの値を0～1の値に補正
             float fillAmount = (float)value / _playerStatuses[_myPlayerID].stamina_max;
             _staminaGaugeFrontRect.sizeDelta = new Vector2(_defaulStaminaGaugetWidth * fillAmount, _staminaGaugeFrontRect.sizeDelta.y);
+
+            //スタミナゲージの色変更
+            Image image = _staminaGaugeFrontImage.GetComponent<Image>();
+            if (0 <= fillAmount && fillAmount <= 0.1)
+            {
+                image.DOColor(Color.red, 0f);
+            }
+            else if (0.1 < fillAmount && fillAmount <= 0.5)
+            {
+                image.DOColor(new Color(1.0f, 0.5f, 0.0f), 0f);
+            }
+            else
+            {
+                image.DOColor(Color.white, 0f);
+            }
         }
 
 

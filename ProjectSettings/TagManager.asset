@@ -8,7 +8,11 @@ TagManager:
   - Stage
   - ItemSpawnPoint
   - EscapePoint
+
   - Door
+
+  - StageIntract
+
   layers:
   - Default
   - TransparentFX
@@ -17,12 +21,16 @@ TagManager:
   - Water
   - UI
   - 
-  - 
-  - 
   - Floor
+
   - Item
   - Stage
   - Door
+
+  - Wall
+  - 
+  - Item
+  - StageIntract
   - 
   - 
   - 

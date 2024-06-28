@@ -12,23 +12,23 @@ using UnityEngine.UIElements;
 namespace Scenes.Ingame.Enemy
 {
     /// <summary>
-    /// ƒ}ƒbƒv‚Ì‹ü‚Ì’Ê‚è•û‚Æƒ}ƒbƒv‚Ì‚Ç‚Ì‚ ‚½‚è‚ğ‚Ç‚Ì‚­‚ç‚¢Šm”F‚µ‚½‚©‚ğ‹L˜^‚µ‚Ä‚ä‚­ƒNƒ‰ƒXB“GƒLƒƒƒ‰‚ªƒ}ƒbƒv‚ğ”F¯‚·‚é‚Ì‚Ég—p‚³‚ê‚éƒNƒ‰ƒXB
+    /// ãƒãƒƒãƒ—ã®è¦–ç·šã®é€šã‚Šæ–¹ã¨ãƒãƒƒãƒ—ã®ã©ã®ã‚ãŸã‚Šã‚’ã©ã®ãã‚‰ã„ç¢ºèªã—ãŸã‹ã‚’è¨˜éŒ²ã—ã¦ã‚†ãã‚¯ãƒ©ã‚¹ã€‚æ•µã‚­ãƒ£ãƒ©ãŒãƒãƒƒãƒ—ã‚’èªè­˜ã™ã‚‹ã®ã«ä½¿ç”¨ã•ã‚Œã‚‹ã‚¯ãƒ©ã‚¹ã€‚
     /// </summary>
     public class EnemyVisibilityMap : MonoBehaviour
     {
-        public List<List<List<VisivilityArea>>> visivilityAreaGrid;//Unity‚ÌÀ•WŒn‚ğ—DæAˆêŒÂ–Ú‚ªx²“ñŒÂ–Ú‚ªy²“ñŒÂ–Ú‚ªz²‚ÌƒCƒ[ƒW¶‰º‚ª[0][0]¶ã‚ª[0][max]
-        public float maxVisivilityRange;//‚±‚Ì‹——£‚ğ’´‚¦‚Ä‚¢‚éƒGƒŠƒA‚ÍŒ©‚¦‚é‚±‚Æ‚Í‚È‚¢‚à‚Ì‚Æ‚·‚é
+
+        public List<List<List<VisivilityArea>>> visivilityAreaGrid;//Unityï¿½Ìï¿½ï¿½Wï¿½nï¿½ï¿½Dï¿½ï¿½Aï¿½ï¿½Â–Ú‚ï¿½xï¿½ï¿½ï¿½ï¿½Â–Ú‚ï¿½yï¿½ï¿½ï¿½ï¿½Â–Ú‚ï¿½zï¿½ï¿½ï¿½ÌƒCï¿½ï¿½ï¿½[ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½[0][0]ï¿½ï¿½ï¿½ã‚ª[0][max]
+        public float maxVisivilityRange;//ï¿½ï¿½ï¿½Ì‹ï¿½ï¿½ï¿½ï¿½ğ’´‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½Aï¿½ÍŒï¿½ï¿½ï¿½ï¿½é‚±ï¿½Æ‚Í‚È‚ï¿½ï¿½ï¿½ï¿½Ì‚Æ‚ï¿½ï¿½ï¿½
+
         public bool debugMode;
         public float gridRange;
-        public Vector3 centerPosition;//‚¢‚¿‚Î‚ñ¶‰º‚ÌƒOƒŠƒbƒh‚Ì’†‰›
-
-        //ƒƒ‚A‚±‚ê‚ç\‘¢‘Ì‚Í‚à‚Í‚â‹‘å‰»‚µ‚·‚¬‚Ä‚¨‚èƒNƒ‰ƒX‚É‚µ‚½•û‚ª‚‘¬‚Å‚ ‚é‚Æl‚¦‚ç‚ê‚é
+        public Vector3 centerPosition;//ã„ã¡ã°ã‚“å·¦ä¸‹ã®ã‚°ãƒªãƒƒãƒ‰ã®ä¸­å¤®
 
 
-        /// <summary>ƒ}ƒX–Ú‚ÌˆÊ’u‚ğ2‚Â‚Ìbyte‚Å•\‚µ‘a‚Ìƒ}ƒX–Ú‚Ü‚Å‚Ì‹——£‚ğfoat‚Å‚ ‚ç‚í‚µ‚Ä‚¢‚é</summary>
         [StructLayout(LayoutKind.Auto)]
         public struct TripleByteAndMonoFloat
-        {//ˆÊ’u‚Æ‹——£
+        {//ï¿½Ê’uï¿½Æ‹ï¿½ï¿½ï¿½
+
             public byte x;
             public byte y;
             public byte z;
@@ -59,13 +59,16 @@ namespace Scenes.Ingame.Enemy
         }
 
         /// <summary>
-        /// ƒ}ƒX–Ú‚ª‰½“xŒ©‚ç‚ê‚½‚©‚ğbyte‚Å‹L˜^‚µA‚±‚Ìƒ}ƒX–Ú‚©‚ç‹ü‚Ì’Ê‚éƒ}ƒX–Ú‚ğList‚Å‹L˜^‚µ‚Ä‚¢‚é
+        /// ãƒã‚¹ç›®ãŒä½•åº¦è¦‹ã‚‰ã‚ŒãŸã‹ã‚’byteã§è¨˜éŒ²ã—ã€ã“ã®ãƒã‚¹ç›®ã‹ã‚‰è¦–ç·šã®é€šã‚‹ãƒã‚¹ç›®ã‚’Listã§è¨˜éŒ²ã—ã¦ã„ã‚‹
         /// </summary>
         [StructLayout(LayoutKind.Auto)]
         public struct VisivilityArea
         {
-            public byte watchNum;//‚±‚ÌƒGƒŠƒA‚ğŒ©‚½‰ñ”
+
+            public byte watchNum;//ï¿½ï¿½ï¿½ÌƒGï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             public List<TripleByteAndMonoFloat> canVisivleAreaPosition;
+
+
             public VisivilityArea(byte sWatchNum)
             {
                 watchNum = sWatchNum;
@@ -87,31 +90,35 @@ namespace Scenes.Ingame.Enemy
         }
 
         /// <summary>
-        /// ƒ}ƒX–Ú‚ÌW‡‚Å‚ ‚é“ñŸŒ³List‚ğì¬‚·‚éB
+        /// ãƒã‚¹ç›®ã®é›†åˆã§ã‚ã‚‹äºŒæ¬¡å…ƒListã‚’ä½œæˆã™ã‚‹ã€‚
         /// </summary>
-        /// <param name="x">xÀ•W•ûŒü‚Éƒ}ƒX–Ú‚ğ‚¢‚­‚Â•À‚×‚é‚©</param>
-        /// <param name="z">zÀ•W•ûŒü‚Éƒ}ƒX–Ú‚ğ‚¢‚­‚Â•À‚×‚é‚©</param>
-        /// <param name="range">‚±‚Ì‹——£ˆÈã‚Ì‹ü‚Í’Ê‚ç‚È‚¢‚à‚Ì‚Æl‚¦‚ÄƒVƒ~ƒ…ƒŒ[ƒg‚³‚ê‚é‹——£</param>
-        /// <param name="setCenterPosition">¶‰º‚Ìƒ}ƒX–Ú‚Ì’†SˆÊ’u</param>
+
+        /// <param name="x">xï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Éƒ}ï¿½Xï¿½Ú‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â•ï¿½ï¿½×‚é‚©</param>
+        /// <param name="z">zï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½Éƒ}ï¿½Xï¿½Ú‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â•ï¿½ï¿½×‚é‚©</param>
+        /// <param name="range">ï¿½ï¿½ï¿½Ì‹ï¿½ï¿½ï¿½ï¿½Èï¿½Ìï¿½ï¿½ï¿½ï¿½Í’Ê‚ï¿½È‚ï¿½ï¿½ï¿½ï¿½Ì‚Ælï¿½ï¿½ï¿½ÄƒVï¿½~ï¿½ï¿½ï¿½ï¿½ï¿½[ï¿½gï¿½ï¿½ï¿½ï¿½é‹—ï¿½ï¿½</param>
+        /// <param name="setCenterPosition">ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒ}ï¿½Xï¿½Ú‚Ì’ï¿½ï¿½Sï¿½Ê’u</param>
         public void GridMake(byte x,byte y, byte z, float range, Vector3 setCenterPosition)
-        { //ƒ}ƒbƒv‚ğì¬Bx‚Æz‚ÍƒOƒŠƒbƒh‚Ì”z’u”Brange‚ÍƒOƒŠƒbƒh‚Ì‹——£BcenterPosition‚Í¶‰º‚ÌˆÊ’u
-            if (debugMode) Debug.Log("ƒOƒŠƒbƒhì¬ŠJn");
+        { //ï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ì¬ï¿½Bxï¿½ï¿½zï¿½ÍƒOï¿½ï¿½ï¿½bï¿½hï¿½Ì”zï¿½uï¿½ï¿½ï¿½Brangeï¿½ÍƒOï¿½ï¿½ï¿½bï¿½hï¿½Ì‹ï¿½ï¿½ï¿½ï¿½BcenterPositionï¿½Íï¿½ï¿½ï¿½ï¿½ÌˆÊ’u
+            if (debugMode) Debug.Log("ï¿½Oï¿½ï¿½ï¿½bï¿½hï¿½ì¬ï¿½Jï¿½n");
             visivilityAreaGrid = new List<List<List<VisivilityArea>>>();
             gridRange = range;
             centerPosition = setCenterPosition;
             for (byte i = 0; i < x; i++)
-            { //”z—ñ‚Ì—v‘f‚ğì¬
+            { //ï¿½zï¿½ï¿½Ì—vï¿½fï¿½ï¿½ï¿½ì¬
                
                 List<List<VisivilityArea>> itemy = new List<List<VisivilityArea>>();
                 for (byte j = 0; j < y; j++)
+
                 {
                     List<VisivilityArea> itemz = new List<VisivilityArea>();
                     for (byte k=0;k < z;k++) {
 
-                        if (debugMode) Debug.DrawLine(setCenterPosition + ToVector3(i, j, k) * range, setCenterPosition + ToVector3(i, j, k) * range + ToVector3(0, 10, 0), Color.yellow, 10);//ƒOƒŠƒbƒh‚ÌˆÊ’u‚ğ•\¦
+
+                        if (debugMode) Debug.DrawLine(setCenterPosition + ToVector3(i, j, k) * range, setCenterPosition + ToVector3(i, j, k) * range + ToVector3(0, 10, 0), Color.yellow, 10);//ï¿½Oï¿½ï¿½ï¿½bï¿½hï¿½ÌˆÊ’uï¿½ï¿½\ï¿½ï¿½
                         itemz.Add(new VisivilityArea(0));
                     }
                     itemy.Add(itemz);
+
                 }
                 visivilityAreaGrid.Add(itemy);
             }
@@ -121,43 +128,47 @@ namespace Scenes.Ingame.Enemy
         }
 
         /// <summary>
-        /// ƒ}ƒbƒv‚ğƒXƒLƒƒƒ“‚µ‚Äƒ}ƒX–Ú“¯m‚Å‚Ì‹ŠE‚Ì’Ê‚Á‚Ä‚¢‚éî•ñ‚ğŒˆ’è‚·‚é
+        /// ãƒãƒƒãƒ—ã‚’ã‚¹ã‚­ãƒ£ãƒ³ã—ã¦ãƒã‚¹ç›®åŒå£«ã§ã®è¦–ç•Œã®é€šã£ã¦ã„ã‚‹æƒ…å ±ã‚’æ±ºå®šã™ã‚‹
         /// </summary>
         public void MapScan()
-        {//ƒ}ƒbƒv‚ğƒXƒLƒƒƒ“‚µ‚ÄÀÛ‚Ì‹ŠE‚ª‚Ç‚Ì‚æ‚¤‚É’Ê‚Á‚Ä‚¢‚é‚©‚ğİ’è
-            if (debugMode) Debug.Log("ƒ}ƒbƒvƒXƒLƒƒƒ“ŠJn");
-            //Šeƒ}ƒX–Ú‚Ö‚ÆƒAƒNƒZƒX
+        {//ãƒãƒƒãƒ—ã‚’ã‚¹ã‚­ãƒ£ãƒ³ã—ã¦å®Ÿéš›ã®è¦–ç•ŒãŒã©ã®ã‚ˆã†ã«é€šã£ã¦ã„ã‚‹ã‹ã‚’è¨­å®š
+            if (debugMode) Debug.Log("ãƒãƒƒãƒ—ã‚¹ã‚­ãƒ£ãƒ³é–‹å§‹");
+            //å„ãƒã‚¹ç›®ã¸ã¨ã‚¢ã‚¯ã‚»ã‚¹
             for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
             {
+
                 for (byte y =0;y < visivilityAreaGrid[0].Count(); y++) {
 
                     for (byte z = 0; z < visivilityAreaGrid[0][0].Count(); z++)
+
                     {
 
-                        //‘ÎÛ‚Ìƒ}ƒX‚©‚ç‘¼‚Ìƒ}ƒX–Ú‚ªŒ©‚¦‚é‚©‚ğŠm”F
+                        //ï¿½ÎÛ‚Ìƒ}ï¿½Xï¿½ï¿½ï¿½ç‘¼ï¿½Ìƒ}ï¿½Xï¿½Ú‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½é‚©ï¿½ï¿½ï¿½mï¿½F
                         for (byte vX = 0; vX < visivilityAreaGrid.Count(); vX++)
                         {
+
                             for (byte vY = 0; vY < visivilityAreaGrid[0].Count(); vY++)
                             {
                                 for (byte vZ = 0; vZ < visivilityAreaGrid[0][0].Count(); vZ++)
                                 {
                                     if ((x != vX) || (y != vY)||(z != vZ))
-                                    { //©•ª©g‚Å‚Í‚È‚¢ê‡                               
+                                    { //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½Å‚Í‚È‚ï¿½ï¿½ê‡                               
                                         float range2 = Mathf.Pow((x - vX) * gridRange, 2) + Mathf.Pow((y - vY) * gridRange, 2) + Mathf.Pow((z - vZ) * gridRange, 2);
                                         if (range2 <= Mathf.Pow(maxVisivilityRange, 2))
-                                        { //‹ŠE‚ª’Ê‚é‚Æ‚³‚ê‚é‹——£‚Å‚È‚¢ê‡
-                                            float range = Mathf.Sqrt(range2);//•½•ûª‚ğ‹‚ß‚é‚Ì‚Í‚·‚²‚­ƒRƒXƒg‚ªd‚¢‚ç‚µ‚¢‚Ì‚ÅŠmÀ‚ÉŒvZ‚ª•K—v‚É‚È‚Á‚Ä‚©‚ç‚µ‚Ä‚Ü‚·
-                                                                             //‹ŠE‚ª’Ê‚é‚©Ray‚ª’Ê‚é‚©
+                                        { //ï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½Ê‚ï¿½Æ‚ï¿½ï¿½ï¿½é‹—ï¿½ï¿½ï¿½Å‚È‚ï¿½ï¿½ê‡
+                                            float range = Mathf.Sqrt(range2);//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß‚ï¿½Ì‚Í‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Rï¿½Xï¿½gï¿½ï¿½ï¿½dï¿½ï¿½ï¿½ç‚µï¿½ï¿½ï¿½Ì‚ÅŠmï¿½ï¿½ï¿½ÉŒvï¿½Zï¿½ï¿½ï¿½Kï¿½vï¿½É‚È‚ï¿½ï¿½Ä‚ï¿½ï¿½ç‚µï¿½Ä‚Ü‚ï¿½
+                                                                             //ï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½Ê‚é‚©ï¿½ï¿½Rayï¿½ï¿½ï¿½Ê‚é‚©
                                             bool hit;
                                             Ray ray = new Ray(centerPosition + ToVector3(x * gridRange, y * gridRange, z * gridRange), ToVector3(vX - x, vY - y, vZ - z));
                                             hit = Physics.Raycast(ray, out RaycastHit hitInfo, range, 2048, QueryTriggerInteraction.Collide);
                                             if (!hit)
-                                            { //‰½‚É‚à‚ ‚½‚Á‚Ä‚¢‚È‚©‚Á‚½ê‡
+                                            { //ï¿½ï¿½ï¿½É‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡
                                                 if (debugMode) Debug.DrawRay(ray.origin, ray.direction * range, Color.green, 10);
                                                 visivilityAreaGrid[x][y][z].canVisivleAreaPosition.Add(new TripleByteAndMonoFloat(vX,vY, vZ, range));
                                             }
 
                                         }
+
                                     }
 
                                 }
@@ -167,12 +178,13 @@ namespace Scenes.Ingame.Enemy
                 }
                 
             }
-            //‚±‚±‚Ü‚Å—ˆ‚Äƒ}ƒbƒvƒXƒLƒƒƒ“‚ªI‚í‚é
-            if (debugMode) Debug.Log("ƒ}ƒbƒv‚ÌƒXƒLƒƒƒ“‚ªŠ®—¹‚µ‚Ü‚µ‚½");
+            //ã“ã“ã¾ã§æ¥ã¦ãƒãƒƒãƒ—ã‚¹ã‚­ãƒ£ãƒ³ãŒçµ‚ã‚ã‚‹
+            if (debugMode) Debug.Log("ãƒãƒƒãƒ—ã®ã‚¹ã‚­ãƒ£ãƒ³ãŒå®Œäº†ã—ã¾ã—ãŸ");
         }
 
         /// <summary>
-        /// ƒhƒA‚ğƒXƒLƒƒƒ“‚µ‚Ä‰ğ•úó‘Ô‚Å‚È‚¢‚Æ‹ŠE‚Ì’Ê‚ç‚È‚¢”»’è‚ğì‚é
+
+        /// ï¿½hï¿½Aï¿½ï¿½ï¿½Xï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‰ï¿½ï¿½ï¿½ï¿½Ô‚Å‚È‚ï¿½ï¿½Æï¿½ï¿½Eï¿½Ì’Ê‚ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public void NeedOpenDoorScan() {
             for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
@@ -181,25 +193,25 @@ namespace Scenes.Ingame.Enemy
                     for (byte z = 0; z < visivilityAreaGrid[0][0].Count(); z++)
                     {
 
-                        foreach (TripleByteAndMonoFloat visivilityAreaPosition in visivilityAreaGrid[x][y][z].canVisivleAreaPosition)//Šeƒ}ƒX–Ú‚²‚Æ‚ÌŒ©‚¦‚é‚Å‚ ‚ë‚¤ƒ}ƒX‚ÉƒAƒNƒZƒX
+                        foreach (TripleByteAndMonoFloat visivilityAreaPosition in visivilityAreaGrid[x][y][z].canVisivleAreaPosition)//ï¿½eï¿½}ï¿½Xï¿½Ú‚ï¿½ï¿½Æ‚ÌŒï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ë‚¤ï¿½}ï¿½Xï¿½ÉƒAï¿½Nï¿½Zï¿½X
                         {
 
                             float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaPosition.x) * gridRange, 2) + Mathf.Pow((y - visivilityAreaPosition.y) * gridRange, 2) + Mathf.Pow((z - visivilityAreaPosition.z) * gridRange, 2));
 
 
-                            //ŠeƒGƒŠƒA‚ÌƒOƒŠƒbƒh‚ÉƒAƒNƒZƒX
+                            //ï¿½eï¿½Gï¿½ï¿½ï¿½Aï¿½ÌƒOï¿½ï¿½ï¿½bï¿½hï¿½ÉƒAï¿½Nï¿½Zï¿½X
                             Ray ray = new Ray(centerPosition + ToVector3(x * gridRange, y * gridRange, z * gridRange), ToVector3(visivilityAreaPosition.x - x, visivilityAreaPosition.y - y, visivilityAreaPosition.z - z));
 
 
                             foreach (RaycastHit doorHit in Physics.RaycastAll(ray.origin, ray.direction, range, 4096, QueryTriggerInteraction.Collide).ToArray<RaycastHit>())
-                            {//–½’†‚µ‚½‚·‚×‚Ä‚ÌƒhƒA‚ÉƒAƒNƒZƒX
+                            {//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚Ä‚Ìƒhï¿½Aï¿½ÉƒAï¿½Nï¿½Zï¿½X
                                 if (doorHit.collider.gameObject.TryGetComponent<StageDoor>(out StageDoor stageDoorCs))
                                 {
                                     if (debugMode) Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 10);
                                     visivilityAreaPosition.needOpenDoor.Add(stageDoorCs);
 
                                 }
-                                else { Debug.LogWarning("ƒhƒA‚Ìƒ^ƒO‚ª•t‚¢‚Ä‚¢‚é‚Ì‚ÉStageDoor.cs‚ª•t‚¢‚Ä‚¢‚È‚¢ƒIƒuƒWƒFƒNƒg‚ª‚ ‚é"); }
+                                else { Debug.LogWarning("ï¿½hï¿½Aï¿½Ìƒ^ï¿½Oï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚ï¿½StageDoor.csï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"); }
                             }
                         }
                     }
@@ -211,11 +223,11 @@ namespace Scenes.Ingame.Enemy
         }
 
         /// <summary>
-        /// ƒhƒA‚ğƒXƒLƒƒƒ“‚µ‚Ä•Â½ó‘Ô‚Å‚È‚¢‚Æ‹ŠE‚Ì’Ê‚ç‚È‚¢”»’è‚ğì‚é
+        /// ï¿½hï¿½Aï¿½ï¿½ï¿½Xï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä•Âï¿½ï¿½ï¿½Ô‚Å‚È‚ï¿½ï¿½Æï¿½ï¿½Eï¿½Ì’Ê‚ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         /// </summary>
         public void NeedCloseDoorScan()
         {
-            Debug.Log("•Â‚¶‚Ä‚¢‚È‚­‚Ä‚Í‚È‚ç‚È‚¢ƒhƒA‚ğƒXƒLƒƒƒ“‚µ‚Ü‚·");
+            Debug.Log("ï¿½Â‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½Ä‚Í‚È‚ï¿½È‚ï¿½ï¿½hï¿½Aï¿½ï¿½ï¿½Xï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½");
             for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
             {
                 for (byte y = 0; y < visivilityAreaGrid[0].Count(); y++)
@@ -224,48 +236,51 @@ namespace Scenes.Ingame.Enemy
 
                     for (byte z = 0; z < visivilityAreaGrid[0][0].Count(); z++)
                     {
-                        foreach (TripleByteAndMonoFloat visivilityAreaPosition in visivilityAreaGrid[x][y][z].canVisivleAreaPosition)//Šeƒ}ƒX–Ú‚²‚Æ‚ÌŒ©‚¦‚é‚Å‚ ‚ë‚¤ƒ}ƒX‚ÉƒAƒNƒZƒX
+                        foreach (TripleByteAndMonoFloat visivilityAreaPosition in visivilityAreaGrid[x][y][z].canVisivleAreaPosition)//ï¿½eï¿½}ï¿½Xï¿½Ú‚ï¿½ï¿½Æ‚ÌŒï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ë‚¤ï¿½}ï¿½Xï¿½ÉƒAï¿½Nï¿½Zï¿½X
                         {
 
                             float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaPosition.x) * gridRange, 2) + Mathf.Pow((y - visivilityAreaPosition.y) * gridRange, 2) + Mathf.Pow((z - visivilityAreaPosition.z) * gridRange, 2));
 
 
-                            //ŠeƒGƒŠƒA‚ÌƒOƒŠƒbƒh‚ÉƒAƒNƒZƒX
+                            //ï¿½eï¿½Gï¿½ï¿½ï¿½Aï¿½ÌƒOï¿½ï¿½ï¿½bï¿½hï¿½ÉƒAï¿½Nï¿½Zï¿½X
                             Ray ray = new Ray(centerPosition + ToVector3(x * gridRange, y*gridRange, z * gridRange), ToVector3(visivilityAreaPosition.x - x, visivilityAreaPosition.y - y, visivilityAreaPosition.z - z));
 
 
                             foreach (RaycastHit doorHit in Physics.RaycastAll(ray.origin, ray.direction, range, 4096, QueryTriggerInteraction.Collide).ToArray<RaycastHit>())
-                            {//–½’†‚µ‚½‚·‚×‚Ä‚ÌƒhƒA‚ÉƒAƒNƒZƒX
+                            {//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚Ä‚Ìƒhï¿½Aï¿½ÉƒAï¿½Nï¿½Zï¿½X
                                 if (doorHit.collider.gameObject.TryGetComponent<StageDoor>(out StageDoor stageDoorCs))
                                 {
                                     if (debugMode) Debug.DrawRay(ray.origin, ray.direction * range, Color.blue, 10);
                                     visivilityAreaPosition.needCloseDoor.Add(stageDoorCs);
 
                                 }
-                                else { Debug.LogWarning("ƒhƒA‚Ìƒ^ƒO‚ª•t‚¢‚Ä‚¢‚é‚Ì‚ÉStageDoor.cs‚ª•t‚¢‚Ä‚¢‚È‚¢ƒIƒuƒWƒFƒNƒg‚ª‚ ‚é"); }
+                                else { Debug.LogWarning("ï¿½hï¿½Aï¿½Ìƒ^ï¿½Oï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Ì‚ï¿½StageDoor.csï¿½ï¿½ï¿½tï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½Iï¿½uï¿½Wï¿½Fï¿½Nï¿½gï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"); }
                             }
                         }
                     }
                 }
             }
-            Debug.Log("•Â‚¶‚Ä‚¢‚È‚­‚Ä‚Í‚È‚ç‚È‚¢ƒhƒA‚ğƒXƒLƒƒƒ“‚ªŠ®—¹‚µ‚Ü‚µ‚½");
+            Debug.Log("ï¿½Â‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½Ä‚Í‚È‚ï¿½È‚ï¿½ï¿½hï¿½Aï¿½ï¿½ï¿½Xï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½");
         }
 
 
         /// <summary>
-        /// ©g‚ÌƒfƒB[ƒvƒRƒs[‚ğì¬‚µ‚Ä•Ô‚·
+        /// ï¿½ï¿½ï¿½gï¿½Ìƒfï¿½Bï¿½[ï¿½vï¿½Rï¿½sï¿½[ï¿½ï¿½ï¿½ì¬ï¿½ï¿½ï¿½Ä•Ô‚ï¿½
+
         /// </summary>
-        /// <returns>©g‚ÌƒfƒB[ƒvƒRƒs[</returns>
+        /// <returns>è‡ªèº«ã®ãƒ‡ã‚£ãƒ¼ãƒ—ã‚³ãƒ”ãƒ¼</returns>
         public EnemyVisibilityMap DeepCopy()
         {
-            if (debugMode) Debug.Log("ƒfƒB[ƒvƒRƒs[ŠJn");
+            if (debugMode) Debug.Log("ãƒ‡ã‚£ãƒ¼ãƒ—ã‚³ãƒ”ãƒ¼é–‹å§‹");
             EnemyVisibilityMap copy;
             copy = new EnemyVisibilityMap();
+
             copy.visivilityAreaGrid = new List<List<List<VisivilityArea>>>();
 
-            foreach (List<List<VisivilityArea>> item in visivilityAreaGrid)//3ŸŒ³ƒŠƒXƒg‚ğƒRƒs[
+            foreach (List<List<VisivilityArea>> item in visivilityAreaGrid)//3ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Xï¿½gï¿½ï¿½ï¿½Rï¿½sï¿½[
+
             {
-                List<List<VisivilityArea>> secondVisivilityArea = new List<List<VisivilityArea>>();//“ñŸŒ³”z—ñ
+                List<List<VisivilityArea>> secondVisivilityArea = new List<List<VisivilityArea>>();//ï¿½ñŸŒï¿½ï¿½zï¿½ï¿½
 
                 foreach (List<VisivilityArea> item2 in item) {
 
@@ -285,7 +300,7 @@ namespace Scenes.Ingame.Enemy
                     }
                     secondVisivilityArea.Add(therdVisivilityarea);
                 }
-                copy.visivilityAreaGrid.Add(secondVisivilityArea);//“ñŸŒ³List‚ğOŸŒ³‚ÉAdd‚·‚é
+                copy.visivilityAreaGrid.Add(secondVisivilityArea);//ï¿½ñŸŒï¿½Listï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Addï¿½ï¿½ï¿½ï¿½
             }
 
 
@@ -297,7 +312,7 @@ namespace Scenes.Ingame.Enemy
             copy.centerPosition = centerPosition;
             
             if (debugMode)
-            { //ƒ}ƒX–Ú‚Ìî•ñ‚ª³í‚ÉƒRƒs[‚Å‚«‚Ä‚¢‚é‚©‚ğ•\¦‚·‚é
+            { //ãƒã‚¹ç›®ã®æƒ…å ±ãŒæ­£å¸¸ã«ã‚³ãƒ”ãƒ¼ã§ãã¦ã„ã‚‹ã‹ã‚’è¡¨ç¤ºã™ã‚‹
                 for (byte x = 0; x < copy.visivilityAreaGrid.Count(); x++)
                 {
                     for (byte y = 0; y < copy.visivilityAreaGrid[0].Count(); y++) {
@@ -310,22 +325,22 @@ namespace Scenes.Ingame.Enemy
                 }
             }
 
-            if (visivilityAreaGrid.Count() != copy.visivilityAreaGrid.Count()) { Debug.LogWarning("”‚ªˆá‚¤1"); } else { Debug.Log("”‚Í“¯‚¶"); }
-            if (visivilityAreaGrid[0].Count() != copy.visivilityAreaGrid[0].Count()) { Debug.LogWarning("”‚ªˆá‚¤2"); }
-            if (visivilityAreaGrid[0][0].Count() != copy.visivilityAreaGrid[0][0].Count()) { Debug.LogWarning("”‚ªˆá‚¤3"); }
+            if (visivilityAreaGrid.Count() != copy.visivilityAreaGrid.Count()) { Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½ï¿½á‚¤1"); } else { Debug.Log("ï¿½ï¿½ï¿½Í“ï¿½ï¿½ï¿½"); }
+            if (visivilityAreaGrid[0].Count() != copy.visivilityAreaGrid[0].Count()) { Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½ï¿½á‚¤2"); }
+            if (visivilityAreaGrid[0][0].Count() != copy.visivilityAreaGrid[0][0].Count()) { Debug.LogWarning("ï¿½ï¿½ï¿½ï¿½ï¿½á‚¤3"); }
             return copy;
            
         }
 
 
         /// <summary>
-        /// Ÿ‚ÉŠm”F‚·‚×‚«Å‚àŒ©‚Ä‚¨‚ç‚¸Å‚à‹ß‚¢ˆÊ’u‚ğæ“¾B
+        /// æ¬¡ã«ç¢ºèªã™ã¹ãæœ€ã‚‚è¦‹ã¦ãŠã‚‰ãšæœ€ã‚‚è¿‘ã„ä½ç½®ã‚’å–å¾—ã€‚
         /// </summary>
-        /// <param name="nowPosition">Œ»İ‚Ìcharacter‚ÌÀ•W</param>
-        /// <returns>Ÿ‚És‚­‚×‚«À•W</returns>
+        /// <param name="nowPosition">ç¾åœ¨ã®characterã®åº§æ¨™</param>
+        /// <returns>æ¬¡ã«è¡Œãã¹ãåº§æ¨™</returns>
         public Vector3 GetNextNearWatchPosition(Vector3 nowPosition)
         {
-            if (debugMode) Debug.Log("Ÿ‚ÌˆÚ“®æ‚ğæ“¾");
+            if (debugMode) Debug.Log("æ¬¡ã®ç§»å‹•å…ˆã‚’å–å¾—");
             List<byte> nextPositionX = new List<byte>();
             List<byte> nextPositionY = new List<byte>();
             List<byte> nextPositionZ = new List<byte>();
@@ -344,24 +359,26 @@ namespace Scenes.Ingame.Enemy
 
             for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
             {
+
                 for (byte y = 0; y < visivilityAreaGrid[0].Count();y++) {
                     for (byte z = 0; z < visivilityAreaGrid[0][0].Count(); z++)
                     {
                         if (visivilityAreaGrid[x][y][z].watchNum == smallestWatchNum)
-                        { //Å‚à¬‚³‚¢ê‡
+                        { //ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡
                             nextPositionX.Add(x);
                             nextPositionY.Add(y);
                             nextPositionZ.Add(z);
                         }
                         VisivilityArea newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[x][y][z].watchNum - smallestWatchNum), visivilityAreaGrid[x][y][z].canVisivleAreaPosition); ;
                         visivilityAreaGrid[x][y][z] = newVisivilityArea;
+
                     }
                 }
 
             }
-            //Å‚à‹ß‚¢—v‘f‚ğl‚¦‚é
+            //æœ€ã‚‚è¿‘ã„è¦ç´ ã‚’è€ƒãˆã‚‹
             float nearDistance = float.MaxValue;
-            byte nearPositionX = 0; byte nearPositionY = 0; byte nearPositionZ = 0;//Y•ûŒü‚Ì•]‰¿’l‚ğ10”{‚µ‚Ä‚¢‚é
+            byte nearPositionX = 0; byte nearPositionY = 0; byte nearPositionZ = 0;//Yï¿½ï¿½ï¿½ï¿½ï¿½Ì•]ï¿½ï¿½ï¿½lï¿½ï¿½10ï¿½{ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
             for (int i = 0; i < nextPositionX.Count; i++)
             {
                 if (nearDistance > Vector3.Magnitude(nowPosition - (centerPosition + ToVector3(nextPositionX[i], nextPositionY[i] * 10, nextPositionZ[i]) * gridRange)))
@@ -373,43 +390,46 @@ namespace Scenes.Ingame.Enemy
                 }
             }
 
-            //ÀÛ‚ÉŸ‚¬‚És‚­‚×‚«À•W‚ğ¦‚·
+
+            //ï¿½ï¿½ï¿½Û‚Éï¿½ï¿½ï¿½ï¿½Ésï¿½ï¿½ï¿½×‚ï¿½ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             Vector3 nextPosition = (ToVector3(nearPositionX, nearPositionY, nearPositionZ) * gridRange) + centerPosition;
             if (debugMode)
-            {//Ÿ‚És‚­‚×‚«ˆÊ’u‚ğ•`‰æ
+            {//ï¿½ï¿½ï¿½Ésï¿½ï¿½ï¿½×‚ï¿½ï¿½Ê’uï¿½ï¿½`ï¿½ï¿½
                 Debug.DrawLine(nextPosition, nextPosition + ToVector3(0, 20, 0), Color.magenta, 3);
+
             }
             return nextPosition;
         }
 
         /// <summary>
-        /// ¡‚¢‚éêŠ‚©‚çŒ©‚ê‚éƒ}ƒX–Ú‚ÌŒ©‚½‰ñ”‚ÌƒJƒEƒ“ƒg‚ğ‘‰Á‚³‚¹‚é
+        /// ä»Šã„ã‚‹å ´æ‰€ã‹ã‚‰è¦‹ã‚Œã‚‹ãƒã‚¹ç›®ã®è¦‹ãŸå›æ•°ã®ã‚«ã‚¦ãƒ³ãƒˆã‚’å¢—åŠ ã•ã›ã‚‹
         /// </summary>
-        /// <param name="nowPosition">Œ»İ‚ÌÀ•W</param>
-        /// <param name="visivilityRange">‹ŠE‚Ì’·‚³</param>
+        /// <param name="nowPosition">ç¾åœ¨ã®åº§æ¨™</param>
+        /// <param name="visivilityRange">è¦–ç•Œã®é•·ã•</param>
         public void CheckVisivility(Vector3 nowPosition, float visivilityRange)
         {
-            if (debugMode) Debug.Log("‹ŠE‚Ì’Ê‚è‚ğƒ`ƒFƒbƒN");
+            if (debugMode) Debug.Log("è¦–ç•Œã®é€šã‚Šã‚’ãƒã‚§ãƒƒã‚¯");
             VisivilityArea newVisivilityArea;
             if ((nowPosition.x < centerPosition.x + (visivilityAreaGrid.Count - 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < nowPosition.x))
-            {//xÀ•W‚ªƒ}ƒbƒv‚Ì”ÍˆÍ“à‚Å‚ ‚é‚©‚Ç‚¤‚©
+
+            {//xï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½}ï¿½bï¿½vï¿½Ì”ÍˆÍ“ï¿½ï¿½Å‚ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½
 
                 if ((nowPosition.y < centerPosition.y + (visivilityAreaGrid[0].Count -0.5) * gridRange) && (centerPosition.y - 0.5 * gridRange < nowPosition.y))
-                {//yÀ•W
-                    if ((nowPosition.z < centerPosition.z + (visivilityAreaGrid[0][0].Count - 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < nowPosition.z)) //zÀ•W‚ªƒ}ƒbƒv‚Ì”ÍˆÍ“à‚Å‚ ‚é‚©‚Ç‚¤‚©
+                {//yï¿½ï¿½ï¿½W
+                    if ((nowPosition.z < centerPosition.z + (visivilityAreaGrid[0][0].Count - 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < nowPosition.z)) //zï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½}ï¿½bï¿½vï¿½Ì”ÍˆÍ“ï¿½ï¿½Å‚ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½
                     {
-                        if (debugMode) Debug.Log("ƒ}ƒbƒv‚Ì”ÍˆÍ“à‚Å‚·");
-                        byte myPositionX,myPositionY, myPositionZ;//©•ª‚ª‚Ç‚±‚ÌƒOƒŠƒbƒh‚É‚¢‚é‚©‚ğŠm”F‚·‚é
+                        if (debugMode) Debug.Log("ï¿½}ï¿½bï¿½vï¿½Ì”ÍˆÍ“ï¿½ï¿½Å‚ï¿½");
+                        byte myPositionX,myPositionY, myPositionZ;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç‚ï¿½ï¿½ÌƒOï¿½ï¿½ï¿½bï¿½hï¿½É‚ï¿½ï¿½é‚©ï¿½ï¿½ï¿½mï¿½Fï¿½ï¿½ï¿½ï¿½
                         myPositionX = (byte)Mathf.FloorToInt((float)(nowPosition.x - centerPosition.x + 0.5 * gridRange) / gridRange);
                         myPositionY=  (byte)Mathf.FloorToInt((float)(nowPosition.y - centerPosition.y + 0.5 * gridRange) / gridRange);
                         myPositionZ = (byte)Mathf.FloorToInt((float)(nowPosition.z - centerPosition.z + 0.5 * gridRange) / gridRange);
                         foreach (TripleByteAndMonoFloat item in visivilityAreaGrid[myPositionX][myPositionY][myPositionZ].canVisivleAreaPosition)
                         {
                             if (item.range < visivilityRange)
-                            { //Œ©‚¦‚é‹——£
-                              //ƒhƒA‚ÉŠÖ˜A‚µ‚ÄŒ©‚¦‚éğŒ‚É‚ ‚é‚©’²‚×‚é
+                            { //ï¿½ï¿½ï¿½ï¿½ï¿½é‹—ï¿½ï¿½
+                              //ï¿½hï¿½Aï¿½ÉŠÖ˜Aï¿½ï¿½ï¿½ÄŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½é‚©ï¿½ï¿½ï¿½×‚ï¿½
                                 bool noDoor = true;
-                                foreach (StageDoor needOpen in item.needOpenDoor) //ŠJ‚¢‚Ä‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢ƒhƒA‚ÍŠJ‚¢‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN
+                                foreach (StageDoor needOpen in item.needOpenDoor) //ï¿½Jï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½Î‚È‚ï¿½È‚ï¿½ï¿½hï¿½Aï¿½ÍŠJï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½`ï¿½Fï¿½bï¿½N
                                 {
                                     if (needOpen.ReturnIsOpen == false)
                                     {
@@ -418,7 +438,7 @@ namespace Scenes.Ingame.Enemy
                                 }
                                 if (noDoor)
                                 {
-                                    foreach (StageDoor needClose in item.needCloseDoor)//•Â‚¶‚Ä‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢ƒhƒA‚Í•Â‚¶‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN
+                                    foreach (StageDoor needClose in item.needCloseDoor)//ï¿½Â‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½Î‚È‚ï¿½È‚ï¿½ï¿½hï¿½Aï¿½Í•Â‚ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½`ï¿½Fï¿½bï¿½N
                                     {
                                         if (needClose.ReturnIsOpen == true)
                                         {
@@ -430,43 +450,50 @@ namespace Scenes.Ingame.Enemy
 
                                 if (noDoor)
                                 {
-                                    //Œ©‚½‰ñ”‚ğ‘«‚·B‚½‚¾‚µ\‘¢‘Ì‚ğList‚ÌFor•¶‚Ì’†‚Å‚¢‚¶‚ê‚È‚¢‚Ì‚ÅƒRƒs[‚µ‚Ä‚¢‚¶‚Á‚Ä‘‚«Š·‚¦‚éBƒI[ƒo[ƒtƒ[‚µ‚È‚¢ê‡
+                                    //ï¿½ï¿½ï¿½ï¿½ï¿½ñ”‚ğ‘«‚ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½Ì‚ï¿½Listï¿½ï¿½Forï¿½ï¿½ï¿½Ì’ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì‚ÅƒRï¿½sï¿½[ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½Iï¿½[ï¿½oï¿½[ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½È‚ï¿½ï¿½ê‡
                                     if ((byte)(visivilityAreaGrid[item.x][item.y][item.z].watchNum) < byte.MaxValue)
                                     {
                                         newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[item.x][item.y][item.z].watchNum + 1), visivilityAreaGrid[item.x][item.y][item.z].canVisivleAreaPosition);
                                         visivilityAreaGrid[item.x][item.y][item.z] = newVisivilityArea;
                                     }
                                     if (debugMode)
-                                    {//Œ©‚½ƒGƒŠƒA‚ğü‚Å•\¦
+                                    {//ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½Å•\ï¿½ï¿½
                                         Debug.DrawLine(centerPosition + ToVector3(myPositionX, myPositionY, myPositionZ) * gridRange, centerPosition + ToVector3(item.x, item.y, item.z) * gridRange, Color.green, 1f);
                                     }
                                 }
 
+
                             }
                         }
-                        //©•ª‚ª¡‚¢‚éêŠ‚ÉŒ©‚½‰ñ”‚ğ‘«‚·B‚½‚¾‚µ\‘¢‘Ì‚ğList‚ÌFor•¶‚Ì’†‚Å‚¢‚¶‚ê‚È‚¢‚Ì‚ÅƒRƒs[‚µ‚Ä‚¢‚¶‚Á‚Ä‘‚«Š·‚¦‚é
+                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½êŠï¿½ÉŒï¿½ï¿½ï¿½ï¿½ñ”‚ğ‘«‚ï¿½ï¿½Bï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½Ì‚ï¿½Listï¿½ï¿½Forï¿½ï¿½ï¿½Ì’ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½Ì‚ÅƒRï¿½sï¿½[ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         if ((byte)(visivilityAreaGrid[myPositionX][myPositionY][myPositionZ].watchNum) < byte.MaxValue)
                         {
                             newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[myPositionX][myPositionY][myPositionZ].watchNum + 1), visivilityAreaGrid[myPositionX][myPositionY][myPositionZ].canVisivleAreaPosition);
                             visivilityAreaGrid[myPositionX][myPositionY][myPositionZ] = newVisivilityArea;
                         }
                     }
+
                     else
+
                     {
-                         Debug.LogError("zÀ•W‚ªƒ}ƒbƒv‚©‚ç‚Í‚İo‚Ä‚¢‚Ü‚·");
+                         Debug.LogError("zï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½Í‚İoï¿½Ä‚ï¿½ï¿½Ü‚ï¿½");
                     }
                 }
+
                 else {
-                    Debug.LogError("zÀ•W‚ªƒ}ƒbƒv‚©‚ç‚Í‚İo‚Ä‚¢‚Ü‚·");
+                    Debug.LogError("zï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½Í‚İoï¿½Ä‚ï¿½ï¿½Ü‚ï¿½");
+
                 }
             }
             else
             {
-                Debug.LogError("xÀ•W‚ªƒ}ƒbƒv‚©‚ç‚Í‚İo‚Ä‚¢‚Ü‚·");
+
+                Debug.LogError("xï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½Í‚İoï¿½Ä‚ï¿½ï¿½Ü‚ï¿½");
+
             }
 
             if (debugMode)
-            { //Šeƒ}ƒX–Ú‚ª‚Ç‚ê‚¾‚¯Œ©‚ç‚ê‚Ä‚¢‚é‚©‚ğŠm”F‚·‚é
+            { //å„ãƒã‚¹ç›®ãŒã©ã‚Œã ã‘è¦‹ã‚‰ã‚Œã¦ã„ã‚‹ã‹ã‚’ç¢ºèªã™ã‚‹
                 for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
                 {
                     for (byte y =0;y < visivilityAreaGrid[0].Count();y++) {
@@ -489,31 +516,34 @@ namespace Scenes.Ingame.Enemy
         }
 
         /// <summary>
-        /// “Á’è‚ÌˆÊ’u‚©‚ç‰¹‚ª•·‚±‚¦‚Ä‚«‚½ê‡‚Ìˆ—
+        /// ç‰¹å®šã®ä½ç½®ã‹ã‚‰éŸ³ãŒèã“ãˆã¦ããŸå ´åˆã®å‡¦ç†
         /// </summary>
-        /// <param name="position">‰¹Œ¹‚ÌÀ•W</param>
-        /// <param name="resetRange">‰¹Œ¹‚ª‘¶İ‚·‚é‚Å‚ ‚ë‚¤‚Æ‚¢‚¤–‚Å‘ÎÛ‚Æ‚·‚é”ÍˆÍ</param>
-        /// <param name="periodic">’èŠú“I‚Èƒ`ƒFƒbƒN‚É‚æ‚Á‚ÄŒÄ‚Ño‚³‚ê‚½‚Ì‚©‚Ç‚¤‚©</param>
+        /// <param name="position">éŸ³æºã®åº§æ¨™</param>
+        /// <param name="resetRange">éŸ³æºãŒå­˜åœ¨ã™ã‚‹ã§ã‚ã‚ã†ã¨ã„ã†äº‹ã§å¯¾è±¡ã¨ã™ã‚‹ç¯„å›²</param>
+        /// <param name="periodic">å®šæœŸçš„ãªãƒã‚§ãƒƒã‚¯ã«ã‚ˆã£ã¦å‘¼ã³å‡ºã•ã‚ŒãŸã®ã‹ã©ã†ã‹</param>
         public void HearingSound(Vector3 position, float resetRange, bool periodic)
         {
-            if (debugMode) Debug.Log("“Á’èˆÊ’u‚©‚ç•·‚±‚¦‚Ä‚«‚½‰¹‚É‚Â‚¢‚Ä‘Îˆ");
+            if (debugMode) Debug.Log("ç‰¹å®šä½ç½®ã‹ã‚‰èã“ãˆã¦ããŸéŸ³ã«ã¤ã„ã¦å¯¾å‡¦");
             VisivilityArea newVisivilityArea;
             if ((position.x < centerPosition.x + (visivilityAreaGrid.Count - 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < position.x))
-            {//xÀ•W‚ªƒ}ƒbƒv‚Ì”ÍˆÍ“à‚Å‚ ‚é‚©‚Ç‚¤‚©
+
+            {//xï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½}ï¿½bï¿½vï¿½Ì”ÍˆÍ“ï¿½ï¿½Å‚ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½
                 if ((position.y < centerPosition.y + (visivilityAreaGrid[0].Count - 0.5) * gridRange) && (centerPosition.y - 0.5 * gridRange < position.y))
+
                 {
-                    if ((position.z < centerPosition.z + (visivilityAreaGrid[0][0].Count - 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < position.z)) //zÀ•W‚ªƒ}ƒbƒv‚Ì”ÍˆÍ“à‚Å‚ ‚é‚©‚Ç‚¤‚©
+                    if ((position.z < centerPosition.z + (visivilityAreaGrid[0][0].Count - 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < position.z)) //zï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½}ï¿½bï¿½vï¿½Ì”ÍˆÍ“ï¿½ï¿½Å‚ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½
                     {
                         for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
                         {
+
                             for (byte y = 0; y < visivilityAreaGrid[0].Count(); y++)
                             {
                                 for (byte z = 0; z < visivilityAreaGrid[0][0].Count(); z++)
                                 {
-                                    //ƒ}ƒX‚ª‘ÎÛ”ÍˆÍ‚©’²‚×‚é                          
+                                    //ï¿½}ï¿½Xï¿½ï¿½ï¿½ÎÛ”ÍˆÍ‚ï¿½ï¿½ï¿½ï¿½×‚ï¿½                          
                                     if (resetRange > Vector3.Magnitude(position - (centerPosition + ToVector3(x, y, z) * gridRange)))
                                     {
-                                        //‘ÎÛ“à‚Ìê‡Œ©‚½‰ñ”‚ğ0‚Æ‚·‚é
+                                        //ï¿½ÎÛ“ï¿½ï¿½Ìê‡ï¿½ï¿½ï¿½ï¿½ï¿½ñ”‚ï¿½0ï¿½Æ‚ï¿½ï¿½ï¿½
                                         newVisivilityArea = ToVisivilityArea((byte)(0), visivilityAreaGrid[x][y][z].canVisivleAreaPosition);
                                         visivilityAreaGrid[x][y][z] = newVisivilityArea;
                                         if (debugMode) { DrawCross((centerPosition + ToVector3(x, y, z) * gridRange), 5, Color.magenta, 2f); }
@@ -521,13 +551,14 @@ namespace Scenes.Ingame.Enemy
                                     }
                                     else
                                     {
-                                        //‘ÎÛ‚Å‚È‚¢ê‡Œ©‚½‰ñ”‚ğ1’Ç‰Á‚·‚é(‰½“x‚à‰¹‚ğ•·‚¢‚½ê‡‚ÉÅ‚àV‚µ‚¢‰¹‚ğ‘ÎÛ‚Æ‚·‚é‚½‚ß)
+                                        //ï¿½ÎÛ‚Å‚È‚ï¿½ï¿½ê‡ï¿½ï¿½ï¿½ï¿½ï¿½ñ”‚ï¿½1ï¿½Ç‰ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½xï¿½ï¿½ï¿½ï¿½ï¿½ğ•·‚ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÉÅ‚ï¿½ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÎÛ‚Æ‚ï¿½ï¿½é‚½ï¿½ï¿½)
                                         if (periodic)
-                                        {//×‚©‚­‘–‚è‚Ü‚­‚é‚±‚Æ‚Å‰¹‚Ì‚µ‚Ä‚¢‚È‚¢ƒGƒŠƒA‚ª‹É’[‚É‘{õæ‚É‚È‚ç‚È‚¢‚æ‚¤‚É‚·‚éƒOƒŠƒbƒ`‚Ì‘Îô
+                                        {//ï¿½×‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½é‚±ï¿½Æ‚Å‰ï¿½ï¿½Ì‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½Gï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½É’[ï¿½É‘{ï¿½ï¿½ï¿½ï¿½É‚È‚ï¿½È‚ï¿½ï¿½æ‚¤ï¿½É‚ï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½bï¿½`ï¿½Ì‘Îï¿½
                                             newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[x][y][z].watchNum + 1), visivilityAreaGrid[x][y][z].canVisivleAreaPosition);
                                             visivilityAreaGrid[x][y][z] = newVisivilityArea;
                                         }
                                     }
+
                                 }
 
 
@@ -537,71 +568,79 @@ namespace Scenes.Ingame.Enemy
                     }
                     else
                     {
-                        Debug.LogError("zÀ•W‚ªƒ}ƒbƒv‚©‚ç‚Í‚İo‚Ä‚¢‚Ü‚·");
+                        Debug.LogError("zï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½Í‚İoï¿½Ä‚ï¿½ï¿½Ü‚ï¿½");
                     }
                 }
-                else { Debug.LogError("yÀ•W‚ªƒ}ƒbƒv‚©‚ç‚Í‚İo‚Ä‚¢‚Ü‚·"); }
+
+                else { Debug.LogError("yï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½Í‚İoï¿½Ä‚ï¿½ï¿½Ü‚ï¿½"); }
                 
                 
             }
             else {
-                Debug.LogError("xÀ•W‚ªƒ}ƒbƒv‚©‚ç‚Í‚İo‚Ä‚¢‚Ü‚·");
+                Debug.LogError("xï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½Í‚İoï¿½Ä‚ï¿½ï¿½Ü‚ï¿½");
+
             }
         }
 
         /// <summary>
-        /// ƒvƒŒƒCƒ„[‚ÌŒõ‚ªŒ©‚¦‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğŒŸo‚·‚é
+        /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å…‰ãŒè¦‹ãˆã¦ã„ã‚‹ã‹ã©ã†ã‹ã‚’æ¤œå‡ºã™ã‚‹
         /// </summary>
-        /// <param name="enemyPosition">“G‚Ì‹êŠ</param>
-        /// <param name="playerPosition">ƒvƒŒƒCƒ„[‚Ì‹êŠ</param>
-        /// <param name="visivilityRange">“G‚Ì‹ŠE‚Ì‹——£</param>
-        /// <param name="lightRange">ƒvƒŒƒCƒ„[‚Ì‹ŠE‚Ì‹——£</param>
-        /// <param name="NextPosition">QÆ“n‚µ‚ÅÅ‚à‹­‚¢Œõ‚ÌŒ©‚¦‚½ˆÊ’u‚ğ•Ô‚³‚ê‚é</param>
-        /// <returns>Œõ‚ÍŒ©‚¦‚½‚©‚Ç‚¤‚©</returns>
+        /// <param name="enemyPosition">æ•µã®å±…å ´æ‰€</param>
+        /// <param name="playerPosition">ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å±…å ´æ‰€</param>
+        /// <param name="visivilityRange">æ•µã®è¦–ç•Œã®è·é›¢</param>
+        /// <param name="lightRange">ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¦–ç•Œã®è·é›¢</param>
+        /// <param name="NextPosition">å‚ç…§æ¸¡ã—ã§æœ€ã‚‚å¼·ã„å…‰ã®è¦‹ãˆãŸä½ç½®ã‚’è¿”ã•ã‚Œã‚‹</param>
+        /// <returns>å…‰ã¯è¦‹ãˆãŸã‹ã©ã†ã‹</returns>
         public bool RightCheck(Vector3 enemyPosition, Vector3 playerPosition, float visivilityRange, float lightRange, ref Vector3 NextPosition)
         {
             if (!((enemyPosition.x < centerPosition.x + (visivilityAreaGrid.Count - 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < enemyPosition.x)))
             {
-                Debug.LogError("EnemyPosition.x‚ª”ÍˆÍŠO‚Å‚·");
+                Debug.LogError("EnemyPosition.xãŒç¯„å›²å¤–ã§ã™");
                 return false;
             }
+
             if (!((enemyPosition.y < centerPosition.y + (visivilityAreaGrid[0].Count - 0.5) * gridRange) && (centerPosition.y - 0.5 * gridRange < enemyPosition.y)))
             {
-                Debug.LogError("EnemyPosition.y‚ª”ÍˆÍŠO‚Å‚·");
+                Debug.LogError("EnemyPosition.yï¿½ï¿½ï¿½ÍˆÍŠOï¿½Å‚ï¿½");
                 return false;
             }
             if (!((enemyPosition.z < centerPosition.z + (visivilityAreaGrid[0][0].Count - 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < enemyPosition.z)))
+
             {
-                Debug.LogError("EnemyPosition.z‚ª”ÍˆÍŠO‚Å‚·");
+                Debug.LogError("EnemyPosition.zãŒç¯„å›²å¤–ã§ã™");
                 return false;
             }
             if (!((playerPosition.x < centerPosition.x + (visivilityAreaGrid.Count - 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < playerPosition.x)))
             {
-                Debug.LogError("PlayerPosition.x‚ª”ÍˆÍŠO‚Å‚·");
+                Debug.LogError("PlayerPosition.xãŒç¯„å›²å¤–ã§ã™");
                 return false;
             }
+
             if (!((playerPosition.y < centerPosition.y + (visivilityAreaGrid[0].Count - 0.5) * gridRange) && (centerPosition.y - 0.5 * gridRange < playerPosition.y)))
             {
-                Debug.LogError("PlayerPosition.y‚ª”ÍˆÍŠO‚Å‚·");
+                Debug.LogError("PlayerPosition.yï¿½ï¿½ï¿½ÍˆÍŠOï¿½Å‚ï¿½");
                 return false;
             }
             if (!((playerPosition.z < centerPosition.z + (visivilityAreaGrid[0][0].Count - 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < playerPosition.z)))
+
             {
-                Debug.LogError("EPlayerPosition.z‚ª”ÍˆÍŠO‚Å‚·");
+                Debug.LogError("EPlayerPosition.zãŒç¯„å›²å¤–ã§ã™");
                 return false;
             }
-            //Enemy‚©‚çŒ©‚ê‚é‰Â”\«‚Ì‚ ‚éƒ}ƒX‚ğæ“¾
+
+            //Enemyï¿½ï¿½ï¿½çŒ©ï¿½ï¿½ï¿½Â”\ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½}ï¿½Xï¿½ï¿½ï¿½æ“¾
             byte enemyGridPositionX,enemyGridPositionY, enemyGridPositionZ;
+
             enemyGridPositionX = (byte)Mathf.FloorToInt((float)(enemyPosition.x - centerPosition.x + 0.5 * gridRange) / gridRange);
             enemyGridPositionY = (byte)Mathf.FloorToInt((float)(enemyPosition.y - centerPosition.y + 0.5 * gridRange) / gridRange);
             enemyGridPositionZ = (byte)Mathf.FloorToInt((float)(enemyPosition.z - centerPosition.z + 0.5 * gridRange) / gridRange);
 
-            List<TripleByteAndMonoFloat> enemyVisivilityGridPosition = new List<TripleByteAndMonoFloat> ();//¡‚µ‚Ä‚é‚±‚Æ‚Í‚±‚Ìæ‚É‚¨‚¢‚Ä“G‚©‚çƒhƒA‚Ì–â‘è‚È‚­Œ©‚¦‚éƒ}ƒX‚¾‚¯‚ğ’Šo‚·‚é‚±‚Æ
+            List<TripleByteAndMonoFloat> enemyVisivilityGridPosition = new List<TripleByteAndMonoFloat> ();//ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚é‚±ï¿½Æ‚Í‚ï¿½ï¿½Ìï¿½É‚ï¿½ï¿½ï¿½ï¿½Ä“Gï¿½ï¿½ï¿½ï¿½hï¿½Aï¿½Ì–ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½}ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ğ’Šoï¿½ï¿½ï¿½é‚±ï¿½ï¿½
 
             foreach (TripleByteAndMonoFloat item    in visivilityAreaGrid[enemyGridPositionX][enemyGridPositionY][enemyGridPositionZ].canVisivleAreaPosition) {
-                //ƒhƒA‚ÉŠÖ˜A‚µ‚ÄŒ©‚¦‚éğŒ‚É‚ ‚é‚©’²‚×‚é
+                //ï¿½hï¿½Aï¿½ÉŠÖ˜Aï¿½ï¿½ï¿½ÄŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½é‚©ï¿½ï¿½ï¿½×‚ï¿½
                 bool noDoor = true;
-                foreach (StageDoor needOpen in item.needOpenDoor) //ŠJ‚¢‚Ä‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢ƒhƒA‚ÍŠJ‚¢‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN
+                foreach (StageDoor needOpen in item.needOpenDoor) //ï¿½Jï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½Î‚È‚ï¿½È‚ï¿½ï¿½hï¿½Aï¿½ÍŠJï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½`ï¿½Fï¿½bï¿½N
                 {
                     if (needOpen.ReturnIsOpen == false)
                     {
@@ -610,7 +649,7 @@ namespace Scenes.Ingame.Enemy
                 }
                 if (noDoor)
                 {
-                    foreach (StageDoor needClose in item.needCloseDoor)//•Â‚¶‚Ä‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢ƒhƒA‚Í•Â‚¶‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN
+                    foreach (StageDoor needClose in item.needCloseDoor)//ï¿½Â‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½Î‚È‚ï¿½È‚ï¿½ï¿½hï¿½Aï¿½Í•Â‚ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½`ï¿½Fï¿½bï¿½N
                     {
                         if (needClose.ReturnIsOpen == true)
                         {
@@ -638,18 +677,19 @@ namespace Scenes.Ingame.Enemy
                 }
             }
 
-            //Œõ‚ª“Í‚­‰Â”\«‚Ì‚ ‚éƒ}ƒX‚ğæ“¾
+            //ï¿½ï¿½ï¿½ï¿½ï¿½Í‚ï¿½ï¿½Â”\ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½}ï¿½Xï¿½ï¿½ï¿½æ“¾
             byte rightGridPositionX, rightGridPositionY,rightGridPositionZ;
+
             rightGridPositionX = (byte)Mathf.FloorToInt((float)(playerPosition.x - centerPosition.x + 0.5 * gridRange) / gridRange);
             rightGridPositionY = (byte)Mathf.FloorToInt((float)(playerPosition.y - centerPosition.y + 0.5 * gridRange) / gridRange);
             rightGridPositionZ = (byte)Mathf.FloorToInt((float)(playerPosition.z - centerPosition.z + 0.5 * gridRange) / gridRange);
             Debug.Log(rightGridPositionY);
-            List<TripleByteAndMonoFloat> rightingGridPosition = new List<TripleByteAndMonoFloat>();//¡‚µ‚Ä‚é‚±‚Æ‚Í‚±‚Ìæ‚É‚¨‚¢‚ÄƒvƒŒƒCƒ„[‚©‚çƒhƒA‚Ì–â‘è‚È‚­Œ©‚¦‚éƒ}ƒX‚¾‚¯‚ğ’Šo‚·‚é‚±‚Æ
+            List<TripleByteAndMonoFloat> rightingGridPosition = new List<TripleByteAndMonoFloat>();//ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚é‚±ï¿½Æ‚Í‚ï¿½ï¿½Ìï¿½É‚ï¿½ï¿½ï¿½ï¿½Äƒvï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½hï¿½Aï¿½Ì–ï¿½ï¿½È‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½}ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ğ’Šoï¿½ï¿½ï¿½é‚±ï¿½ï¿½
             foreach (TripleByteAndMonoFloat item in visivilityAreaGrid[rightGridPositionX][rightGridPositionY][rightGridPositionZ].canVisivleAreaPosition)
             {
-                //ƒhƒA‚ÉŠÖ˜A‚µ‚ÄŒ©‚¦‚éğŒ‚É‚ ‚é‚©’²‚×‚é
+                //ï¿½hï¿½Aï¿½ÉŠÖ˜Aï¿½ï¿½ï¿½ÄŒï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É‚ï¿½ï¿½é‚©ï¿½ï¿½ï¿½×‚ï¿½
                 bool noDoor = true;
-                foreach (StageDoor needOpen in item.needOpenDoor) //ŠJ‚¢‚Ä‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢ƒhƒA‚ÍŠJ‚¢‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN
+                foreach (StageDoor needOpen in item.needOpenDoor) //ï¿½Jï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½Î‚È‚ï¿½È‚ï¿½ï¿½hï¿½Aï¿½ÍŠJï¿½ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½`ï¿½Fï¿½bï¿½N
                 {
                     if (needOpen.ReturnIsOpen == false)
                     {
@@ -658,7 +698,7 @@ namespace Scenes.Ingame.Enemy
                 }
                 if (noDoor)
                 {
-                    foreach (StageDoor needClose in item.needCloseDoor)//•Â‚¶‚Ä‚¢‚È‚¯‚ê‚Î‚È‚ç‚È‚¢ƒhƒA‚Í•Â‚¶‚Ä‚¢‚é‚©ƒ`ƒFƒbƒN
+                    foreach (StageDoor needClose in item.needCloseDoor)//ï¿½Â‚ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½ï¿½Î‚È‚ï¿½È‚ï¿½ï¿½hï¿½Aï¿½Í•Â‚ï¿½ï¿½Ä‚ï¿½ï¿½é‚©ï¿½`ï¿½Fï¿½bï¿½N
                     {
                         if (needClose.ReturnIsOpen == true)
                         {
@@ -674,7 +714,7 @@ namespace Scenes.Ingame.Enemy
             }
 
 
-            if (debugMode)//Œõ‚ğ•`‰æ
+            if (debugMode)//ï¿½ï¿½ï¿½ï¿½`ï¿½ï¿½
             {
                 for (int r = 0; r < rightingGridPosition.Count; r++)
                 {
@@ -683,13 +723,11 @@ namespace Scenes.Ingame.Enemy
                 }
             }
 
+
          
 
+            //ï¿½ï¿½ï¿½é‚±ï¿½Æ‚Ì‚Å‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½ï¿½é‚¢ï¿½}ï¿½Xï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-
-
-
-            //Œ©‚é‚±‚Æ‚Ì‚Å‚«‚éÅ‚à–¾‚é‚¢ƒ}ƒX‚ğŒˆ’è
             bool canLookLight = false;
             byte mostShiningGridPositionX = 0,mostShiningGridPositionY = 0, mostShiningGridPositionZ = 0;
             float shining = 0;
@@ -698,11 +736,13 @@ namespace Scenes.Ingame.Enemy
                 for (int r = 0; r < rightingGridPosition.Count; r++)
                 {
                     if (enemyVisivilityGridPosition[e].x == rightingGridPosition[r].x && enemyVisivilityGridPosition[e].z == rightingGridPosition[r].z)
-                    {//Œõ‚ª“Í‚­‰Â”\«‚ª‚ ‚èŒ©‚¦‚Ä‚¢‚éƒ}ƒX‚ğæ“¾
+                    {//å…‰ãŒå±Šãå¯èƒ½æ€§ãŒã‚ã‚Šè¦‹ãˆã¦ã„ã‚‹ãƒã‚¹ã‚’å–å¾—
                         if (enemyVisivilityGridPosition[e].range < visivilityRange && rightingGridPosition[r].range < lightRange)
-                        { //Œ©‚¦‚éã‚ÉŒõ‚à“Í‚­
+
+                        { //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÉŒï¿½ï¿½ï¿½ï¿½Í‚ï¿½
                             if (debugMode) { DrawCross((ToVector3(rightingGridPosition[r].x, rightingGridPosition[r].y, rightingGridPosition[r].z) * gridRange) + centerPosition, 2, Color.yellow, 1); }
-                            if (shining < lightRange - rightingGridPosition[r].range)//Å‚à–¾‚é‚¢ƒ}ƒX‚Å‚ ‚é
+                            if (shining < lightRange - rightingGridPosition[r].range)//ï¿½Å‚ï¿½ï¿½ï¿½ï¿½é‚¢ï¿½}ï¿½Xï¿½Å‚ï¿½ï¿½ï¿½
+
                             {
                                 mostShiningGridPositionX = rightingGridPosition[r].x;
                                 mostShiningGridPositionY = rightingGridPosition[r].y;
@@ -715,25 +755,27 @@ namespace Scenes.Ingame.Enemy
                 }
             }
 
-            //î•ñ‚ğ•Ô‚·
+            //æƒ…å ±ã‚’è¿”ã™
             if (canLookLight)
             {
+
                 NextPosition = (ToVector3(mostShiningGridPositionX, mostShiningGridPositionY, mostShiningGridPositionZ) * gridRange) + centerPosition;
-                if (debugMode) { DrawCross(NextPosition, 5, Color.yellow, 1); Debug.Log("Œõ‚ªŒ©‚¦‚½I"); Debug.DrawLine(NextPosition, NextPosition + ToVector3(0, 20, 0), Color.magenta, 3); }
+                if (debugMode) { DrawCross(NextPosition, 5, Color.yellow, 1); Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½I"); Debug.DrawLine(NextPosition, NextPosition + ToVector3(0, 20, 0), Color.magenta, 3); }
+
                 return true;
             }
             else
             {
-                if (debugMode) { Debug.Log("Œõ‚ÍŒ©‚¦‚È‚©‚Á‚½"); }
+                if (debugMode) { Debug.Log("å…‰ã¯è¦‹ãˆãªã‹ã£ãŸ"); }
                 return false;
             }
         }
 
         /// <summary>
-        /// ‘S‚Ä‚Ìƒ}ƒX–Ú‚ÌŒ©‚½‰ñ”‚ğ‹K’è‰ñ”•ÏX‚·‚é
+        /// å…¨ã¦ã®ãƒã‚¹ç›®ã®è¦‹ãŸå›æ•°ã‚’è¦å®šå›æ•°å¤‰æ›´ã™ã‚‹
         /// </summary>
-        /// <param name="change">•Ï‰»‚³‚¹‚é”</param>
-        /// /// <param name="plus">‘«‚·‚È‚çtrueAˆø‚­‚È‚çfalse</param>
+        /// <param name="change">å¤‰åŒ–ã•ã›ã‚‹æ•°</param>
+        /// /// <param name="plus">è¶³ã™ãªã‚‰trueã€å¼•ããªã‚‰false</param>
         public void ChangeEveryGridWatchNum(byte change, bool plus)
         {
             VisivilityArea newVisivilityArea;
@@ -776,7 +818,7 @@ namespace Scenes.Ingame.Enemy
         }
 
         /// <summary>
-        /// ‘S‚Ä‚Ìƒ}ƒX–Ú‚ÌŒ©‚½‰ñ”‚ğƒZƒbƒg‚·‚é
+        /// å…¨ã¦ã®ãƒã‚¹ç›®ã®è¦‹ãŸå›æ•°ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
         /// </summary>
         /// <param name="num"></param>
         public void SetEveryGridWatchNum(byte num)
@@ -795,23 +837,23 @@ namespace Scenes.Ingame.Enemy
         }
 
         /// <summary>
-        /// “Á’è‚ÌƒOƒŠƒbƒh‚ÌŒ©‚½‰ñ”‚ğƒZƒbƒg‚·‚é
+        /// ç‰¹å®šã®ã‚°ãƒªãƒƒãƒ‰ã®è¦‹ãŸå›æ•°ã‚’ã‚»ãƒƒãƒˆã™ã‚‹
         /// </summary>
-        /// <param name="position">ƒ}ƒX‚Ì‚ ‚éˆÊ’u</param>
-        /// <param name="num">ƒZƒbƒg‚·‚é”</param>
+        /// <param name="position">ãƒã‚¹ã®ã‚ã‚‹ä½ç½®</param>
+        /// <param name="num">ã‚»ãƒƒãƒˆã™ã‚‹æ•°</param>
         public void SetGridWatchNum(Vector3 position, byte num)
         {
             VisivilityArea newVisivilityArea;
             if (!(position.x < centerPosition.x + (visivilityAreaGrid.Count - 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < position.x))
             {
-                Debug.LogError("Position.x‚ª”ÍˆÍŠO‚Å‚·");
+                Debug.LogError("Position.xãŒç¯„å›²å¤–ã§ã™");
             }
             if (!(position.y < centerPosition.y + (visivilityAreaGrid[0].Count - 0.5) * gridRange) && (centerPosition.y - 0.5 * gridRange < position.x)) {
-                Debug.LogError("positionY‚ª”ÍˆÍŠO‚Å‚·");
+                Debug.LogError("positionYï¿½ï¿½ï¿½ÍˆÍŠOï¿½Å‚ï¿½");
             }
             if (!(position.z < centerPosition.z + (visivilityAreaGrid[0][0].Count - 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < position.z))
             {
-                Debug.LogError("Position.z‚ª”ÍˆÍŠO‚Å‚·");
+                Debug.LogError("Position.zãŒç¯„å›²å¤–ã§ã™");
             }
             byte gridPositionX, gridPositionY,gridPositionZ;
             gridPositionX = (byte)Mathf.FloorToInt((float)(position.x - centerPosition.x + 0.5 * gridRange) / gridRange);
@@ -824,29 +866,33 @@ namespace Scenes.Ingame.Enemy
 
 
         /// <summary>
-        /// ƒvƒŒƒCƒ„[‚Ìü•Ó‚ÉÅ‰‹ß‚Ã‚©‚È‚¢‚æ‚¤‚É‚·‚é‚½‚ß‚Ég—p
+        /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å‘¨è¾ºã«æœ€åˆè¿‘ã¥ã‹ãªã„ã‚ˆã†ã«ã™ã‚‹ãŸã‚ã«ä½¿ç”¨
         /// </summary>
         public void DontApproachPlayer()
         {
             Vector3 playerPosition = GameObject.FindWithTag("Player").transform.position;
-            if (debugMode) Debug.Log("ƒvƒŒƒCƒ„[‚ÉƒXƒ|[ƒ“’¼ŒãÚ‹ß‚µ‚È‚¢‚æ‚¤‚É‘Îˆ");
+            if (debugMode) Debug.Log("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ã‚¹ãƒãƒ¼ãƒ³ç›´å¾Œæ¥è¿‘ã—ãªã„ã‚ˆã†ã«å¯¾å‡¦");
             VisivilityArea newVisivilityArea;
             if ((playerPosition.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < playerPosition.x))
-            {//xÀ•W‚ªƒ}ƒbƒv‚Ì”ÍˆÍ“à‚Å‚ ‚é‚©‚Ç‚¤‚©
+
+            {//xï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½}ï¿½bï¿½vï¿½Ì”ÍˆÍ“ï¿½ï¿½Å‚ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½
                 if ((playerPosition.y < centerPosition.y + (visivilityAreaGrid[0].Count + 0.5) * gridRange) && (centerPosition.y - 0.5 * gridRange < playerPosition.y))
+
                 {
-                    if ((playerPosition.z < centerPosition.z + (visivilityAreaGrid[0][0].Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < playerPosition.z)) //zÀ•W‚ªƒ}ƒbƒv‚Ì”ÍˆÍ“à‚Å‚ ‚é‚©‚Ç‚¤‚©
+                    if ((playerPosition.z < centerPosition.z + (visivilityAreaGrid[0][0].Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < playerPosition.z)) //zï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½}ï¿½bï¿½vï¿½Ì”ÍˆÍ“ï¿½ï¿½Å‚ï¿½ï¿½é‚©ï¿½Ç‚ï¿½ï¿½ï¿½
                     {
                         for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
                         {
+
                             for (byte y = 0; y < visivilityAreaGrid[0].Count(); y++)
+
                             {
                                 for (byte z = 0; z < visivilityAreaGrid[0][0].Count(); z++)
                                 {
-                                    //ƒ}ƒX‚ª‘ÎÛ”ÍˆÍ(ƒn[ƒhƒR[ƒh‚Å50‚É‚µ‚Ä‚ ‚é)‚©’²‚×‚é                          
+                                    //ï¿½}ï¿½Xï¿½ï¿½ï¿½ÎÛ”Íˆï¿½(ï¿½nï¿½[ï¿½hï¿½Rï¿½[ï¿½hï¿½ï¿½50ï¿½É‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½)ï¿½ï¿½ï¿½ï¿½ï¿½×‚ï¿½                          
                                     if (50 > Vector3.Magnitude(playerPosition - (centerPosition + ToVector3(x, y, z) * gridRange)))
                                     {
-                                        //‘ÎÛ“à‚Ìê‡Œ©‚½‰ñ”‚ğ0‚Æ‚·‚é
+                                        //ï¿½ÎÛ“ï¿½ï¿½Ìê‡ï¿½ï¿½ï¿½ï¿½ï¿½ñ”‚ï¿½0ï¿½Æ‚ï¿½ï¿½ï¿½
                                         newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[x][y][z].watchNum + 1), visivilityAreaGrid[x][y][z].canVisivleAreaPosition);
                                         visivilityAreaGrid[x][y][z] = newVisivilityArea;
                                         if (debugMode) { DrawCross((centerPosition + ToVector3(x, y, z) * gridRange), 5, Color.magenta, 2f); }
@@ -860,24 +906,26 @@ namespace Scenes.Ingame.Enemy
                     }
                     else
                     {
-                        Debug.LogError("zÀ•W‚ªƒ}ƒbƒv‚©‚ç‚Í‚İo‚Ä‚¢‚Ü‚·");
+                        Debug.LogError("zï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½Í‚İoï¿½Ä‚ï¿½ï¿½Ü‚ï¿½");
                     }
                 }
                 else
                 {
-                    Debug.LogError("yÀ•W‚ªƒ}ƒbƒv‚©‚ç‚Í‚İo‚Ä‚¢‚Ü‚·");
+
+                    Debug.LogError("yï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½Í‚İoï¿½Ä‚ï¿½ï¿½Ü‚ï¿½");
                 }
             }
             else {
-                Debug.LogError("xÀ•W‚ªƒ}ƒbƒv‚©‚ç‚Í‚İo‚Ä‚¢‚Ü‚·");
+                Debug.LogError("xï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½}ï¿½bï¿½vï¿½ï¿½ï¿½ï¿½Í‚İoï¿½Ä‚ï¿½ï¿½Ü‚ï¿½");
             }
+
 
         }
 
 
 
         //###################################
-        //•Ö—˜‚ÈŠÖ”‚½‚¿
+        //ï¿½Ö—ï¿½ï¿½ÈŠÖï¿½ï¿½ï¿½ï¿½ï¿½
         //###################################
 
         Vector2 translation2 = Vector2.zero;

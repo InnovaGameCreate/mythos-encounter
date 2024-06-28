@@ -22,7 +22,7 @@ namespace Scenes.Ingame.Enemy
         //Countはタイミングを計るような変数を表す。例えば..クールダウンがどれだけ終了しているかや何かい攻撃をしたかなど
         [Header("敵キャラの基本スペックの初期値")]
         [SerializeField][Tooltip("hpの初期値")] private int _hpBase;
-        [SerializeField][Tooltip("巡回時の速度の初期値")] private float _patolloringSpeedBase;
+        [SerializeField][Tooltip("巡回時の速度の初期値")] private float _patrollingSpeedBase;
         [SerializeField][Tooltip("索敵時の速度")] private float _searchSpeedBase;
         [SerializeField][Tooltip("追跡時の速度")] private float _chaseSpeedBase;
         [SerializeField][Tooltip("聴力の初期値。0は全く聞こえず100はどんな小さい音も聞き逃さない")][Range(0, 100)] private float _audiometerPowerBase;
@@ -64,15 +64,15 @@ namespace Scenes.Ingame.Enemy
 
 
         private IntReactiveProperty _hp = new IntReactiveProperty();
-        private FloatReactiveProperty _patolloringSpeed = new FloatReactiveProperty();
+        private FloatReactiveProperty _patrollingSpeed = new FloatReactiveProperty();
         private FloatReactiveProperty _searcSpeed = new FloatReactiveProperty();
-        private FloatReactiveProperty _cheseSpeed = new FloatReactiveProperty();
+        private FloatReactiveProperty _chaseSpeed = new FloatReactiveProperty();
         private FloatReactiveProperty _audiometerPower = new FloatReactiveProperty();
         private BoolReactiveProperty _reactToLight = new BoolReactiveProperty();
         private BoolReactiveProperty _flying = new BoolReactiveProperty();
         private IntReactiveProperty _stamina = new IntReactiveProperty();
         private IntReactiveProperty _actionCoolTime = new IntReactiveProperty();
-        private ReactiveProperty<EnemyState> _enemyState = new ReactiveProperty<EnemyState>(EnemyState.Patorolling);
+        private ReactiveProperty<EnemyState> _enemyState = new ReactiveProperty<EnemyState>(EnemyState.Patrolling);
 
         private IntReactiveProperty _horror = new IntReactiveProperty();
         private IntReactiveProperty _atackPower = new IntReactiveProperty();
@@ -80,9 +80,9 @@ namespace Scenes.Ingame.Enemy
         private BoolReactiveProperty _isBind = new BoolReactiveProperty(false);//拘束状態であるか否か
 
         public IObservable<int> OnHpChange { get { return _hp; } }
-        public IObservable<float> OnPatolloringSppedChange { get { return _patolloringSpeed; } }
+        public IObservable<float> OnPatrollingSpeedChange { get { return _patrollingSpeed; } }
         public IObservable<float> OnSearchSpeedChange { get { return _searcSpeed; } }
-        public IObservable<float> OnCheseSpeedChange { get { return _cheseSpeed; } }
+        public IObservable<float> OnChaseSpeedChange { get { return _chaseSpeed; } }
         public IObservable<float> OnAudiometerPowerChange { get { return _audiometerPower; } }
         public IObservable<bool> OnReactToLightChange { get { return _reactToLight; } }
         public IObservable<bool> OnFlyingChange { get { return _flying; } }
@@ -96,9 +96,9 @@ namespace Scenes.Ingame.Enemy
 
 
         //##########GetとかSetのかたまり
-        public float ReturnPatolloringSpeed { get { return _patolloringSpeed.Value; } }
+        public float ReturnPatrollingSpeed { get { return _patrollingSpeed.Value; } }
         public float ReturnSearchSpeed { get { return _searcSpeed.Value; } }
-        public float ReturnCheseSpeed { get { return _cheseSpeed.Value; } }
+        public float ReturnChaseSpeed { get { return _chaseSpeed.Value; } }
 
         public int ReturnStaminaBase { get { return _staminaBase; } }
         public int Stamina { get { return _stamina.Value; } }
@@ -148,14 +148,14 @@ namespace Scenes.Ingame.Enemy
                 .Skip(1)//初期化の時は無視
                 .Subscribe(x =>
                 {
-                    if (x) { _searcSpeed.Value = _searchSpeedBase * 0.1f; _patolloringSpeed.Value = _patolloringSpeedBase * 0.1f; _cheseSpeed.Value = _chaseSpeedBase * 0.1f; }
-                    else { _searcSpeed.Value = _searchSpeedBase * 1f; _patolloringSpeed.Value = _patolloringSpeedBase * 1f; _cheseSpeed.Value = _chaseSpeedBase * 1f; }
+                    if (x) { _searcSpeed.Value = _searchSpeedBase * 0.1f; _patrollingSpeed.Value = _patrollingSpeedBase * 0.1f; _chaseSpeed.Value = _chaseSpeedBase * 0.1f; }
+                    else { _searcSpeed.Value = _searchSpeedBase * 1f; _patrollingSpeed.Value = _patrollingSpeedBase * 1f; _chaseSpeed.Value = _chaseSpeedBase * 1f; }
                     switch (ReturnEnemyState)
                     {
-                        case EnemyState.Patorolling: _myAgent.speed = ReturnPatolloringSpeed; break;
+                        case EnemyState.Patrolling: _myAgent.speed = ReturnPatrollingSpeed; break;
                         case EnemyState.Searching: _myAgent.speed = ReturnSearchSpeed; break;
-                        case EnemyState.Chese: _myAgent.speed = ReturnCheseSpeed; break;
-                        case EnemyState.Attack: _myAgent.speed = ReturnCheseSpeed; break;
+                        case EnemyState.Chase: _myAgent.speed = ReturnChaseSpeed; break;
+                        case EnemyState.Attack: _myAgent.speed = ReturnChaseSpeed; break;
                     }
                 }).AddTo(this);
 
@@ -185,10 +185,10 @@ namespace Scenes.Ingame.Enemy
         /// </summary>
         public void ResetStatus() {
             _hp.Value = _hpBase;
-            _patolloringSpeed.Value = _patolloringSpeedBase;
+            _patrollingSpeed.Value = _patrollingSpeedBase;
             _searcSpeed.Value = _searchSpeedBase;
             _searcSpeed.Value = _searchSpeedBase;
-            _cheseSpeed.Value = _chaseSpeedBase;
+            _chaseSpeed.Value = _chaseSpeedBase;
             _atackPower.Value = _atackPowerBase;
             _audiometerPower.Value = _audiometerPowerBase;
             _reactToLight.Value = _reactToLightBase;

@@ -64,6 +64,7 @@ namespace Scenes.Ingame.Stage
             });
         }
 
+
         private void QuickDoorOpen()
         {
             transform.DORotate(OPENVALUE, 0).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(() =>
@@ -86,7 +87,7 @@ namespace Scenes.Ingame.Stage
 
             if (_isAnimation)
             {
-                Debug.LogWarning("ƒAƒjƒ[ƒVƒ‡ƒ“’†‚Å‚·");
+                Debug.LogWarning("ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½");
  
             }
             else {
@@ -113,12 +114,12 @@ namespace Scenes.Ingame.Stage
         }
 
         /// <summary>
-        /// ƒhƒA‚ğİ’è‚³‚ê‚Ä‚¢‚½‰Šúó‘Ô‚É–ß‚·
+        /// ï¿½hï¿½Aï¿½ï¿½İ’è‚³ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚É–ß‚ï¿½
         /// </summary>
         public void ChangeDoorInitial() {
             if (_isAnimation)
             {
-                Debug.LogWarning("ƒAƒjƒ[ƒVƒ‡ƒ“’†‚Å‚·");
+                Debug.LogWarning("ï¿½Aï¿½jï¿½ï¿½ï¿½[ï¿½Vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å‚ï¿½");
 
             }
             else {
@@ -141,6 +142,13 @@ namespace Scenes.Ingame.Stage
                     }
                 }
             }
+
+        public string ReturnPopString()
+        {
+            if (_isOpen)
+                return "Close";
+            else
+                return "Open";
         }
     }
 }

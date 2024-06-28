@@ -7,6 +7,16 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Aspen_Bark_01
+    second: {fileID: 2100000, guid: c0d29c94ef142cf49a1feaabd1563422, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Aspen_Bark_02
+    second: {fileID: 2100000, guid: 90314635439d8b445ae600ab0e71fe43, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Billboard_Maple_01
     second: {fileID: 2100000, guid: 429260a4a19465b4587e80f7e9d30774, type: 2}
   - first:
@@ -17,12 +27,27 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Maple_01_Bark.002
+    second: {fileID: 2100000, guid: c0d29c94ef142cf49a1feaabd1563422, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Maple_Bark
     second: {fileID: 2100000, guid: 4c0d81eca3afc4848907e71a27a3e08c, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Maple_Bark_01
+    second: {fileID: 2100000, guid: bc856ca852666114bb2a11f773fbf5c4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Maple_Leaves
+    second: {fileID: 2100000, guid: 80d9d0fc83dbecd4d95ad70f936088b2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Maple_Leaves.002
     second: {fileID: 2100000, guid: 80d9d0fc83dbecd4d95ad70f936088b2, type: 2}
   materials:
     materialImportMode: 1
@@ -80,7 +105,7 @@ ModelImporter:
     skinWeightsMode: 0
     maxBonesPerVertex: 4
     minBoneWeight: 0.001
-    optimizeBones: 1
+    optimizeBones: 0
     meshOptimizationFlags: -1
     indexFormat: 1
     secondaryUVAngleDistortion: 8
@@ -116,7 +141,7 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 1
+    hasExtraRoot: 0
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1

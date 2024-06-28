@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7279544102987469898}
   - component: {fileID: 4686608353179275495}
   - component: {fileID: 7433570426077695508}
-  - component: {fileID: -4473489317441767790}
+  - component: {fileID: 6819108974274411578}
   m_Layer: 10
   m_Name: Bandage
   m_TagString: Item
@@ -165,7 +165,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &-4473489317441767790
+--- !u!114 &6819108974274411578
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

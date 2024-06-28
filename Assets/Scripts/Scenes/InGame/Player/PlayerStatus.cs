@@ -5,62 +5,67 @@ using UniRx;
 using System;
 
 /// <summary>
-/// ƒvƒŒƒCƒ„[‚ÌƒXƒe[ƒ^ƒX‚ğŠÇ—‚·‚éƒNƒ‰ƒX
-/// MV(R)P‚É‚¨‚¯‚éModel‚Ì–ğŠ„‚ğ‘z’è
+/// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’ç®¡ç†ã™ã‚‹ã‚¯ãƒ©ã‚¹
+/// MV(R)Pã«ãŠã‘ã‚‹Modelã®å½¹å‰²ã‚’æƒ³å®š
 /// </summary>
 namespace Scenes.Ingame.Player
 {
 
     public class PlayerStatus : MonoBehaviour
     {
-        //ƒvƒŒƒCƒ„[‚Ìƒf[ƒ^ƒx[ƒX(‰¼’u‚«)
-        [Header("ƒvƒŒ[ƒ„[‚Ìƒf[ƒ^ƒx[ƒX")]
+        //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹(ä»®ç½®ã)
+        [Header("ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã®ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹")]
         [SerializeField] private int _playerID = 0;
         [SerializeField] private int _healthBase = 100;
         [SerializeField] private int _staminaBase = 100;
         [SerializeField] private int _sanBase = 100;
         [SerializeField] private int _speedBase = 5;
-        [SerializeField][Tooltip("ƒvƒŒƒCƒ„[‚Ì‚ÂÆ–¾‚ÌŒõ‚Ì“Í‚­‹——£")] private float _lightrangeBase = 20;
-        [SerializeField][Tooltip("ƒvƒŒƒCƒ„[‚Ì‚µ‚á‚ª‚İ•à‚«‚Ì‰¹—Ê")] private float _sneakVolumeBase = 5;
-        [SerializeField][Tooltip("ƒvƒŒƒCƒ„[‚Ì•à‚«‚Ì‰¹—Ê")] private float _walkVolumeBase = 10;
-        [SerializeField][Tooltip("ƒvƒŒƒCƒ„[‚Ì‘–‚è‚Ì‰¹—Ê")] private float _runVolumeBase = 15;
+        [SerializeField][Tooltip("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æŒã¤ç…§æ˜ã®å…‰ã®å±Šãè·é›¢")] private float _lightrangeBase = 20;
+        [SerializeField][Tooltip("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ã—ã‚ƒãŒã¿æ­©ãæ™‚ã®éŸ³é‡")] private float _sneakVolumeBase = 5;
+        [SerializeField][Tooltip("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ­©ãæ™‚ã®éŸ³é‡")] private float _walkVolumeBase = 10;
+        [SerializeField][Tooltip("ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®èµ°ã‚Šã®éŸ³é‡")] private float _runVolumeBase = 15;
 
 
-        //Œ»İ‚ÌƒXƒe[ƒ^ƒX‚Ì•Ï”i¡Œãƒlƒbƒgƒ[ƒN‰»—\’èj
-        //‰Šú‰»‚É‚Â‚¢‚Ä‚à¡Œã‚Íƒf[ƒ^ƒx[ƒX‚ğQÆ‚µ‚Äs‚¤‚æ‚¤‚É‚·‚éB
-        [SerializeField] private IntReactiveProperty _health = new IntReactiveProperty();//HP.ƒ[ƒ‚É‚È‚é‚Æ€–S
-        [SerializeField] private IntReactiveProperty _stamina = new IntReactiveProperty();//ƒXƒ^ƒ~ƒi
-        [SerializeField] private IntReactiveProperty _san = new IntReactiveProperty();//SAN’l
-        [SerializeField] private IntReactiveProperty _speed = new IntReactiveProperty();//ˆÚ“®‘¬“x‚ÌŠî€’l
-        [SerializeField] private BoolReactiveProperty _survive = new BoolReactiveProperty(true);//¶€.true‚Ì‚Æ‚«‚Í¶‚«‚Ä‚¢‚é
-        [SerializeField] private BoolReactiveProperty _bleeding = new BoolReactiveProperty(false);//oŒŒó‘Ô.true‚Ì‚Æ‚«‚ÉŠÔŒo‰ß‚Å‘Ì—Í‚ªŒ¸­
+        //ç¾åœ¨ã®ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã®å¤‰æ•°ï¼ˆä»Šå¾Œãƒãƒƒãƒˆãƒ¯ãƒ¼ã‚¯åŒ–äºˆå®šï¼‰
+        //åˆæœŸåŒ–ã«ã¤ã„ã¦ã‚‚ä»Šå¾Œã¯ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‚’å‚ç…§ã—ã¦è¡Œã†ã‚ˆã†ã«ã™ã‚‹ã€‚
+        [SerializeField] private IntReactiveProperty _health = new IntReactiveProperty();//HP.ã‚¼ãƒ­ã«ãªã‚‹ã¨æ­»äº¡
+        [SerializeField] private IntReactiveProperty _stamina = new IntReactiveProperty();//ã‚¹ã‚¿ãƒŸãƒŠ
+        [SerializeField] private IntReactiveProperty _san = new IntReactiveProperty();//SANå€¤
+        [SerializeField] private IntReactiveProperty _speed = new IntReactiveProperty();//ç§»å‹•é€Ÿåº¦ã®åŸºæº–å€¤
+        [SerializeField] private BoolReactiveProperty _survive = new BoolReactiveProperty(true);//ç”Ÿæ­».trueã®ã¨ãã¯ç”Ÿãã¦ã„ã‚‹
+        [SerializeField] private BoolReactiveProperty _bleeding = new BoolReactiveProperty(false);//å‡ºè¡€çŠ¶æ…‹.trueã®ã¨ãã«æ™‚é–“çµŒéã§ä½“åŠ›ãŒæ¸›å°‘
 
         [SerializeField] private ReactiveProperty<PlayerActionState> _playerActionState = new ReactiveProperty<PlayerActionState>(PlayerActionState.Idle);
-        [SerializeField] private FloatReactiveProperty _lightrange = new FloatReactiveProperty();//Œõ‚Ì“Í‚­‹——£
-        [SerializeField] private FloatReactiveProperty _sneakVolume = new FloatReactiveProperty();//‚µ‚á‚ª‚İ‚Ì‰¹—Ê
-        [SerializeField] private FloatReactiveProperty _walkVolume = new FloatReactiveProperty();//‚µ‚á‚ª‚İ‚Ì‰¹—Ê
-        [SerializeField] private FloatReactiveProperty _runVolume = new FloatReactiveProperty();//‚µ‚á‚ª‚İ‚Ì‰¹—Ê
+        [SerializeField] private FloatReactiveProperty _lightrange = new FloatReactiveProperty();//å…‰ã®å±Šãè·é›¢
+        [SerializeField] private FloatReactiveProperty _sneakVolume = new FloatReactiveProperty();//ã—ã‚ƒãŒã¿æ™‚ã®éŸ³é‡
+        [SerializeField] private FloatReactiveProperty _walkVolume = new FloatReactiveProperty();//ã—ã‚ƒãŒã¿æ™‚ã®éŸ³é‡
+        [SerializeField] private FloatReactiveProperty _runVolume = new FloatReactiveProperty();//ã—ã‚ƒãŒã¿æ™‚ã®éŸ³é‡
 
-        //‚»‚Ì‘¼‚ÌSubject
-        private Subject<Unit> _enemyAttackedMe = new Subject<Unit>();//“G‚©‚çUŒ‚‚ğH‚ç‚Á‚½‚Æ‚«‚ÌƒCƒxƒ“ƒg
+        private Subject<float> castEvent = new Subject<float>();//å‘ªæ–‡ã®è© å”±æ™‚é–“ã‚’ç™ºè¡Œ
 
-        //‚»‚ê‚¼‚ê‚Ìw“Ç‘¤‚ğŒöŠJ‚·‚éB‘¼‚ÌClass‚ÅSubscribe‚Å‚«‚éB
-        public IObservable<int> OnPlayerHealthChange { get { return _health; } }//_health(‘Ì—Í)‚ª•Ï‰»‚µ‚½Û‚ÉƒCƒxƒ“ƒg‚ª”­s
-        public IObservable<int> OnPlayerStaminaChange { get { return _stamina; } }//_stamina(ƒXƒ^ƒ~ƒi)‚ª•Ï‰»‚µ‚½Û‚ÉƒCƒxƒ“ƒg‚ª”­s
-        public IObservable<int> OnPlayerSanValueChange { get { return _san; } }//_san(SAN’l)‚ª•Ï‰»‚µ‚½Û‚ÉƒCƒxƒ“ƒg‚ª”­s
-        public IObservable<int> OnPlayerSpeedChange { get { return _speed; } }//_speed(ˆÚ“®‘¬“x‚ÌŠî€’l)‚ª•Ï‰»‚µ‚½Û‚ÉƒCƒxƒ“ƒg‚ª”­s
+        //ãã®ä»–ã®Subject
+        private Subject<Unit> _enemyAttackedMe = new Subject<Unit>();//æ•µã‹ã‚‰æ”»æ’ƒã‚’é£Ÿã‚‰ã£ãŸã¨ãã®ã‚¤ãƒ™ãƒ³ãƒˆ
 
-        public IObservable<bool> OnPlayerSurviveChange { get { return _survive; } }//_survive(¶€)‚ª•Ï‰»‚µ‚½Û‚ÉƒCƒxƒ“ƒg‚ª”­s
-        public IObservable<bool> OnPlayerbleedingChange { get { return _bleeding; } }//_bleeding(oŒŒó‘Ô)‚ª•Ï‰»‚µ‚½Û‚ÉƒCƒxƒ“ƒg‚ª”­s
-        public IObservable<PlayerActionState> OnPlayerActionStateChange { get { return _playerActionState; } }//_PlayerActionState(ƒvƒŒƒCƒ„[‚Ìs“®ó‘Ô)‚ª•Ï‰»‚µ‚½Û‚ÉƒCƒxƒ“ƒg‚ª”­s
-        public IObservable<float> OnLightrangeChange { get { return _lightrange; } }//ƒvƒŒƒCƒ„[‚ÌŒõ‚Ì“Í‚­‹——£‚ª•Ï‰»‚µ‚½ê‡‚ÉƒCƒxƒ“ƒg‚ª”­s
-        public IObservable<float> OnSneakVolumeChange { get { return _sneakVolume; } }//ƒvƒŒƒCƒ„[‚Ì”E‚Ñ•à‚«‚Ì‰¹‚ª“Í‚­‹——£‚ª•Ï‰»‚µ‚½ê‡‚ÉƒCƒxƒ“ƒg‚ª”­s
-        public IObservable<float> OnWalkVolumeChange { get { return _walkVolume; } }//ƒvƒŒƒCƒ„[‚Ì•à‚­‰¹‚ª“Í‚­‹——£‚ª•Ï‰»‚µ‚½ê‡‚ÉƒCƒxƒ“ƒg‚ª”­s
-        public IObservable<float> OnRunVolumeChange { get { return _runVolume; } }//ƒvƒŒƒCƒ„[‚Ì‘–‚é‰¹‚ª“Í‚­‹——£‚ª•Ï‰»‚µ‚½ê‡‚ÉƒCƒxƒ“ƒg‚ª”­s
+        //ãã‚Œãã‚Œã®è³¼èª­å´ã‚’å…¬é–‹ã™ã‚‹ã€‚ä»–ã®Classã§Subscribeã§ãã‚‹ã€‚
+        public IObservable<int> OnPlayerHealthChange { get { return _health; } }//_health(ä½“åŠ›)ãŒå¤‰åŒ–ã—ãŸéš›ã«ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºè¡Œ
+        public IObservable<int> OnPlayerStaminaChange { get { return _stamina; } }//_stamina(ã‚¹ã‚¿ãƒŸãƒŠ)ãŒå¤‰åŒ–ã—ãŸéš›ã«ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºè¡Œ
+        public IObservable<int> OnPlayerSanValueChange { get { return _san; } }//_san(SANå€¤)ãŒå¤‰åŒ–ã—ãŸéš›ã«ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºè¡Œ
+        public IObservable<int> OnPlayerSpeedChange { get { return _speed; } }//_speed(ç§»å‹•é€Ÿåº¦ã®åŸºæº–å€¤)ãŒå¤‰åŒ–ã—ãŸéš›ã«ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºè¡Œ
 
-        public IObservable<Unit> OnEnemyAttackedMe { get { return _enemyAttackedMe; } }//“G‚©‚çUŒ‚‚ğó‚¯‚½Û‚ÉƒCƒxƒ“ƒg‚ª”­s
+        public IObservable<bool> OnPlayerSurviveChange { get { return _survive; } }//_survive(ç”Ÿæ­»)ãŒå¤‰åŒ–ã—ãŸéš›ã«ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºè¡Œ
+        public IObservable<bool> OnPlayerbleedingChange { get { return _bleeding; } }//_bleeding(å‡ºè¡€çŠ¶æ…‹)ãŒå¤‰åŒ–ã—ãŸéš›ã«ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºè¡Œ
+        public IObservable<PlayerActionState> OnPlayerActionStateChange { get { return _playerActionState; } }//_PlayerActionState(ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®è¡Œå‹•çŠ¶æ…‹)ãŒå¤‰åŒ–ã—ãŸéš›ã«ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºè¡Œ
+        public IObservable<float> OnLightrangeChange { get { return _lightrange; } }//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å…‰ã®å±Šãè·é›¢ãŒå¤‰åŒ–ã—ãŸå ´åˆã«ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºè¡Œ
+        public IObservable<float> OnSneakVolumeChange { get { return _sneakVolume; } }//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å¿ã³æ­©ãã®éŸ³ãŒå±Šãè·é›¢ãŒå¤‰åŒ–ã—ãŸå ´åˆã«ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºè¡Œ
+        public IObservable<float> OnWalkVolumeChange { get { return _walkVolume; } }//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ­©ãéŸ³ãŒå±Šãè·é›¢ãŒå¤‰åŒ–ã—ãŸå ´åˆã«ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºè¡Œ
+        public IObservable<float> OnRunVolumeChange { get { return _runVolume; } }//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®èµ°ã‚‹éŸ³ãŒå±Šãè·é›¢ãŒå¤‰åŒ–ã—ãŸå ´åˆã«ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºè¡Œ
 
-        //ˆê•”î•ñ‚ÌŠJ¦
+        public IObservable<Unit> OnEnemyAttackedMe { get { return _enemyAttackedMe; } }//æ•µã‹ã‚‰æ”»æ’ƒã‚’å—ã‘ãŸéš›ã®ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç™»éŒ²ã•ã›ã‚‹
+        public IObserver<Unit> OnEnemyAttackedMeEvent { get { return _enemyAttackedMe; } }//æ•µã‹ã‚‰æ”»æ’ƒã‚’å—ã‘ãŸéš›ã«ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºè¡Œ
+
+        public IObservable<float> OnCastEvente { get { return castEvent; } }//æ•µã‹ã‚‰æ”»æ’ƒã‚’å—ã‘ãŸéš›ã«ã‚¤ãƒ™ãƒ³ãƒˆãŒç™ºè¡Œ
+        
+        //ä¸€éƒ¨æƒ…å ±ã®é–‹ç¤º
         public int playerID { get { return _playerID; } }
         public int stamina_max { get { return _staminaBase; } }
         public int nowStaminaValue { get { return _stamina.Value; } }
@@ -76,11 +81,13 @@ namespace Scenes.Ingame.Player
 
         public bool nowPlayerUseMagic { get { return _isUseMagic; } }
 
-        public int lastHP;//HP‚Ì•Ï“®‘O‚Ì”’l‚ğ‹L˜^B”äŠr‚É—p‚¢‚é
-        public int lastSanValue;//SAN’l‚Ì•Ï“®‘O‚Ì”’l‚ğ‹L˜^B”äŠr‚É—p‚¢‚é
-        public int bleedingDamage = 1;//oŒŒ‚Éó‚¯‚éƒ_ƒ[ƒW
+        public int lastHP;//HPã®å¤‰å‹•å‰ã®æ•°å€¤ã‚’è¨˜éŒ²ã€‚æ¯”è¼ƒã«ç”¨ã„ã‚‹
+        public int lastSanValue;//SANå€¤ã®å¤‰å‹•å‰ã®æ•°å€¤ã‚’è¨˜éŒ²ã€‚æ¯”è¼ƒã«ç”¨ã„ã‚‹
+        public int bleedingDamage = 1;//å‡ºè¡€æ™‚ã«å—ã‘ã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸
         private bool _isUseItem = false;
         private bool _isUseMagic = false;
+        private bool _isHaveCharm = false;
+        private bool _isUseEscapePoint = false;
         private bool _isPulsationBleeding = false;
 
         private void Init()
@@ -100,21 +107,21 @@ namespace Scenes.Ingame.Player
         // Start is called before the first frame update
         void Awake()
         {
-            //‰Šú‰»
+            //åˆæœŸåŒ–
             Init();
-            _health.Subscribe(x => CheckHealth(x, _playerID));//‘Ì—Í‚ª•Ï‰»‚µ‚½‚Æ‚«‚ÉƒQ[ƒ€“à‚Å•ÏX‚ğ‰Á‚¦‚é
-            _stamina.Subscribe(x => CheckStamina(x, _playerID));//ƒXƒ^ƒ~ƒi‚ª•Ï‰»‚µ‚½‚Æ‚«‚ÉƒQ[ƒ€“à‚Å•ÏX‚ğ‰Á‚¦‚é
-            _san.Subscribe(x => CheckSanValue(x, _playerID));//SAN’l‚ª•Ï‰»‚µ‚½‚Æ‚«‚ÉƒQ[ƒ€“à‚Å•ÏX‚ğ‰Á‚¦‚é
+            _health.Subscribe(x => CheckHealth(x, _playerID));//ä½“åŠ›ãŒå¤‰åŒ–ã—ãŸã¨ãã«ã‚²ãƒ¼ãƒ å†…ã§å¤‰æ›´ã‚’åŠ ãˆã‚‹
+            _stamina.Subscribe(x => CheckStamina(x, _playerID));//ã‚¹ã‚¿ãƒŸãƒŠãŒå¤‰åŒ–ã—ãŸã¨ãã«ã‚²ãƒ¼ãƒ å†…ã§å¤‰æ›´ã‚’åŠ ãˆã‚‹
+            _san.Subscribe(x => CheckSanValue(x, _playerID));//SANå€¤ãŒå¤‰åŒ–ã—ãŸã¨ãã«ã‚²ãƒ¼ãƒ å†…ã§å¤‰æ›´ã‚’åŠ ãˆã‚‹
             _bleeding.
                 Where(x => x == true).
-                Subscribe(_ => StartCoroutine(Bleeding(bleedingDamage)));//oŒŒó‘Ô‚É‚È‚Á‚½‚Æ‚«‚ÉoŒŒˆ—‚ğŠJn
+                Subscribe(_ => StartCoroutine(Bleeding(bleedingDamage)));//å‡ºè¡€çŠ¶æ…‹ã«ãªã£ãŸã¨ãã«å‡ºè¡€å‡¦ç†ã‚’é–‹å§‹
         }
 
         // Update is called once per frame
         void Update()
         {
 #if UNITY_EDITOR
-            //ƒfƒoƒbƒO—p.(•K—v–³‚­‚È‚ê‚ÎÁ‚·)
+            //ãƒ‡ãƒãƒƒã‚°ç”¨.(å¿…è¦ç„¡ããªã‚Œã°æ¶ˆã™)
             if (Input.GetKeyDown(KeyCode.L))
             {
                 ChangeHealth(10, "Damage");
@@ -132,14 +139,15 @@ namespace Scenes.Ingame.Player
             {
                 _enemyAttackedMe.OnNext(default);
             }
+
 #endif           
         }
 
         /// <summary>
-        /// ‘Ì—Í‚ğ•ÏX‚³‚¹‚é‚½‚ß‚ÌŠÖ”
+        /// ä½“åŠ›ã‚’å¤‰æ›´ã•ã›ã‚‹ãŸã‚ã®é–¢æ•°
         /// </summary>
-        /// <param name="value">•ÏX—Ê</param>
-        /// <param name="mode">Heal(‰ñ•œ), Damage(Œ¸­)‚Ì“ñ‚Â‚Ì‚İ</param>
+        /// <param name="value">å¤‰æ›´é‡</param>
+        /// <param name="mode">Heal(å›å¾©), Damage(æ¸›å°‘)ã®äºŒã¤ã®ã¿</param>
         public void ChangeHealth(int value, string mode)
         {
             if (mode == "Heal")
@@ -155,10 +163,10 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// ƒXƒ^ƒ~ƒi‚ğ•ÏX‚³‚¹‚é‚½‚ß‚ÌŠÖ”
+        /// ã‚¹ã‚¿ãƒŸãƒŠã‚’å¤‰æ›´ã•ã›ã‚‹ãŸã‚ã®é–¢æ•°
         /// </summary>
-        /// <param name="value">•ÏX—Ê</param>
-        /// <param name="mode">Heal(‰ñ•œ), Damage(Œ¸­)‚Ì“ñ‚Â‚Ì‚İ</param>
+        /// <param name="value">å¤‰æ›´é‡</param>
+        /// <param name="mode">Heal(å›å¾©), Damage(æ¸›å°‘)ã®äºŒã¤ã®ã¿</param>
         public void ChangeStamina(int value, string mode)
         {
             if (mode == "Heal")
@@ -168,10 +176,10 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// SAN’l‚ğ•ÏX‚³‚¹‚é‚½‚ß‚ÌŠÖ”
+        /// SANå€¤ã‚’å¤‰æ›´ã•ã›ã‚‹ãŸã‚ã®é–¢æ•°
         /// </summary>
-        /// <param name="value">•ÏX—Ê</param>
-        /// <param name="mode">Heal(‰ñ•œ), Damage(Œ¸­)‚Ì“ñ‚Â‚Ì‚İ</param>
+        /// <param name="value">å¤‰æ›´é‡</param>
+        /// <param name="mode">Heal(å›å¾©), Damage(æ¸›å°‘)ã®äºŒã¤ã®ã¿</param>
         public void ChangeSanValue(int value, string mode)
         {
             if (mode == "Heal")
@@ -183,20 +191,20 @@ namespace Scenes.Ingame.Player
             else if (mode == "Damage")
             {
                 lastSanValue = _san.Value;
-                _san.Value = Mathf.Max(0, _san.Value - value);
+                _san.Value = Mathf.Max(0, _san.Value - value / (_isHaveCharm ? 2 : 1));
             }
         }
 
         /// <summary>
-        /// ˆÚ“®‘¬“x‚ğ•ÏX‚³‚¹‚éŠÖ”
+        /// ç§»å‹•é€Ÿåº¦ã‚’å¤‰æ›´ã•ã›ã‚‹é–¢æ•°
         /// </summary>
         public void ChangeSpeed()
         {
-            _speed.Value = (int)(_speedBase * (_isUseItem ? 0.5f : 1) * (_isUseMagic ? 0.5f : 1));
+            _speed.Value = (int)(_speedBase * (_isUseItem ? 0.5f : 1) * (_isUseMagic ? 0.5f : 1) * (_isUseEscapePoint ? 0.5f : 1));
         }
 
         /// <summary>
-        /// ƒAƒCƒeƒ€‚ğg‚Á‚Ä‚¢‚é‚Ì‚©ŠÇ—‚·‚é‚½‚ß‚ÌŠÖ”
+        /// ã‚¢ã‚¤ãƒ†ãƒ ã‚’ä½¿ã£ã¦ã„ã‚‹ã®ã‹ç®¡ç†ã™ã‚‹ãŸã‚ã®é–¢æ•°
         /// </summary>
         /// <param name="value"></param>
         public void UseItem(bool value)
@@ -205,7 +213,7 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// ô•¶‚ğ¥‚¦‚Ä‚¢‚é‚©ŠÇ—‚·‚é‚½‚ß‚ÌŠÖ”
+        /// å‘ªæ–‡ã‚’å”±ãˆã¦ã„ã‚‹ã‹ç®¡ç†ã™ã‚‹ãŸã‚ã®é–¢æ•°
         /// </summary>
         /// <param name="value"></param>
         public void UseMagic(bool value)
@@ -214,7 +222,28 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// S””‚É‰‚¶‚ÄoŒŒó‘Ô‚ÌoŒŒ—Ê‚ğ•Ï‰»‚³‚¹‚éŠÖ”
+        /// ãŠå®ˆã‚ŠãŒã‚¢ã‚¤ãƒ†ãƒ ã‚¹ãƒ­ãƒƒãƒˆã«ã‚ã‚‹ã‹åˆ¤å®šã™ã‚‹é–¢æ•°
+        /// </summary>
+        /// <param name="value"></param>
+        public void HaveCharm(bool value)
+        {
+            _isHaveCharm = value;
+        }
+        /// <summary>
+        /// å‘ªæ–‡ã‚’å”±ãˆã¦ã„ã‚‹ã‹ç®¡ç†ã™ã‚‹ãŸã‚ã®é–¢æ•°
+        /// </summary>
+        /// <param name="value"></param>
+        public void UseEscapePoint(bool value,float time = 0)
+        {
+            if (value)
+            {
+                castEvent.OnNext(time);
+            }
+            _isUseEscapePoint = value;
+        }
+
+        /// <summary>
+        /// å¿ƒæ‹æ•°ã«å¿œã˜ã¦å‡ºè¡€çŠ¶æ…‹æ™‚ã®å‡ºè¡€é‡ã‚’å¤‰åŒ–ã•ã›ã‚‹é–¢æ•°
         /// </summary>
         /// <param name="value"></param>
         public void PulsationBleeding(bool value)
@@ -223,7 +252,7 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// _bleeding(oŒŒó‘Ô)‚Ì’l‚ğ•ÏX‚·‚é‚½‚ß‚ÌŠÖ”
+        /// _bleeding(å‡ºè¡€çŠ¶æ…‹)ã®å€¤ã‚’å¤‰æ›´ã™ã‚‹ãŸã‚ã®é–¢æ•°
         /// </summary>
         /// <param name="value"></param>
         public void ChangeBleedingBool(bool value)
@@ -237,7 +266,7 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// oŒŒó‘Ô‚Ìˆ—‚ğs‚¤ŠÖ”B
+        /// å‡ºè¡€çŠ¶æ…‹ã®å‡¦ç†ã‚’è¡Œã†é–¢æ•°ã€‚
         /// </summary>
         /// <returns></returns>
         private IEnumerator Bleeding(int damage)
@@ -248,7 +277,7 @@ namespace Scenes.Ingame.Player
                 if (_bleeding.Value)
                 {
                     ChangeHealth(damage * (_isPulsationBleeding ? 2 : 1), "Damage");
-                    Debug.Log("oŒŒƒ_ƒ[ƒW‚ª“ü‚è‚Ü‚µ‚½B");
+                    Debug.Log("å‡ºè¡€ãƒ€ãƒ¡ãƒ¼ã‚¸ãŒå…¥ã‚Šã¾ã—ãŸã€‚");
                 }
                 else
                     yield break;
@@ -256,12 +285,12 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// ‘Ì—Í‚ÉŠÖ‚·‚éˆ—‚ğs‚¤
+        /// ä½“åŠ›ã«é–¢ã™ã‚‹å‡¦ç†ã‚’è¡Œã†
         /// </summary>
-        /// <param name="health">c‚è‘Ì—Í</param>
+        /// <param name="health">æ®‹ã‚Šä½“åŠ›</param>
         private void CheckHealth(int health, int ID)
         {
-            //Debug.Log("c‚è‘Ì—ÍF" + health);
+            //Debug.Log("æ®‹ã‚Šä½“åŠ›ï¼š" + health);
 
 
             if (health <= 0)
@@ -269,22 +298,22 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// ƒXƒ^ƒ~ƒi‚ÉŠÖ‚·‚éˆ—‚ğs‚¤
+        /// ã‚¹ã‚¿ãƒŸãƒŠã«é–¢ã™ã‚‹å‡¦ç†ã‚’è¡Œã†
         /// </summary>
-        /// <param name="stamina">c‚èƒXƒ^ƒ~ƒi</param>
+        /// <param name="stamina">æ®‹ã‚Šã‚¹ã‚¿ãƒŸãƒŠ</param>
         private void CheckStamina(int stamina, int ID)
         {
-            //ƒXƒ^ƒ~ƒic—Ê‚ğƒQ[ƒ€“à‚É•\¦.
-            //Debug.Log("c‚èƒXƒ^ƒ~ƒiF" + stamina);
+            //ã‚¹ã‚¿ãƒŸãƒŠæ®‹é‡ã‚’ã‚²ãƒ¼ãƒ å†…ã«è¡¨ç¤º.
+            //Debug.Log("æ®‹ã‚Šã‚¹ã‚¿ãƒŸãƒŠï¼š" + stamina);
         }
 
         /// <summary>
-        /// san’l‚ÉŠÖ‚·‚éˆ—‚ğs‚¤
+        /// sanå€¤ã«é–¢ã™ã‚‹å‡¦ç†ã‚’è¡Œã†
         /// </summary>
-        /// <param name="sanValue">c‚è‚ÌSAN’l</param>
+        /// <param name="sanValue">æ®‹ã‚Šã®SANå€¤</param>
         private void CheckSanValue(int sanValue, int ID)
         {
-            //Debug.Log("c‚èsan’lF" + sanValue);           
+            //Debug.Log("æ®‹ã‚Šsanå€¤ï¼š" + sanValue);           
 
             if (sanValue <= 0)
                 _survive.Value = false;

@@ -20,8 +20,7 @@ namespace Scenes.Ingame.Enemy
         [SerializeField] private bool _staminaOver = false;
 
 
-
-        private float _stuminaChangeCount = 0;//スタミナを毎秒減らすのに使用
+        private float _staminaChangeCount = 0;//スタミナを毎秒減らすのに使用
        
 
 
@@ -42,15 +41,15 @@ namespace Scenes.Ingame.Enemy
         {
             if (Vector3.Magnitude(this.transform.position - _myAgent.destination) < 1.5f) { endMove = true; } else { endMove = false; }
 
-            _stuminaChangeCount += Time.deltaTime;
-            if (_stuminaChangeCount > 1) 
+            _staminaChangeCount += Time.deltaTime;
+            if (_staminaChangeCount > 1) 
             {//毎秒処理
                 Debug.Log(_enemyStatus.Stamina);
-                _stuminaChangeCount -= 1;
+                _staminaChangeCount -= 1;
                 switch (_enemyStatus.ReturnEnemyState)
                 {
-                    case EnemyState.Patorolling:
-                        _myAgent.speed = _enemyStatus.ReturnPatolloringSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
+                    case EnemyState.Patrolling:
+                        _myAgent.speed = _enemyStatus.ReturnPatrollingSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
                         { //スタミナが削れていたら
                             _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
@@ -71,7 +70,7 @@ namespace Scenes.Ingame.Enemy
                             _staminaOver = false;
                         }
                         break;
-                    case EnemyState.Chese:
+                    case EnemyState.Chase:
                         //スタミナ周りの処理をする
                         if (_staminaOver)
                         { //スタミナが切れ切ったかどうか
@@ -112,7 +111,7 @@ namespace Scenes.Ingame.Enemy
                         }
                         else
                         {
-                            _myAgent.speed = _enemyStatus.ReturnCheseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
+                            _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         }
                         break;
                     case EnemyState.Attack:
@@ -155,7 +154,7 @@ namespace Scenes.Ingame.Enemy
                         }
                         else
                         {
-                            _myAgent.speed = _enemyStatus.ReturnCheseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
+                            _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         }
                         break;
                     case EnemyState.FallBack: 

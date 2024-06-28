@@ -15,15 +15,15 @@ namespace Scenes.Ingame.Enemy
         [Header("このスクリプトを制御する変数")]
         [SerializeField][Tooltip("何秒ごとに視界の状態、攻撃可能性、SANをチェックするか")] private float _checkRate;
         [SerializeField][Tooltip("戦闘時の視界の広さ")] private float _visivilityRange;//仕様上視界範囲は全て同一？じゃなかったらこれはEnemyStatusに送り込むよ
-        [SerializeField] [Tooltip("見失ったとしてもどれだけの時間頑張って探そうとするかどうか")]private float _brindCheseTime;
+        [SerializeField] [Tooltip("見失ったとしてもどれだけの時間頑張って探そうとするかどうか")]private float _blindChaseTime;
         [SerializeField][Tooltip("デバッグするかどうか")] private bool _debugMode;
 
 
 
         private int _horror;
-        private int _atackPower;
+        private int _attackPower;
 
-        [Header("Horror,AtackPowerを除く攻撃性能")]
+        [Header("Horror,AttackPowerを除く攻撃性能")]
         [SerializeField][Tooltip("攻撃の間隔")] private float _attackTime;
         [SerializeField][Tooltip("近接攻撃の射程")] private float _atackRange;
         [SerializeField][Tooltip("遠隔攻撃が可能かどうか")] private bool canShot;
@@ -46,11 +46,11 @@ namespace Scenes.Ingame.Enemy
         //##########内部で使う変数##########
         private GameObject _player;
         private PlayerStatus _playerStatus;
-        private float _atackTimeCount;
+        private float _attackTimeCount;
         private float _shotTimeCount;
         private float _audiomaterPower;//聞く力
         private float _checkTimeCount;//前回チェックしてからの時間を計測
-         float _brindCheseTimeCount;
+         float _blindChaseTimeCount;
         private EnemyVisibilityMap _myVisivilityMap;
         private EnemyState _lastEnemyState = EnemyState.None;
         Vector3 nextPositionCandidate = new Vector3(0, 0, 0);
@@ -62,7 +62,7 @@ namespace Scenes.Ingame.Enemy
         public void Init(EnemyVisibilityMap setVisivilityMap) {
             _myVisivilityMap = setVisivilityMap;
             _horror = _enemyStatus.ReturnHorror;
-            _atackPower = _enemyStatus.ReturnAtackPower;
+            _attackPower = _enemyStatus.ReturnAtackPower;
             _audiomaterPower = _enemyStatus.ReturnAudiomaterPower;
 
             _player = GameObject.FindWithTag("Player");
@@ -74,7 +74,7 @@ namespace Scenes.Ingame.Enemy
 
             _enemyStatus.OnEnemyStateChange.Subscribe(state => 
             {
-                if ((state == EnemyState.Chese || state == EnemyState.Attack) && !((_lastEnemyState == EnemyState.Chese || _lastEnemyState == EnemyState.Attack))) 
+                if ((state == EnemyState.Chase || state == EnemyState.Attack) && !((_lastEnemyState == EnemyState.Chase || _lastEnemyState == EnemyState.Attack))) 
                 { 
                     _lastEnemyState = state;
                     _myVisivilityMap.SetEveryGridWatchNum(50);
@@ -87,11 +87,11 @@ namespace Scenes.Ingame.Enemy
         protected virtual void FixedUpdate()
         {
             float _playerDistance;
-            if (_enemyStatus.ReturnEnemyState == EnemyState.Chese || _enemyStatus.ReturnEnemyState == EnemyState.Attack)
+            if (_enemyStatus.ReturnEnemyState == EnemyState.Chase || _enemyStatus.ReturnEnemyState == EnemyState.Attack)
             { //追跡状態または攻撃状態の場合
 
                 //いろいろ数える
-                if (_atackTimeCount < _attackTime) { _atackTimeCount += Time.deltaTime; }
+                if (_attackTimeCount < _attackTime) { _attackTimeCount += Time.deltaTime; }
                 if (_shotTimeCount < _shotTime) { _shotTimeCount += Time.deltaTime; }
 
                 //定期的に状態を変更
@@ -108,18 +108,18 @@ namespace Scenes.Ingame.Enemy
                         {
                             _myVisivilityMap.ChangeEveryGridWatchNum(1, true);
                             _myVisivilityMap.SetGridWatchNum(_player.transform.position, 0);
-                            _brindCheseTimeCount = 0;//見えたのであきらめるまでのカウントはリセット
+                            _blindChaseTimeCount = 0;//見えたのであきらめるまでのカウントはリセット
                                                      //移動目標をプレイヤーの座標にする
                             _enemyMove.SetMovePosition(_player.transform.position);
                             if (_playerDistance < _atackRange)//近接攻撃の射程内か確認する
                             { //近接攻撃をする
                                 _enemyStatus.SetEnemyState(EnemyState.Attack);
-                                if (_atackTimeCount > _attackTime)
+                                if (_attackTimeCount > _attackTime)
                                 {
-                                    _atackTimeCount = 0;
+                                    _attackTimeCount = 0;
                                     _shotTimeCount = 0;//遠隔から近接の距離に入った瞬間2連続で攻撃が行われないために両方のカウントを0にしている。
                                     if (_debugMode) Debug.Log("ここで近接攻撃！");
-                                    _playerStatus.ChangeHealth(_atackPower, "Damage");
+                                    _playerStatus.ChangeHealth(_attackPower, "Damage");
                                 }
 
 
@@ -129,7 +129,7 @@ namespace Scenes.Ingame.Enemy
                                 _enemyStatus.SetEnemyState(EnemyState.Attack);
                                 if (_shotTimeCount > _shotTime)
                                 {
-                                    _atackTimeCount = 0;
+                                    _attackTimeCount = 0;
                                     _shotTimeCount = 0;
                                     if (_debugMode) Debug.Log("ここで遠隔攻撃！");
                                     GameObject.Instantiate(_ballet, this.transform.position + new Vector3(0,2,0) + this.transform.forward, Quaternion.identity);
@@ -139,20 +139,20 @@ namespace Scenes.Ingame.Enemy
                             }
                             else
                             {//攻撃できないなら追いかける
-                                _enemyStatus.SetEnemyState(EnemyState.Chese);
+                                _enemyStatus.SetEnemyState(EnemyState.Chase);
                             }
                         }
                     }
                     else
                     { //敵が見えないならせめてなんとかいそうなエリアへ行こうとする
-                        _brindCheseTimeCount += _checkRate;
-                        if (_brindCheseTimeCount > _brindCheseTime)
+                        _blindChaseTimeCount += _checkRate;
+                        if (_blindChaseTimeCount > _blindChaseTime)
                         { //あきらめるかどうかの判定
                             _enemyStatus.SetEnemyState(EnemyState.Searching);//追っかけるのあきらめた
                         }
                         else
                         { //まだあきらめない場合、近距離に特化したのSearchを行う
-                            _enemyStatus.SetEnemyState(EnemyState.Chese);
+                            _enemyStatus.SetEnemyState(EnemyState.Chase);
 
                             if (_enemyStatus.ReturnReactToLight && _myVisivilityMap.RightCheck(this.transform.position, _player.transform.position, _visivilityRange, _playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
                             { //光が見えるか調べる

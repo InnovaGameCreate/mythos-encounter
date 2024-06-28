@@ -43,16 +43,6 @@ namespace Scenes.Ingame.InGameSystem.UI
                     Display(value);
                 }).AddTo(this);
         }
-        private void OnEnable()
-        {
-            ResultValue resultValue = new ResultValue();
-            resultValue.time = 10;
-            resultValue.firstContact = true;
-            resultValue.firstContact = false;
-            resultValue.level = 2;
-            resultValue.totalMoney = 390;
-            Display(resultValue);
-        }
         private void Display(ResultValue resultValue)
         {
             _sequence = DOTween.Sequence();
