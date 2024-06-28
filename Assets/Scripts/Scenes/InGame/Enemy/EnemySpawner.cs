@@ -36,7 +36,7 @@ namespace Scenes.Ingame.Enemy
         private EnemyVisibilityMap _enemyVisibilityMap;
         [SerializeField]
         [Tooltip("各マス目の数")]
-        private byte _x, _z;
+        private byte _x, _y,_z;
         [SerializeField]
         [Tooltip("マップのマス目の幅")]
         private float _range;
@@ -155,7 +155,7 @@ namespace Scenes.Ingame.Enemy
             _enemyVisibilityMap = new EnemyVisibilityMap();
             _enemyVisibilityMap.debugMode = _debugMode;
             _enemyVisibilityMap.maxVisivilityRange = _maxVisiviilityRange;
-            _enemyVisibilityMap.GridMake(_x, _z, _range, _centerPosition);              
+            _enemyVisibilityMap.GridMake(_x, _y,_z, _range, _centerPosition);              
             _enemyVisibilityMap.MapScan();
 
 
