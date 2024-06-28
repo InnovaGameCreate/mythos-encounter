@@ -422,7 +422,7 @@ namespace Scenes.Ingame.Enemy
                                     }
                                     if (debugMode)
                                     {//見たエリアを線で表示
-                                        Debug.DrawLine(centerPosition + ToVector3(myPositionX, 0, myPositionZ) * gridRange, centerPosition + ToVector3(item.x, 0, item.z) * gridRange, Color.green, 1f);
+                                        Debug.DrawLine(centerPosition + ToVector3(myPositionX, myPositionY, myPositionZ) * gridRange, centerPosition + ToVector3(item.x, item.y, item.z) * gridRange, Color.green, 1f);
                                     }
                                 }
 
@@ -618,7 +618,7 @@ namespace Scenes.Ingame.Enemy
 
             if (debugMode)
             {
-                for (byte e = 0; e < enemyVisivilityGridPosition.Count; e++)
+                for (int e = 0; e < enemyVisivilityGridPosition.Count; e++)
                 {
                     if (enemyVisivilityGridPosition[e].range < visivilityRange) Debug.DrawLine((ToVector3(enemyGridPositionX, enemyGridPositionY, enemyGridPositionZ) * gridRange) + centerPosition, (ToVector3(enemyVisivilityGridPosition[e].x, enemyVisivilityGridPosition[e].y, enemyVisivilityGridPosition[e].z) * gridRange) + centerPosition, Color.green, 1f);
                 }
@@ -661,7 +661,7 @@ namespace Scenes.Ingame.Enemy
 
             if (debugMode)//光を描画
             {
-                for (byte r = 0; r < rightingGridPosition.Count; r++)
+                for (int r = 0; r < rightingGridPosition.Count; r++)
                 {
                     if (rightingGridPosition[r].range < lightRange) { }
                     Debug.DrawLine((ToVector3(rightGridPositionX, rightGridPositionY, rightGridPositionZ) * gridRange) + centerPosition, (ToVector3(rightingGridPosition[r].x, rightingGridPosition[r].y, rightingGridPosition[r].z) * gridRange) + centerPosition, Color.yellow, 1f);
@@ -678,9 +678,9 @@ namespace Scenes.Ingame.Enemy
             bool canLookLight = false;
             byte mostShiningGridPositionX = 0,mostShiningGridPositionY = 0, mostShiningGridPositionZ = 0;
             float shining = 0;
-            for (byte e = 0; e < enemyVisivilityGridPosition.Count; e++)
+            for (int e = 0; e < enemyVisivilityGridPosition.Count; e++)
             {
-                for (byte r = 0; r < rightingGridPosition.Count; r++)
+                for (int r = 0; r < rightingGridPosition.Count; r++)
                 {
                     if (enemyVisivilityGridPosition[e].x == rightingGridPosition[r].x && enemyVisivilityGridPosition[e].z == rightingGridPosition[r].z)
                     {//光が届く可能性があり見えているマスを取得
@@ -818,34 +818,43 @@ namespace Scenes.Ingame.Enemy
             VisivilityArea newVisivilityArea;
             if ((playerPosition.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < playerPosition.x))
             {//x座標がマップの範囲内であるかどうか
-                if ((playerPosition.z < centerPosition.z + (visivilityAreaGrid[0].Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < playerPosition.z)) //z座標がマップの範囲内であるかどうか
+                if ((playerPosition.y < centerPosition.y + (visivilityAreaGrid[0].Count + 0.5) * gridRange) && (centerPosition.y - 0.5 * gridRange < playerPosition.y))
                 {
-                    for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
+                    if ((playerPosition.z < centerPosition.z + (visivilityAreaGrid[0][0].Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < playerPosition.z)) //z座標がマップの範囲内であるかどうか
                     {
-                        for (byte y = 0; y < visivilityAreaGrid[0].Count(); y++) {
-                            for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
+                        for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
+                        {
+                            for (byte y = 0; y < visivilityAreaGrid[0].Count(); y++)
                             {
-                                //マスが対象範囲(ハードコードで50にしてある)か調べる                          
-                                if (50 > Vector3.Magnitude(playerPosition - (centerPosition + ToVector3(x, y, z) * gridRange)))
+                                for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
                                 {
-                                    //対象内の場合見た回数を0とする
-                                    newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[x][y][z].watchNum + 1), visivilityAreaGrid[x][y][z].canVisivleAreaPosition);
-                                    visivilityAreaGrid[x][y][z] = newVisivilityArea;
-                                    if (debugMode) { DrawCross((centerPosition + ToVector3(x, y, z) * gridRange), 5, Color.magenta, 2f); }
-                                }
-                                else
-                                {
+                                    //マスが対象範囲(ハードコードで50にしてある)か調べる                          
+                                    if (50 > Vector3.Magnitude(playerPosition - (centerPosition + ToVector3(x, y, z) * gridRange)))
+                                    {
+                                        //対象内の場合見た回数を0とする
+                                        newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[x][y][z].watchNum + 1), visivilityAreaGrid[x][y][z].canVisivleAreaPosition);
+                                        visivilityAreaGrid[x][y][z] = newVisivilityArea;
+                                        if (debugMode) { DrawCross((centerPosition + ToVector3(x, y, z) * gridRange), 5, Color.magenta, 2f); }
+                                    }
+                                    else
+                                    {
+                                    }
                                 }
                             }
                         }
                     }
+                    else
+                    {
+                        Debug.LogError("z座標がマップからはみ出ています");
+                    }
                 }
                 else
                 {
-                    if (debugMode) Debug.Log("z座標がマップからはみ出ています");
+                    Debug.LogError("y座標がマップからはみ出ています");
                 }
-                if (debugMode) Debug.Log("x座標がマップからはみ出ています");
-
+            }
+            else {
+                Debug.LogError("x座標がマップからはみ出ています");
             }
 
         }
