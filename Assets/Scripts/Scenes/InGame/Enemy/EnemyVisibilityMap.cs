@@ -206,6 +206,7 @@ namespace Scenes.Ingame.Enemy
 
 
             }
+            
         }
 
         /// <summary>
@@ -213,6 +214,7 @@ namespace Scenes.Ingame.Enemy
         /// </summary>
         public void NeedCloseDoorScan()
         {
+            Debug.Log("閉じていなくてはならないドアをスキャンします");
             for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
             {
                 for (byte y = 0; y < visivilityAreaGrid[0].Count(); y++)
@@ -245,6 +247,7 @@ namespace Scenes.Ingame.Enemy
                     }
                 }
             }
+            Debug.Log("閉じていなくてはならないドアをスキャンが完了しました");
         }
 
 
@@ -258,13 +261,19 @@ namespace Scenes.Ingame.Enemy
             EnemyVisibilityMap copy;
             copy = new EnemyVisibilityMap();
             copy.visivilityAreaGrid = new List<List<List<VisivilityArea>>>();
+
             foreach (List<List<VisivilityArea>> item in visivilityAreaGrid)//3次元リストをコピー
             {
                 List<List<VisivilityArea>> secondVisivilityArea = new List<List<VisivilityArea>>();//二次元配列
+
                 foreach (List<VisivilityArea> item2 in item) {
+
                     List<VisivilityArea> therdVisivilityarea = new List<VisivilityArea>();
+
                     foreach (VisivilityArea item3 in item2) {
+
                         List<TripleByteAndMonoFloat> addCanVisivilityAndMonoFloat = new List<TripleByteAndMonoFloat>();
+
                         foreach (TripleByteAndMonoFloat value in item3.canVisivleAreaPosition)
                         {
 
@@ -285,11 +294,12 @@ namespace Scenes.Ingame.Enemy
             copy.maxVisivilityRange = maxVisivilityRange;
             copy.debugMode = debugMode;
             copy.centerPosition = centerPosition;
+            
             if (debugMode)
             { //マス目の情報が正常にコピーできているかを表示する
                 for (byte x = 0; x < copy.visivilityAreaGrid.Count(); x++)
                 {
-                    for (byte y = 0; x < copy.visivilityAreaGrid[0].Count(); y++) {
+                    for (byte y = 0; y < copy.visivilityAreaGrid[0].Count(); y++) {
                         for (byte z = 0; z < copy.visivilityAreaGrid[0][0].Count(); z++)
                         {
                             Debug.DrawLine(copy.centerPosition + ToVector3(x, y, z) * copy.gridRange, copy.centerPosition + ToVector3(x, y, z) * copy.gridRange + ToVector3(0, 10, 0), Color.green, 10);
@@ -298,7 +308,12 @@ namespace Scenes.Ingame.Enemy
 
                 }
             }
+
+            if (visivilityAreaGrid.Count() != copy.visivilityAreaGrid.Count()) { Debug.LogWarning("数が違う1"); } else { Debug.Log("数は同じ"); }
+            if (visivilityAreaGrid[0].Count() != copy.visivilityAreaGrid[0].Count()) { Debug.LogWarning("数が違う2"); }
+            if (visivilityAreaGrid[0][0].Count() != copy.visivilityAreaGrid[0][0].Count()) { Debug.LogWarning("数が違う3"); }
             return copy;
+           
         }
 
 
@@ -826,7 +841,7 @@ namespace Scenes.Ingame.Enemy
                         {
                             for (byte y = 0; y < visivilityAreaGrid[0].Count(); y++)
                             {
-                                for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
+                                for (byte z = 0; z < visivilityAreaGrid[0][0].Count(); z++)
                                 {
                                     //マスが対象範囲(ハードコードで50にしてある)か調べる                          
                                     if (50 > Vector3.Magnitude(playerPosition - (centerPosition + ToVector3(x, y, z) * gridRange)))
