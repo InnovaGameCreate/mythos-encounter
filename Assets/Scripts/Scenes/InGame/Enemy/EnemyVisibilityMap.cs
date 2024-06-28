@@ -289,10 +289,13 @@ namespace Scenes.Ingame.Enemy
             { //マス目の情報が正常にコピーできているかを表示する
                 for (byte x = 0; x < copy.visivilityAreaGrid.Count(); x++)
                 {
-                    for (byte z = 0; z < copy.visivilityAreaGrid[0].Count(); z++)
-                    {
-                        Debug.DrawLine(copy.centerPosition +  ToVector3(x, 0, z) * copy.gridRange, copy.centerPosition + ToVector3(x, 0, z) * copy.gridRange + ToVector3(0, 10, 0), Color.green, 10);
+                    for (byte y = 0; x < copy.visivilityAreaGrid[0].Count(); y++) {
+                        for (byte z = 0; z < copy.visivilityAreaGrid[0][0].Count(); z++)
+                        {
+                            Debug.DrawLine(copy.centerPosition + ToVector3(x, y, z) * copy.gridRange, copy.centerPosition + ToVector3(x, y, z) * copy.gridRange + ToVector3(0, 10, 0), Color.green, 10);
+                        }
                     }
+
                 }
             }
             return copy;
@@ -308,45 +311,54 @@ namespace Scenes.Ingame.Enemy
         {
             if (debugMode) Debug.Log("次の移動先を取得");
             List<byte> nextPositionX = new List<byte>();
+            List<byte> nextPositionY = new List<byte>();
             List<byte> nextPositionZ = new List<byte>();
             byte smallestWatchNum = byte.MaxValue;
             for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
             {
-                for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
-                {
-                    if (smallestWatchNum > visivilityAreaGrid[x][z].watchNum) { smallestWatchNum = visivilityAreaGrid[x][z].watchNum; }
+                for (byte y =0;y < visivilityAreaGrid[0].Count();y++) {
+                    for (byte z = 0; z < visivilityAreaGrid[0][0].Count(); z++)
+                    {
+                        if (smallestWatchNum > visivilityAreaGrid[x][y][z].watchNum) { smallestWatchNum = visivilityAreaGrid[x][y][z].watchNum; }
+                    }
                 }
+
             }
 
 
             for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
             {
-                for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
-                {
-                    if (visivilityAreaGrid[x][z].watchNum == smallestWatchNum)
-                    { //最も小さい場合
-                        nextPositionX.Add(x);
-                        nextPositionZ.Add(z);
+                for (byte y = 0; y < visivilityAreaGrid[0].Count();y++) {
+                    for (byte z = 0; z < visivilityAreaGrid[0][0].Count(); z++)
+                    {
+                        if (visivilityAreaGrid[x][y][z].watchNum == smallestWatchNum)
+                        { //最も小さい場合
+                            nextPositionX.Add(x);
+                            nextPositionY.Add(y);
+                            nextPositionZ.Add(z);
+                        }
+                        VisivilityArea newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[x][y][z].watchNum - smallestWatchNum), visivilityAreaGrid[x][y][z].canVisivleAreaPosition); ;
+                        visivilityAreaGrid[x][y][z] = newVisivilityArea;
                     }
-                    VisivilityArea newVisivilityArea = new VisivilityArea((byte)(visivilityAreaGrid[x][z].watchNum - smallestWatchNum), visivilityAreaGrid[x][z].canVisivleAreaPosition); ;
-                    visivilityAreaGrid[x][z] = newVisivilityArea;
                 }
+
             }
             //最も近い要素を考える
             float nearDistance = float.MaxValue;
-            byte nearPositionX = 0; byte nearPositionZ = 0;
-            for (short i = 0; i < nextPositionX.Count; i++)
+            byte nearPositionX = 0; byte nearPositionY = 0; byte nearPositionZ = 0;//Y方向の評価値を10倍している
+            for (int i = 0; i < nextPositionX.Count; i++)
             {
-                if (nearDistance > Vector3.Magnitude(nowPosition - (centerPosition + ToVector3(nextPositionX[i], 0, nextPositionZ[i]) * gridRange)))
+                if (nearDistance > Vector3.Magnitude(nowPosition - (centerPosition + ToVector3(nextPositionX[i], nextPositionY[i] * 10, nextPositionZ[i]) * gridRange)))
                 {
-                    nearDistance = Vector3.Magnitude(nowPosition - (centerPosition + ToVector3(nextPositionX[i], 0, nextPositionZ[i]) * gridRange));
+                    nearDistance = Vector3.Magnitude(nowPosition - (centerPosition + ToVector3(nextPositionX[i], nextPositionY[i] * 10, nextPositionZ[i]) * gridRange));
                     nearPositionX = nextPositionX[i];
+                    nearPositionY = nextPositionY[i];
                     nearPositionZ = nextPositionZ[i];
                 }
             }
 
             //実際に次ぎに行くべき座標を示す
-            Vector3 nextPosition = (ToVector3(nearPositionX, 0, nearPositionZ) * gridRange) + centerPosition;
+            Vector3 nextPosition = (ToVector3(nearPositionX, nearPositionY, nearPositionZ) * gridRange) + centerPosition;
             if (debugMode)
             {//次に行くべき位置を描画
                 Debug.DrawLine(nextPosition, nextPosition + ToVector3(0, 20, 0), Color.magenta, 3);
@@ -365,84 +377,97 @@ namespace Scenes.Ingame.Enemy
             VisivilityArea newVisivilityArea;
             if ((nowPosition.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < nowPosition.x))
             {//x座標がマップの範囲内であるかどうか
-                if ((nowPosition.z < centerPosition.z + (visivilityAreaGrid[0].Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < nowPosition.z)) //z座標がマップの範囲内であるかどうか
-                {
-                    if (debugMode) Debug.Log("マップの範囲内です");
-                    byte myPositionx, myPositionz;//自分がどこのグリッドにいるかを確認する
-                    myPositionx = (byte)Mathf.FloorToInt((float)(nowPosition.x - centerPosition.x + 0.5 * gridRange) / gridRange);
-                    myPositionz = (byte)Mathf.FloorToInt((float)(nowPosition.z - centerPosition.z + 0.5 * gridRange) / gridRange);
-                    foreach (TripleByteAndMonoFloat item in visivilityAreaGrid[myPositionx][myPositionz].canVisivleAreaPosition)
+
+                if ((nowPosition.y < centerPosition.y + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.y - 0.5 * gridRange < nowPosition.y))
+                {//y座標
+                    if ((nowPosition.z < centerPosition.z + (visivilityAreaGrid[0].Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < nowPosition.z)) //z座標がマップの範囲内であるかどうか
                     {
-                        if (item.range < visivilityRange)
-                        { //見える距離
-                            //ドアに関連して見える条件にあるか調べる
-                            bool noDoor = true;
-                            foreach (StageDoor needOpen in item.needOpenDoor) //開いていなければならないドアは開いているかチェック
-                            {
-                                if (needOpen.ReturnIsOpen == false) 
+                        if (debugMode) Debug.Log("マップの範囲内です");
+                        byte myPositionX,myPositionY, myPositionZ;//自分がどこのグリッドにいるかを確認する
+                        myPositionX = (byte)Mathf.FloorToInt((float)(nowPosition.x - centerPosition.x + 0.5 * gridRange) / gridRange);
+                        myPositionY=  (byte)Mathf.FloorToInt((float)(nowPosition.y - centerPosition.y + 0.5 * gridRange) / gridRange);
+                        myPositionZ = (byte)Mathf.FloorToInt((float)(nowPosition.z - centerPosition.z + 0.5 * gridRange) / gridRange);
+                        foreach (TripleByteAndMonoFloat item in visivilityAreaGrid[myPositionX][myPositionY][myPositionZ].canVisivleAreaPosition)
+                        {
+                            if (item.range < visivilityRange)
+                            { //見える距離
+                              //ドアに関連して見える条件にあるか調べる
+                                bool noDoor = true;
+                                foreach (StageDoor needOpen in item.needOpenDoor) //開いていなければならないドアは開いているかチェック
                                 {
-                                    noDoor = false; break; 
-                                }
-                            }
-                            if (noDoor) {
-                                foreach (StageDoor needClose in item.needCloseDoor)//閉じていなければならないドアは閉じているかチェック
-                                {
-                                    if (needClose.ReturnIsOpen == true) 
-                                    { 
-                                        noDoor = false;
-                                        break;
+                                    if (needOpen.ReturnIsOpen == false)
+                                    {
+                                        noDoor = false; break;
                                     }
                                 }
-                            }
-                            
-                            if (noDoor) {
-                                //見た回数を足す。ただし構造体をListのFor文の中でいじれないのでコピーしていじって書き換える。オーバーフローしない場合
-                                if ((byte)(visivilityAreaGrid[item.x][item.z].watchNum) < byte.MaxValue)
+                                if (noDoor)
                                 {
-                                    newVisivilityArea = new VisivilityArea((byte)(visivilityAreaGrid[item.x][item.z].watchNum + 1), visivilityAreaGrid[item.x][item.z].canVisivleAreaPosition);
-                                    visivilityAreaGrid[item.x][item.z] = newVisivilityArea;
+                                    foreach (StageDoor needClose in item.needCloseDoor)//閉じていなければならないドアは閉じているかチェック
+                                    {
+                                        if (needClose.ReturnIsOpen == true)
+                                        {
+                                            noDoor = false;
+                                            break;
+                                        }
+                                    }
                                 }
-                                if (debugMode)
-                                {//見たエリアを線で表示
-                                    Debug.DrawLine(centerPosition + ToVector3(myPositionx, 0, myPositionz) * gridRange, centerPosition + ToVector3(item.x, 0, item.z) * gridRange, Color.green, 1f);
-                                }
-                            }
 
+                                if (noDoor)
+                                {
+                                    //見た回数を足す。ただし構造体をListのFor文の中でいじれないのでコピーしていじって書き換える。オーバーフローしない場合
+                                    if ((byte)(visivilityAreaGrid[item.x][item.y][item.z].watchNum) < byte.MaxValue)
+                                    {
+                                        newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[item.x][item.y][item.z].watchNum + 1), visivilityAreaGrid[item.x][item.y][item.z].canVisivleAreaPosition);
+                                        visivilityAreaGrid[item.x][item.y][item.z] = newVisivilityArea;
+                                    }
+                                    if (debugMode)
+                                    {//見たエリアを線で表示
+                                        Debug.DrawLine(centerPosition + ToVector3(myPositionX, 0, myPositionZ) * gridRange, centerPosition + ToVector3(item.x, 0, item.z) * gridRange, Color.green, 1f);
+                                    }
+                                }
+
+                            }
+                        }
+                        //自分が今いる場所に見た回数を足す。ただし構造体をListのFor文の中でいじれないのでコピーしていじって書き換える
+                        if ((byte)(visivilityAreaGrid[myPositionX][myPositionY][myPositionZ].watchNum) < byte.MaxValue)
+                        {
+                            newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[myPositionX][myPositionY][myPositionZ].watchNum + 1), visivilityAreaGrid[myPositionX][myPositionY][myPositionZ].canVisivleAreaPosition);
+                            visivilityAreaGrid[myPositionX][myPositionY][myPositionZ] = newVisivilityArea;
                         }
                     }
-                    //自分が今いる場所に見た回数を足す。ただし構造体をListのFor文の中でいじれないのでコピーしていじって書き換える
-                    if ((byte)(visivilityAreaGrid[myPositionx][myPositionz].watchNum) < byte.MaxValue)
+                    else
                     {
-                        newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[myPositionx][myPositionz].watchNum + 1), visivilityAreaGrid[myPositionx][myPositionz].canVisivleAreaPosition);
-                        visivilityAreaGrid[myPositionx][myPositionz] = newVisivilityArea;
+                         Debug.LogError("z座標がマップからはみ出ています");
                     }
                 }
-                else
-                {
-                    if (debugMode) Debug.Log("z座標がマップからはみ出ています");
+                else {
+                    Debug.LogError("z座標がマップからはみ出ています");
                 }
-
             }
             else
             {
-                if (debugMode) Debug.Log("x座標がマップからはみ出ています");
+                Debug.LogError("x座標がマップからはみ出ています");
             }
 
             if (debugMode)
             { //各マス目がどれだけ見られているかを確認する
                 for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
                 {
-                    for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
-                    {
-                        Color drawColor;
-                        if (visivilityAreaGrid[x][z].watchNum < 25) { drawColor = new Color32((byte)(10 * visivilityAreaGrid[x][z].watchNum), 0, (byte)(byte.MaxValue - (10 * visivilityAreaGrid[x][z].watchNum)), byte.MaxValue); }
-                        else
+                    for (byte y =0;y < visivilityAreaGrid[0].Count();y++) {
+                        for (byte z = 0; z < visivilityAreaGrid[0][0].Count(); z++)
                         {
-                            drawColor = Color.red;
+                            Color drawColor;
+                            if (visivilityAreaGrid[x][y][z].watchNum < 25) { drawColor = new Color32((byte)(10 * visivilityAreaGrid[x][y][z].watchNum), 0, (byte)(byte.MaxValue - (10 * visivilityAreaGrid[x][y][z].watchNum)), byte.MaxValue); }
+                            else
+                            {
+                                drawColor = Color.red;
+                            }
+
+                            Debug.DrawLine(centerPosition + ToVector3(x, y, z) * gridRange, centerPosition + ToVector3(x, y, z) * gridRange + ToVector3(0, 10, 0), drawColor, 1f);
                         }
 
-                        Debug.DrawLine(centerPosition + ToVector3(x, 0, z) * gridRange, centerPosition + ToVector3(x, 0, z) * gridRange + ToVector3(0, 10, 0), drawColor, 1f);
                     }
+
                 }
             }
         }
@@ -459,38 +484,52 @@ namespace Scenes.Ingame.Enemy
             VisivilityArea newVisivilityArea;
             if ((position.x < centerPosition.x + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < position.x))
             {//x座標がマップの範囲内であるかどうか
-                if ((position.z < centerPosition.z + (visivilityAreaGrid[0].Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < position.z)) //z座標がマップの範囲内であるかどうか
+                if ((position.y < centerPosition.y + (visivilityAreaGrid[0].Count + 0.5) * gridRange) && (centerPosition.y - 0.5 * gridRange < position.y))
                 {
-                    for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
+                    if ((position.z < centerPosition.z + (visivilityAreaGrid[0][0].Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < position.z)) //z座標がマップの範囲内であるかどうか
                     {
-                        for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
+                        for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
                         {
-                            //マスが対象範囲か調べる                          
-                            if (resetRange > Vector3.Magnitude(position - (centerPosition + ToVector3(x, 0, z) * gridRange)))
+                            for (byte y = 0; y < visivilityAreaGrid[0].Count(); y++)
                             {
-                                //対象内の場合見た回数を0とする
-                                newVisivilityArea = ToVisivilityArea((byte)(0), visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                                visivilityAreaGrid[x][z] = newVisivilityArea;
-                                if (debugMode) { DrawCross((centerPosition + ToVector3(x, 0, z) * gridRange), 5, Color.magenta, 2f); }
+                                for (byte z = 0; z < visivilityAreaGrid[0][0].Count(); z++)
+                                {
+                                    //マスが対象範囲か調べる                          
+                                    if (resetRange > Vector3.Magnitude(position - (centerPosition + ToVector3(x, y, z) * gridRange)))
+                                    {
+                                        //対象内の場合見た回数を0とする
+                                        newVisivilityArea = ToVisivilityArea((byte)(0), visivilityAreaGrid[x][y][z].canVisivleAreaPosition);
+                                        visivilityAreaGrid[x][y][z] = newVisivilityArea;
+                                        if (debugMode) { DrawCross((centerPosition + ToVector3(x, y, z) * gridRange), 5, Color.magenta, 2f); }
+
+                                    }
+                                    else
+                                    {
+                                        //対象でない場合見た回数を1追加する(何度も音を聞いた場合に最も新しい音を対象とするため)
+                                        if (periodic)
+                                        {//細かく走りまくることで音のしていないエリアが極端に捜索先にならないようにするグリッチの対策
+                                            newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[x][y][z].watchNum + 1), visivilityAreaGrid[x][y][z].canVisivleAreaPosition);
+                                            visivilityAreaGrid[x][y][z] = newVisivilityArea;
+                                        }
+                                    }
+                                }
+
 
                             }
-                            else
-                            {
-                                //対象でない場合見た回数を1追加する(何度も音を聞いた場合に最も新しい音を対象とするため)
-                                if (periodic)
-                                {//細かく走りまくることで音のしていないエリアが極端に捜索先にならないようにするグリッチの対策
-                                    newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[x][z].watchNum + 1), visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                                    visivilityAreaGrid[x][z] = newVisivilityArea;
-                                }
-                            }
+
                         }
                     }
+                    else
+                    {
+                        Debug.LogError("z座標がマップからはみ出ています");
+                    }
                 }
-                else
-                {
-                    if (debugMode) Debug.Log("z座標がマップからはみ出ています");
-                }
-                if (debugMode) Debug.Log("x座標がマップからはみ出ています");
+                else { Debug.LogError("y座標がマップからはみ出ています"); }
+                
+                
+            }
+            else {
+                Debug.LogError("x座標がマップからはみ出ています");
             }
         }
 
@@ -510,7 +549,14 @@ namespace Scenes.Ingame.Enemy
                 Debug.LogError("EnemyPosition.xが範囲外です");
                 return false;
             }
-            if (!(enemyPosition.z < centerPosition.z + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < enemyPosition.z))
+            if (!(enemyPosition.y < centerPosition.y + (visivilityAreaGrid[0].Count + 0.5) * gridRange) && (centerPosition.y - 0.5 * gridRange < enemyPosition.y))
+            {
+                Debug.LogError("EnemyPosition.yが範囲外です");
+                return false;
+            }
+
+
+            if (!(enemyPosition.z < centerPosition.z + (visivilityAreaGrid[0][0].Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < enemyPosition.z))
             {
                 Debug.LogError("EnemyPosition.zが範囲外です");
                 return false;
@@ -520,19 +566,25 @@ namespace Scenes.Ingame.Enemy
                 Debug.LogError("PlayerPosition.xが範囲外です");
                 return false;
             }
-            if (!(playerPosition.z < centerPosition.z + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < playerPosition.z))
+            if (!(playerPosition.y < centerPosition.y + (visivilityAreaGrid[0].Count + 0.5) * gridRange) && (centerPosition.y - 0.5 * gridRange < playerPosition.y))
+            {
+                Debug.LogError("PlayerPosition.xが範囲外です");
+                return false;
+            }
+            if (!(playerPosition.z < centerPosition.z + (visivilityAreaGrid[0][0].Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < playerPosition.z))
             {
                 Debug.LogError("EPlayerPosition.zが範囲外です");
                 return false;
             }
             //Enemyから見れる可能性のあるマスを取得
-            byte enemyGridPositionX, enemyGridPositionZ;
+            byte enemyGridPositionX,enemyGridPositionY, enemyGridPositionZ;
             enemyGridPositionX = (byte)Mathf.FloorToInt((float)(enemyPosition.x - centerPosition.x + 0.5 * gridRange) / gridRange);
+            enemyGridPositionY = (byte)Mathf.FloorToInt((float)(enemyPosition.y - centerPosition.y + 0.5 * gridRange) / gridRange);
             enemyGridPositionZ = (byte)Mathf.FloorToInt((float)(enemyPosition.z - centerPosition.z + 0.5 * gridRange) / gridRange);
 
             List<TripleByteAndMonoFloat> enemyVisivilityGridPosition = new List<TripleByteAndMonoFloat> ();//今してることはこの先において敵からドアの問題なく見えるマスだけを抽出すること
 
-            foreach (TripleByteAndMonoFloat item    in visivilityAreaGrid[enemyGridPositionX][enemyGridPositionZ].canVisivleAreaPosition) {
+            foreach (TripleByteAndMonoFloat item    in visivilityAreaGrid[enemyGridPositionX][enemyGridPositionY][enemyGridPositionZ].canVisivleAreaPosition) {
                 //ドアに関連して見える条件にあるか調べる
                 bool noDoor = true;
                 foreach (StageDoor needOpen in item.needOpenDoor) //開いていなければならないドアは開いているかチェック
@@ -568,16 +620,17 @@ namespace Scenes.Ingame.Enemy
             {
                 for (byte e = 0; e < enemyVisivilityGridPosition.Count; e++)
                 {
-                    if (enemyVisivilityGridPosition[e].range < visivilityRange) Debug.DrawLine((ToVector3(enemyGridPositionX, 0, enemyGridPositionZ) * gridRange) + centerPosition, (ToVector3(enemyVisivilityGridPosition[e].x, 0, enemyVisivilityGridPosition[e].z) * gridRange) + centerPosition, Color.green, 1f);
+                    if (enemyVisivilityGridPosition[e].range < visivilityRange) Debug.DrawLine((ToVector3(enemyGridPositionX, enemyGridPositionY, enemyGridPositionZ) * gridRange) + centerPosition, (ToVector3(enemyVisivilityGridPosition[e].x, enemyVisivilityGridPosition[e].y, enemyVisivilityGridPosition[e].z) * gridRange) + centerPosition, Color.green, 1f);
                 }
             }
 
             //光が届く可能性のあるマスを取得
-            byte rightGridPositionX, rightGridPositionZ;
+            byte rightGridPositionX, rightGridPositionY,rightGridPositionZ;
             rightGridPositionX = (byte)Mathf.FloorToInt((float)(playerPosition.x - centerPosition.x + 0.5 * gridRange) / gridRange);
+            rightGridPositionY = (byte)Mathf.FloorToInt((float)(playerPosition.y - centerPosition.y + 0.5 * gridRange) / gridRange);
             rightGridPositionZ = (byte)Mathf.FloorToInt((float)(playerPosition.z - centerPosition.z + 0.5 * gridRange) / gridRange);
             List<TripleByteAndMonoFloat> rightingGridPosition = new List<TripleByteAndMonoFloat>();//今してることはこの先においてプレイヤーからドアの問題なく見えるマスだけを抽出すること
-            foreach (TripleByteAndMonoFloat item in visivilityAreaGrid[rightGridPositionX][rightGridPositionZ].canVisivleAreaPosition)
+            foreach (TripleByteAndMonoFloat item in visivilityAreaGrid[rightGridPositionX][rightGridPositionY][rightGridPositionZ].canVisivleAreaPosition)
             {
                 //ドアに関連して見える条件にあるか調べる
                 bool noDoor = true;
@@ -611,7 +664,7 @@ namespace Scenes.Ingame.Enemy
                 for (byte r = 0; r < rightingGridPosition.Count; r++)
                 {
                     if (rightingGridPosition[r].range < lightRange) { }
-                    Debug.DrawLine((ToVector3(rightGridPositionX, 0, rightGridPositionZ) * gridRange) + centerPosition, (ToVector3(rightingGridPosition[r].x, 0, rightingGridPosition[r].z) * gridRange) + centerPosition, Color.yellow, 1f);
+                    Debug.DrawLine((ToVector3(rightGridPositionX, rightGridPositionY, rightGridPositionZ) * gridRange) + centerPosition, (ToVector3(rightingGridPosition[r].x, rightingGridPosition[r].y, rightingGridPosition[r].z) * gridRange) + centerPosition, Color.yellow, 1f);
                 }
             }
 
@@ -623,7 +676,7 @@ namespace Scenes.Ingame.Enemy
 
             //見ることのできる最も明るいマスを決定
             bool canLookLight = false;
-            byte mostShiningGridPositionX = 0, mostShiningGridPositionZ = 0;
+            byte mostShiningGridPositionX = 0,mostShiningGridPositionY = 0, mostShiningGridPositionZ = 0;
             float shining = 0;
             for (byte e = 0; e < enemyVisivilityGridPosition.Count; e++)
             {
@@ -633,10 +686,11 @@ namespace Scenes.Ingame.Enemy
                     {//光が届く可能性があり見えているマスを取得
                         if (enemyVisivilityGridPosition[e].range < visivilityRange && rightingGridPosition[r].range < lightRange)
                         { //見える上に光も届く
-                            if (debugMode) { DrawCross((ToVector3(rightingGridPosition[r].x, 0, rightingGridPosition[r].z) * gridRange) + centerPosition, 2, Color.yellow, 1); }
+                            if (debugMode) { DrawCross((ToVector3(rightingGridPosition[r].x, rightingGridPosition[r].y, rightingGridPosition[r].z) * gridRange) + centerPosition, 2, Color.yellow, 1); }
                             if (shining < lightRange - rightingGridPosition[r].range)//最も明るいマスである
                             {
                                 mostShiningGridPositionX = rightingGridPosition[r].x;
+                                mostShiningGridPositionY = rightingGridPosition[r].y;
                                 mostShiningGridPositionZ = rightingGridPosition[r].z;
                                 shining = lightRange - rightingGridPosition[r].range;
                                 canLookLight = true;
@@ -649,7 +703,7 @@ namespace Scenes.Ingame.Enemy
             //情報を返す
             if (canLookLight)
             {
-                NextPosition = (ToVector3(mostShiningGridPositionX, 0, mostShiningGridPositionZ) * gridRange) + centerPosition;
+                NextPosition = (ToVector3(mostShiningGridPositionX, mostShiningGridPositionY, mostShiningGridPositionZ) * gridRange) + centerPosition;
                 if (debugMode) { DrawCross(NextPosition, 5, Color.yellow, 1); Debug.Log("光が見えた！"); Debug.DrawLine(NextPosition, NextPosition + ToVector3(0, 20, 0), Color.magenta, 3); }
                 return true;
             }
@@ -670,38 +724,39 @@ namespace Scenes.Ingame.Enemy
             VisivilityArea newVisivilityArea;
             for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
             {
-                for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
-                {
-                    if (plus)
+                for (byte y = 0; y < visivilityAreaGrid[0].Count();y++) {
+                    for (byte z = 0; z < visivilityAreaGrid[0][0].Count(); z++)
                     {
-                        if ((byte)(visivilityAreaGrid[x][z].watchNum) < byte.MaxValue - change)
+                        if (plus)
                         {
-                            newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[x][z].watchNum + change), visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                            visivilityAreaGrid[x][z] = newVisivilityArea;
+                            if ((byte)(visivilityAreaGrid[x][y][z].watchNum) < byte.MaxValue - change)
+                            {
+                                newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[x][y][z].watchNum + change), visivilityAreaGrid[x][y][z].canVisivleAreaPosition);
+                                visivilityAreaGrid[x][y][z] = newVisivilityArea;
+                            }
+                            else
+                            {
+                                newVisivilityArea = ToVisivilityArea(byte.MaxValue, visivilityAreaGrid[x][y][z].canVisivleAreaPosition);
+                                visivilityAreaGrid[x][y][z] = newVisivilityArea;
+                            }
                         }
                         else
                         {
-                            newVisivilityArea = ToVisivilityArea(byte.MaxValue, visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                            visivilityAreaGrid[x][z] = newVisivilityArea;
+                            if ((byte)(visivilityAreaGrid[x][y][z].watchNum) < byte.MinValue + change)
+                            {
+                                newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[x][y][z].watchNum - change), visivilityAreaGrid[x][y][z].canVisivleAreaPosition);
+                                visivilityAreaGrid[x][y][z] = newVisivilityArea;
+                            }
+                            else
+                            {
+                                newVisivilityArea = ToVisivilityArea(byte.MinValue, visivilityAreaGrid[x][y][z].canVisivleAreaPosition);
+                                visivilityAreaGrid[x][y][z] = newVisivilityArea;
+                            }
+
                         }
                     }
-                    else
-                    {
-                        if ((byte)(visivilityAreaGrid[x][z].watchNum) < byte.MinValue + change)
-                        {
-                            newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[x][z].watchNum - change), visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                            visivilityAreaGrid[x][z] = newVisivilityArea;
-                        }
-                        else
-                        {
-                            newVisivilityArea = ToVisivilityArea(byte.MinValue, visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                            visivilityAreaGrid[x][z] = newVisivilityArea;
-                        }
-
-                    }
-
-
                 }
+                
             }
         }
 
@@ -714,10 +769,12 @@ namespace Scenes.Ingame.Enemy
             VisivilityArea newVisivilityArea;
             for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
             {
-                for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
-                {
-                    newVisivilityArea = ToVisivilityArea(num, visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                    visivilityAreaGrid[x][z] = newVisivilityArea;
+                for (byte y = 0; y < visivilityAreaGrid[0].Count();y++) {
+                    for (byte z = 0; z < visivilityAreaGrid[0][0].Count(); z++)
+                    {
+                        newVisivilityArea = ToVisivilityArea(num, visivilityAreaGrid[x][y][z].canVisivleAreaPosition);
+                        visivilityAreaGrid[x][y][z] = newVisivilityArea;
+                    }
                 }
             }
         }
@@ -734,15 +791,19 @@ namespace Scenes.Ingame.Enemy
             {
                 Debug.LogError("Position.xが範囲外です");
             }
-            if (!(position.z < centerPosition.z + (visivilityAreaGrid.Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < position.z))
+            if (!(position.y < centerPosition.y + (visivilityAreaGrid[0].Count + 0.5) * gridRange) && (centerPosition.y - 0.5 * gridRange < position.x)) {
+                Debug.LogError("positionYが範囲外です");
+            }
+            if (!(position.z < centerPosition.z + (visivilityAreaGrid[0][0].Count + 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < position.z))
             {
                 Debug.LogError("Position.zが範囲外です");
             }
-            byte gridPositionX, gridPositionZ;
+            byte gridPositionX, gridPositionY,gridPositionZ;
             gridPositionX = (byte)Mathf.FloorToInt((float)(position.x - centerPosition.x + 0.5 * gridRange) / gridRange);
+            gridPositionY = (byte)Mathf.FloorToInt((float)(position.y - centerPosition.y + 0.5 * gridRange) / gridRange);
             gridPositionZ = (byte)Mathf.FloorToInt((float)(position.z - centerPosition.z + 0.5 * gridRange) / gridRange);
-            newVisivilityArea = ToVisivilityArea(num, visivilityAreaGrid[gridPositionX][gridPositionZ].canVisivleAreaPosition);
-            visivilityAreaGrid[gridPositionX][gridPositionZ] = newVisivilityArea;
+            newVisivilityArea = ToVisivilityArea(num, visivilityAreaGrid[gridPositionX][gridPositionY][gridPositionZ].canVisivleAreaPosition);
+            visivilityAreaGrid[gridPositionX][gridPositionY][gridPositionZ] = newVisivilityArea;
         }
 
 
@@ -761,18 +822,20 @@ namespace Scenes.Ingame.Enemy
                 {
                     for (byte x = 0; x < visivilityAreaGrid.Count(); x++)
                     {
-                        for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
-                        {
-                            //マスが対象範囲(ハードコードで50にしてある)か調べる                          
-                            if (50 > Vector3.Magnitude(playerPosition - (centerPosition + ToVector3(x, 0, z) * gridRange)))
+                        for (byte y = 0; y < visivilityAreaGrid[0].Count(); y++) {
+                            for (byte z = 0; z < visivilityAreaGrid[0].Count(); z++)
                             {
-                                //対象内の場合見た回数を0とする
-                                newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[x][z].watchNum + 1), visivilityAreaGrid[x][z].canVisivleAreaPosition);
-                                visivilityAreaGrid[x][z] = newVisivilityArea;
-                                if (debugMode) { DrawCross((centerPosition + ToVector3(x, 0, z) * gridRange), 5, Color.magenta, 2f); }
-                            }
-                            else
-                            {
+                                //マスが対象範囲(ハードコードで50にしてある)か調べる                          
+                                if (50 > Vector3.Magnitude(playerPosition - (centerPosition + ToVector3(x, y, z) * gridRange)))
+                                {
+                                    //対象内の場合見た回数を0とする
+                                    newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[x][y][z].watchNum + 1), visivilityAreaGrid[x][y][z].canVisivleAreaPosition);
+                                    visivilityAreaGrid[x][y][z] = newVisivilityArea;
+                                    if (debugMode) { DrawCross((centerPosition + ToVector3(x, y, z) * gridRange), 5, Color.magenta, 2f); }
+                                }
+                                else
+                                {
+                                }
                             }
                         }
                     }
