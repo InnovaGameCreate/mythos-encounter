@@ -2743,6 +2743,10 @@ PrefabInstance:
       value: 19
       objectReference: {fileID: 0}
     - target: {fileID: 1614493044594472170, guid: bba2b43ed544a404ba6e0b9ccad16846, type: 3}
+      propertyPath: _y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1614493044594472170, guid: bba2b43ed544a404ba6e0b9ccad16846, type: 3}
       propertyPath: _z
       value: 19
       objectReference: {fileID: 0}
