@@ -139,15 +139,8 @@ namespace Scenes.Ingame.Player
             {
                 _enemyAttackedMe.OnNext(default);
             }
-
-            if (Input.GetKeyDown(KeyCode.M)) {
-                Debug.Log($"_isアドレナリンは{_isBuffedAdrenaline}");
-            }
-
-            if (Input.GetKeyDown(KeyCode.N)) {
-    
-            }
          
+
         }
 
         /// <summary>
