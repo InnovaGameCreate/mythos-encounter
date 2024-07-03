@@ -120,7 +120,7 @@ namespace Scenes.Ingame.Player
         // Update is called once per frame
         void Update()
         {
-#if UNITY_EDITOR
+
             //デバッグ用.(必要無くなれば消す)
             if (Input.GetKeyDown(KeyCode.L))
             {
@@ -147,7 +147,7 @@ namespace Scenes.Ingame.Player
             if (Input.GetKeyDown(KeyCode.N)) {
     
             }
-#endif           
+         
         }
 
         /// <summary>
