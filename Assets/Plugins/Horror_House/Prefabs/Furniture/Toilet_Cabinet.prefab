@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 372794287650274581}
   - component: {fileID: 5240013730682685493}
   - component: {fileID: 6207225465436183222}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Toilet_Cabinet_Box_LOD2
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -201,9 +201,9 @@ GameObject:
   - component: {fileID: 1497496055133386387}
   - component: {fileID: 8716252795489392177}
   - component: {fileID: 6880836467895431135}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Toilet_Cabinet_Box_LOD0
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -344,7 +344,7 @@ Transform:
   - {fileID: 5226197730186861432}
   - {fileID: 7339766974653062996}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!205 &701880667376962476
 LODGroup:
@@ -387,9 +387,9 @@ GameObject:
   - component: {fileID: 4541201332009445792}
   - component: {fileID: 2210725396636972234}
   - component: {fileID: 1844576693736297815}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Toilet_Cabinet_Box_LOD1
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

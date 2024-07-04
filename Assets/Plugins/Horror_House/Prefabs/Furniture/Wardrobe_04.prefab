@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 1005845583282322004}
   - component: {fileID: 8670383314192168327}
   - component: {fileID: 5579919215103553775}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wardrobe_04_Door_02_LOD0
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 50747862763709430}
-  m_LocalRotation: {x: -0, y: -0.2274936, z: -0, w: 0.9737796}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.29479456, y: 0.18780279, z: 0.30537912}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -35,7 +35,7 @@ Transform:
   - {fileID: 7911234440305008501}
   m_Father: {fileID: 9214117382904198360}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: -26.299002, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &744484960752590301
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -134,9 +134,9 @@ GameObject:
   - component: {fileID: 6592283069996061020}
   - component: {fileID: 5424137448535871615}
   - component: {fileID: 9111703366270712561}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wardrobe_04_Box_LOD0
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -253,9 +253,9 @@ GameObject:
   - component: {fileID: 8656100163911762861}
   - component: {fileID: 4767885754121397226}
   - component: {fileID: 3022597627837352233}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wardrobe_04_Box_LOD1
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -338,9 +338,9 @@ GameObject:
   - component: {fileID: 5102722723372854814}
   - component: {fileID: 4192782946476659158}
   - component: {fileID: 1151600324341920840}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wardrobe_04_Box_02_LOD0
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -457,9 +457,9 @@ GameObject:
   - component: {fileID: 7911234440305008501}
   - component: {fileID: 4541373142175522846}
   - component: {fileID: 5998006567571295234}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wardrobe_04_Door_02_LOD1
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -647,9 +647,9 @@ GameObject:
   - component: {fileID: 5954979597879770013}
   - component: {fileID: 4426492301157149374}
   - component: {fileID: 2120690529737278654}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wardrobe_04_Door_01_LOD0
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -661,7 +661,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2124689764218113602}
-  m_LocalRotation: {x: -0, y: 0.7066952, z: -0, w: 0.7075182}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.29479456, y: 0.18780279, z: -0.9257658}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -669,7 +669,7 @@ Transform:
   - {fileID: 2829644169937261626}
   m_Father: {fileID: 9214117382904198360}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 89.93301, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5609084196190057590
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -766,9 +766,9 @@ GameObject:
   - component: {fileID: 2829644169937261626}
   - component: {fileID: 6510513289070715039}
   - component: {fileID: 1654271236730664632}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wardrobe_04_Door_01_LOD1
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1017,9 +1017,9 @@ GameObject:
   - component: {fileID: 6472759416560152262}
   - component: {fileID: 1682545659220518236}
   - component: {fileID: 3537712702752636715}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wardrobe_04_Door_03_LOD0
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1136,9 +1136,9 @@ GameObject:
   - component: {fileID: 6158558971483005912}
   - component: {fileID: 5057115154325660329}
   - component: {fileID: 5476820243722618017}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wardrobe_04_Box_02_LOD1
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1219,9 +1219,9 @@ GameObject:
   - component: {fileID: 8562164086231801089}
   - component: {fileID: 5544240002997442163}
   - component: {fileID: 303899306095171131}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Wardrobe_04_Door_03_LOD1
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1329,7 +1329,7 @@ Transform:
   - {fileID: 6333483586382691845}
   - {fileID: 5513789401610425847}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!205 &4144720516731569065
 LODGroup:
