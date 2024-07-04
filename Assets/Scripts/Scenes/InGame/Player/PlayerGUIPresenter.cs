@@ -25,6 +25,8 @@ namespace Scenes.Ingame.Player
         //View
         [SerializeField] private DisplayPlayerStatusManager _displayPlayerStatusManager;
 
+        [Header("カーソル設定")][SerializeField] private bool _isCurcleSetting = false;
+
         [Header("ゲーム内UI(オンライン)")]
         [SerializeField] private Slider[] _healthSliders;//各プレイヤーのHPバー
         [SerializeField] private Slider[] _sanValueSliders;//各プレイヤーのSAN値バー
@@ -61,6 +63,9 @@ namespace Scenes.Ingame.Player
         {
             _castGauge.enabled = false;
             _defaulStaminaGaugetWidth = _staminaGaugeFrontRect.sizeDelta.x;
+
+            if (_isCurcleSetting)
+                CursorSetting(true);
 
             //プレイヤーの作成が終わり、配列のソートが終了したら叩かれる
             _displayPlayerStatusManager.OnCompleteSort
@@ -254,6 +259,25 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
+        /// カーソルの設定を行う関数
+        /// </summary>
+        /// <param name="WannaLock">Lockしたいか否か</param>
+        public void CursorSetting(bool WannaLock)
+        {
+            if (WannaLock)
+            {
+                Cursor.visible = false;
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            else
+            {
+                Cursor.visible = true;
+                Cursor.lockState = CursorLockMode.None;
+            }
+            
+        }
+
+        /// <summary>
         /// Sliderの値を変える為の関数.Slider,Textに直接参照している
         /// </summary>
         /// <param name="value">Slinder.Valueに代入する値</param>
@@ -299,8 +323,5 @@ namespace Scenes.Ingame.Player
                 image.DOColor(Color.white, 0f);
             }
         }
-
-
-        //～～アイテム関連の処理を記述する場所～～
     }
 }

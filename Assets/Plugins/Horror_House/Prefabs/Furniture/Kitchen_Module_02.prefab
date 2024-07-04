@@ -96,9 +96,9 @@ GameObject:
   - component: {fileID: 7474755867737754881}
   - component: {fileID: 4343906883925003445}
   - component: {fileID: 6304722171209023866}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Kitchen_Module_02_Door_LOD0
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -383,9 +383,9 @@ GameObject:
   - component: {fileID: 5985081083885328633}
   - component: {fileID: 8334842078230158613}
   - component: {fileID: 1007798628674686543}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Kitchen_Module_02_Door_LOD1
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -466,9 +466,9 @@ GameObject:
   - component: {fileID: 3960910377791226900}
   - component: {fileID: 4125763591502800051}
   - component: {fileID: 6598899064036009557}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Kitchen_Module_02,1_Door_LOD1
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -551,9 +551,9 @@ GameObject:
   - component: {fileID: 1998219190220666786}
   - component: {fileID: 151806117542822374}
   - component: {fileID: 5311988785827351437}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: Kitchen_Module_02,1_Door_LOD0
-  m_TagString: Untagged
+  m_TagString: StageIntract
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
