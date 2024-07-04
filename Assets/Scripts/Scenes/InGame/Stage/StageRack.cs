@@ -54,7 +54,7 @@ namespace Scenes.Ingame.Stage
             }
         }
 
-        private void AnimationcComplete()
+        private void AnimationComplete()
         {
             _rackCollider.isTrigger = false;
             _isAnimation = false;
@@ -64,33 +64,31 @@ namespace Scenes.Ingame.Stage
         {
             if (drawType == DrawType.RightOpen)
             {
-                transform.DORotate(R_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine);
+                transform.DORotate(R_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(AnimationComplete);
             }
             else if (drawType == DrawType.LeftOpen)
             {
-                transform.DORotate(L_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine);
+                transform.DORotate(L_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(AnimationComplete);
             }
             else if (drawType == DrawType.DrawOpen)
             {
-                transform.DOLocalMove(0.3f * D_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine);
+                transform.DOLocalMove(0.3f * D_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(AnimationComplete);
             }
-            AnimationcComplete();
         }
         private void RackClose()
         {
             if (drawType == DrawType.RightOpen)
             {
-                transform.DORotate(-R_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine);
+                transform.DORotate(-R_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(AnimationComplete);
             }
             if (drawType == DrawType.LeftOpen)
             {
-                transform.DORotate(-L_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine);
+                transform.DORotate(-L_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(AnimationComplete);
             }
             if (drawType == DrawType.DrawOpen)
             {
-                transform.DOLocalMove(0.3f * -D_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine);
+                transform.DOLocalMove(0.3f * -D_OPENVALUE, 1).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(AnimationComplete);
             }
-            AnimationcComplete();
         }
         public string ReturnPopString()
         {
