@@ -130,7 +130,7 @@ namespace Scenes.Ingame.Stage
             {
                 for (int x = 0; x < _stageSize.x + 1; x++)
                 {
-                    instantiatePosition = ToVector3(x * TILESIZE, (floor + 1) * 5.8f, y * TILESIZE);
+                    instantiatePosition = ToVector3(x * TILESIZE, (floor + 1) * 5.9f, y * TILESIZE);
                     checkPosition = ToVector2(x, y);
                     if (floor == 0)
                     {
@@ -148,7 +148,7 @@ namespace Scenes.Ingame.Stage
                         Instantiate(_prefabPool.getTilePrefab, instantiatePosition, Quaternion.identity, secondFloorObject.transform);
                     }
 
-                    instantiatePosition = ToVector3(x * TILESIZE, floor * 5.8f, y * TILESIZE);
+                    instantiatePosition = ToVector3(x * TILESIZE, floor * TILESIZE, y * TILESIZE);
                     if (x == 0)
                     {
                         Instantiate(_prefabPool.getOutSideWallXPrefab, instantiatePosition, Quaternion.identity, outSideWallObject.transform);
