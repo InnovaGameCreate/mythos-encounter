@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -771,6 +771,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1318592374272218765, guid: 50bdab7d98cd7e74a8fbc46f11327523, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3051247044438801286, guid: 50bdab7d98cd7e74a8fbc46f11327523, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3443565738485771131, guid: 50bdab7d98cd7e74a8fbc46f11327523, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -778,6 +786,18 @@ PrefabInstance:
     - target: {fileID: 3443565738485771131, guid: 50bdab7d98cd7e74a8fbc46f11327523, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3543928421603309800, guid: 50bdab7d98cd7e74a8fbc46f11327523, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3845141981099303174, guid: 50bdab7d98cd7e74a8fbc46f11327523, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5642989641621043144, guid: 50bdab7d98cd7e74a8fbc46f11327523, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6891736726484430825, guid: 50bdab7d98cd7e74a8fbc46f11327523, type: 3}
       propertyPath: _itemSlots.Array.size
@@ -854,6 +874,14 @@ PrefabInstance:
     - target: {fileID: 7052893467612382858, guid: 50bdab7d98cd7e74a8fbc46f11327523, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7100779994014573214, guid: 50bdab7d98cd7e74a8fbc46f11327523, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9095092579557727937, guid: 50bdab7d98cd7e74a8fbc46f11327523, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
