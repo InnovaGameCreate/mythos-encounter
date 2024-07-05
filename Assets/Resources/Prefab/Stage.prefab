@@ -246,7 +246,7 @@ MonoBehaviour:
   levelNameToSave: Default
   levelDimensionX: 125
   levelDimensionY: 125
-  unitScale: 1
+  unitScale: 1.5
   scanSpacingPerUnit: 0.25
   rayStartHeight: 5
   rayMaxDistance: 10
@@ -358,7 +358,7 @@ Transform:
   - {fileID: 4262955829018097603}
   - {fileID: 2997796602784301469}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2817882825628233842
 MonoBehaviour:
@@ -510,7 +510,7 @@ MonoBehaviour:
   levelNameToSave: Default
   levelDimensionX: 125
   levelDimensionY: 125
-  unitScale: 1
+  unitScale: 1.5
   scanSpacingPerUnit: 0.25
   rayStartHeight: 5
   rayMaxDistance: 10
