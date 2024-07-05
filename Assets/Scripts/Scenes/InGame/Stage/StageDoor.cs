@@ -87,7 +87,7 @@ namespace Scenes.Ingame.Stage
 
             if (_isAnimation)
             {
-                Debug.LogWarning("�A�j���[�V�������ł�");
+                Debug.LogWarning("アニメーションが終了していません");
  
             }
             else {
@@ -116,13 +116,15 @@ namespace Scenes.Ingame.Stage
         /// <summary>
         /// �h�A��ݒ肳��Ă���������Ԃɖ߂�
         /// </summary>
-        public void ChangeDoorInitial() {
+        public void ChangeDoorInitial()
+        {
             if (_isAnimation)
             {
                 Debug.LogWarning("�A�j���[�V�������ł�");
 
             }
-            else {
+            else
+            {
                 if (_initialStateOpen)
                 {
                     if (!_isOpen)
@@ -142,6 +144,7 @@ namespace Scenes.Ingame.Stage
                     }
                 }
             }
+        }
 
         public string ReturnPopString()
         {

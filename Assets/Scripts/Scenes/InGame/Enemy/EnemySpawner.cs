@@ -86,20 +86,8 @@ namespace Scenes.Ingame.Enemy
 
 
         private async UniTaskVoid InitialSpawn(CancellationToken token) {
-            //ドアを入手
-            foreach (var doorObject in GameObject.FindGameObjectsWithTag("Door").ToArray<GameObject>())
-            {
-                StageDoor getDoorCs;
-                if (doorObject.TryGetComponent<StageDoor>(out getDoorCs))
-                {
-                    _doors.Add(getDoorCs);
-                }
-                else
-                {
-                    Debug.LogWarning("Door.csを持たないDoorタグのオブジェクト「" + doorObject + "」があります");
-                }
-            }
-
+            
+            _doors = new List<StageDoor>(FindObjectsOfType<StageDoor>());
 
 
             //全てのドアが動き終わったか確認する
