@@ -5,6 +5,7 @@ using UniRx;
 using UniRx.Triggers;
 using System;
 using System.Linq;
+using EPOOutline;
 using Scenes.Ingame.InGameSystem;
 
 namespace Scenes.Ingame.Player
@@ -67,7 +68,7 @@ namespace Scenes.Ingame.Player
             scrollValue = 0;
 
             RaycastHit hit = new RaycastHit();
-            Outline outline;
+            Outlinable outline;
             GameObject hitObject = null;
             //視線の先にアイテムがあるか確認。あれば右クリックで拾得できるようにする
             this.UpdateAsObservable()
@@ -87,7 +88,7 @@ namespace Scenes.Ingame.Player
                                 if (hitObject != null)
                                 {
                                     //アウトラインの処理
-                                    hitObject.TryGetComponent<Outline>(out outline);
+                                    hitObject.TryGetComponent<Outlinable>(out outline);
                                     if (outline != null)
                                         outline.enabled = false;
 
@@ -104,7 +105,7 @@ namespace Scenes.Ingame.Player
                             {
                                 _popActive.OnNext("脱出アイテム");//アイテムポップが出現
                                 escapeItemIntract.Intract(_myPlayerStatus);
-                                escapeItem.gameObject.GetComponent<Outline>().enabled = true;//アウトライン表示
+                                escapeItem.gameObject.GetComponent<Outlinable>().enabled = true;//アウトライン表示
                             }
 
                             //脱出アイテム以外のアイテムの時
@@ -113,13 +114,13 @@ namespace Scenes.Ingame.Player
                                 string name = item.GetItemData().itemName;
                                 _popActive.OnNext(name);//アイテムポップが出現
                                 itemIntract.Intract(_myPlayerStatus);
-                                item.gameObject.GetComponent<Outline>().enabled = true;//アウトライン表示
+                                item.gameObject.GetComponent<Outlinable>().enabled = true;//アウトライン表示
                             }
 
                             //StageIntract（ドアなど）のとき
                             if (hit.collider.gameObject.CompareTag("StageIntract") && hit.collider.gameObject.TryGetComponent(out IInteractable intract))
                             {
-                                hit.collider.gameObject.GetComponent<Outline>().enabled = true;//アウトライン表示
+                                hit.collider.gameObject.GetComponent<Outlinable>().enabled = true;//アウトライン表示
                                 intract.Intract(_myPlayerStatus);
                                 _popActive.OnNext(intract.ReturnPopString());
                             }
@@ -131,7 +132,7 @@ namespace Scenes.Ingame.Player
                             if (hitObject != null)
                             {
                                 //アウトラインの処理
-                                hitObject.TryGetComponent<Outline>(out outline);
+                                hitObject.TryGetComponent<Outlinable>(out outline);
                                 if (outline != null)
                                     outline.enabled = false;
 
