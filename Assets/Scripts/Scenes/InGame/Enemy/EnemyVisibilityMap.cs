@@ -152,17 +152,12 @@ namespace Scenes.Ingame.Enemy
                                                                              //視界が通るか＝Rayが通るか
                                             bool hit;//ドアとかインタラクトできるのも関連以外
                                             Ray ray = new Ray(centerPosition + ToVector3(x * gridRange, y * gridRange, z * gridRange), ToVector3(vX - x, vY - y, vZ - z));
-                                            hit = Physics.Raycast(ray, out RaycastHit hitInfo, range, ~(LayerMask.GetMask("StageIntract", "Player")), QueryTriggerInteraction.Collide);
+                                            hit = Physics.Raycast(ray,  range, ~(LayerMask.GetMask("StageIntract", "Player")), QueryTriggerInteraction.Collide);
                                             if (!hit)
                                             { //何にもあたっていなかった場合
-
-
-
-
                                                 if (debugMode) Debug.DrawRay(ray.origin, ray.direction * range, Color.green, 10);
-                                                visivilityAreaGrid[x][y][z].canVisivleAreaPosition.Add(new TripleByteAndMonoFloat(vX, vY, vZ, range));
+                                                visivilityAreaGrid[x][y][z].canVisivleAreaPosition.Add(new TripleByteAndMonoFloat(vX, vY, vZ, range));//追加
                                             }
-
                                         }
                                     }
 
@@ -193,13 +188,9 @@ namespace Scenes.Ingame.Enemy
                         {
 
                             float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaPosition.x) * gridRange, 2) + Mathf.Pow((y - visivilityAreaPosition.y) * gridRange, 2) + Mathf.Pow((z - visivilityAreaPosition.z) * gridRange, 2));
-
-
                             //各エリアのグリッドにアクセス
                             Ray ray = new Ray(centerPosition + ToVector3(x * gridRange, y * gridRange, z * gridRange), ToVector3(visivilityAreaPosition.x - x, visivilityAreaPosition.y - y, visivilityAreaPosition.z - z));
-
-
-                            foreach (RaycastHit doorHit in Physics.RaycastAll(ray.origin, ray.direction, range, 4096, QueryTriggerInteraction.Collide).ToArray<RaycastHit>())
+                            foreach (RaycastHit doorHit in Physics.RaycastAll(ray.origin, ray.direction, range, LayerMask.GetMask("StageIntract"), QueryTriggerInteraction.Collide).ToArray<RaycastHit>())
                             {//命中したすべてのドアにアクセス
                                 if (doorHit.collider.gameObject.TryGetComponent<StageDoor>(out StageDoor stageDoorCs))
                                 {
@@ -207,7 +198,6 @@ namespace Scenes.Ingame.Enemy
                                     visivilityAreaPosition.needOpenDoor.Add(stageDoorCs);
 
                                 }
-                                else { Debug.LogWarning("ドアのタグが付いているのにStageDoor.csが付いていないオブジェクトがある"); }
                             }
                         }
                     }
@@ -234,15 +224,10 @@ namespace Scenes.Ingame.Enemy
                     {
                         foreach (TripleByteAndMonoFloat visivilityAreaPosition in visivilityAreaGrid[x][y][z].canVisivleAreaPosition)//各マス目ごとの見えるであろうマスにアクセス
                         {
-
                             float range = Mathf.Sqrt(Mathf.Pow((x - visivilityAreaPosition.x) * gridRange, 2) + Mathf.Pow((y - visivilityAreaPosition.y) * gridRange, 2) + Mathf.Pow((z - visivilityAreaPosition.z) * gridRange, 2));
-
-
                             //各エリアのグリッドにアクセス
                             Ray ray = new Ray(centerPosition + ToVector3(x * gridRange, y * gridRange, z * gridRange), ToVector3(visivilityAreaPosition.x - x, visivilityAreaPosition.y - y, visivilityAreaPosition.z - z));
-
-
-                            foreach (RaycastHit doorHit in Physics.RaycastAll(ray.origin, ray.direction, range, 4096, QueryTriggerInteraction.Collide).ToArray<RaycastHit>())
+                            foreach (RaycastHit doorHit in Physics.RaycastAll(ray.origin, ray.direction, range, LayerMask.GetMask("StageIntract"), QueryTriggerInteraction.Collide).ToArray<RaycastHit>())
                             {//命中したすべてのドアにアクセス
                                 if (doorHit.collider.gameObject.TryGetComponent<StageDoor>(out StageDoor stageDoorCs))
                                 {
@@ -250,7 +235,6 @@ namespace Scenes.Ingame.Enemy
                                     visivilityAreaPosition.needCloseDoor.Add(stageDoorCs);
 
                                 }
-                                else { Debug.LogWarning("ドアのタグが付いているのにStageDoor.csが付いていないオブジェクトがある"); }
                             }
                         }
                     }
