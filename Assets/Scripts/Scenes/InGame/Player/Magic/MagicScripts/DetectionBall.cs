@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using EPOOutline;
 using Scenes.Ingame.InGameSystem;
 
 namespace Scenes.Ingame.Player
@@ -23,7 +24,7 @@ namespace Scenes.Ingame.Player
             //脱出アイテムに触れたらアウトラインを表示させる（デモ版）
             if (other.gameObject.CompareTag("Item") && other.gameObject.GetComponent<EscapeItem>())
             {
-                var outline = other.gameObject.GetComponent<Outline>();
+                var outline = other.gameObject.GetComponent<Outlinable>();
                 outline.enabled = true;
 
                 this.gameObject.SetActive(false);
@@ -33,7 +34,7 @@ namespace Scenes.Ingame.Player
             /*
             if (other.gameObject.CompareTag("Item") && other.gameObject.GetComponent<EscapeItem>())
             {
-                var outline = other.gameObject.GetComponent<Outline>();
+                var outline = other.gameObject.GetComponent<Outlinable>();
                 outline.enabled = true;
             }
             */

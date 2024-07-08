@@ -2,6 +2,7 @@ using Scenes.Ingame.InGameSystem;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using EPOOutline;
 
 namespace Scenes.Ingame.Player
 {
@@ -89,7 +90,7 @@ namespace Scenes.Ingame.Player
                 if (escapeItems[i] == null)
                     continue;
                 else
-                    escapeItems[i].gameObject.GetComponent<Outline>().enabled = false;
+                    escapeItems[i].gameObject.GetComponent<Outlinable>().enabled = false;
             }
         }
 
