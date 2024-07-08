@@ -1,6 +1,8 @@
+using Scenes.Ingame.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
 
 public class EnemyBallet : MonoBehaviour
 {
@@ -27,7 +29,9 @@ public class EnemyBallet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Player") { //ñΩíÜÇæÅI
-            collision.gameObject.GetComponent<Scenes.Ingame.Player.PlayerStatus>().ChangeHealth(_damage, "Damage");
+            PlayerStatus playerStatus = collision.gameObject.GetComponent<PlayerStatus>();
+            playerStatus.ChangeHealth(_damage, "Damage");
+            playerStatus.OnEnemyAttackedMeEvent.OnNext(Unit.Default);
             Destroy(this.gameObject);
         } else if (collision.gameObject.tag == "Stage") {
             Destroy(this.gameObject);

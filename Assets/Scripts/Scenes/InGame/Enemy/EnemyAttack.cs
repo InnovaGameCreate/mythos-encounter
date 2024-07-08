@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using System;
 
 
 namespace Scenes.Ingame.Enemy
@@ -81,6 +82,8 @@ namespace Scenes.Ingame.Enemy
                 } 
             }).AddTo(this);
 
+            if(_debugMode)_playerStatus.OnEnemyAttackedMe.Subscribe(_ => Debug.Log("攻撃された"));
+
         }
 
         // Update is called once per frame
@@ -120,6 +123,8 @@ namespace Scenes.Ingame.Enemy
                                     _shotTimeCount = 0;//遠隔から近接の距離に入った瞬間2連続で攻撃が行われないために両方のカウントを0にしている。
                                     if (_debugMode) Debug.Log("ここで近接攻撃！");
                                     _playerStatus.ChangeHealth(_attackPower, "Damage");
+                                    _playerStatus.OnEnemyAttackedMeEvent.OnNext(Unit.Default);
+
                                 }
 
 
