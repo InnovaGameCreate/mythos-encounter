@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using EPOOutline;
 using Scenes.Ingame.InGameSystem;
+using System.Diagnostics.Contracts;
 
 namespace Scenes.Ingame.Player
 {
@@ -68,8 +69,6 @@ namespace Scenes.Ingame.Player
             scrollValue = 0;
 
             RaycastHit hit = new RaycastHit();
-            Outlinable outline;
-            GameObject hitObject = null;
             //視線の先にアイテムがあるか確認。あれば右クリックで拾得できるようにする
             this.UpdateAsObservable()
                     .Subscribe(_ =>
@@ -82,65 +81,46 @@ namespace Scenes.Ingame.Player
                                 Debug.DrawRay(_mainCamera.transform.position, _mainCamera.transform.forward, Color.black);
                             }
                             //raycast先のオブジェクトが変化した際にOutlineを非表示にする
+
                             if (_lastGameobject != null &&
                             _lastOutlinable != null &&
                             _lastGameobject != hit.collider.gameObject)
                             {
-                                _lastOutlinable.enabled = false;
+                                IntractEvent(false, "");
                             }
                             _lastGameobject = hit.collider.gameObject;
 
-                            //Rayに当たったゲームオブジェクトを格納(壁に当たった場合は別処理)
-                            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
+                            if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
                             {
-                                _popActive.OnNext(null);
-                                if (hitObject != null)
+                                interactable.Intract(_myPlayerStatus);
+
+                                if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out EscapeItem escapeItem))
                                 {
-                                    //アウトラインの処理
-                                    hitObject.TryGetComponent<Outlinable>(out outline);
-                                    if (outline != null)
-                                        outline.enabled = false;
-
-                                    hitObject = null;
+                                    //脱出アイテムだった時
+                                    _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
+                                    IntractEvent(true, "脱出アイテム");//アウトライン表示
                                 }
-                            }
-                            else
-                            {
-                                hitObject = hit.collider.gameObject;
-                            }
-
-                            //脱出アイテムだった時
-                            if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out EscapeItem escapeItem) && hit.collider.gameObject.TryGetComponent(out IInteractable escapeItemIntract))
-                            {
-                                _popActive.OnNext("脱出アイテム");//アイテムポップが出現
-                                escapeItemIntract.Intract(_myPlayerStatus);
-                                _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
-                                _lastOutlinable.enabled = true;//アウトライン表示
-                            }
-                            else if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out ItemEffect item) && hit.collider.gameObject.TryGetComponent(out IInteractable itemIntract))
-                            {   //脱出アイテム以外のアイテムの時
-                                string name = item.GetItemData().itemName;
-                                _popActive.OnNext(name);//アイテムポップが出現
-                                itemIntract.Intract(_myPlayerStatus);
-                                _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
-                                _lastOutlinable.enabled = true;//アウトライン表示
-                            }
-                            else if (hit.collider.gameObject.CompareTag("StageIntract") && hit.collider.gameObject.TryGetComponent(out IInteractable intract))
-                            {   //StageIntract（ドアなど）のとき
-                                _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
-                                _lastOutlinable.enabled = true;//アウトライン表示
-                                intract.Intract(_myPlayerStatus);
-                                _popActive.OnNext(intract.ReturnPopString());
+                                else if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out ItemEffect item))
+                                {
+                                    //脱出アイテム以外のアイテムの時
+                                    string name = item.GetItemData().itemName;
+                                    _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
+                                    IntractEvent(true, name);//アウトライン表示
+                                }
+                                else if (hit.collider.gameObject.CompareTag("StageIntract"))
+                                {
+                                    //StageIntract（ドアなど）のとき
+                                    _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
+                                    IntractEvent(true, interactable.ReturnPopString());//アウトライン表示
+                                }
                             }
                         }
                         else
                         {
-                            _popActive.OnNext(null);
                             //Rayに何も当たらなかった時の処理
                             if (_lastOutlinable != null)
                             {
-                                _lastOutlinable.enabled = false;
-                                _lastOutlinable = null;
+                                IntractEvent(false, "");
                             }
                         }
                     });
@@ -227,6 +207,12 @@ namespace Scenes.Ingame.Player
                             }
                         }
                     });
+        }
+
+        private void IntractEvent(bool outlineValue, string popString)
+        {
+            _lastOutlinable.enabled = outlineValue;
+            _popActive.OnNext(popString);
         }
 
         private void Update()
