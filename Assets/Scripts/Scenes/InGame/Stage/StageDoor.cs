@@ -9,9 +9,13 @@ namespace Scenes.Ingame.Stage
         [SerializeField]
         private bool _initialStateOpen = true;
         private bool _isOpen = false;
-        private bool _isAnimation = false;
+        [SerializeField] private bool _isAnimation = false;
         private Vector3 OPENVALUE = new Vector3(0, 90, 0);
         private BoxCollider _doorCollider;
+
+        public bool ReturnIsOpen { get { return _isOpen; } }
+        public bool ReturnIsAnimation { get { return _isAnimation; } }
+
         public void Intract(PlayerStatus status)
         {
             if (Input.GetMouseButtonDown(1) && _isAnimation == false)
@@ -37,8 +41,9 @@ namespace Scenes.Ingame.Stage
             _doorCollider = GetComponent<BoxCollider>();
             if (_initialStateOpen)
             {
+                _isAnimation = true;
                 _doorCollider.isTrigger = false;
-                DoorOpen();
+                QuickDoorOpen();
                 _isOpen = true;
             }
         }
@@ -59,6 +64,89 @@ namespace Scenes.Ingame.Stage
             });
         }
 
+        private void QuickDoorOpen()
+        {
+            transform.DORotate(OPENVALUE, 0).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(() =>
+            {
+                _doorCollider.isTrigger = false;
+                _isAnimation = false;
+            });
+        }
+
+        private void QuickDoorClose()
+        {
+            transform.DORotate(-OPENVALUE, 0).SetRelative(true).SetEase(Ease.InOutSine).OnComplete(() =>
+            {
+                _doorCollider.isTrigger = false;
+                _isAnimation = false;
+            });
+        }
+
+        public void ChangeDoorQuickOpen(bool open)
+        {
+
+            if (_isAnimation)
+            {
+                Debug.LogWarning("アニメーション中です");
+
+            }
+            else
+            {
+
+                if (open)
+                {
+                    if (!_isOpen)
+                    {
+                        _isAnimation = true;
+                        QuickDoorOpen();
+                        _isOpen = true;
+                    }
+                }
+                else
+                {
+                    if (_isOpen)
+                    {
+                        _isAnimation = true;
+                        QuickDoorClose();
+                        _isOpen = false;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// ドアを設定されていた初期状態に戻す
+        /// </summary>
+        public void ChangeDoorInitial()
+        {
+            if (_isAnimation)
+            {
+                Debug.LogWarning("アニメーション中です");
+
+            }
+            else
+            {
+                if (_initialStateOpen)
+                {
+                    if (!_isOpen)
+                    {
+                        _isAnimation = true;
+                        QuickDoorOpen();
+                        _isOpen = true;
+                    }
+                }
+                else
+                {
+                    if (_isOpen)
+                    {
+                        _isAnimation = true;
+                        QuickDoorClose();
+                        _isOpen = false;
+                    }
+                }
+            }
+        }
+
         public string ReturnPopString()
         {
             if (_isOpen)
@@ -66,5 +154,6 @@ namespace Scenes.Ingame.Stage
             else
                 return "Open";
         }
+
     }
 }
