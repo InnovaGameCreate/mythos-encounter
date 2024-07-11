@@ -369,6 +369,15 @@ namespace Scenes.Ingame.Player
             }
             else //死んだとき
             {
+                //死因に応じて死亡時アニメーションを変える
+                if (_health.Value <= 0)//体力が0で死んだとき
+                { 
+                
+                }
+                else if(_san.Value <= 0)//SAN値が0で死んだとき
+                {
+                     
+                }
                 _anim.SetBool("Survive", false);
                 _playerMagic.ChangeCanUseMagicBool(false);
                 return;

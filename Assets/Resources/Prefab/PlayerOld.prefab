@@ -441,7 +441,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _characterController: {fileID: 1212518499987544778}
   _myPlayerStatus: {fileID: 123063826094000374}
-  _myPlayerSoundManager: {fileID: 7111757753802298086}
   _camera: {fileID: 2217506152449124184}
   _animator: {fileID: 3828261050524690517}
   moveSpeed: 0
@@ -492,6 +491,9 @@ MonoBehaviour:
   _runVolume:
     value: 0
   _anim: {fileID: 3828261050524690517}
+  _controller: {fileID: 1212518499987544778}
+  _cupsuleCollider: {fileID: 3801678524532269845}
+  _playerMagic: {fileID: 5250157038054447586}
   lastHP: 0
   lastSanValue: 0
   bleedingDamage: 1
@@ -507,11 +509,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49365891cf10dc7478222266a286094d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _audio: {fileID: 2478478512199155072}
+  _audio: {fileID: 0}
   _footClips:
-  - {fileID: 8300000, guid: d1251f5709207d84b9dda18f7edbe8d9, type: 3}
-  - {fileID: 8300000, guid: 8a1e5e46c922d6f4d9b868324f344303, type: 3}
   - {fileID: 8300000, guid: 92aa88c7813d51e48be80e2c82bc4c34, type: 3}
+  - {fileID: 8300000, guid: 5c43ff49ff354ba4fb09b5669986a3d6, type: 3}
+  - {fileID: 8300000, guid: 4c724762c759eb04bb9ddeb22ac85c84, type: 3}
+  - {fileID: 8300000, guid: d827cfa902f292248bd101ca98590f2a, type: 3}
+  - {fileID: 8300000, guid: bfeeffed7e916b74c8dc429e37a6845f, type: 3}
   _screamClips:
   - {fileID: 8300000, guid: 73d0d866ac1b6b4448ca22c79df25e11, type: 3}
   - {fileID: 8300000, guid: cd603e617d23fb148988f12fef7fe223, type: 3}
