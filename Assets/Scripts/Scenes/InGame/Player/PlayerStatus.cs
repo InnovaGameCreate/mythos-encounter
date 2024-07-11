@@ -89,6 +89,7 @@ namespace Scenes.Ingame.Player
         private bool _isHaveCharm = false;
         private bool _isUseEscapePoint = false;
         private bool _isPulsationBleeding = false;
+        private bool _isBuffedAdrenaline = false;
 
         private void Init()
         {
@@ -172,7 +173,7 @@ namespace Scenes.Ingame.Player
             if (mode == "Heal")
                 _stamina.Value = Mathf.Min(100, _stamina.Value + value);
             else if (mode == "Damage")
-                _stamina.Value = Mathf.Max(0, _stamina.Value - value);
+                _stamina.Value = Mathf.Max(0, _stamina.Value - (int)(value * (_isBuffedAdrenaline ? 0.5f : 1)));
         }
 
         /// <summary>
@@ -317,6 +318,21 @@ namespace Scenes.Ingame.Player
 
             if (sanValue <= 0)
                 _survive.Value = false;
+        }
+
+        public void StartBuff()
+        {
+            StartCoroutine(BuffAdrenaline());
+        }
+        /// <summary>
+        /// アドレナリン上昇状態を変化させるための関数
+        /// </summary>
+        public IEnumerator BuffAdrenaline()
+        {
+            _isBuffedAdrenaline = true;
+            yield return new WaitForSeconds(15.0f);
+            _isBuffedAdrenaline = false;
+            yield break;
         }
     }
 }
