@@ -35,7 +35,7 @@ namespace Scenes.Ingame.Player
 
         [Header("ゲーム内UI(オフライン)")]
         [Header("スタミナ関係")]//スタミナゲージ系
-        [SerializeField] private Image _staminaGaugeBackGround;//個人のスタミナゲージ
+        [SerializeField] private RectMask2D _staminaGaugeMask;//個人のスタミナゲージマスク
         [SerializeField] private RectTransform _staminaGaugeFrontRect;//個人のスタミナゲージ
         [SerializeField] private Image _staminaGaugeFrontImage;//個人のスタミナゲージ
 
@@ -56,13 +56,13 @@ namespace Scenes.Ingame.Player
         private int _myPlayerID = 0;
 
         //スタミナゲージ関連のフィールド
-        private float _defaulStaminaGaugetWidth;
+        private float _defaultStaminaGaugeWidth;
 
         // Start is called before the first frame update
         void Awake()
         {
             _castGauge.enabled = false;
-            _defaulStaminaGaugetWidth = _staminaGaugeFrontRect.sizeDelta.x;
+            _defaultStaminaGaugeWidth = _staminaGaugeFrontRect.sizeDelta.x;
 
             if (_isCurcleSetting)
                 CursorSetting(true);
@@ -101,13 +101,11 @@ namespace Scenes.Ingame.Player
                              ChangeStaminaGauge(x);
                              if (x == 100)
                              { 
-                                _staminaGaugeBackGround.DOFade(endValue: 0f, duration: 1f);
                                 _staminaGaugeFrontImage.DOFade(endValue: 0f, duration: 1f);
                              }
                                  
                              else
                              { 
-                                _staminaGaugeBackGround.DOFade(endValue: 1f, duration: 0f);
                                 _staminaGaugeFrontImage.DOFade(endValue: 1f, duration: 0f);
                              }
                                 
@@ -138,7 +136,7 @@ namespace Scenes.Ingame.Player
                             for (int i = 0; i < _itemSlots.Length; i++)
                             {
                                 if (_playerItem.ItemSlots[i].myItemSlotStatus == ItemSlotStatus.available)
-                                    _itemSlots[i].color = new Color(0.32f , 0.32f , 0.32f);
+                                    _itemSlots[i].color = Color.white;
                             }
                             
                             //選択されているスロットだけ赤色に変化
@@ -288,26 +286,28 @@ namespace Scenes.Ingame.Player
             if (mode == "Health")
             {
                 _healthSliders[ID].value = value;
-                _healthText[ID].text = value.ToString();
+                // _healthText[ID].text = value.ToString();
             }
 
             else if (mode == "SanValue")
             {
                 _sanValueSliders[ID].value = value;
-                _sanValueText[ID].text = value.ToString();
+                // _sanValueText[ID].text = value.ToString();
             }
         }
 
         public void ChangeStaminaGauge(int value)
         {
             //  DoTweenの動作を破棄
-            _staminaGaugeBackGround.DOKill();
             _staminaGaugeFrontImage.DOKill();
 
             //スタミナの値を0～1の値に補正
             float fillAmount = (float)value / _playerStatuses[_myPlayerID].stamina_max;
-            _staminaGaugeFrontRect.sizeDelta = new Vector2(_defaulStaminaGaugetWidth * fillAmount, _staminaGaugeFrontRect.sizeDelta.y);
+            float maskValue = _defaultStaminaGaugeWidth * (1 - fillAmount) / 2;
 
+            // RectMask2Dのleftとrightの値を更新
+            _staminaGaugeMask.padding = new Vector4(maskValue, _staminaGaugeMask.padding.y, maskValue, _staminaGaugeMask.padding.w);
+            
             //スタミナゲージの色変更
             Image image = _staminaGaugeFrontImage.GetComponent<Image>();
             if (0 <= fillAmount && fillAmount <= 0.1)
