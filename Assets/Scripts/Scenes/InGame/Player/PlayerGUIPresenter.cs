@@ -181,8 +181,8 @@ namespace Scenes.Ingame.Player
                                 _itemSlots[replaceEvent.Index].color = Color.blue;
                             else
                             { 
-                                //先にグレーに戻す
-                                _itemSlots[replaceEvent.Index].color = new Color(0.32f, 0.32f, 0.32f);
+                                //先に基本色に戻す
+                                _itemSlots[replaceEvent.Index].color = Color.white;
 
                                 //もし選択中のアイテムスロットなら赤色に戻す
                                 if(replaceEvent.Index == _playerItem.nowIndex)
