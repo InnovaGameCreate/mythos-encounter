@@ -380,7 +380,13 @@ namespace Scenes.Ingame.Player
                 }
                 _anim.SetBool("Survive", false);
                 _playerMagic.ChangeCanUseMagicBool(false);
-                return;
+
+                //画面を暗転させる
+                var fadeBlackImage = FindObjectOfType<Scenes.Ingame.InGameSystem.UI.FadeBlackImage>();
+                if (fadeBlackImage != null)
+                {
+                    fadeBlackImage.FadeInImage();
+                }
             }
         }
 
