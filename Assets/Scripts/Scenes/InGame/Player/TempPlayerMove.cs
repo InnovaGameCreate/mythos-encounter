@@ -128,26 +128,31 @@ namespace Scenes.Ingame.Player
 
         void Update()
         {
-            float moveMouseX = Input.GetAxis("Mouse X");
-            if (Mathf.Abs(moveMouseX) > 0.001f)
+            //生きている間はカメラを操作できる
+            if (_myPlayerStatus.nowPlayerSurvive)
             {
-                // 回転軸はワールド座標のY軸
-                transform.RotateAround(transform.position, Vector3.up, moveMouseX);
-            }
+                float moveMouseX = Input.GetAxis("Mouse X");
+                if (Mathf.Abs(moveMouseX) > 0.001f)
+                {
+                    // 回転軸はワールド座標のY軸
+                    transform.RotateAround(transform.position, Vector3.up, moveMouseX);
+                }
 
-            //カメラをX軸方向に回転させる。視点が上下に動かせるように（範囲に制限あり）
-            float moveMouseY = Input.GetAxis("Mouse Y");
-            if (Mathf.Abs(moveMouseY) > 0.001f)
-            {
-                _nowCameraAngle.x -= moveMouseY;
-                _nowCameraAngle.x = Mathf.Clamp(_nowCameraAngle.x, -40, 60);
-                _camera.gameObject.transform.localEulerAngles = _nowCameraAngle;
+                //カメラをX軸方向に回転させる。視点が上下に動かせるように（範囲に制限あり）
+                float moveMouseY = Input.GetAxis("Mouse Y");
+                if (Mathf.Abs(moveMouseY) > 0.001f)
+                {
+                    _nowCameraAngle.x -= moveMouseY;
+                    _nowCameraAngle.x = Mathf.Clamp(_nowCameraAngle.x, -40, 60);
+                    _camera.gameObject.transform.localEulerAngles = _nowCameraAngle;
+                }
             }
+            
 
             //動ける状態であれば動く
-            if (_isCanMove && !_isCannotMoveByParalyze)
+            if (_isCanMove && !_isCannotMoveByParalyze && _myPlayerStatus.nowPlayerSurvive)
                 Move();
-            else if(!_isCanMove || _isCannotMoveByParalyze)
+            else if(!_isCanMove || _isCannotMoveByParalyze || !_myPlayerStatus.nowPlayerSurvive)
             {
                 _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
                 _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Idle);//待機状態へ移行

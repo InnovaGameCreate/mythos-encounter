@@ -479,7 +479,7 @@ GameObject:
   m_Component:
   - component: {fileID: 848513832572176275}
   - component: {fileID: 1212518499987544778}
-  - component: {fileID: 3801678524532269845}
+  - component: {fileID: 4602485249755492097}
   - component: {fileID: 2478478512199155072}
   - component: {fileID: 8389478554569858200}
   - component: {fileID: 123063826094000374}
@@ -542,7 +542,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 1.4, z: 0}
---- !u!136 &3801678524532269845
+--- !u!136 &4602485249755492097
 CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -725,9 +725,13 @@ MonoBehaviour:
     value: 0
   _runVolume:
     value: 0
+  _anim: {fileID: 7828239267385386567}
+  _controller: {fileID: 1212518499987544778}
+  _cupsuleCollider: {fileID: 4602485249755492097}
   lastHP: 0
   lastSanValue: 0
   bleedingDamage: 1
+  _startDeathAnimation: 0
 --- !u!114 &7111757753802298086
 MonoBehaviour:
   m_ObjectHideFlags: 0
