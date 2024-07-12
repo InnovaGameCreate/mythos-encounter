@@ -197,7 +197,7 @@ namespace Scenes.Ingame.Enemy
                                     _myVisivilityMap.CheckVisivility(this.transform.position, _visivilityRange);
                                     if (_enemyMove.endMove)//移動が終わっている場合
                                     {
-                                        _myVisivilityMap.ChangeGridWatchNum(_myAgent.path.corners[_myAgent.path.corners.Length],1,true);
+                                        _myVisivilityMap.ChangeGridWatchNum(_myAgent.path.corners[_myAgent.path.corners.Length - 1],1,true);
                                         //あらたな移動先を取得するメソッドを書き込む
                                         _enemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
                                     }
