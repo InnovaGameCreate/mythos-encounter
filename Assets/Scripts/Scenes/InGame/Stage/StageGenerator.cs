@@ -32,6 +32,14 @@ namespace Scenes.Ingame.Stage
         private bool playerSpawnRoom = false;
         private bool viewDebugLog = false;//確認用のデバックログを表示する
         private CancellationTokenSource source = new CancellationTokenSource();
+        [Header("Room Size Count")]
+        [SerializeField]
+        private int LARGEROOM = 20;
+        [SerializeField]
+        private int MEDIUMROOM = 12;
+        [SerializeField]
+        private int SMALLROOM = 8;
+
         [Header("Parent")]
         [SerializeField]
         private GameObject floorObject;
@@ -68,7 +76,7 @@ namespace Scenes.Ingame.Stage
             {
                 RoomData[,] targetFloor = new RoomData[(int)_stageSize.x, (int)_stageSize.y];   //データの初期化
                 RoomPlotId(RoomType.room2x2Stair, new Vector2(0, 0), targetFloor);              //確定の階段部屋データの入力
-                RandomFullSpaceRoomPlot(targetFloor, 20, 12, 8);                                //データに部屋のIDの割り当て
+                RandomFullSpaceRoomPlot(targetFloor, LARGEROOM, MEDIUMROOM, SMALLROOM);                                //データに部屋のIDの割り当て
                 if (viewDebugLog) DebugStageData(targetFloor);
                 await RommShaping(token, targetFloor);                                          //空間を埋めるように部屋の大きさを調整
                 targetFloor = GenerateAisle(token, targetFloor);
@@ -176,7 +184,7 @@ namespace Scenes.Ingame.Stage
                         switch (stage[x, y].RoomType)
                         {
                             case RoomType.room2x2:
-                                if (!playerSpawnRoom)
+                                if (!playerSpawnRoom && x >= 3 && y >= 3)
                                 {
                                     Instantiate(_prefabPool.getPlayerSpawnRoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
                                     _spawnPosition = instantiatePosition;

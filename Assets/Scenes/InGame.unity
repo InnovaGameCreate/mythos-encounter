@@ -432,6 +432,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: LARGEROOM
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: SMALLROOM
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: MEDIUMROOM
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: _stageSize.x
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
+      propertyPath: _stageSize.y
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 6624500817061936141, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
       propertyPath: m_Name
       value: Stage
