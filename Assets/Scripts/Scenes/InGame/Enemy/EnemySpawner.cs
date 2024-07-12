@@ -196,7 +196,7 @@ namespace Scenes.Ingame.Enemy
 
             if (_nonInGameManagerMode)
             {
-                EnemySpawn(EnemyName.TestEnemy, new Vector3(-10, _centerPosition.y + 3, -10));
+                EnemySpawn(_enemyName, new Vector3(-10, _centerPosition.y + 3, -10));
             }
             else
             {
