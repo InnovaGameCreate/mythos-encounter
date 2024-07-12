@@ -38,6 +38,7 @@ namespace Scenes.Ingame.Player
         [SerializeField] private RectMask2D _staminaGaugeMask;//個人のスタミナゲージマスク
         [SerializeField] private RectTransform _staminaGaugeFrontRect;//個人のスタミナゲージ
         [SerializeField] private Image _staminaGaugeFrontImage;//個人のスタミナゲージ
+        [SerializeField] private Image _staminaGaugeBackGround;
 
         [SerializeField] private GameObject _pop;//アイテムポップ
         [SerializeField] private TMP_Text _pop_Text;//アイテムポップ
@@ -94,19 +95,21 @@ namespace Scenes.Ingame.Player
                     }
 
                     //操作するキャラクターのスタミナゲージにだけ、スタミナゲージを変更させる処理を追加する。
-                    //FhotonFusionだったら、inputAuthorityを持つキャラクターのみに指定
+                    //PhotonFusionだったら、inputAuthorityを持つキャラクターのみに指定
                     _playerStatuses[0].OnPlayerStaminaChange
                          .Subscribe(x =>
                          {
                              ChangeStaminaGauge(x);
                              if (x == 100)
                              { 
-                                _staminaGaugeFrontImage.DOFade(endValue: 0f, duration: 1f);
+                                 _staminaGaugeBackGround.DOFade(endValue: 0f, duration: 1f);
+                                 _staminaGaugeFrontImage.DOFade(endValue: 0f, duration: 1f);
                              }
                                  
                              else
                              { 
-                                _staminaGaugeFrontImage.DOFade(endValue: 1f, duration: 0f);
+                                 _staminaGaugeBackGround.DOFade(endValue: 1f, duration: 0f);
+                                 _staminaGaugeFrontImage.DOFade(endValue: 1f, duration: 0f);
                              }
                                 
                          }).AddTo(this);
@@ -300,13 +303,14 @@ namespace Scenes.Ingame.Player
         {
             //  DoTweenの動作を破棄
             _staminaGaugeFrontImage.DOKill();
-
+            _staminaGaugeBackGround.DOKill();
+            
             //スタミナの値を0～1の値に補正
             float fillAmount = (float)value / _playerStatuses[_myPlayerID].stamina_max;
             float maskValue = _defaultStaminaGaugeWidth * (1 - fillAmount) / 2;
 
             // RectMask2Dのleftとrightの値を更新
-            _staminaGaugeMask.padding = new Vector4(maskValue, _staminaGaugeMask.padding.y, maskValue, _staminaGaugeMask.padding.w);
+            _staminaGaugeMask.padding = new Vector4(maskValue,0, maskValue, 0);
             
             //スタミナゲージの色変更
             Image image = _staminaGaugeFrontImage.GetComponent<Image>();
