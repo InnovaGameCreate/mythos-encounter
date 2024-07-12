@@ -21,7 +21,11 @@ namespace Scenes.Ingame.Enemy
 
 
         private float _staminaChangeCount = 0;//スタミナを毎秒減らすのに使用
-       
+        private Vector3 _movePosition;
+
+        public Vector3 GetMovePosition() {
+            return _movePosition;
+        }
 
 
 
@@ -176,6 +180,7 @@ namespace Scenes.Ingame.Enemy
 
         public void SetMovePosition(Vector3 targetPosition) 
         {
+            _movePosition = targetPosition;
             _myAgent.destination = targetPosition;
         }
     }

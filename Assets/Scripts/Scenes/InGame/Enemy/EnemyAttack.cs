@@ -42,7 +42,7 @@ namespace Scenes.Ingame.Enemy
         [Header("自身についているメソッド")]
         [SerializeField] private EnemyStatus _enemyStatus;
         [SerializeField] private EnemySearch _enemySearch;
-        [SerializeField] private EnemyMove _enemyMove;
+        [SerializeField] private EnemyMove _myEnemyMove;
         private NavMeshAgent _myAgent;
 
         //##########内部で使う変数##########
@@ -115,7 +115,7 @@ namespace Scenes.Ingame.Enemy
                             _myVisivilityMap.SetGridWatchNum(_player.transform.position, 0);
                             _blindChaseTimeCount = 0;//見えたのであきらめるまでのカウントはリセット
                                                      //移動目標をプレイヤーの座標にする
-                            _enemyMove.SetMovePosition(_player.transform.position);
+                            _myEnemyMove.SetMovePosition(_player.transform.position);
                             if (_playerDistance < _atackRange)//近接攻撃の射程内か確認する
                             { //近接攻撃をする
                                 _enemyStatus.SetEnemyState(EnemyState.Attack);
@@ -164,23 +164,23 @@ namespace Scenes.Ingame.Enemy
                             if (_enemyStatus.ReturnReactToLight && _myVisivilityMap.RightCheck(this.transform.position, _player.transform.position, _visivilityRange, _playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
                             { //光が見えるか調べる
                                 if (_debugMode) Debug.Log("追跡中光が見えた");
-                                _enemyMove.SetMovePosition(nextPositionCandidate);
+                                _myEnemyMove.SetMovePosition(nextPositionCandidate);
                             }
-                            else if (_enemyMove.endMove)
+                            else if (_myEnemyMove.endMove)
                             { //移動が終了している場合
                                 if (_playerStatus.nowPlayerActionState == PlayerActionState.Sneak && Mathf.Pow((float)(_playerStatus.nowPlayerSneakVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)//忍音が聞こえるかどうか
                                 {
 
                                     if (_debugMode) Debug.Log("追跡中忍ぶ音が聞こえる");
                                     _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
-                                    _enemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
+                                    _myEnemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
 
                                 }
                                 else if (_playerStatus.nowPlayerActionState == PlayerActionState.Walk && Mathf.Pow((float)(_playerStatus.nowPlayerWalkVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)//歩く音が聞こえるかどうか
                                 {
                                     if (_debugMode) Debug.Log("追跡中歩く音が聞こえる");
                                     _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
-                                    _enemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
+                                    _myEnemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
 
                                 }
                                 else if (_playerStatus.nowPlayerActionState == PlayerActionState.Dash && Mathf.Pow((float)(_playerStatus.nowPlayerRunVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)//走る音が聞こえるかどうか
@@ -188,18 +188,18 @@ namespace Scenes.Ingame.Enemy
 
                                     if (_debugMode) Debug.Log("追跡中走る音が聞こえる");
                                     _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
-                                    _enemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
+                                    _myEnemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
 
                                 }
                                 else
                                 {
                                     //なんの痕跡も見つからなかった場合普通に巡回する
                                     _myVisivilityMap.CheckVisivility(this.transform.position, _visivilityRange);
-                                    if (_enemyMove.endMove)//移動が終わっている場合
+                                    if (_myEnemyMove.endMove)//移動が終わっている場合
                                     {
-                                        _myVisivilityMap.ChangeGridWatchNum(_myAgent.path.corners[_myAgent.path.corners.Length - 1],1,true);
+                                        _myVisivilityMap.ChangeGridWatchNum(_myEnemyMove.GetMovePosition(), 1, true);
                                         //あらたな移動先を取得するメソッドを書き込む
-                                        _enemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
+                                        _myEnemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
                                     }
                                 }
                             }

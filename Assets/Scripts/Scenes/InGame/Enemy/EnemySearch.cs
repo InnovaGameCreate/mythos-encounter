@@ -20,7 +20,7 @@ namespace Scenes.Ingame.Enemy
         protected bool _debugMode;
         [SerializeField]
         protected EnemyMove _myEneyMove;
-        private NavMeshAgent _myAgent;
+        protected NavMeshAgent _myAgent;
 
         [SerializeField]
         protected float _visivilityRange;//仕様上視界範囲は全て同一？じゃなかったらこれはEnemyStatusに送り込むよ
@@ -102,7 +102,6 @@ namespace Scenes.Ingame.Enemy
 
             if (_enemyStatus.ReturnEnemyState == EnemyState.Patrolling || _enemyStatus.ReturnEnemyState == EnemyState.Searching)
             { //巡回状態または捜索状態の場合
-                Debug.Log("位置" + _myAgent.path.corners[_myAgent.path.corners.Length - 1]);
 
 
                 //定期的に視界情報を調べる
@@ -155,8 +154,8 @@ namespace Scenes.Ingame.Enemy
                         
                         if (_myEneyMove.endMove)//移動が終わっている場合
                         {
-                            Debug.Log("完了した位置" + _myAgent.path.corners[_myAgent.path.corners.Length - 1]);
-                            _myVisivilityMap.ChangeGridWatchNum(_myAgent.path.corners[_myAgent.path.corners.Length - 1], 1, true);
+                            Debug.Log(_myEneyMove.GetMovePosition());
+                            _myVisivilityMap.ChangeGridWatchNum(_myEneyMove.GetMovePosition(), 100, true);
                             //痕跡のあった場所まで来たが何もいなかった場合ここが実行されるのでStatusを書き換える
                             _enemyStatus.SetEnemyState(EnemyState.Patrolling);
                             //あらたな移動先を取得するメソッドを書き込む
@@ -166,9 +165,8 @@ namespace Scenes.Ingame.Enemy
                             
                         
                     }
-                    
-                    
-                    
+
+
                 }
             }
         }
