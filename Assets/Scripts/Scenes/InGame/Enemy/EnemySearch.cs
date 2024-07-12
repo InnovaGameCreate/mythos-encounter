@@ -155,7 +155,7 @@ namespace Scenes.Ingame.Enemy
                         if (_myEneyMove.endMove)//移動が終わっている場合
                         {
                             Debug.Log(_myEneyMove.GetMovePosition());
-                            _myVisivilityMap.ChangeGridWatchNum(_myEneyMove.GetMovePosition(), 100, true);
+                            _myVisivilityMap.ChangeGridWatchNum(_myEneyMove.GetMovePosition(), 1, true);
                             //痕跡のあった場所まで来たが何もいなかった場合ここが実行されるのでStatusを書き換える
                             _enemyStatus.SetEnemyState(EnemyState.Patrolling);
                             //あらたな移動先を取得するメソッドを書き込む
