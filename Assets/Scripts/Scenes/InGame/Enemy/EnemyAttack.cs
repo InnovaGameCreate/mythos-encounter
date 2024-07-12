@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using System;
-
+using UnityEngine.AI;
 
 namespace Scenes.Ingame.Enemy
 {
@@ -43,6 +43,7 @@ namespace Scenes.Ingame.Enemy
         [SerializeField] private EnemyStatus _enemyStatus;
         [SerializeField] private EnemySearch _enemySearch;
         [SerializeField] private EnemyMove _enemyMove;
+        private NavMeshAgent _myAgent;
 
         //##########内部で使う変数##########
         private GameObject _player;
@@ -72,6 +73,7 @@ namespace Scenes.Ingame.Enemy
             if (_playerStatus == null) { Debug.LogWarning("プレイヤーステータスが認識できません"); }
 
             _camera = GameObject.Find("Main Camera").GetComponent<Camera>();
+            _myAgent = GetComponent<NavMeshAgent>();
 
             _enemyStatus.OnEnemyStateChange.Subscribe(state => 
             {
@@ -195,6 +197,7 @@ namespace Scenes.Ingame.Enemy
                                     _myVisivilityMap.CheckVisivility(this.transform.position, _visivilityRange);
                                     if (_enemyMove.endMove)//移動が終わっている場合
                                     {
+                                        _myVisivilityMap.ChangeGridWatchNum(_myAgent.path.corners[_myAgent.path.corners.Length],1,true);
                                         //あらたな移動先を取得するメソッドを書き込む
                                         _enemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
                                     }

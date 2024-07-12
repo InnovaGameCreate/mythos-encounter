@@ -39,7 +39,13 @@ namespace Scenes.Ingame.Enemy
         // Update is called once per frame
         void FixedUpdate()
         {
-            if (Vector3.Magnitude(this.transform.position - _myAgent.destination) < 1.5f) { endMove = true; } else { endMove = false; }
+            if (Vector3.Magnitude(this.transform.position - _myAgent.path.corners[_myAgent.path.corners.Length]) < 1.5f) 
+            { 
+                endMove = true; 
+            } else 
+            {
+                endMove = false; 
+            }
 
             _staminaChangeCount += Time.deltaTime;
             if (_staminaChangeCount > 1) 
