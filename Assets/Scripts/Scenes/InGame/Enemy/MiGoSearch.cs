@@ -66,6 +66,7 @@ namespace Scenes.Ingame.Enemy
                                 _myVisivilityMap.CheckVisivility(this.transform.position, _visivilityRange);
                                 if (_myEneyMove.endMove)//ˆÚ“®‚ªI‚í‚Á‚Ä‚¢‚éê‡
                                 {
+                                    _myVisivilityMap.ChangeGridWatchNum(_myAgent.path.corners[_myAgent.path.corners.Length - 1], 1, true);
                                     //­Õ‚Ì‚ ‚Á‚½êŠ‚Ü‚Å—ˆ‚½‚ª‰½‚à‚¢‚È‚©‚Á‚½ê‡‚±‚±‚ªÀs‚³‚ê‚é‚Ì‚ÅStatus‚ğ‘‚«Š·‚¦‚é
                                     _enemyStatus.SetEnemyState(EnemyState.Patrolling);
                                 }

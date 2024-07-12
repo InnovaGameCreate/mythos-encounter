@@ -20,7 +20,7 @@ namespace Scenes.Ingame.Enemy
         protected bool _debugMode;
         [SerializeField]
         protected EnemyMove _myEneyMove;
-        private NavMeshAgent _myAgent;
+        protected NavMeshAgent _myAgent;
 
         [SerializeField]
         protected float _visivilityRange;//仕様上視界範囲は全て同一？じゃなかったらこれはEnemyStatusに送り込むよ
