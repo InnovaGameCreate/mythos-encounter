@@ -92,10 +92,10 @@ namespace Scenes.Ingame.Stage
             for (int floor = 1; floor <= 2; floor++)
             {
                 RoomData[,] targetFloor = floor == 1 ? _firsrFloorData : _secondFloorData;
-                await GenerateStage(token, targetFloor, floor - 1);                             //部屋の生成
+                await UniTask.Create(() => GenerateStage(token, targetFloor, floor - 1));                             //部屋の生成
                 //TODO:要調整：生成位置のずれ
-                await CorridorShaping(token, targetFloor, floor - 1);                         //通路の装飾
-                await GenerateWall(token, targetFloor, floor - 1);                              //壁の生成
+                await UniTask.Create(() => CorridorShaping(token, targetFloor, floor - 1));                         //通路の装飾
+                await UniTask.Create(() => GenerateWall(token, targetFloor, floor - 1));                              //壁の生成
             }
             floorObject.GetComponent<NavMeshSurface>().BuildNavMesh();                          //NavMeshのbake
             IngameManager.Instance.SetReady(ReadyEnum.StageReady);                              //ステージ生成完了を通知
