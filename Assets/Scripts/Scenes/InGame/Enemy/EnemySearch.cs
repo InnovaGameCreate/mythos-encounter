@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using UnityEngine.AI;
 
 namespace Scenes.Ingame.Enemy
 {
@@ -19,6 +20,7 @@ namespace Scenes.Ingame.Enemy
         protected bool _debugMode;
         [SerializeField]
         protected EnemyMove _myEneyMove;
+        private NavMeshAgent _myAgent;
 
         [SerializeField]
         protected float _visivilityRange;//仕様上視界範囲は全て同一？じゃなかったらこれはEnemyStatusに送り込むよ
@@ -46,6 +48,8 @@ namespace Scenes.Ingame.Enemy
             if (_player == null) { Debug.LogWarning("プレイヤーが認識できません"); }
             _playerStatus = _player.GetComponent<PlayerStatus>();
             if (_playerStatus == null) { Debug.LogWarning("プレイヤーステータスが認識できません"); }
+            _myAgent = GetComponent<NavMeshAgent>();
+
             //スペックの初期設定
             _audiomaterPower = _enemyStatus.ReturnAudiomaterPower;
 
@@ -151,7 +155,7 @@ namespace Scenes.Ingame.Enemy
                         
                         if (_myEneyMove.endMove)//移動が終わっている場合
                         {
-                            
+                            _myVisivilityMap.ChangeGridWatchNum(_myAgent.path.corners[_myAgent.path.corners.Length], 1, true);
                             //痕跡のあった場所まで来たが何もいなかった場合ここが実行されるのでStatusを書き換える
                             _enemyStatus.SetEnemyState(EnemyState.Patrolling);
                             //あらたな移動先を取得するメソッドを書き込む
