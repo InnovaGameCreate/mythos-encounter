@@ -149,7 +149,7 @@ namespace Scenes.Ingame.Player
                     _playerItem.OnPopActive
                         .Subscribe(x =>
                         {
-                            if (x != null)
+                            if (x != "")
                             {
                                 _pop_Text.text = x;
                                 _pop.SetActive(true);

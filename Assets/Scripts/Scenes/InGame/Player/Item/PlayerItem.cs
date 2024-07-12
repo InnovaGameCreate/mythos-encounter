@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using EPOOutline;
 using Scenes.Ingame.InGameSystem;
+using System.Diagnostics.Contracts;
 
 namespace Scenes.Ingame.Player
 {
@@ -48,8 +49,8 @@ namespace Scenes.Ingame.Player
         public IObservable<int> OnNowIndexChange { get { return _nowIndex; } }//外部で_nowIndexの値が変更されたときに行う処理を登録できるようにする
         public IObservable<String> OnPopActive { get { return _popActive; } }
         public IObservable<CollectionReplaceEvent<ItemSlotStruct>> OnItemSlotReplace => _itemSlot.ObserveReplace();//外部に_itemSlotの要素が変更されたときに行う処理を登録できるようにする
-
-
+        private Outlinable _lastOutlinable = null;
+        private GameObject _lastGameobject = null;
         // Start is called before the first frame update
         void Start()
         {
@@ -57,7 +58,7 @@ namespace Scenes.Ingame.Player
             _myPlayerStatus = GetComponent<PlayerStatus>();
 
             //今後はingame前のアイテムの所持状況を代入させる。α版は初期化
-            ItemSlotStruct init = new ItemSlotStruct();            
+            ItemSlotStruct init = new ItemSlotStruct();
             for (int i = 0; i < 7; i++)
             {
                 init.ChangeInfo();
@@ -68,75 +69,58 @@ namespace Scenes.Ingame.Player
             scrollValue = 0;
 
             RaycastHit hit = new RaycastHit();
-            Outlinable outline;
-            GameObject hitObject = null;
             //視線の先にアイテムがあるか確認。あれば右クリックで拾得できるようにする
             this.UpdateAsObservable()
                     .Subscribe(_ =>
                     {
                         if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, _getItemRange, layerMask))//設定した距離にあるアイテムを認知
                         {
+
                             if (_debugMode)
                             {
                                 Debug.DrawRay(_mainCamera.transform.position, _mainCamera.transform.forward, Color.black);
                             }
+                            //raycast先のオブジェクトが変化した際にOutlineを非表示にする
 
-                            //Rayに当たったゲームオブジェクトを格納(壁に当たった場合は別処理)
-                            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Wall"))
+                            if (_lastGameobject != null &&
+                            _lastOutlinable != null &&
+                            _lastGameobject != hit.collider.gameObject)
                             {
-                                _popActive.OnNext(null);
-                                if (hitObject != null)
+                                IntractEvent(false, "");
+                            }
+                            _lastGameobject = hit.collider.gameObject;
+
+                            if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
+                            {
+                                interactable.Intract(_myPlayerStatus);
+
+                                if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out EscapeItem escapeItem))
                                 {
-                                    //アウトラインの処理
-                                    hitObject.TryGetComponent<Outlinable>(out outline);
-                                    if (outline != null)
-                                        outline.enabled = false;
-
-                                    hitObject = null;
+                                    //脱出アイテムだった時
+                                    _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
+                                    IntractEvent(true, "脱出アイテム");//アウトライン表示
                                 }
-                            }
-                            else
-                            {
-                                hitObject = hit.collider.gameObject;
-                            }
-
-                            //脱出アイテムだった時
-                            if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out EscapeItem escapeItem) && hit.collider.gameObject.TryGetComponent(out IInteractable escapeItemIntract))
-                            {
-                                _popActive.OnNext("脱出アイテム");//アイテムポップが出現
-                                escapeItemIntract.Intract(_myPlayerStatus);
-                                escapeItem.gameObject.GetComponent<Outlinable>().enabled = true;//アウトライン表示
-                            }
-
-                            //脱出アイテム以外のアイテムの時
-                            if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out ItemEffect item) && hit.collider.gameObject.TryGetComponent(out IInteractable itemIntract))
-                            {
-                                string name = item.GetItemData().itemName;
-                                _popActive.OnNext(name);//アイテムポップが出現
-                                itemIntract.Intract(_myPlayerStatus);
-                                item.gameObject.GetComponent<Outlinable>().enabled = true;//アウトライン表示
-                            }
-
-                            //StageIntract（ドアなど）のとき
-                            if (hit.collider.gameObject.CompareTag("StageIntract") && hit.collider.gameObject.TryGetComponent(out IInteractable intract))
-                            {
-                                hit.collider.gameObject.GetComponent<Outlinable>().enabled = true;//アウトライン表示
-                                intract.Intract(_myPlayerStatus);
-                                _popActive.OnNext(intract.ReturnPopString());
+                                else if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out ItemEffect item))
+                                {
+                                    //脱出アイテム以外のアイテムの時
+                                    string name = item.GetItemData().itemName;
+                                    _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
+                                    IntractEvent(true, name);//アウトライン表示
+                                }
+                                else if (hit.collider.gameObject.CompareTag("StageIntract"))
+                                {
+                                    //StageIntract（ドアなど）のとき
+                                    _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
+                                    IntractEvent(true, interactable.ReturnPopString());//アウトライン表示
+                                }
                             }
                         }
                         else
                         {
-                            _popActive.OnNext(null);
                             //Rayに何も当たらなかった時の処理
-                            if (hitObject != null)
+                            if (_lastOutlinable != null)
                             {
-                                //アウトラインの処理
-                                hitObject.TryGetComponent<Outlinable>(out outline);
-                                if (outline != null)
-                                    outline.enabled = false;
-
-                                hitObject = null; 
+                                IntractEvent(false, "");
                             }
                         }
                     });
@@ -167,7 +151,7 @@ namespace Scenes.Ingame.Player
                         rb.useGravity = true;
                         rb.isKinematic = false;
                         rb.AddForce(_mainCamera.transform.forward * 300);
-                        
+
                         //アイテムスロットのListを更新
                         nowBringItem = null;
                         ItemSlotStruct temp = new ItemSlotStruct();
@@ -176,10 +160,10 @@ namespace Scenes.Ingame.Player
 
             //アイテムスロットの選択状態が変わったときに、手元に適切なアイテムを出現させる
             _nowIndex
-                .Subscribe(_ => 
+                .Subscribe(_ =>
                 {
                     //他にアイテムを手に持っていたら、それを破壊
-                    if(nowBringItem != null)
+                    if (nowBringItem != null)
                         Destroy(nowBringItem);
 
                     //手に選択したアイテムを出現させる
@@ -206,9 +190,9 @@ namespace Scenes.Ingame.Player
                         if (ItemNumberKeyDown() == 0)
                         {
                             scrollValue -= Input.GetAxis("Mouse ScrollWheel") * scrollSense;
-                            scrollValue = Mathf.Clamp(scrollValue,0,6);
+                            scrollValue = Mathf.Clamp(scrollValue, 0, 6);
 
-                            if(_itemSlot[(int)scrollValue].myItemSlotStatus != ItemSlotStatus.unavailable)
+                            if (_itemSlot[(int)scrollValue].myItemSlotStatus != ItemSlotStatus.unavailable)
                                 _nowIndex.Value = (int)scrollValue;
                         }
                         //数字キーのみの入力時
@@ -217,20 +201,29 @@ namespace Scenes.Ingame.Player
                             int temp = ItemNumberKeyDown() - 49;
 
                             if (_itemSlot[temp].myItemSlotStatus != ItemSlotStatus.unavailable)
-                            { 
+                            {
                                 _nowIndex.Value = ItemNumberKeyDown() - 49;
                                 scrollValue = _nowIndex.Value;
-                            }                           
-                        }                           
+                            }
+                        }
                     });
+        }
+
+        private void IntractEvent(bool outlineValue, string popString)
+        {
+            _lastOutlinable.enabled = outlineValue;
+            _popActive.OnNext(popString);
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.P)) {
+            if (Input.GetKeyDown(KeyCode.P))
+            {
                 int y = 0;
-                foreach(var x in _itemSlot) {
-                    if(x.myItemData != null) {
+                foreach (var x in _itemSlot)
+                {
+                    if (x.myItemData != null)
+                    {
                         y += 1;
                     }
                 }
@@ -273,7 +266,7 @@ namespace Scenes.Ingame.Player
         /// <param name="index">変更したいリストの順番</param>
         public void ConsumeItem(int index)
         {
-            if(nowBringItem != null)
+            if (nowBringItem != null)
                 Destroy(nowBringItem);
 
             ItemSlotStruct temp = new ItemSlotStruct();
@@ -281,7 +274,7 @@ namespace Scenes.Ingame.Player
         }
 
         public void ChangeCanUseItem(bool value)
-        { 
+        {
             _isCanUseItem = value;
         }
 
