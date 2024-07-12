@@ -10,7 +10,7 @@ namespace Scenes.Ingame.Enemy
 
         protected override void Start()
         {
-            _enemySpawner = GameObject.Find("EnemySpowner").GetComponent<EnemySpawner>();
+            _enemySpawner = FindObjectOfType<EnemySpawner>();
         }
 
         protected override void Action()

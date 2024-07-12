@@ -89,8 +89,6 @@ namespace Scenes.Ingame.Enemy
             //ドアを入手
             _doors = new List<StageDoor>(FindObjectsOfType<StageDoor>());
 
-
-
             //全てのドアが動き終わったか確認する
             bool stop = false;
             while (!stop)
@@ -109,7 +107,6 @@ namespace Scenes.Ingame.Enemy
                 }
             }
 
-
             /*      なぜこれが上手くいかんのだ！？
             //全てのドアが動き終わったか確認する
             for (int i = 0; i < _doors.Count; i++)
@@ -118,16 +115,13 @@ namespace Scenes.Ingame.Enemy
                 await UniTask.WaitWhile(() => !_doors[i].ReturnIsAnimation);
                 Debug.Log("ここまで3");
             }
-
             */
-
 
             //全てのドアを閉める
             for (int i = 0; i < _doors.Count; i++)
             {
                 _doors[i].ChangeDoorQuickOpen(false);
             }
-
 
             //全てのドアが動き終わったか確認する
             stop = false;
@@ -178,11 +172,10 @@ namespace Scenes.Ingame.Enemy
                     if (_doors[i].ReturnIsAnimation)
                     {
                         stop = false;
+                        await UniTask.Delay(100, cancellationToken: token);
                     }
-                    if (!stop) await UniTask.Delay(100, cancellationToken: token);
                 }
             }
-
             //コライダーの更新を待つ
             await UniTask.DelayFrame(2, PlayerLoopTiming.FixedUpdate, token);
             _enemyVisibilityMap.NeedCloseDoorScan();
@@ -200,8 +193,6 @@ namespace Scenes.Ingame.Enemy
             }
             else
             {
-
-
                 //ここでEnemy制作
                 EnemySpawn(_enemyName, _enemySpawnPosition);
                 //敵の沸きが完了したことを知らせる
