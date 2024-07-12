@@ -11,8 +11,12 @@ namespace Scenes.Ingame.Player
     {
         [SerializeField] CharacterController _characterController;
         [SerializeField] private PlayerStatus _myPlayerStatus;
-        [SerializeField] private PlayerSoundManager _myPlayerSoundManager;
         Vector3 _moveVelocity;
+        private float _moveAdjustValue;
+
+        //キーバインドの設定用
+        KeyCode dash = KeyCode.LeftShift;
+        KeyCode sneak = KeyCode.LeftControl;
 
         [Header("カメラ関係")]
         [SerializeField] private GameObject _camera;
@@ -59,11 +63,9 @@ namespace Scenes.Ingame.Player
                     //スタミナの増減を決定
                     if (state == PlayerActionState.Dash)
                         StartCoroutine(DecreaseStamina());
-                    else if(_lastPlayerAction == PlayerActionState.Dash && state != PlayerActionState.Dash)//変化前の状態がダッシュでかつ、変化後がスタミナを回復できる状態の時
-                        StartCoroutine(IncreaseStamina());                                                 //スタミナ回復コルーチンの重複を避けるための処置
+                    else if(state != PlayerActionState.Dash)//スタミナを回復できる状態の時
+                        StartCoroutine(IncreaseStamina());                                                 
 
-                    //足音の種類を決定・鳴らす
-                    _myPlayerSoundManager.FootSound(state);
                 }).AddTo(this);
 
             //待機状態に切り替え
@@ -74,7 +76,7 @@ namespace Scenes.Ingame.Player
                 .Subscribe(_ => 
                 {
                     _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
-                    _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Idle);
+                    _moveAdjustValue = 0;
                 });
 
             //キー入力の状況による歩行状態への切り替え
@@ -88,7 +90,7 @@ namespace Scenes.Ingame.Player
                 .Subscribe(_ => 
                 {
                     _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
-                    _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Walk);
+                    _moveAdjustValue = 1.0f;
                 });
 
             //スタミナが切れた際の歩行状態への切り替え（ペナルティがつく）
@@ -97,7 +99,7 @@ namespace Scenes.Ingame.Player
                 .Subscribe(_ =>
                 {
                     _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
-                    _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Walk);
+                    _moveAdjustValue = 1.0f;
                     StartCoroutine(CountTiredPenalty());
                 });
 
@@ -107,7 +109,7 @@ namespace Scenes.Ingame.Player
                 .Where(_ => _isCanMove && !_isCannotMoveByParalyze)
                 .Subscribe(_ => 
                 {
-                    _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Dash);
+                    _moveAdjustValue = 2.0f;
                 });
 
             //Ctrl+移動キーを押したとき忍び歩き状態に切り替え
@@ -119,7 +121,7 @@ namespace Scenes.Ingame.Player
                 .Subscribe(_ =>
                 {
                     _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
-                    _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Sneak);
+                    _moveAdjustValue = 0.5f;
                 });
             #endregion
 
@@ -128,26 +130,31 @@ namespace Scenes.Ingame.Player
 
         void Update()
         {
-            float moveMouseX = Input.GetAxis("Mouse X");
-            if (Mathf.Abs(moveMouseX) > 0.001f)
+            //生きている間はカメラを操作できる
+            if (_myPlayerStatus.nowPlayerSurvive)
             {
-                // 回転軸はワールド座標のY軸
-                transform.RotateAround(transform.position, Vector3.up, moveMouseX);
-            }
+                float moveMouseX = Input.GetAxis("Mouse X");
+                if (Mathf.Abs(moveMouseX) > 0.001f)
+                {
+                    // 回転軸はワールド座標のY軸
+                    transform.RotateAround(transform.position, Vector3.up, moveMouseX);
+                }
 
-            //カメラをX軸方向に回転させる。視点が上下に動かせるように（範囲に制限あり）
-            float moveMouseY = Input.GetAxis("Mouse Y");
-            if (Mathf.Abs(moveMouseY) > 0.001f)
-            {
-                _nowCameraAngle.x -= moveMouseY;
-                _nowCameraAngle.x = Mathf.Clamp(_nowCameraAngle.x, -40, 60);
-                _camera.gameObject.transform.localEulerAngles = _nowCameraAngle;
+                //カメラをX軸方向に回転させる。視点が上下に動かせるように（範囲に制限あり）
+                float moveMouseY = Input.GetAxis("Mouse Y");
+                if (Mathf.Abs(moveMouseY) > 0.001f)
+                {
+                    _nowCameraAngle.x -= moveMouseY;
+                    _nowCameraAngle.x = Mathf.Clamp(_nowCameraAngle.x, -40, 60);
+                    _camera.gameObject.transform.localEulerAngles = _nowCameraAngle;
+                }
             }
+            
 
             //動ける状態であれば動く
-            if (_isCanMove && !_isCannotMoveByParalyze)
+            if (_isCanMove && !_isCannotMoveByParalyze && _myPlayerStatus.nowPlayerSurvive)
                 Move();
-            else if(!_isCanMove || _isCannotMoveByParalyze)
+            else if(!_isCanMove || _isCannotMoveByParalyze || !_myPlayerStatus.nowPlayerSurvive)
             {
                 _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
                 _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Idle);//待機状態へ移行
@@ -177,25 +184,41 @@ namespace Scenes.Ingame.Player
             {
                 _moveVelocity += transform.right;
             }
+
+            //移動させる
             _moveVelocity = _moveVelocity.normalized;
+            _characterController.Move(_moveVelocity * Time.deltaTime * moveSpeed * _moveAdjustValue);
 
-            //状態に応じて移動速度が変化
-            switch (_myPlayerStatus.nowPlayerActionState)
+            //CharacterControllerの速度に応じて状態を変化
+            //1.0ずつずらしているのは、壁に向かって移動しているときに値が0ではないことと、多少の外れ値を対策するため
+            if (1.0f < _characterController.velocity.magnitude && _characterController.velocity.magnitude <= moveSpeed / 2 + 1.0f)
             {
-                case PlayerActionState.Walk:
-                    _characterController.Move(_moveVelocity * Time.deltaTime * moveSpeed);
-                    break;
-                case PlayerActionState.Dash:
-                    _characterController.Move(_moveVelocity * Time.deltaTime * moveSpeed * 2);
-                    break;
-                case PlayerActionState.Sneak:
-                    _characterController.Move(_moveVelocity * Time.deltaTime * moveSpeed / 2);
-                    break;
-                default:
-                    break;
+                if (Input.GetKey(sneak))
+                {
+                    _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Sneak);
+                    _animator.SetFloat("MovementSpeed", moveSpeed / 2);
+                }
+                else
+                { 
+                    _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Walk);
+                    _animator.SetFloat("MovementSpeed", moveSpeed);
+                }                  
             }
-
-            _animator.SetFloat("MovementSpeed", _characterController.velocity.magnitude);
+            else if (moveSpeed / 2 + 1.0f < _characterController.velocity.magnitude && _characterController.velocity.magnitude <= moveSpeed + 1.0f)
+            {
+                _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Walk);
+                _animator.SetFloat("MovementSpeed", moveSpeed);
+            }
+            else if (moveSpeed + 1.0f < _characterController.velocity.magnitude && _characterController.velocity.magnitude <= moveSpeed * 2 + 1.0f)
+            {
+                _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Dash);
+                _animator.SetFloat("MovementSpeed", moveSpeed * 2);
+            }
+            else if(_characterController.velocity.magnitude < 1.0f)
+            {
+                _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Idle);
+                _animator.SetFloat("MovementSpeed", _characterController.velocity.magnitude);
+            }
         }
 
         private IEnumerator DecreaseStamina()
