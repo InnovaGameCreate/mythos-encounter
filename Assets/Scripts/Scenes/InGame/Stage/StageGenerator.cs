@@ -130,7 +130,7 @@ namespace Scenes.Ingame.Stage
             {
                 for (int x = 0; x < _stageSize.x + 1; x++)
                 {
-                    instantiatePosition = ToVector3(x * TILESIZE, (floor + 1) * 5.9f, y * TILESIZE);
+                    instantiatePosition = ToVector3(x * TILESIZE, (floor + 1) * 5.84f, y * TILESIZE);
                     checkPosition = ToVector2(x, y);
                     if (floor == 0)
                     {
