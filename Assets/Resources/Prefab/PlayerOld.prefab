@@ -494,6 +494,7 @@ MonoBehaviour:
   _controller: {fileID: 1212518499987544778}
   _cupsuleCollider: {fileID: 3801678524532269845}
   _playerMagic: {fileID: 5250157038054447586}
+  _playerItem: {fileID: 6449360652433016383}
   lastHP: 0
   lastSanValue: 0
   bleedingDamage: 1

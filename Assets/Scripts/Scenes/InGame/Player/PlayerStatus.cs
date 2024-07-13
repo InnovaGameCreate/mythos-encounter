@@ -46,6 +46,7 @@ namespace Scenes.Ingame.Player
         [SerializeField] private CharacterController _controller;
         [SerializeField] private CapsuleCollider _cupsuleCollider;
         [SerializeField] private PlayerMagic _playerMagic;
+        [SerializeField] private PlayerItem _playerItem;
 
         private Subject<float> castEvent = new Subject<float>();//呪文の詠唱時間を発行
 
@@ -160,16 +161,19 @@ namespace Scenes.Ingame.Player
             //死亡時に当たり判定を死体と同じ場所に動かす
             //Todo:蘇生時に当たり判定を体と同じ場所に動かす（今後実装）
             if (_startDeathAnimation || _startReviveAnimation)
-            {
-                //　コライダの高さの調整
-                _controller.height = _anim.GetFloat("ColliderHeight");
-                _cupsuleCollider.height = _anim.GetFloat("ColliderHeight");
-                //　コライダの中心位置の調整
-                _controller.center = new Vector3(_controller.center.x, _anim.GetFloat("ColliderCenterY"), _controller.center.z);
-                _cupsuleCollider.center = new Vector3(_cupsuleCollider.center.x, _anim.GetFloat("ColliderCenterY"), _cupsuleCollider.center.z);
+            {               
+                _cupsuleCollider.height = _anim.GetFloat("ColliderHeight");//　コライダの高さの調整       
+                _cupsuleCollider.center = new Vector3(_cupsuleCollider.center.x, _anim.GetFloat("ColliderCenterY"), _cupsuleCollider.center.z);//　コライダの中心位置の調整
+
                 //　コライダの半径の調整
-                _controller.radius = _anim.GetFloat("ColliderRadius");
                 _cupsuleCollider.radius = _anim.GetFloat("ColliderRadius");
+
+                //CharacterControllerのコライダー半径の変更（死亡時のアバターの壁埋まり防止のため）
+                if(_startDeathAnimation && !_startReviveAnimation)//死亡時
+                    _controller.radius = 1.2f;
+                else if(_startDeathAnimation && !_startReviveAnimation)//蘇生時
+                    _controller.radius = 0.4f;
+
 
                 //　コライダの向きの調整
                 if (_anim.GetFloat("ColliderDirection") >= 1.0f)
@@ -368,7 +372,12 @@ namespace Scenes.Ingame.Player
             if (isSurvive)//生き返ったとき
             {
                 //今後蘇生関連の仕様が上がったら処理を実行させる
-                _anim.SetBool("Survive", true);
+                _anim.SetBool("Survive", true);               
+                _playerItem.ChangeCanUseItem(true);
+                if (!_playerMagic.GetUsedMagicBool())
+                {
+                    _playerMagic.ChangeCanUseMagicBool(true);
+                }
             }
             else //死んだとき
             {
@@ -383,6 +392,7 @@ namespace Scenes.Ingame.Player
                 }
                 _anim.SetBool("Survive", false);
                 _playerMagic.ChangeCanUseMagicBool(false);
+                _playerItem.ChangeCanUseItem(false);
 
                 //画面を暗転させる
                 var fadeBlackImage = FindObjectOfType<Scenes.Ingame.InGameSystem.UI.FadeBlackImage>();
