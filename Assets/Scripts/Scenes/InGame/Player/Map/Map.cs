@@ -27,6 +27,7 @@ namespace Scenes.Ingame.Player
 
         private KeyCode _mapKey = KeyCode.M;
         private GameObject _player;
+        private PlayerStatus _playerStatus;
         [SerializeField]private MeshRenderer[] _fogMeshRenderers = new MeshRenderer[2];
         // Start is called before the first frame update
         void Start()
@@ -36,6 +37,7 @@ namespace Scenes.Ingame.Player
                 .Subscribe(_ =>
                 {
                     _player = GameObject.FindWithTag("Player");
+                    _player.TryGetComponent<PlayerStatus>(out _playerStatus);
                     //ƒIƒ“ƒ‰ƒCƒ“‘Î‰ž‚ÌÛ‚ÍInputAuthority‚ÅŒ©•ª‚¯‚é
                 }).AddTo(this);
 
@@ -43,8 +45,10 @@ namespace Scenes.Ingame.Player
             //¡ŒãŽÀ‘•
 
             //_mapKey‚ð‰Ÿ‚µ‚½Û‚Ìˆ—
+            //¶‚«‚Ä‚¢‚é‚Æ‚«‚¶‚á‚È‚¢‚Æƒ_ƒ
             this.UpdateAsObservable()
                 .Where(_ => Input.GetKeyDown(_mapKey))
+                .Where(_ => _playerStatus.nowPlayerSurvive)
                 .ThrottleFirst(TimeSpan.FromMilliseconds(100))
                 .Subscribe(_ =>
                 {
