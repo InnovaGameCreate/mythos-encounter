@@ -43,9 +43,9 @@ namespace Scenes.Ingame.Player
 
         [Header("必要なコンポーネント")]
         [SerializeField] private Animator _anim;
-        [SerializeField] private CharacterController _controller;
         [SerializeField] private CapsuleCollider _cupsuleCollider;
         [SerializeField] private PlayerMagic _playerMagic;
+        [SerializeField] private PlayerItem _playerItem;
 
         private Subject<float> castEvent = new Subject<float>();//呪文の詠唱時間を発行
 
@@ -162,13 +162,10 @@ namespace Scenes.Ingame.Player
             if (_startDeathAnimation || _startReviveAnimation)
             {
                 //　コライダの高さの調整
-                _controller.height = _anim.GetFloat("ColliderHeight");
                 _cupsuleCollider.height = _anim.GetFloat("ColliderHeight");
                 //　コライダの中心位置の調整
-                _controller.center = new Vector3(_controller.center.x, _anim.GetFloat("ColliderCenterY"), _controller.center.z);
                 _cupsuleCollider.center = new Vector3(_cupsuleCollider.center.x, _anim.GetFloat("ColliderCenterY"), _cupsuleCollider.center.z);
                 //　コライダの半径の調整
-                _controller.radius = _anim.GetFloat("ColliderRadius");
                 _cupsuleCollider.radius = _anim.GetFloat("ColliderRadius");
 
                 //　コライダの向きの調整
@@ -368,7 +365,12 @@ namespace Scenes.Ingame.Player
             if (isSurvive)//生き返ったとき
             {
                 //今後蘇生関連の仕様が上がったら処理を実行させる
-                _anim.SetBool("Survive", true);
+                _anim.SetBool("Survive", true);               
+                _playerItem.ChangeCanUseItem(true);
+                if (!_playerMagic.GetUsedMagicBool())
+                {
+                    _playerMagic.ChangeCanUseMagicBool(true);
+                }
             }
             else //死んだとき
             {
@@ -383,6 +385,7 @@ namespace Scenes.Ingame.Player
                 }
                 _anim.SetBool("Survive", false);
                 _playerMagic.ChangeCanUseMagicBool(false);
+                _playerItem.ChangeCanUseItem(false);
 
                 //画面を暗転させる
                 var fadeBlackImage = FindObjectOfType<Scenes.Ingame.InGameSystem.UI.FadeBlackImage>();

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using UniRx.Triggers;
+using System;
 
 namespace Scenes.Ingame.Player
 {
@@ -82,10 +83,12 @@ namespace Scenes.Ingame.Player
             //キー入力の状況による歩行状態への切り替え
             //①ダッシュキーを押していない,スニークキーを押していない,移動方向ベクトルが0でない,WASDどれかは押している。これらを満たしたとき
             //②走っている状態でWキーを離したとき
+            //③ダッシュキー押した状態でASDキーを入力している.このときWキーは押していないことが条件
             this.UpdateAsObservable()
                 .Where(_ => (!Input.GetKey(dash) && !Input.GetKey(sneak) && _moveVelocity != Vector3.zero &&
                             (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D)) ) ||
-                             (_myPlayerStatus.nowPlayerActionState == PlayerActionState.Dash && !Input.GetKey(KeyCode.W)) )
+                             (_myPlayerStatus.nowPlayerActionState == PlayerActionState.Dash && !Input.GetKey(KeyCode.W)) || 
+                             (Input.GetKey(dash) && !Input.GetKey(KeyCode.W) && (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))))
                 .Where(_ => _isCanMove && !_isCannotMoveByParalyze)
                 .Subscribe(_ => 
                 {
@@ -107,6 +110,7 @@ namespace Scenes.Ingame.Player
             this.UpdateAsObservable()
                 .Where(_ => ((Input.GetKeyDown(dash) && Input.GetKey(KeyCode.W)) || (Input.GetKey(dash) && Input.GetKeyDown(KeyCode.W))) && !_isTiredPenalty && _moveVelocity != Vector3.zero)
                 .Where(_ => _isCanMove && !_isCannotMoveByParalyze)
+                .ThrottleFirst(TimeSpan.FromMilliseconds(500))//0.5秒間の間は再度ダッシュできないようにする。
                 .Subscribe(_ => 
                 {
                     _moveAdjustValue = 2.0f;
@@ -268,7 +272,7 @@ namespace Scenes.Ingame.Player
                 if (_isParalyzed)
                 {
                     //25%の確率で1秒間動けない
-                    int random = Random.Range(0, 4);
+                    int random = UnityEngine.Random.Range(0, 4);
                     if (random == 0)
                     {
                         _isCannotMoveByParalyze = true;
