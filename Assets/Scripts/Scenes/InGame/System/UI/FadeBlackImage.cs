@@ -20,6 +20,7 @@ namespace Scenes.Ingame.InGameSystem.UI
         /// </summary>
         public void FadeInImage()
         {
+            _thisCanvas.sortingOrder = 99;
             _blackImage.DOFade(1, 2f).SetDelay(0.5f); 
         }
 
@@ -28,6 +29,7 @@ namespace Scenes.Ingame.InGameSystem.UI
         /// </summary>
         public void FadeOutImage()
         {
+            _thisCanvas.sortingOrder = -1;
             _blackImage.DOFade(0, 0.5f);
         }
 
