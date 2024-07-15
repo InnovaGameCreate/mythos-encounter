@@ -51,6 +51,8 @@ namespace Scenes.Ingame.Player
         public IObservable<CollectionReplaceEvent<ItemSlotStruct>> OnItemSlotReplace => _itemSlot.ObserveReplace();//外部に_itemSlotの要素が変更されたときに行う処理を登録できるようにする
         private Outlinable _lastOutlinable = null;
         private GameObject _lastGameobject = null;
+
+        [SerializeField] GameObject _itemForDebug;//デバッグ用アイテム
         // Start is called before the first frame update
         void Start()
         {
@@ -229,6 +231,35 @@ namespace Scenes.Ingame.Player
                 }
                 Debug.Log($"アイテム所持数：{y}");
             }
+
+            if(Input.GetKeyDown(KeyCode.B))
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    {
+                        if(_itemForDebug != null)
+                        {
+                            ItemSlotStruct item = new ItemSlotStruct();
+                            item.ChangeInfo(_itemForDebug.GetComponent<ItemEffect>().GetItemData(), ItemSlotStatus.available);
+                            ChangeListValue(0, item);
+                            nowBringItem = Instantiate(_itemForDebug);
+
+
+                            nowBringItem.gameObject.transform.position = myRightHand.transform.position;
+                            nowBringItem.gameObject.transform.parent = myRightHand.transform;
+                            var effect = nowBringItem.gameObject.GetComponent<ItemEffect>();
+                            effect.ownerPlayerStatus = _myPlayerStatus;
+                            effect.ownerPlayerItem = this;
+                            effect.OnPickUp();
+                            var rigid = nowBringItem.GetComponent<Rigidbody>();
+                            rigid.useGravity = false;
+                            rigid.isKinematic = true;
+                        }
+
+                    }
+                }
+            }
+
 
         }
 

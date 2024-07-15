@@ -732,6 +732,7 @@ MonoBehaviour:
   lastHP: 0
   lastSanValue: 0
   bleedingDamage: 1
+  countDoll: 0
 --- !u!114 &7111757753802298086
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -773,6 +774,7 @@ MonoBehaviour:
   _mainCamera: {fileID: 1285542953524166243}
   _getItemRange: 4
   scrollSense: 10
+  _itemForDebug: {fileID: 4570247510132778309, guid: ab67a0a3e18354c4d95587b785f10572, type: 3}
 --- !u!114 &3297469623762709221
 MonoBehaviour:
   m_ObjectHideFlags: 0

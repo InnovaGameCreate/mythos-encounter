@@ -14,6 +14,7 @@ namespace Scenes.Ingame.Player
         private int[] _randoms = new int[2];
         private PlayerItem _myPlayerItem;
         private TempPlayerMove _myPlayerMove;
+        private PlayerStatus _myPlayerStatus;
 
         private ItemSlotStruct _unavailableSlot;
         private bool _isFirst = true;//初めて呼び出されたか
@@ -68,6 +69,7 @@ namespace Scenes.Ingame.Player
                     else //手に持っていないアイテムだった時
                     {
                         var obj = Instantiate(itemSlot.myItemData.prefab, this.gameObject.transform.position + new Vector3(0,1,0), itemSlot.myItemData.prefab.transform.rotation);
+                        obj.GetComponent<ItemEffect>().ownerPlayerStatus = _myPlayerStatus;
                         obj.GetComponent<ItemEffect>().OnThrow();
                     }
                 }

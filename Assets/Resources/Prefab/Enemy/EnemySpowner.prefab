@@ -46,9 +46,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _debugMode: 0
   _nonInGameManagerMode: 0
-  _enemyName: 0
+  _enemyName: 1
   _enemyVisibilityMap: {fileID: 0}
   _x: 9
+  _y: 0
   _z: 9
   _range: 5.8
   _maxVisiviilityRange: 50
@@ -57,3 +58,4 @@ MonoBehaviour:
   _deepOnes: {fileID: 8865830389490726247, guid: e6d24b3c74905f547ad444af061ed259, type: 3}
   _spawnOfCthulhu: {fileID: 1502827998043956805, guid: 12d632861ee534348b7a8114133b23d5, type: 3}
   _MiGo: {fileID: 2083930819845757192, guid: 1934123d9afe937408275cbfb70cb0bf, type: 3}
+  _enemySpawnPosition: {x: 0, y: 0, z: 0}
