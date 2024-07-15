@@ -381,6 +381,7 @@ namespace Scenes.Ingame.Player
                 _survive.Value = false;
         }
 
+
         /// <summary>
         /// 生死状態の変更時に処理を行う
         /// </summary>
@@ -444,6 +445,7 @@ namespace Scenes.Ingame.Player
             _isBuffedAdrenaline = false;
             yield break;
         }
+
     }
 }
 
