@@ -84,6 +84,7 @@ namespace Scenes.Ingame.Player
         public int lastHP;//HPの変動前の数値を記録。比較に用いる
         public int lastSanValue;//SAN値の変動前の数値を記録。比較に用いる
         public int bleedingDamage = 1;//出血時に受けるダメージ
+        public int countDoll = 0;//所持している身代わり人形の数
         private bool _isUseItem = false;
         private bool _isUseMagic = false;
         private bool _isHaveCharm = false;
@@ -229,6 +230,15 @@ namespace Scenes.Ingame.Player
         {
             _isHaveCharm = value;
         }
+
+        /// <summary>
+        /// 身代わり人形をいくつ所持しているか確認する関数
+        /// </summary>
+        /// <param name="x"></param>
+        public void ChangeCountDoll(int x)
+        {
+            countDoll += x;
+        }
         /// <summary>
         /// 呪文を唱えているか管理するための関数
         /// </summary>
@@ -263,6 +273,12 @@ namespace Scenes.Ingame.Player
         public void ChangePlayerActionState(PlayerActionState state)
         {
             _playerActionState.Value = state;
+        }
+
+        public void ReviveCharacter()
+        {
+            _survive.Value = true;
+            ChangeHealth(50, "Heal");
         }
 
         /// <summary>
@@ -318,6 +334,8 @@ namespace Scenes.Ingame.Player
             if (sanValue <= 0)
                 _survive.Value = false;
         }
+
+        
     }
 }
 
