@@ -1235,38 +1235,6 @@ PrefabInstance:
       propertyPath: m_ShadowResolution.m_Level
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1534826612512213551, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
-      propertyPath: m_Range
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1534826612512213551, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
-      propertyPath: m_Intensity
-      value: 157.77672
-      objectReference: {fileID: 0}
-    - target: {fileID: 1534826612512213551, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
-      propertyPath: m_SpotAngle
-      value: 74.072815
-      objectReference: {fileID: 0}
-    - target: {fileID: 1534826612512213551, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
-      propertyPath: m_InnerSpotAngle
-      value: 46.183464
-      objectReference: {fileID: 0}
-    - target: {fileID: 1537768235632425462, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
-      propertyPath: m_Range
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1537768235632425462, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
-      propertyPath: m_Intensity
-      value: 157.77672
-      objectReference: {fileID: 0}
-    - target: {fileID: 1537768235632425462, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
-      propertyPath: m_SpotAngle
-      value: 74.072815
-      objectReference: {fileID: 0}
-    - target: {fileID: 1537768235632425462, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
-      propertyPath: m_InnerSpotAngle
-      value: 46.183464
-      objectReference: {fileID: 0}
     - target: {fileID: 4677249299836718794, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
       propertyPath: m_ShadowResolution.m_Level
       value: 1
@@ -1274,22 +1242,6 @@ PrefabInstance:
     - target: {fileID: 6280168649147678623, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
       propertyPath: m_Name
       value: Chandelier_02 (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 6637052621915433607, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
-      propertyPath: m_Range
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6637052621915433607, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
-      propertyPath: m_Intensity
-      value: 157.77672
-      objectReference: {fileID: 0}
-    - target: {fileID: 6637052621915433607, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
-      propertyPath: m_SpotAngle
-      value: 74.072815
-      objectReference: {fileID: 0}
-    - target: {fileID: 6637052621915433607, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
-      propertyPath: m_InnerSpotAngle
-      value: 46.183464
       objectReference: {fileID: 0}
     - target: {fileID: 6659826249567675685, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
       propertyPath: m_RootOrder
@@ -1358,22 +1310,6 @@ PrefabInstance:
     - target: {fileID: 7787543326971857649, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
       propertyPath: m_ShadowResolution.m_Level
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8565929468525460022, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
-      propertyPath: m_Range
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8565929468525460022, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
-      propertyPath: m_Intensity
-      value: 157.77672
-      objectReference: {fileID: 0}
-    - target: {fileID: 8565929468525460022, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
-      propertyPath: m_SpotAngle
-      value: 74.072815
-      objectReference: {fileID: 0}
-    - target: {fileID: 8565929468525460022, guid: e337d38de5350884a94d07daf07d69c9, type: 3}
-      propertyPath: m_InnerSpotAngle
-      value: 46.183464
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
