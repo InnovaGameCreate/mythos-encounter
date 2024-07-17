@@ -42,8 +42,12 @@ namespace Scenes.Ingame.Player
         private Subject<String> _popActive = new Subject<String>();
         private ReactiveCollection<ItemSlotStruct> _itemSlot = new ReactiveCollection<ItemSlotStruct>();//現在所持しているアイテムのリスト
 
+        [SerializeField] private GameObject _spotLight;//Cameraに付属しているスポットライト
+        private bool _switchHandLight;//ライトのON/OFF状態を保存しておくための変数
+
         public List<ItemSlotStruct> ItemSlots { get { return _itemSlot.ToList(); } }//外部に_itemSlotの内容を公開する
         public int nowIndex { get => _nowIndex.Value; }
+        public bool SwitchHandLigtht { get => _switchHandLight; }
 
 
         public IObservable<int> OnNowIndexChange { get { return _nowIndex; } }//外部で_nowIndexの値が変更されたときに行う処理を登録できるようにする
@@ -230,6 +234,7 @@ namespace Scenes.Ingame.Player
                 Debug.Log($"アイテム所持数：{y}");
             }
 
+
         }
 
         /// <summary>
@@ -281,6 +286,25 @@ namespace Scenes.Ingame.Player
         public void ChangeCanChangeBringItem(bool value)
         {
             _isCanChangeBringItem = value;
+        }
+
+        //懐中電灯を起動・停止するための関数
+        public void ActiveHandLight(bool value)
+        {
+            _spotLight.GetComponent<Light>().enabled = value;
+        }
+
+        //懐中電灯のON/OFFを切り替える関数
+        public void ChangeSwitchHandLight()
+        {
+            if(!_switchHandLight)
+            {
+                _switchHandLight = true;
+            }
+            else
+            {
+                _switchHandLight = false;
+            }
         }
     }
 }
