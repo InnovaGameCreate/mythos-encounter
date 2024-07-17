@@ -30,6 +30,7 @@ namespace Scenes.Ingame.Stage
         const float TILESIZE = 5.85f;
         const int OFFSET = 2;//通路を作らない範囲
         private bool playerSpawnRoom = false;
+        private bool escapeSpawnRoom = false;
         private bool viewDebugLog = false;//確認用のデバックログを表示する
         private CancellationTokenSource source = new CancellationTokenSource();
         [Header("Room Size Count")]
@@ -106,7 +107,16 @@ namespace Scenes.Ingame.Stage
                 await GenerateWall(token, targetFloor, floor - 1);                              //壁の生成
             }
             floorObject.GetComponent<NavMeshSurface>().BuildNavMesh();                          //NavMeshのbake
+            ErrorCheck();
             IngameManager.Instance.SetReady(ReadyEnum.StageReady);                              //ステージ生成完了を通知
+        }
+        private void ErrorCheck()
+        {
+            if (!playerSpawnRoom || !escapeSpawnRoom)
+            {
+                if (!playerSpawnRoom) Debug.LogError($"playerSpawnRoomが生成されていません");
+                if (!escapeSpawnRoom) Debug.LogError($"escapeSpawnRoomが生成されていません");
+            }
         }
         private void InitialSet()
         {
@@ -189,6 +199,11 @@ namespace Scenes.Ingame.Stage
                                     Instantiate(_prefabPool.getPlayerSpawnRoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
                                     _spawnPosition = instantiatePosition;
                                     playerSpawnRoom = true;
+                                }
+                                else if (!escapeSpawnRoom && x >= 3 && y >= 3)
+                                {
+                                    Instantiate(_prefabPool.getEscapeSpawnRoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
+                                    escapeSpawnRoom = true;
                                 }
                                 else
                                 {
