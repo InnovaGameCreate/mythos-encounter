@@ -7,13 +7,16 @@ namespace Scenes.Ingame.Stage
 {
     public class StageLight : MonoBehaviour, IInteractable
     {
-        [SerializeField] private GameObject _lightObject;
-        private float _lightStrength;
+        [SerializeField] private List<GameObject> _lightObject = new List<GameObject>();
+        private float[] _lightStrength = new float[10];
         private bool _isOn = false;
 
-        void Start()
+        void Awake()
         {
-            _lightStrength = _lightObject.GetComponent<Light>().intensity;
+            for (int i = 0; i < _lightObject.Count; i++)
+            {
+                _lightStrength[i] = _lightObject[i].GetComponent<Light>().intensity;
+            }
         }
         public void Intract(PlayerStatus status)
         {
@@ -35,12 +38,19 @@ namespace Scenes.Ingame.Stage
 
         private void LightOn()
         {
-            _lightObject.GetComponent<Light>().intensity = _lightStrength;
+            for (int i = 0; i < _lightObject.Count; i++)
+            {
+                _lightObject[i].GetComponent<Light>().intensity = _lightStrength[i];
+
+            }
         }
 
         private void LightOff()
         {
-            _lightObject.GetComponent<Light>().intensity = 0;
+            for (int i = 0; i < _lightObject.Count; i++)
+            {
+                _lightObject[i].GetComponent<Light>().intensity = 0;
+            } 
         }
 
         public string ReturnPopString()
