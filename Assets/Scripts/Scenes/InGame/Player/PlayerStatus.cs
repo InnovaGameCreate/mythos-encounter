@@ -392,6 +392,8 @@ namespace Scenes.Ingame.Player
                 {
                     _playerMagic.ChangeCanUseMagicBool(true);
                 }
+
+                _deathEventCount = 0;
             }
             else //死んだとき
             {
@@ -407,6 +409,7 @@ namespace Scenes.Ingame.Player
                 _anim.SetBool("Survive", false);
                 _playerMagic.ChangeCanUseMagicBool(false);
                 _playerItem.ChangeCanUseItem(false);
+                _deathEventCount = 0;
 
                 //画面を暗転させる
                 var fadeBlackImage = FindObjectOfType<Scenes.Ingame.InGameSystem.UI.FadeBlackImage>();
@@ -424,7 +427,7 @@ namespace Scenes.Ingame.Player
         {
             _deathEventCount += 1;
 
-            if(_deathEventCount % 2 == 0)//イベントが来た回数が偶数回の時のみ実行
+            if(_deathEventCount == 2)//2回目のイベント時のみ実行
             {
                 _startDeathAnimation = !_startDeathAnimation;
                 _playerItem.CheckHaveDoll();
