@@ -159,6 +159,14 @@ namespace Scenes.Ingame.Player
             {
                 _enemyAttackedMe.OnNext(default);
             }
+
+            if(Input.GetKeyDown(KeyCode.K))
+            {
+                if(Input.GetKey(KeyCode.LeftShift))
+                {
+                    Debug.Log($"人形の数は{countDoll}");
+                }
+            }
 #endif           
 
             //死亡時に当たり判定を死体と同じ場所に動かす
@@ -428,6 +436,11 @@ namespace Scenes.Ingame.Player
         private void DeathAnimationBoolChange()
         {
             _startDeathAnimation = !_startDeathAnimation;
+
+            if(countDoll > 0)
+            {
+                _playerItem.UseDollUniqueEffect();
+            }
         }
 
         public void StartBuff()

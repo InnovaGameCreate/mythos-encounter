@@ -211,40 +211,7 @@ namespace Scenes.Ingame.Player
                         }
                     });
 
-            //プレーヤーの体力が0になったとき、身代わり人形の効果を発生させる
-            _myPlayerStatus.OnPlayerSurviveChange
-                .Skip(1)
-                .Where(value => value == false)
-                .Where(_ => _myPlayerStatus.countDoll > 0)
-                .Subscribe(_ =>
-                {
-                    //アイテムスロットに人形があるか確認し、Indexnが小さい方を先に消費する
-                    for (int i = 0; i < 7; i++)
-                    {
-                        
-                        if (_itemSlot[i].myItemData != null)
-                        {
-                            if (_itemSlot[i].myItemData.itemID == 7)
-                            {
-                                //仮のアイテムを生成して、死亡時の効果を起動させる
-                                GameObject Item = Instantiate(_itemSlot[i].myItemData.prefab);
-                                Item.GetComponent<DollEffect>().UniqueEffect(_myPlayerStatus);
-
-                                //アイテム破壊とアイテムスロットの初期化
-                                Destroy(Item);
-                                if(_nowIndex.Value == i && nowBringItem != null)
-                                {
-                                    Destroy(nowBringItem);
-                                }
-                                ItemSlotStruct temp = new ItemSlotStruct();
-                                _itemSlot[i] = temp;
-
-                                break;
-                            }
-                        }
-
-                    }
-                });
+            
         }
 
         private void IntractEvent(bool outlineValue, string popString)
@@ -350,6 +317,40 @@ namespace Scenes.Ingame.Player
         public void ChangeCanChangeBringItem(bool value)
         {
             _isCanChangeBringItem = value;
+        }
+
+        /// <summary>
+        /// 身代わり人形の効果を起動するための関数
+        /// </summary>
+        public void UseDollUniqueEffect()
+        {
+            for (int i = 0; i < 7; i++)
+            {
+
+                if (_itemSlot[i].myItemData != null)
+                {
+                    if (_itemSlot[i].myItemData.itemID == 7)
+                    {
+                        //仮のアイテムを生成して、死亡時の効果を起動させる
+                        GameObject Item = Instantiate(_itemSlot[i].myItemData.prefab);
+                        Item.GetComponent<DollEffect>().UniqueEffect(_myPlayerStatus);
+
+                        //アイテム破壊とアイテムスロットの初期化
+                        Destroy(Item);
+                        if (_nowIndex.Value == i && nowBringItem != null)
+                        {
+                            Destroy(nowBringItem);
+                        }
+                        ItemSlotStruct temp = new ItemSlotStruct();
+                        _itemSlot[i] = temp;
+
+                        break;
+                    }
+
+                    Debug.LogError("アイテム欄に身代わり人形がありません。");
+                }
+
+            }
         }
     }
 }

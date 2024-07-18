@@ -38,6 +38,7 @@ namespace Scenes.Ingame.Player
             {
                 GameObject.FindWithTag("Enemy").GetComponent<EnemyMove>().ResetPosition();
             }
+            ownerPlayerStatus.ChangeCountDoll(-1);
 
         }
 
