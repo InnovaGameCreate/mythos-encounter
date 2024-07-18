@@ -426,6 +426,15 @@ namespace Scenes.Ingame.Player
             _isBuffedAdrenaline = false;
             yield break;
         }
+
+        /// <summary>
+        /// 光の距離を変化させる関数
+        /// </summary>
+        /// <param name="extendLightRange"></param>光の距離の伸ばすか否か判定する変数
+        public void ChangeLightRange(bool extendLightRange)
+        {
+            _lightrange.Value = (extendLightRange ? 80 : 20);
+        }
     }
 }
 

@@ -8,6 +8,7 @@ using System.Linq;
 using EPOOutline;
 using Scenes.Ingame.InGameSystem;
 using System.Diagnostics.Contracts;
+using Unity.VisualScripting;
 
 namespace Scenes.Ingame.Player
 {
@@ -45,9 +46,12 @@ namespace Scenes.Ingame.Player
         [SerializeField] private GameObject _spotLight;//Cameraに付属しているスポットライト
         private bool _switchHandLight;//ライトのON/OFF状態を保存しておくための変数
 
+        //アイテムデバッグ用
+        [SerializeField] private GameObject _itemForDebug;
+
         public List<ItemSlotStruct> ItemSlots { get { return _itemSlot.ToList(); } }//外部に_itemSlotの内容を公開する
         public int nowIndex { get => _nowIndex.Value; }
-        public bool SwitchHandLigtht { get => _switchHandLight; }
+        public bool SwitchHandLight { get => _switchHandLight; }
 
 
         public IObservable<int> OnNowIndexChange { get { return _nowIndex; } }//外部で_nowIndexの値が変更されたときに行う処理を登録できるようにする
@@ -234,7 +238,33 @@ namespace Scenes.Ingame.Player
                 Debug.Log($"アイテム所持数：{y}");
             }
 
+            if (Input.GetKeyDown(KeyCode.B))
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    {
+                        if(_itemForDebug != null)
+                        {
+                            ItemSlotStruct item = new ItemSlotStruct();
+                            item.ChangeInfo(_itemForDebug.GetComponent<ItemEffect>().GetItemData(), ItemSlotStatus.available);
+                            ChangeListValue(0, item);
+                            nowBringItem = Instantiate(_itemForDebug);
 
+
+                            nowBringItem.gameObject.transform.position = myRightHand.transform.position;
+                            nowBringItem.gameObject.transform.parent = myRightHand.transform;
+                            var effect = nowBringItem.gameObject.GetComponent<ItemEffect>();
+                            effect.ownerPlayerStatus = _myPlayerStatus;
+                            effect.ownerPlayerItem = this;
+                            effect.OnPickUp();
+                            var rigid = nowBringItem.GetComponent<Rigidbody>();
+                            rigid.useGravity = false;
+                            rigid.isKinematic = true;
+                        }
+        
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -292,6 +322,8 @@ namespace Scenes.Ingame.Player
         public void ActiveHandLight(bool value)
         {
             _spotLight.GetComponent<Light>().enabled = value;
+            _myPlayerStatus.ChangeLightRange(value);
+            
         }
 
         //懐中電灯のON/OFFを切り替える関数
