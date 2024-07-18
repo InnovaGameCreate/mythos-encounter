@@ -94,7 +94,8 @@ namespace Scenes.Ingame.Player
         [HideInInspector] public int lastHP;//HPの変動前の数値を記録。比較に用いる
         [HideInInspector] public int lastSanValue;//SAN値の変動前の数値を記録。比較に用いる
         [HideInInspector] public int bleedingDamage = 1;//出血時に受けるダメージ
-        public int countDoll = 0;//所持している身代わり人形の数
+
+        private int _deathEventCount = 0;//死亡アニメーションのイベント回数確認用
 
         private bool _isUseItem = false;
         private bool _isUseMagic = false;
@@ -160,13 +161,7 @@ namespace Scenes.Ingame.Player
                 _enemyAttackedMe.OnNext(default);
             }
 
-            if(Input.GetKeyDown(KeyCode.K))
-            {
-                if(Input.GetKey(KeyCode.LeftShift))
-                {
-                    Debug.Log($"人形の数は{countDoll}");
-                }
-            }
+
 #endif           
 
             //死亡時に当たり判定を死体と同じ場所に動かす
@@ -285,14 +280,6 @@ namespace Scenes.Ingame.Player
             _isHaveCharm = value;
         }
 
-        /// <summary>
-        /// 身代わり人形をいくつ所持しているか確認する関数
-        /// </summary>
-        /// <param name="x"></param>
-        public void ChangeCountDoll(int x)
-        {
-            countDoll += x;
-        }
         /// <summary>
         /// 呪文を唱えているか管理するための関数
         /// </summary>
@@ -435,12 +422,14 @@ namespace Scenes.Ingame.Player
         /// </summary>
         private void DeathAnimationBoolChange()
         {
-            _startDeathAnimation = !_startDeathAnimation;
+            _deathEventCount += 1;
 
-            if(countDoll > 0)
+            if(_deathEventCount % 2 == 0)//イベントが来た回数が偶数回の時のみ実行
             {
-                _playerItem.UseDollUniqueEffect();
+                _startDeathAnimation = !_startDeathAnimation;
+                _playerItem.CheckHaveDoll();
             }
+
         }
 
         public void StartBuff()

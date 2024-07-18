@@ -240,12 +240,22 @@ namespace Scenes.Ingame.Player
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
                     {
+                        
 
                         if(_itemForDebug != null)
                         {
                             ItemSlotStruct item = new ItemSlotStruct();
                             item.ChangeInfo(_itemForDebug.GetComponent<ItemEffect>().GetItemData(), ItemSlotStatus.available);
-                            ChangeListValue(0, item);
+                            if (_itemSlot[0].myItemData != null)
+                            {
+                                ChangeListValue(1, item);
+                            }
+                            else
+                            {
+                                ChangeListValue(0, item);
+                            }
+
+                            
                             nowBringItem = Instantiate(_itemForDebug);
 
 
@@ -320,13 +330,12 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// 身代わり人形の効果を起動するための関数
+        /// 身代わり人形を持っているか確認するための関数
         /// </summary>
-        public void UseDollUniqueEffect()
+        public void CheckHaveDoll()
         {
             for (int i = 0; i < 7; i++)
-            {
-
+            {                    
                 if (_itemSlot[i].myItemData != null)
                 {
                     if (_itemSlot[i].myItemData.itemID == 7)
@@ -347,10 +356,10 @@ namespace Scenes.Ingame.Player
                         break;
                     }
 
-                    Debug.LogError("アイテム欄に身代わり人形がありません。");
                 }
 
             }
+
         }
     }
 }

@@ -732,7 +732,6 @@ MonoBehaviour:
   lastHP: 0
   lastSanValue: 0
   bleedingDamage: 1
-  countDoll: 0
 --- !u!114 &7111757753802298086
 MonoBehaviour:
   m_ObjectHideFlags: 0

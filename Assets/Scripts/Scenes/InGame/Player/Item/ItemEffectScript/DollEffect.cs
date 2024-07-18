@@ -11,12 +11,12 @@ namespace Scenes.Ingame.Player
     {
         public override void OnPickUp()
         {
-            ownerPlayerStatus.ChangeCountDoll(1);
+
         }
 
         public override void OnThrow()
         {
-            ownerPlayerStatus.ChangeCountDoll(-1);
+
         }
 
         public override void Effect()
@@ -38,7 +38,6 @@ namespace Scenes.Ingame.Player
             {
                 GameObject.FindWithTag("Enemy").GetComponent<EnemyMove>().ResetPosition();
             }
-            ownerPlayerStatus.ChangeCountDoll(-1);
 
         }
 

@@ -73,6 +73,7 @@ namespace Scenes.Ingame.Player
             var effect = this.gameObject.GetComponent<ItemEffect>();
             effect.ownerPlayerStatus = status;
             effect.ownerPlayerItem = PlayerItem;
+            effect.OnPickUp();//各アイテムの拾った時の処理を実行させる
             PlayerItem.nowBringItem.GetComponent<Rigidbody>().useGravity = false;//アイテムを持った時に重力の影響を受けないようにする
         }
 
