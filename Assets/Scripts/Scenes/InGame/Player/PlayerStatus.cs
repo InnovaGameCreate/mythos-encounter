@@ -202,13 +202,13 @@ namespace Scenes.Ingame.Player
         {
             if (mode == "Heal")
             {
-                lastHP = _health.Value;
                 _health.Value = Mathf.Min(100, _health.Value + value);
+                lastHP = _health.Value;
             }
             else if (mode == "Damage")
             {
-                lastHP = _health.Value;
                 _health.Value = Mathf.Max(0, _health.Value - value);
+                lastHP = _health.Value;
             }
         }
 
@@ -352,6 +352,13 @@ namespace Scenes.Ingame.Player
 
             if (health <= 0)
                 _survive.Value = false;
+
+            if(lastHP >= 0 && health < 0)
+            {
+                _survive.Value = true;
+            }
+
+
         }
 
         /// <summary>
@@ -394,6 +401,7 @@ namespace Scenes.Ingame.Player
                 }
 
                 _deathEventCount = 0;
+                _startReviveAnimation = true;
             }
             else //死んだとき
             {
@@ -407,6 +415,7 @@ namespace Scenes.Ingame.Player
                      
                 }
                 _anim.SetBool("Survive", false);
+                _anim.SetBool("FinishRevive", false);
                 _playerMagic.ChangeCanUseMagicBool(false);
                 _playerItem.ChangeCanUseItem(false);
                 _deathEventCount = 0;
@@ -433,6 +442,15 @@ namespace Scenes.Ingame.Player
                 _playerItem.CheckHaveDoll();
             }
 
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void FinishReviveAnimation()
+        {
+            _anim.SetBool("FinisihRevive", true);
+            _startReviveAnimation |= false;
         }
 
         public void StartBuff()
