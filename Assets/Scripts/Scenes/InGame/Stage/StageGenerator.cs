@@ -13,12 +13,6 @@ using System;
 
 namespace Scenes.Ingame.Stage
 {
-    public enum generateType
-    {
-        XandY = 0,
-        X = 1,
-        Y = 2,
-    }
     /// <summary>
     /// 動作説明
     /// １._stageSizeに設定されたサイズのステージデータを生成（配列の_stageGenerateDataで管理）
@@ -89,7 +83,7 @@ namespace Scenes.Ingame.Stage
             for (int floor = 1; floor <= 2; floor++)
             {
                 RoomData[,] targetFloor = new RoomData[(int)_stageSize.x, (int)_stageSize.y];   //データの初期化
-                RoomPlotId(RoomType.room2x2Stair, new Vector2(0, 0), targetFloor);              //確定の階段部屋データの入力
+                RoomPlotId(RoomType.room2x2Stair, new Vector2((int)_stageSize.x - 2, (int)_stageSize.y - 2), targetFloor);//確定の階段部屋データの入力
                 RandomFullSpaceRoomPlot(targetFloor, LARGEROOM, MEDIUMROOM, SMALLROOM);                                //データに部屋のIDの割り当て
                 if (viewDebugLog) DebugStageData(targetFloor);
                 await RommShaping(token, targetFloor);                                          //空間を埋めるように部屋の大きさを調整
@@ -555,7 +549,7 @@ namespace Scenes.Ingame.Stage
         /// <summary>
         /// x軸とy軸に１つずつ通路の作成
         /// </summary>
-        private RoomData[,] GenerateAisle(CancellationToken token, RoomData[,] stage,int setValueX = -1,int setValueY = -1, generateType type = generateType.XandY)
+        private RoomData[,] GenerateAisle(CancellationToken token, RoomData[,] stage)
         {
             int xAisleNumber = GenerateXAisle(stage, (int)_stageSize.x - OFFSET, OFFSET);
             int yAisleNumber = GenerateYAisle(stage, (int)_stageSize.y - OFFSET, OFFSET);
@@ -565,7 +559,7 @@ namespace Scenes.Ingame.Stage
             if (viewDebugLog) Debug.Log($"IslePosition => x = {xAisleNumber},y = {yAisleNumber}");
             RoomData initialData = new RoomData();
             initialData.RoomDataSet(RoomType.none, 0);
-            var newStageGenerateData = new RoomData[stage.GetLength(0) + (type != generateType.Y ? 1 :0), stage.GetLength(1) + (type != generateType.X ? 1 : 0)];
+            var newStageGenerateData = new RoomData[stage.GetLength(0) + 1, stage.GetLength(1) + 1];
             for (int i = 0; i < (int)_stageSize.y + 1; i++)
             {
                 for (int j = 0; j < (int)_stageSize.x; j++)
@@ -573,8 +567,6 @@ namespace Scenes.Ingame.Stage
                     newStageGenerateData[i, j] = initialData;
                 }
             }
-            if(type != generateType.Y)
-            {
                 //X軸を通路分ずらす処理
                 for (int y = 0; y < stage.GetLength(1); y++)
                 {
@@ -598,7 +590,6 @@ namespace Scenes.Ingame.Stage
                         }
                     }
                 }
-            }
             var tempXPlotData = new RoomData[newStageGenerateData.GetLength(0), newStageGenerateData.GetLength(1)];
             for (int i = 0; i < (int)_stageSize.y + 1; i++)
             {
@@ -607,8 +598,6 @@ namespace Scenes.Ingame.Stage
                     tempXPlotData[i, j] = initialData;
                 }
             }
-            if (type != generateType.X)
-            {
                 //y軸を通路分ずらす処理
                 for (int x = 0; x < newStageGenerateData.GetLength(0); x++)
                 {
@@ -629,7 +618,6 @@ namespace Scenes.Ingame.Stage
                         }
                     }
                 }
-            }
             return tempXPlotData;
         }
         /// <summary>
@@ -950,7 +938,7 @@ namespace Scenes.Ingame.Stage
             }
             foreach (GameObject target in instantiateRooms)
             {
-                if (spawnPositionRoom == target) continue;
+                if (spawnPositionRoom == target || target == null) continue;
 
                 if (!IsConnected(agent, target.transform.position))
                 {
