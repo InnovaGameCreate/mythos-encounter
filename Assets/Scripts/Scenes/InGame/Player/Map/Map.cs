@@ -15,7 +15,7 @@ namespace Scenes.Ingame.Player
     {
         const float WALLSIZE = 5.85f;
         const float FLOOR_1F = -533.91f;//一階の様子を撮影するのに最適なy座標
-        const float FLOOR_2F = -528.4f;
+        const float FLOOR_2F = -528.025f;
         const float PROJECTIONSIZE_MAX = 55;//カメラの射角の最大値
 
 
