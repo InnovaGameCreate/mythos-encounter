@@ -33,11 +33,18 @@ namespace Scenes.Ingame.Player
             //アイテムにアタッチされているEffect系のスクリプトに取得者の情報を流す。
             ownerPlayerStatus = status;
             ownerPlayerItem = PlayerItem;
-            ownerPlayerStatus.ReviveCharacter(); 
-            if(GameObject.FindWithTag("Enemy") != null)
-            {
-                GameObject.FindWithTag("Enemy").GetComponent<EnemyMove>().ResetPosition();
+            ownerPlayerStatus.ReviveCharacter();
+            
+            GameObject[] Enemys = GameObject.FindGameObjectsWithTag("Enemy");
+
+            foreach (var enemy in Enemys) 
+            { 
+                if (enemy != null) 
+                {
+                    enemy.GetComponent<EnemyMove>().ResetPosition();
+                }
             }
+
 
         }
 

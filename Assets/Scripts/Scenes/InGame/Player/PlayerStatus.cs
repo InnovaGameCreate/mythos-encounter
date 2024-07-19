@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using System;
+using UnityEngine.Rendering.HighDefinition;
 
 /// <summary>
 /// プレイヤーのステータスを管理するクラス
@@ -318,6 +319,7 @@ namespace Scenes.Ingame.Player
 
         public void ReviveCharacter()
         {
+            Debug.Log("ReviveCharacter起動");
             _survive.Value = true;
             ChangeHealth(50, "Heal");
         }
@@ -390,6 +392,7 @@ namespace Scenes.Ingame.Player
         /// <param name="isSurvive">生きているか否か</param>
         private void CheckSurvive(bool isSurvive)
         {
+            Debug.Log("CheckSurvive起動");
             if (isSurvive)//生き返ったとき
             {
                 //今後蘇生関連の仕様が上がったら処理を実行させる
@@ -449,8 +452,8 @@ namespace Scenes.Ingame.Player
         /// </summary>
         private void FinishReviveAnimation()
         {
-            _anim.SetBool("FinisihRevive", true);
-            _startReviveAnimation |= false;
+            _anim.SetBool("FinishRevive", true);
+            _startReviveAnimation = false;
         }
 
         public void StartBuff()

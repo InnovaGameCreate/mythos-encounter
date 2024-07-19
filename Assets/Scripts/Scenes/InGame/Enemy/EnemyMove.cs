@@ -21,7 +21,7 @@ namespace Scenes.Ingame.Enemy
 
 
         private float _staminaChangeCount = 0;//スタミナを毎秒減らすのに使用
-        private Vector3 _initialPosition;
+        private Vector3 _initialPosition = new Vector3(30,0,18);//初期位置保存用変数
        
 
 
