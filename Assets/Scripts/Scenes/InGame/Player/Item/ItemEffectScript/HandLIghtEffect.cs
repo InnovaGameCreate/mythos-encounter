@@ -7,35 +7,35 @@ namespace Scenes.Ingame.Player
 {
     public class HandLIghtEffect : ItemEffect
     {
-        
-
-
-        private void Start()
-        {
-            if(ownerPlayerItem != null)
-            {
-                //アイテム選択時にライトの起動・停止を保存されているON/OFF状態から決定する
-                ownerPlayerItem.ActiveHandLight(ownerPlayerItem.SwitchHandLight);
-
-
-            }
-        }
-
+       
         public override void OnPickUp()
         {
-            //アイテム取得時にライトを起動する
-            ownerPlayerItem.ActiveHandLight(true);
-            if (!ownerPlayerItem.SwitchHandLight)
+            if (ownerPlayerItem.SwitchHandLights[ownerPlayerItem.nowIndex] == HandLightState.NotActive) //アイテム取得時
             {
-                ownerPlayerItem.ChangeSwitchHandLight();
-            }
+                ownerPlayerItem.ActiveHandLight(true);
+                ownerPlayerItem.ChangeSwitchHandLight(HandLightState.On);
 
-            ownerPlayerItem.OnNowIndexChange
-                .Skip(1)
-                .Subscribe(_ =>
+                //選択アイテムを別のものにしたとき、自動でライトを停止する
+                ownerPlayerItem.OnNowIndexChange
+                    .Skip(1)
+                    .Where(x => ownerPlayerItem.ItemSlots[ownerPlayerItem.nowIndex].myItemData == null || ownerPlayerItem.ItemSlots[ownerPlayerItem.nowIndex].myItemData.itemID != 3)
+                    .Subscribe(_ =>
+                    {
+                        ownerPlayerItem.ActiveHandLight(false);
+                    });
+            }
+            else//アイテム選択時
+            {
+                //以前の状態からライトの起動・停止を決定する
+                if (ownerPlayerItem.SwitchHandLights[ownerPlayerItem.nowIndex] == HandLightState.Off)
                 {
                     ownerPlayerItem.ActiveHandLight(false);
-                });
+                }
+                else if (ownerPlayerItem.SwitchHandLights[ownerPlayerItem.nowIndex] == HandLightState.On)
+                {
+                    ownerPlayerItem.ActiveHandLight(true);
+                }
+            }
 
         }
 
@@ -43,14 +43,23 @@ namespace Scenes.Ingame.Player
         {
             //アイテム廃棄時にライトを停止する
             ownerPlayerItem.ActiveHandLight(false);
+            ownerPlayerItem.ChangeSwitchHandLight(HandLightState.NotActive);
         }
 
         public override void Effect()
         {
             //左クリック時にライトのON/OFF状態を切り替え、起動・停止する
-            ownerPlayerItem.ChangeSwitchHandLight();
-            ownerPlayerItem.ActiveHandLight(ownerPlayerItem.SwitchHandLight);
-            Debug.Log($"SwitchHandLIghtは{ownerPlayerItem.SwitchHandLight}");
+            if (ownerPlayerItem.SwitchHandLights[ownerPlayerItem.nowIndex] == HandLightState.Off)
+            {
+                ownerPlayerItem.ChangeSwitchHandLight(HandLightState.On);
+                ownerPlayerItem.ActiveHandLight(true);
+            }
+            else if(ownerPlayerItem.SwitchHandLights[ownerPlayerItem.nowIndex] == HandLightState.On)
+            {
+                ownerPlayerItem.ChangeSwitchHandLight(HandLightState.Off);
+                ownerPlayerItem.ActiveHandLight(false);
+            }
+
         }
 
      

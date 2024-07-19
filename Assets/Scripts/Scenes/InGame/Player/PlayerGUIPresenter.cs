@@ -42,6 +42,7 @@ namespace Scenes.Ingame.Player
 
         [SerializeField] private GameObject _pop;//アイテムポップ
         [SerializeField] private TMP_Text _pop_Text;//アイテムポップ
+        [SerializeField] private Sprite _itemEmptySprite;
 
         [Header("アイテム関係")]//アイテム系
         [SerializeField] private Image[] _itemSlots;//アイテムスロット(7個)
@@ -173,7 +174,7 @@ namespace Scenes.Ingame.Player
                             }
                             else
                             {
-                                _itemImages[replaceEvent.Index].sprite = null;
+                                _itemImages[replaceEvent.Index].sprite = _itemEmptySprite; 
 
                             }
 

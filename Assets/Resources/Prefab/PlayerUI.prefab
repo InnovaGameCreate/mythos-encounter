@@ -61,6 +61,7 @@ MonoBehaviour:
   _staminaGaugeBackGround: {fileID: 1475497503823414726}
   _pop: {fileID: 576009123235549415}
   _pop_Text: {fileID: 7343221210242194201}
+  _itemEmptySprite: {fileID: 21300000, guid: ce64e3088d200b445a7faa6e41cf58fd, type: 3}
   _itemSlots:
   - {fileID: 967040225495875426}
   - {fileID: 7457872460824601599}

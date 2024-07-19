@@ -44,14 +44,16 @@ namespace Scenes.Ingame.Player
         private ReactiveCollection<ItemSlotStruct> _itemSlot = new ReactiveCollection<ItemSlotStruct>();//現在所持しているアイテムのリスト
 
         [SerializeField] private GameObject _spotLight;//Cameraに付属しているスポットライト
-        private bool _switchHandLight;//ライトのON/OFF状態を保存しておくための変数
 
         //アイテムデバッグ用
         [SerializeField] private GameObject _itemForDebug;
 
+        //懐中電灯のon/off状態保存用
+        private List<HandLightState> _switchHandLight = new List<HandLightState>();
+
         public List<ItemSlotStruct> ItemSlots { get { return _itemSlot.ToList(); } }//外部に_itemSlotの内容を公開する
         public int nowIndex { get => _nowIndex.Value; }
-        public bool SwitchHandLight { get => _switchHandLight; }
+        public List<HandLightState> SwitchHandLights { get {  return _switchHandLight.ToList(); } }
 
 
         public IObservable<int> OnNowIndexChange { get { return _nowIndex; } }//外部で_nowIndexの値が変更されたときに行う処理を登録できるようにする
@@ -71,6 +73,13 @@ namespace Scenes.Ingame.Player
             {
                 init.ChangeInfo();
                 _itemSlot.Add(init);
+            }
+
+            //懐中電灯の状態をNotActiveでスロット分作っておく
+            HandLightState LightSwitch = HandLightState.NotActive;
+            for(int i = 0; i < 7; i++)
+            {
+                _switchHandLight.Add(LightSwitch);
             }
 
             //色々な変数の初期化
@@ -327,16 +336,9 @@ namespace Scenes.Ingame.Player
         }
 
         //懐中電灯のON/OFFを切り替える関数
-        public void ChangeSwitchHandLight()
+        public void ChangeSwitchHandLight(HandLightState state)
         {
-            if(!_switchHandLight)
-            {
-                _switchHandLight = true;
-            }
-            else
-            {
-                _switchHandLight = false;
-            }
+            _switchHandLight[_nowIndex.Value] = state;
         }
     }
 }
