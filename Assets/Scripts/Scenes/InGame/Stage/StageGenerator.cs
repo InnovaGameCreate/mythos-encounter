@@ -13,6 +13,12 @@ using System;
 
 namespace Scenes.Ingame.Stage
 {
+    public enum generateType
+    {
+        XandY = 0,
+        X = 1,
+        Y = 2,
+    }
     /// <summary>
     /// 動作説明
     /// １._stageSizeに設定されたサイズのステージデータを生成（配列の_stageGenerateDataで管理）
@@ -549,7 +555,7 @@ namespace Scenes.Ingame.Stage
         /// <summary>
         /// x軸とy軸に１つずつ通路の作成
         /// </summary>
-        private RoomData[,] GenerateAisle(CancellationToken token, RoomData[,] stage,int setValueX = -1,, int setValueX = -1)
+        private RoomData[,] GenerateAisle(CancellationToken token, RoomData[,] stage,int setValueX = -1,int setValueY = -1, generateType type = generateType.XandY)
         {
             int xAisleNumber = GenerateXAisle(stage, (int)_stageSize.x - OFFSET, OFFSET);
             int yAisleNumber = GenerateYAisle(stage, (int)_stageSize.y - OFFSET, OFFSET);
@@ -559,7 +565,7 @@ namespace Scenes.Ingame.Stage
             if (viewDebugLog) Debug.Log($"IslePosition => x = {xAisleNumber},y = {yAisleNumber}");
             RoomData initialData = new RoomData();
             initialData.RoomDataSet(RoomType.none, 0);
-            var newStageGenerateData = new RoomData[stage.GetLength(0) + 1, stage.GetLength(1) + 1];
+            var newStageGenerateData = new RoomData[stage.GetLength(0) + (type != generateType.Y ? 1 :0), stage.GetLength(1) + (type != generateType.X ? 1 : 0)];
             for (int i = 0; i < (int)_stageSize.y + 1; i++)
             {
                 for (int j = 0; j < (int)_stageSize.x; j++)
@@ -567,30 +573,32 @@ namespace Scenes.Ingame.Stage
                     newStageGenerateData[i, j] = initialData;
                 }
             }
-            //X軸を通路分ずらす処理
-            for (int y = 0; y < stage.GetLength(1); y++)
+            if(type != generateType.Y)
             {
-                xSlide = false;
-                for (int x = 0; x < stage.GetLength(0); x++)
+                //X軸を通路分ずらす処理
+                for (int y = 0; y < stage.GetLength(1); y++)
                 {
-                    if (xSlide == false)
+                    xSlide = false;
+                    for (int x = 0; x < stage.GetLength(0); x++)
                     {
-                        if (x >= xAisleNumber && stage[x, y].RoomId != stage[x - 1, y].RoomId)
+                        if (xSlide == false)
                         {
-                            xSlide = true;
+                            if (x >= xAisleNumber && stage[x, y].RoomId != stage[x - 1, y].RoomId)
+                            {
+                                xSlide = true;
+                            }
                         }
-                    }
-                    if (xSlide)
-                    {
-                        newStageGenerateData[x + 1, y] = stage[x, y];
-                    }
-                    else
-                    {
-                        newStageGenerateData[x, y] = stage[x, y];
+                        if (xSlide)
+                        {
+                            newStageGenerateData[x + 1, y] = stage[x, y];
+                        }
+                        else
+                        {
+                            newStageGenerateData[x, y] = stage[x, y];
+                        }
                     }
                 }
             }
-            //y軸を通路分ずらす処理
             var tempXPlotData = new RoomData[newStageGenerateData.GetLength(0), newStageGenerateData.GetLength(1)];
             for (int i = 0; i < (int)_stageSize.y + 1; i++)
             {
@@ -599,22 +607,26 @@ namespace Scenes.Ingame.Stage
                     tempXPlotData[i, j] = initialData;
                 }
             }
-            for (int x = 0; x < newStageGenerateData.GetLength(0); x++)
+            if (type != generateType.X)
             {
-                ySlide = false;
-                for (int y = 0; y < newStageGenerateData.GetLength(1) - 1; y++)
+                //y軸を通路分ずらす処理
+                for (int x = 0; x < newStageGenerateData.GetLength(0); x++)
                 {
-                    if (y >= yAisleNumber && newStageGenerateData[x, y].RoomId != newStageGenerateData[x, y - 1].RoomId)
+                    ySlide = false;
+                    for (int y = 0; y < newStageGenerateData.GetLength(1) - 1; y++)
                     {
-                        ySlide = true;
-                    }
-                    if (ySlide)
-                    {
-                        tempXPlotData[x, y + 1] = newStageGenerateData[x, y];
-                    }
-                    else
-                    {
-                        tempXPlotData[x, y] = newStageGenerateData[x, y];
+                        if (y >= yAisleNumber && newStageGenerateData[x, y].RoomId != newStageGenerateData[x, y - 1].RoomId)
+                        {
+                            ySlide = true;
+                        }
+                        if (ySlide)
+                        {
+                            tempXPlotData[x, y + 1] = newStageGenerateData[x, y];
+                        }
+                        else
+                        {
+                            tempXPlotData[x, y] = newStageGenerateData[x, y];
+                        }
                     }
                 }
             }
