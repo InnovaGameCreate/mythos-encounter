@@ -119,10 +119,7 @@ namespace Scenes.Ingame.Player
                     else
                     {
                         //Ray‚É‰½‚à“–‚½‚ç‚È‚©‚Á‚½‚Ìˆ—
-                        if (_lastOutlinable != null)
-                        {
-                            IntractEvent(false, "");
-                        }
+                        IntractEvent(false, "");
                     }
                 });
 
@@ -212,7 +209,9 @@ namespace Scenes.Ingame.Player
 
         private void IntractEvent(bool outlineValue, string popString)
         {
-            _lastOutlinable.enabled = outlineValue;
+            if(_lastOutlinable != null) 
+                _lastOutlinable.enabled = outlineValue;
+
             _popActive.OnNext(popString);
         }
 
