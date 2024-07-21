@@ -32,6 +32,7 @@ namespace Scenes.Ingame.Player
         [SerializeField] private Slider[] _sanValueSliders;//各プレイヤーのSAN値バー
         [SerializeField] private TMP_Text[] _healthText;//各プレイヤーのHP残量表示テキスト
         [SerializeField] private TMP_Text[] _sanValueText;//各プレイヤーのSAN値残量表示テキスト
+        [SerializeField] private Sprite _itemEmptySprite;//アイテムスロットが空のときにいれる画像
 
         [Header("ゲーム内UI(オフライン)")]
         [Header("スタミナ関係")]//スタミナゲージ系
@@ -173,7 +174,7 @@ namespace Scenes.Ingame.Player
                             }
                             else
                             {
-                                _itemImages[replaceEvent.Index].sprite = null;
+                                _itemImages[replaceEvent.Index].sprite = _itemEmptySprite;
 
                             }
 

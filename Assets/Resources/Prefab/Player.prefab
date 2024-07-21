@@ -774,6 +774,7 @@ MonoBehaviour:
   _mainCamera: {fileID: 1285542953524166243}
   _getItemRange: 4
   scrollSense: 10
+  _itemForDebug: {fileID: 0}
 --- !u!114 &3297469623762709221
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -55,6 +55,7 @@ MonoBehaviour:
   - {fileID: 7505159131462693980}
   _healthText: []
   _sanValueText: []
+  _itemEmptySprite: {fileID: 21300000, guid: ce64e3088d200b445a7faa6e41cf58fd, type: 3}
   _staminaGaugeMask: {fileID: 2705360254038223814}
   _staminaGaugeFrontRect: {fileID: 3171006714604072499}
   _staminaGaugeFrontImage: {fileID: 814158108117991342}

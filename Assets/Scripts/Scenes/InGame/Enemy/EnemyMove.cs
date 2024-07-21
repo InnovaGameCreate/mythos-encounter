@@ -21,6 +21,7 @@ namespace Scenes.Ingame.Enemy
 
 
         private float _staminaChangeCount = 0;//スタミナを毎秒減らすのに使用
+        private Vector3 _initialPosition = new Vector3(30,0,18);//初期位置保存用変数
        
 
 
@@ -33,6 +34,7 @@ namespace Scenes.Ingame.Enemy
             _myAgent = GetComponent<NavMeshAgent>();
             if (_myAgent == null) Debug.LogError("NavMeshAgentが認識できません");
             _myAgent.destination = this.transform.position;
+            _initialPosition = this.transform.position;
 
         }
 
@@ -171,6 +173,18 @@ namespace Scenes.Ingame.Enemy
         public void SetMovePosition(Vector3 targetPosition) 
         {
             _myAgent.destination = targetPosition;
+        }
+
+        /// <summary>
+        /// 座標を初期位置に移動する関数
+        /// </summary>
+        public void ResetPosition()
+        {
+            _myAgent.enabled = false;
+            _enemyStatus.SetEnemyState(EnemyState.Patrolling);
+            transform.position = _initialPosition;
+            _myAgent.enabled = true;
+
         }
     }
 }

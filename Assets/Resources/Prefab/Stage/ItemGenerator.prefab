@@ -50,5 +50,6 @@ MonoBehaviour:
   - {fileID: 4570247510132778309, guid: f9758bb809c86794c9f5f7c72ca5e703, type: 3}
   - {fileID: 4570247510132778309, guid: 31905bfc70a2ddf409c551bcb6df779e, type: 3}
   - {fileID: 4570247510132778309, guid: aee2d85a02b82534598bb8aca49bf407, type: 3}
+  - {fileID: 4570247510132778309, guid: ab67a0a3e18354c4d95587b785f10572, type: 3}
   _escapeItemPrefab: {fileID: 1949379199197260525, guid: 1138eb2a82e55ec48aada3998ffcf7d2, type: 3}
   _escapePointPrefab: {fileID: 62901747889602305, guid: 585ca18ea7e82a64490e201b2b2e3eea, type: 3}
