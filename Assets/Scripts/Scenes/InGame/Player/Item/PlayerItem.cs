@@ -74,59 +74,57 @@ namespace Scenes.Ingame.Player
             RaycastHit hit = new RaycastHit();
             //視線の先にアイテムがあるか確認。あれば右クリックで拾得できるようにする
             this.UpdateAsObservable()
-                    .Subscribe(_ =>
+                .Where(_ => _myPlayerStatus.nowPlayerSurvive)
+                .Subscribe(_ =>
+                {
+                    if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, _getItemRange, layerMask))//設定した距離にあるアイテムを認知
                     {
-                        if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, _getItemRange, layerMask))//設定した距離にあるアイテムを認知
+
+                        if (_debugMode)
                         {
+                            Debug.DrawRay(_mainCamera.transform.position, _mainCamera.transform.forward, Color.black);
+                        }
+                        //raycast先のオブジェクトが変化した際にOutlineを非表示にする
 
-                            if (_debugMode)
+                        if (_lastGameobject != null &&
+                        _lastOutlinable != null &&
+                        _lastGameobject != hit.collider.gameObject)
+                        {
+                            IntractEvent(false, "");
+                        }
+                        _lastGameobject = hit.collider.gameObject;
+
+                        if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
+                        {
+                            interactable.Intract(_myPlayerStatus);
+
+                            if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out EscapeItem escapeItem))
                             {
-                                Debug.DrawRay(_mainCamera.transform.position, _mainCamera.transform.forward, Color.black);
+                                //脱出アイテムだった時
+                                _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
+                                IntractEvent(true, "脱出アイテム");//アウトライン表示
                             }
-                            //raycast先のオブジェクトが変化した際にOutlineを非表示にする
-
-                            if (_lastGameobject != null &&
-                            _lastOutlinable != null &&
-                            _lastGameobject != hit.collider.gameObject)
+                            else if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out ItemEffect item))
                             {
-                                IntractEvent(false, "");
+                                //脱出アイテム以外のアイテムの時
+                                string name = item.GetItemData().itemName;
+                                _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
+                                IntractEvent(true, name);//アウトライン表示
                             }
-                            _lastGameobject = hit.collider.gameObject;
-
-                            if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
+                            else if (hit.collider.gameObject.CompareTag("StageIntract"))
                             {
-                                interactable.Intract(_myPlayerStatus);
-
-                                if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out EscapeItem escapeItem))
-                                {
-                                    //脱出アイテムだった時
-                                    _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
-                                    IntractEvent(true, "脱出アイテム");//アウトライン表示
-                                }
-                                else if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out ItemEffect item))
-                                {
-                                    //脱出アイテム以外のアイテムの時
-                                    string name = item.GetItemData().itemName;
-                                    _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
-                                    IntractEvent(true, name);//アウトライン表示
-                                }
-                                else if (hit.collider.gameObject.CompareTag("StageIntract"))
-                                {
-                                    //StageIntract（ドアなど）のとき
-                                    _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
-                                    IntractEvent(true, interactable.ReturnPopString());//アウトライン表示
-                                }
+                                //StageIntract（ドアなど）のとき
+                                _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
+                                IntractEvent(true, interactable.ReturnPopString());//アウトライン表示
                             }
                         }
-                        else
-                        {
-                            //Rayに何も当たらなかった時の処理
-                            if (_lastOutlinable != null)
-                            {
-                                IntractEvent(false, "");
-                            }
-                        }
-                    });
+                    }
+                    else
+                    {
+                        //Rayに何も当たらなかった時の処理
+                        IntractEvent(false, "");
+                    }
+                });
 
             //左クリックしたときにアイテムを使用
             this.UpdateAsObservable()
@@ -216,7 +214,9 @@ namespace Scenes.Ingame.Player
 
         private void IntractEvent(bool outlineValue, string popString)
         {
-            _lastOutlinable.enabled = outlineValue;
+            if(_lastOutlinable != null) 
+                _lastOutlinable.enabled = outlineValue;
+
             _popActive.OnNext(popString);
         }
 
