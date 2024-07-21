@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using System;
+using UnityEngine.Rendering.HighDefinition;
 
 /// <summary>
 /// プレイヤーのステータスを管理するクラス
@@ -90,9 +91,13 @@ namespace Scenes.Ingame.Player
 
         public bool nowPlayerUseMagic { get { return _isUseMagic; } }
 
+
         [HideInInspector] public int lastHP;//HPの変動前の数値を記録。比較に用いる
         [HideInInspector] public int lastSanValue;//SAN値の変動前の数値を記録。比較に用いる
         [HideInInspector] public int bleedingDamage = 1;//出血時に受けるダメージ
+
+        private int _deathEventCount = 0;//死亡アニメーションのイベント回数確認用
+
         private bool _isUseItem = false;
         private bool _isUseMagic = false;
         private bool _isHaveCharm = false;
@@ -156,6 +161,8 @@ namespace Scenes.Ingame.Player
             {
                 _enemyAttackedMe.OnNext(default);
             }
+
+
 #endif           
 
             //死亡時に当たり判定を死体と同じ場所に動かす
@@ -196,13 +203,13 @@ namespace Scenes.Ingame.Player
         {
             if (mode == "Heal")
             {
-                lastHP = _health.Value;
                 _health.Value = Mathf.Min(100, _health.Value + value);
+                lastHP = _health.Value;
             }
             else if (mode == "Damage")
             {
-                lastHP = _health.Value;
                 _health.Value = Mathf.Max(0, _health.Value - value);
+                lastHP = _health.Value;
             }
         }
 
@@ -273,6 +280,7 @@ namespace Scenes.Ingame.Player
         {
             _isHaveCharm = value;
         }
+
         /// <summary>
         /// 呪文を唱えているか管理するための関数
         /// </summary>
@@ -309,6 +317,13 @@ namespace Scenes.Ingame.Player
             _playerActionState.Value = state;
         }
 
+        public void ReviveCharacter()
+        {
+            Debug.Log("ReviveCharacter起動");
+            _survive.Value = true;
+            ChangeHealth(50, "Heal");
+        }
+
         /// <summary>
         /// 出血状態の処理を行う関数。
         /// </summary>
@@ -339,6 +354,13 @@ namespace Scenes.Ingame.Player
 
             if (health <= 0)
                 _survive.Value = false;
+
+            if(lastHP >= 0 && health < 0)
+            {
+                _survive.Value = true;
+            }
+
+
         }
 
         /// <summary>
@@ -363,12 +385,14 @@ namespace Scenes.Ingame.Player
                 _survive.Value = false;
         }
 
+
         /// <summary>
         /// 生死状態の変更時に処理を行う
         /// </summary>
         /// <param name="isSurvive">生きているか否か</param>
         private void CheckSurvive(bool isSurvive)
         {
+            Debug.Log("CheckSurvive起動");
             if (isSurvive)//生き返ったとき
             {
                 //今後蘇生関連の仕様が上がったら処理を実行させる
@@ -378,6 +402,9 @@ namespace Scenes.Ingame.Player
                 {
                     _playerMagic.ChangeCanUseMagicBool(true);
                 }
+
+                _deathEventCount = 0;
+                _startReviveAnimation = true;
             }
             else //死んだとき
             {
@@ -391,8 +418,10 @@ namespace Scenes.Ingame.Player
                      
                 }
                 _anim.SetBool("Survive", false);
+                _anim.SetBool("FinishRevive", false);
                 _playerMagic.ChangeCanUseMagicBool(false);
                 _playerItem.ChangeCanUseItem(false);
+                _deathEventCount = 0;
 
                 //画面を暗転させる
                 var fadeBlackImage = FindObjectOfType<Scenes.Ingame.InGameSystem.UI.FadeBlackImage>();
@@ -408,7 +437,23 @@ namespace Scenes.Ingame.Player
         /// </summary>
         private void DeathAnimationBoolChange()
         {
-            _startDeathAnimation = !_startDeathAnimation;
+            _deathEventCount += 1;
+
+            if(_deathEventCount == 2)//2回目のイベント時のみ実行
+            {
+                _startDeathAnimation = !_startDeathAnimation;
+                _playerItem.CheckHaveDoll();
+            }
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void FinishReviveAnimation()
+        {
+            _anim.SetBool("FinishRevive", true);
+            _startReviveAnimation = false;
         }
 
         public void StartBuff()
@@ -427,6 +472,7 @@ namespace Scenes.Ingame.Player
             yield break;
         }
 
+
         /// <summary>
         /// 光の距離を変化させる関数
         /// </summary>
@@ -435,6 +481,7 @@ namespace Scenes.Ingame.Player
         {
             _lightrange.Value = (extendLightRange ? 80 : 20);
         }
+
     }
 }
 
