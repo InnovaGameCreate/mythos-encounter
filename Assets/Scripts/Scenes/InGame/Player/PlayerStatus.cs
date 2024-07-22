@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using System;
 using UnityEngine.Rendering.HighDefinition;
+using Scenes.Ingame.InGameSystem.UI;
 
 /// <summary>
 /// プレイヤーのステータスを管理するクラス
@@ -48,6 +49,8 @@ namespace Scenes.Ingame.Player
         [SerializeField] private CapsuleCollider _cupsuleCollider;
         [SerializeField] private PlayerMagic _playerMagic;
         [SerializeField] private PlayerItem _playerItem;
+
+        [SerializeField] private FadeBlackImage _fadeBlackImage;
 
         private Subject<float> castEvent = new Subject<float>();//呪文の詠唱時間を発行
 
@@ -178,7 +181,7 @@ namespace Scenes.Ingame.Player
                 //CharacterControllerのコライダー半径の変更（死亡時のアバターの壁埋まり防止のため）
                 if(_startDeathAnimation && !_startReviveAnimation)//死亡時
                     _controller.radius = 1.2f;
-                else if(_startDeathAnimation && !_startReviveAnimation)//蘇生時
+                else if(!_startDeathAnimation && _startReviveAnimation)//蘇生時
                     _controller.radius = 0.4f;
 
 
@@ -405,6 +408,12 @@ namespace Scenes.Ingame.Player
 
                 _deathEventCount = 0;
                 _startReviveAnimation = true;
+
+                //画面暗転を解除
+                if (_fadeBlackImage != null)
+                {
+                    _fadeBlackImage.FadeOutImage();
+                }
             }
             else //死んだとき
             {
@@ -424,12 +433,21 @@ namespace Scenes.Ingame.Player
                 _deathEventCount = 0;
 
                 //画面を暗転させる
-                var fadeBlackImage = FindObjectOfType<Scenes.Ingame.InGameSystem.UI.FadeBlackImage>();
-                if (fadeBlackImage != null)
+                if (_fadeBlackImage == null)
                 {
-                    fadeBlackImage.FadeInImage();
+                    _fadeBlackImage = FindObjectOfType<FadeBlackImage>();                    
                 }
+                _fadeBlackImage.FadeInImage();
             }
+        }
+
+        /// <summary>
+        /// _fadeBlackImageをセットするための関数
+        /// </summary>
+        /// <param name="script"></param>
+        public void SetFadeBlackImage(FadeBlackImage script)
+        {
+            _fadeBlackImage = script;
         }
 
         /// <summary>
@@ -438,8 +456,9 @@ namespace Scenes.Ingame.Player
         private void DeathAnimationBoolChange()
         {
             _deathEventCount += 1;
+            _startDeathAnimation = true;
 
-            if(_deathEventCount == 2)//2回目のイベント時のみ実行
+            if (_deathEventCount == 2)//2回目のイベント時のみ実行
             {
                 _startDeathAnimation = !_startDeathAnimation;
                 _playerItem.CheckHaveDoll();
@@ -448,7 +467,7 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// 
+        /// 蘇生アニメーションが終了したことを知らせる関数
         /// </summary>
         private void FinishReviveAnimation()
         {

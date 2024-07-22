@@ -162,6 +162,7 @@ namespace Scenes.Ingame.Player
             {
                 _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
                 _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Idle);//待機状態へ移行
+                _animator.SetFloat("MovementSpeed", _characterController.velocity.magnitude);//動けないときに確定でIdle状態のモーションにするため
             }
 
             //自由落下

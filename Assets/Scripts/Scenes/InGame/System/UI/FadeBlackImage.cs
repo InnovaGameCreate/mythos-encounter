@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Scenes.Ingame.Manager;
+using Scenes.Ingame.Player;
+using UniRx;
 
 namespace Scenes.Ingame.InGameSystem.UI
 {
@@ -30,7 +33,15 @@ namespace Scenes.Ingame.InGameSystem.UI
         public void FadeOutImage()
         {
             _thisCanvas.sortingOrder = -1;
-            _blackImage.DOFade(0, 0.5f);
+            var sequence = DOTween.Sequence(); //Sequenceê∂ê¨
+
+            //TweenÇÇ¬Ç»Ç∞ÇÈ
+            sequence.Append(_blackImage.DOFade(0.3f, 4))
+                    .Append(_blackImage.DOFade(0.8f, 3))
+                    .Append(_blackImage.DOFade(0f, 4));
+
+            sequence.Play();
+
         }
 
         /// <summary>
