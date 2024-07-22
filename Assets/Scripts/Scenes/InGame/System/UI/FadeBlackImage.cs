@@ -37,8 +37,8 @@ namespace Scenes.Ingame.InGameSystem.UI
 
             //Tween‚ð‚Â‚È‚°‚é
             sequence.Append(_blackImage.DOFade(0.3f, 4))
-                    .Append(_blackImage.DOFade(0.8f, 3))
-                    .Append(_blackImage.DOFade(0f, 4));
+                    .Append(_blackImage.DOFade(0.95f, 3))
+                    .Append(_blackImage.DOFade(0f, 5));
 
             sequence.Play();
 

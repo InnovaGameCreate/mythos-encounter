@@ -134,8 +134,8 @@ namespace Scenes.Ingame.Player
 
         void Update()
         {
-            //生きている間はカメラを操作できる
-            if (_myPlayerStatus.nowPlayerSurvive)
+            //生きている間かつ蘇生アニメーション中でないときはカメラを操作できる
+            if (_myPlayerStatus.nowPlayerSurvive && !_myPlayerStatus.nowReviveAnimationDoing)
             {
                 float moveMouseX = Input.GetAxis("Mouse X");
                 if (Mathf.Abs(moveMouseX) > 0.001f)
@@ -156,9 +156,9 @@ namespace Scenes.Ingame.Player
             
 
             //動ける状態であれば動く
-            if (_isCanMove && !_isCannotMoveByParalyze && _myPlayerStatus.nowPlayerSurvive)
+            if (_isCanMove && !_isCannotMoveByParalyze && _myPlayerStatus.nowPlayerSurvive && !_myPlayerStatus.nowReviveAnimationDoing)
                 Move();
-            else if(!_isCanMove || _isCannotMoveByParalyze || !_myPlayerStatus.nowPlayerSurvive)
+            else if(!_isCanMove || _isCannotMoveByParalyze || !_myPlayerStatus.nowPlayerSurvive || _myPlayerStatus.nowReviveAnimationDoing)
             {
                 _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
                 _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Idle);//待機状態へ移行

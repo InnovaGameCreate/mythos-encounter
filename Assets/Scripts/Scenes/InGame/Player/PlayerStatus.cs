@@ -93,13 +93,12 @@ namespace Scenes.Ingame.Player
         public float nowPlayerRunVolume { get { return _runVolume.Value; } }
 
         public bool nowPlayerUseMagic { get { return _isUseMagic; } }
+        public bool nowReviveAnimationDoing { get { return _startReviveAnimation; } }
 
 
         [HideInInspector] public int lastHP;//HPの変動前の数値を記録。比較に用いる
         [HideInInspector] public int lastSanValue;//SAN値の変動前の数値を記録。比較に用いる
         [HideInInspector] public int bleedingDamage = 1;//出血時に受けるダメージ
-
-        private int _deathEventCount = 0;//死亡アニメーションのイベント回数確認用
 
         private bool _isUseItem = false;
         private bool _isUseMagic = false;
@@ -107,7 +106,10 @@ namespace Scenes.Ingame.Player
         private bool _isUseEscapePoint = false;
         private bool _isPulsationBleeding = false;
 
+        //アニメーション関連の変数
+        private int _deathEventCount = 0;//死亡アニメーションのイベント回数確認用
         private bool _startReviveAnimation = false;//蘇生アニメーションが始まったか否か
+
         private bool _startDeathAnimation = false;//死亡アニメーションが始まったか否か
         private bool _isBuffedAdrenaline = false;
 
