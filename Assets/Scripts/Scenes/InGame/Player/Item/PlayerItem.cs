@@ -13,64 +13,60 @@ using Unity.VisualScripting;
 namespace Scenes.Ingame.Player
 {
     /// <summary>
-    /// ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¸ºï½«é«¢ï½¢ç¸ºå¶ï½‹èœƒï½¦é€…ï¿½ï½’ç¸ºï½¾ç¸ºï½¨ç¹§âˆšâ—†ç¹§ï½¯ç¹ï½©ç¹§ï½¹
-    /// 1.ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§ï½¹ç¹ï½­ç¹ï¿½ãƒ¨ç¸ºï½«ç¸ºã‚…ï½‹ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§å‰ƒï½½ï½¿é€•ï½¨ç¸ºå¶ï½‹
-    /// 2.è¬‡è¬–âˆšã„ç¹§ï½¤ç¹ï¿½Î’ç¸ºï½®é‚‚ï½¡é€…
-    /// 3.ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§ï½¹ç¹ï½­ç¹ï¿½ãƒ¨ç¸ºï½®è´å’²ï½½ï½®ç¸ºï½®é‚‚ï½¡é€…
+    /// ƒAƒCƒeƒ€‚ÉŠÖ‚·‚éˆ—‚ğ‚Ü‚Æ‚ß‚½ƒNƒ‰ƒX
+    /// 1.ƒAƒCƒeƒ€ƒXƒƒbƒg‚É‚ ‚éƒAƒCƒeƒ€‚ğg—p‚·‚é
+    /// 2.ŠƒAƒCƒeƒ€‚ÌŠÇ—
+    /// 3.ƒAƒCƒeƒ€ƒXƒƒbƒg‚ÌˆÊ’u‚ÌŠÇ—
     /// </summary>
     public class PlayerItem : MonoBehaviour
     {
         private PlayerStatus _myPlayerStatus;
 
-        //ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’é«¢ï½¢è«
-        private ReactiveProperty<int> _nowIndex = new ReactiveProperty<int>();//é©•ï½¸è¬šæ¨”ï½¸ï½­ç¸ºï½®ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§ï½¹ç¹ï½­ç¹ï¿½ãƒ¨é€¡ï½ªèœ¿ï½·
-        public GameObject myRightHand;//è¬‡ä¹ï¿½ç¸ºè–™â†’
-        public GameObject nowBringItem;//è¿´ï½¾è¨ï½¨è¬‡ä¹â†“è¬–âˆšâ–²ç¸ºï½¦ç¸ºï¿½ï½‹ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’
-        private bool _isCanChangeBringItem = true;//è¬‡ä¹â†“è¬–âˆšâ–½ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¸ºï½®èŸç”»å³©ç¹§å®šï½¨ï½±èœ¿ï½¯ç¸ºå¶ï½‹ç¸ºå¥å‡„ç¸º
+        //ƒAƒCƒeƒ€ŠÖŒW
+        private ReactiveProperty<int> _nowIndex = new ReactiveProperty<int>();//‘I‘ğ’†‚ÌƒAƒCƒeƒ€ƒXƒƒbƒg”Ô†
+        public GameObject myRightHand;//è‚Ì‚±‚Æ
+        public GameObject nowBringItem;//Œ»İè‚É‚Á‚Ä‚¢‚éƒAƒCƒeƒ€
+        private bool _isCanChangeBringItem = true;//è‚É‚ÂƒAƒCƒeƒ€‚Ì•ÏX‚ğ‹–‰Â‚·‚é‚©”Û‚©
 
-        //Rayé«¢ï½¢é¨¾ï½£
-        [SerializeField] Camera _mainCamera;//playerç¸ºï½®é€¶ï½®é‚±å£¹ï½’è«¡ï¿½â‰§ç¹§ï½«ç¹ï½¡ç¹ï½©
-        [SerializeField] private float _getItemRange;//ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§è²ï¿½è¬‡ä¹ã€’ç¸ºé˜ªï½‹éœæ™å±¬
+        //RayŠÖ˜A
+        [SerializeField] Camera _mainCamera;//player‚Ì–Úü‚ğ’S‚¤ƒJƒƒ‰
+        [SerializeField] private float _getItemRange;//ƒAƒCƒeƒ€‚ğ“üè‚Å‚«‚é‹——£
         private bool _debugMode = false;
 
-        //ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§ï½¹ç¹ï½­ç¹ï¿½ãƒ¨ï¿½ï¿½Iï¿½å³¨ï¿½è¬«å ºï½½æ†ºæœªé¨¾ï½£
+        //ƒAƒCƒeƒ€ƒXƒƒbƒgiUIj‚Ì‘€ìŠÖ˜A
         private float scrollValue;
-        [SerializeField] private float scrollSense = 10;//ç¹æ§­ãˆç¹§ï½¹ç¹å¸™ã†ç¹ï½¼ç¹ï½«ç¸ºï½®è«¢æº·ï½ºï½¦
+        [SerializeField] private float scrollSense = 10;//ƒ}ƒEƒXƒzƒC[ƒ‹‚ÌŠ´“x
 
         private bool _isCanUseItem = true;
 
-        //UniRxé«¢ï½¢è«
+        //UniRxŠÖŒW
         private Subject<String> _popActive = new Subject<String>();
-        private ReactiveCollection<ItemSlotStruct> _itemSlot = new ReactiveCollection<ItemSlotStruct>();//è¿´ï½¾è¨ï½¨è¬‡è¬–âˆšï¼ ç¸ºï½¦ç¸ºï¿½ï½‹ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¸ºï½®ç¹ï½ªç¹§ï½¹ç¹
+        private ReactiveCollection<ItemSlotStruct> _itemSlot = new ReactiveCollection<ItemSlotStruct>();//Œ»İŠ‚µ‚Ä‚¢‚éƒAƒCƒeƒ€‚ÌƒŠƒXƒg
 
-        [SerializeField] private GameObject _spotLight;//Cameraç¸ºï½«è‰ä¼œï½±æ§­ï¼ ç¸ºï½¦ç¸ºï¿½ï½‹ç¹§ï½¹ç¹æ˜´ãƒ£ç¹åŒ»Î›ç¹§ï½¤ç¹
+        [SerializeField] private GameObject _spotLight;//Camera‚É•t‘®‚µ‚Ä‚¢‚éƒXƒ|ƒbƒgƒ‰ƒCƒg
 
-        //ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹ï¿½ãƒ°ç¹ï¿½ã’é€•ï½¨
+        //ƒAƒCƒeƒ€ƒfƒoƒbƒO—p
         [SerializeField] private GameObject _itemForDebug;
 
-        //è«›è‰ï½¸ï½­é«®ï½»è½£ï½¯ç¸ºï½®on/offè¿¥ï½¶è«·å€¶ï½¿æ™ï½­å€¡ç•‘
+        //‰ù’†“d“”‚Ìon/offó‘Ô•Û‘¶—p
         private List<HandLightState> _switchHandLight = new List<HandLightState>();
 
-        public List<ItemSlotStruct> ItemSlots { get { return _itemSlot.ToList(); } }//èŸå¤œÎšç¸ºï½«_itemSlotç¸ºï½®èœ€ï¿½ï½®ï½¹ç¹§è²ï¿½é«¢ä¹â˜†ç¹§
+        public List<ItemSlotStruct> ItemSlots { get { return _itemSlot.ToList(); } }//ŠO•”‚É_itemSlot‚Ì“à—e‚ğŒöŠJ‚·‚é
         public int nowIndex { get => _nowIndex.Value; }
         public List<HandLightState> SwitchHandLights { get {  return _switchHandLight.ToList(); } }
 
-
-        public IObservable<int> OnNowIndexChange { get { return _nowIndex; } }//èŸå¤œÎšç¸ºï½§_nowIndexç¸ºï½®è›Ÿï½¤ç¸ºæ‚Ÿï½¤ç”»å³©ç¸ºè¼”ï½Œç¸ºæº˜â†’ç¸ºé˜ªâ†“é™¦å¾Œâ‰§èœƒï½¦é€…ï¿½ï½’é€‹ï½»éª­ï½²ç¸ºï½§ç¸ºé˜ªï½‹ç¹§åŒ»â‰§ç¸ºï½«ç¸ºå¶ï½‹
+        public IObservable<int> OnNowIndexChange { get { return _nowIndex; } }//ŠO•”‚Å_nowIndex‚Ì’l‚ª•ÏX‚³‚ê‚½‚Æ‚«‚És‚¤ˆ—‚ğ“o˜^‚Å‚«‚é‚æ‚¤‚É‚·‚é
         public IObservable<String> OnPopActive { get { return _popActive; } }
-        public IObservable<CollectionReplaceEvent<ItemSlotStruct>> OnItemSlotReplace => _itemSlot.ObserveReplace();//èŸå¤œÎšç¸ºï½«_itemSlotç¸ºï½®éš•âˆ«ï½´ç¸ºæ‚Ÿï½¤ç”»å³©ç¸ºè¼”ï½Œç¸ºæº˜â†’ç¸ºé˜ªâ†“é™¦å¾Œâ‰§èœƒï½¦é€…ï¿½ï½’é€‹ï½»éª­ï½²ç¸ºï½§ç¸ºé˜ªï½‹ç¹§åŒ»â‰§ç¸ºï½«ç¸ºå¶ï½‹
+        public IObservable<CollectionReplaceEvent<ItemSlotStruct>> OnItemSlotReplace => _itemSlot.ObserveReplace();//ŠO•”‚É_itemSlot‚Ì—v‘f‚ª•ÏX‚³‚ê‚½‚Æ‚«‚És‚¤ˆ—‚ğ“o˜^‚Å‚«‚é‚æ‚¤‚É‚·‚é
         private Outlinable _lastOutlinable = null;
         private GameObject _lastGameobject = null;
-
-        [SerializeField] GameObject _itemForDebug;//ç¹ï¿½ãƒ°ç¹ï¿½ã’é€•ï½¨ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’
-
         // Start is called before the first frame update
         void Start()
         {
-            int layerMask = LayerMask.GetMask("Item") | LayerMask.GetMask("StageIntract") | LayerMask.GetMask("Wall");//Item, StageIntract,Wallç¸ºï½¨ç¸ºï¿½â‰§ç¹ï½¬ç¹§ï½¤ç¹ï½¤ç¹ï½¼ç¸ºï½«ç¸ºã‚…ï½‹GameObjectç¸ºï½«ç¸ºåŠ±Â°rayç¸ºæ‚Ÿï½½è–™â—†ç¹§å³¨â†‘ç¸ºï¿½ï½ˆç¸ºï¿½â†“ç¸ºå¶ï½‹
+            int layerMask = LayerMask.GetMask("Item") | LayerMask.GetMask("StageIntract") | LayerMask.GetMask("Wall");//Item, StageIntract,Wall‚Æ‚¢‚¤ƒŒƒCƒ„[‚É‚ ‚éGameObject‚É‚µ‚©ray‚ª“–‚½‚ç‚È‚¢‚æ‚¤‚É‚·‚é
             _myPlayerStatus = GetComponent<PlayerStatus>();
 
-            //è‰é›ï½¾å¾Œï¿½ingameèœ‘é˜ªï¿½ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¸ºï½®è¬‡è¬–âˆ«æ†¾è±•âˆšï½’è‰ï½£èœˆï½¥ç¸ºè¼”â—‹ç¹§ä¹ã°ï½±è¿šåŒ»ï¿½è›»æ™„æ‚„è›¹
+            //¡Œã‚Íingame‘O‚ÌƒAƒCƒeƒ€‚ÌŠó‹µ‚ğ‘ã“ü‚³‚¹‚éBƒ¿”Å‚Í‰Šú‰»
             ItemSlotStruct init = new ItemSlotStruct();
             for (int i = 0; i < 7; i++)
             {
@@ -78,96 +74,93 @@ namespace Scenes.Ingame.Player
                 _itemSlot.Add(init);
             }
 
-            //è«›è‰ï½¸ï½­é«®ï½»è½£ï½¯ç¸ºï½®è¿¥ï½¶è«·ä¹ï½’NotActiveç¸ºï½§ç¹§ï½¹ç¹ï½­ç¹ï¿½ãƒ¨è›»ï¿½ï½½æ‡Šâ–²ç¸ºï½¦ç¸ºç¿«ï¿¥
+            //‰ù’†“d“”‚Ìó‘Ô‚ğNotActive‚ÅƒXƒƒbƒg•ªì‚Á‚Ä‚¨‚­
             HandLightState LightSwitch = HandLightState.NotActive;
             for(int i = 0; i < 7; i++)
             {
                 _switchHandLight.Add(LightSwitch);
             }
 
-            //æ¿¶ï½²ç¸²ï¿½â†‘èŸç”»ç„šç¸ºï½®è›»æ™„æ‚„è›¹
+            //FX‚È•Ï”‚Ì‰Šú‰»
             scrollValue = 0;
 
             RaycastHit hit = new RaycastHit();
-            //éš•ä¹Ÿï½·å£¹ï¿½èœˆåŒ»â†“ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¸ºå¾Œâ‰ ç¹§ä¹Â°é’ï½ºéš±é˜ªã‚…â‰ ç¹§å¾Œï¿½èœ¿ï½³ç¹§ï½¯ç¹ï½ªç¹ï¿½ã‘ç¸ºï½§è«¡ï½¾è •åŠ±ã€’ç¸ºé˜ªï½‹ç¹§åŒ»â‰§ç¸ºï½«ç¸ºå¶ï½‹
+            //‹ü‚Ìæ‚ÉƒAƒCƒeƒ€‚ª‚ ‚é‚©Šm”FB‚ ‚ê‚Î‰EƒNƒŠƒbƒN‚ÅE“¾‚Å‚«‚é‚æ‚¤‚É‚·‚é
             this.UpdateAsObservable()
-                .Where(_ => _myPlayerStatus.nowPlayerSurvive)
-                .Subscribe(_ =>
-                {
-                    if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, _getItemRange, layerMask))//è¨­å®šã—ãŸè·é›¢ã«ã‚ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã‚’èªçŸ¥
-                    {
-
-
-                        if (_debugMode)
-
-                        {
-                            Debug.DrawRay(_mainCamera.transform.position, _mainCamera.transform.forward, Color.black);
-                        }
-                        //raycastå…ˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒå¤‰åŒ–ã—ãŸéš›ã«Outlineã‚’éè¡¨ç¤ºã«ã™ã‚‹
-
-
-                        if (_lastGameobject != null &&
-                        _lastOutlinable != null &&
-                        _lastGameobject != hit.collider.gameObject)
-                        {
-                            IntractEvent(false, "");
-                        }
-                        _lastGameobject = hit.collider.gameObject;
-
-
-                        if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
-                        {
-                            interactable.Intract(_myPlayerStatus);
-
-                            if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out EscapeItem escapeItem))
+                            .Where(_ => _myPlayerStatus.nowPlayerSurvive)
+                            .Subscribe(_ =>
                             {
-                                //è„±å‡ºã‚¢ã‚¤ãƒ†ãƒ ã ã£ãŸæ™‚
-                                _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
-                                IntractEvent(true, "è„±å‡ºã‚¢ã‚¤ãƒ†ãƒ ");//ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³è¡¨ç¤º
-                            }
-                            else if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out ItemEffect item))
-                            {
+                                if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, _getItemRange, layerMask))//İ’è‚µ‚½‹——£‚É‚ ‚éƒAƒCƒeƒ€‚ğ”F’m
+                                {
 
-                                //è„±å‡ºã‚¢ã‚¤ãƒ†ãƒ ä»¥å¤–ã®ã‚¢ã‚¤ãƒ†ãƒ ã®æ™‚
-                                string name = item.GetItemData().itemName;
-                                _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
-                                IntractEvent(true, name);//ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³è¡¨ç¤º
-                            }
-                            else if (hit.collider.gameObject.CompareTag("StageIntract"))
-                            {
-                                //StageIntractï¼ˆãƒ‰ã‚¢ãªã©ï¼‰ã®ã¨ã
-                                _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
-                                IntractEvent(true, interactable.ReturnPopString());//ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³è¡¨ç¤º
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //Rayã«ä½•ã‚‚å½“ãŸã‚‰ãªã‹ã£ãŸæ™‚ã®å‡¦ç†
-                        IntractEvent(false, "");
-                    }
-                });
+                                    if (_debugMode)
+                                    {
+                                        Debug.DrawRay(_mainCamera.transform.position, _mainCamera.transform.forward, Color.black);
+                                    }
+                                    //raycastæ‚ÌƒIƒuƒWƒFƒNƒg‚ª•Ï‰»‚µ‚½Û‚ÉOutline‚ğ”ñ•\¦‚É‚·‚é
 
-            //èŸ¾ï½¦ç¹§ï½¯ç¹ï½ªç¹ï¿½ã‘ç¸ºåŠ±â—†ç¸ºï½¨ç¸ºé˜ªâ†“ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§å‰ƒï½½ï½¿é€•ï½¨
+                                    if (_lastGameobject != null &&
+                                    _lastOutlinable != null &&
+                                    _lastGameobject != hit.collider.gameObject)
+                                    {
+                                        IntractEvent(false, "");
+                                    }
+                                    _lastGameobject = hit.collider.gameObject;
+
+                                    if (hit.collider.gameObject.TryGetComponent(out IInteractable interactable))
+                                    {
+                                        interactable.Intract(_myPlayerStatus);
+
+                                        if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out EscapeItem escapeItem))
+                                        {
+                                            //’EoƒAƒCƒeƒ€‚¾‚Á‚½
+                                            _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
+                                            IntractEvent(true, "’EoƒAƒCƒeƒ€");//ƒAƒEƒgƒ‰ƒCƒ“•\¦
+                                        }
+                                        else if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out ItemEffect item))
+                                        {
+                                            //’EoƒAƒCƒeƒ€ˆÈŠO‚ÌƒAƒCƒeƒ€‚Ì
+                                            string name = item.GetItemData().itemName;
+                                            _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
+                                            IntractEvent(true, name);//ƒAƒEƒgƒ‰ƒCƒ“•\¦
+                                        }
+                                        else if (hit.collider.gameObject.CompareTag("StageIntract"))
+                                        {
+                                            //StageIntractiƒhƒA‚È‚Çj‚Ì‚Æ‚«
+                                            _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
+                                            IntractEvent(true, interactable.ReturnPopString());//ƒAƒEƒgƒ‰ƒCƒ“•\¦
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    //Ray‚É‰½‚à“–‚½‚ç‚È‚©‚Á‚½‚Ìˆ—
+                                    IntractEvent(false, "");
+                                }
+                            });
+
+
+            //¶ƒNƒŠƒbƒN‚µ‚½‚Æ‚«‚ÉƒAƒCƒeƒ€‚ğg—p
             this.UpdateAsObservable()
                     .Where(_ => _itemSlot[_nowIndex.Value].myItemData != null && Input.GetMouseButtonDown(0) && _isCanUseItem)
                     .Subscribe(_ =>
                     {
-                        Debug.Log("ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’è´ï½¿ç¸º");
 
-                        //ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§å‰ƒï½½ï½¿é€•ï½¨
+                        Debug.Log("ƒAƒCƒeƒ€g‚¤");
+
+                        //ƒAƒCƒeƒ€‚ğg—p
                         nowBringItem.GetComponent<ItemEffect>().Effect();
                     });
 
-            //Hç¹§ï½­ç¹ï½¼ç¹§è²ï¿½èœ‰å¸™ï¼ ç¸ºæº˜â†’ç¸ºé˜ªâ†“ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§å ¤ï½´è­½            
+            //HƒL[‚ğ“ü—Í‚µ‚½‚Æ‚«‚ÉƒAƒCƒeƒ€‚ğ”jŠü            
             this.UpdateAsObservable()
                     .Where(_ => _itemSlot[_nowIndex.Value].myItemData != null && Input.GetKeyDown(KeyCode.H) && _isCanUseItem)
                     .Subscribe(_ =>
                     {
-                        //ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’è¬ï½¨ç¸ºï½¦ç¹§ä¹â†’ç¸ºé˜ªï¿½èœƒï½¦é€…
+                        //ƒAƒCƒeƒ€Ì‚Ä‚é‚Æ‚«‚Ìˆ—
                         nowBringItem.GetComponent<ItemEffect>().OnThrow();
 
-                        //ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§å®šï½¿ä»£ï¿¥ç¸ºï½«è¬šè¼”ï¿¡è¬ï½¨ç¸ºï½¦ç¹§
+                        //ƒAƒCƒeƒ€‚ğ‹ß‚­‚É“Š‚°Ì‚Ä‚é
                         var rb = nowBringItem.GetComponent<Rigidbody>();
                         nowBringItem.GetComponent<Collider>().enabled = true;
                         nowBringItem.transform.parent = null;
@@ -175,41 +168,41 @@ namespace Scenes.Ingame.Player
                         rb.isKinematic = false;
                         rb.AddForce(_mainCamera.transform.forward * 300);
 
-                        //ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§ï½¹ç¹ï½­ç¹ï¿½ãƒ¨ç¸ºï½®Listç¹§å‘ˆå³©è­ï½°
+                        //ƒAƒCƒeƒ€ƒXƒƒbƒg‚ÌList‚ğXV
                         nowBringItem = null;
                         ItemSlotStruct temp = new ItemSlotStruct();
                         _itemSlot[_nowIndex.Value] = temp;
                     });
 
-            //ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§ï½¹ç¹ï½­ç¹ï¿½ãƒ¨ç¸ºï½®é©•ï½¸è¬šæ¨’æ†¾è«·ä¹â€²èŸå³¨ï½ç¸ºï½£ç¸ºæº˜â†’ç¸ºé˜ªâ†“ç¸²âˆµç„”èœˆï¿½â†“é©•ï½©è›»ï¿½â†‘ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§è²ï¿½è¿´ï½¾ç¸ºè¼”â—‹ç¹§
+            //ƒAƒCƒeƒ€ƒXƒƒbƒg‚Ì‘I‘ğó‘Ô‚ª•Ï‚í‚Á‚½‚Æ‚«‚ÉAèŒ³‚É“KØ‚ÈƒAƒCƒeƒ€‚ğoŒ»‚³‚¹‚é
             _nowIndex
                 .Subscribe(_ =>
                 {
-                    //è‰æ‚¶â†“ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§å‘ˆç„”ç¸ºï½«è¬–âˆšâ–²ç¸ºï½¦ç¸ºï¿½â—†ç¹§å³¨âˆšâ—ç¹§å¾Œï½’éï½´è¢
+                    //‘¼‚ÉƒAƒCƒeƒ€‚ğè‚É‚Á‚Ä‚¢‚½‚çA‚»‚ê‚ğ”j‰ó
                     if (nowBringItem != null)
                         Destroy(nowBringItem);
 
-                    //è¬‡ä¹â†“é©•ï½¸è¬šæ§­ï¼ ç¸ºæº˜ã„ç¹§ï½¤ç¹ï¿½Î’ç¹§è²ï¿½è¿´ï½¾ç¸ºè¼”â—‹ç¹§
+                    //è‚É‘I‘ğ‚µ‚½ƒAƒCƒeƒ€‚ğoŒ»‚³‚¹‚é
                     if (_itemSlot[_nowIndex.Value].myItemData != null)
                     {
                         nowBringItem = Instantiate(_itemSlot[_nowIndex.Value].myItemData.prefab, myRightHand.transform.position, _itemSlot[_nowIndex.Value].myItemData.prefab.transform.rotation);
                         nowBringItem.transform.parent = myRightHand.transform;
-                        nowBringItem.GetComponent<ItemInstract>().InstantIntract(_myPlayerStatus);//ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¸ºï½«è ¢ï¿½ï½¦âˆšâ†‘è« ï¿½ï½±ç¹§å‰ƒï½¸å¼±âˆ´ç¹§
+                        nowBringItem.GetComponent<ItemInstract>().InstantIntract(_myPlayerStatus);//ƒAƒCƒeƒ€‚É•K—v‚Èî•ñ‚ğ—^‚¦‚é
 
-                        //éš•å†¶ï½¦å£»ï½¸ç¿«ï¿½ç¹èˆŒã’ç¹§å ¤â”Œç¸ºä¸Šâ˜†ç¸ºæº˜ï½ç¸ºï½«è¬‡ä¹â†“è¬–âˆšâ–²ç¸ºï½¦ç¸ºï¿½ï½‹é«¢è–™ï¿½Colliderç¹§å‘ˆï½¶åŒ»â˜†
+                        //‹Šoã‚ÌƒoƒO‚ğ–³‚­‚·‚½‚ß‚Éè‚É‚Á‚Ä‚¢‚éŠÔ‚ÍCollider‚ğÁ‚·
                         nowBringItem.GetComponent<Collider>().enabled = false;
                     }
                 }).AddTo(this);
 
-            //ç¹åŠ±Îç¹§ï½¤ç¹ï½¤ç¹ï½¼ç¸ºï½®èœˆï½¥èœ‰å¸™â†“ç¹§åŒ»ï½‹_nowIndexç¸ºï½®èŸç”»å³©
-            //1.ç¹æ§­ãˆç¹§ï½¹ç¹å¸™ã†ç¹ï½¼ç¹ï½«ç¸ºï½®èœˆï½¥èœ‰
-            //2.è¬¨ï½°èŸ„åŠ±ãç¹ï½¼ç¸ºï½®èœˆï½¥èœ‰
+            //ƒvƒŒƒCƒ„[‚Ì“ü—Í‚É‚æ‚é_nowIndex‚Ì•ÏX
+            //1.ƒ}ƒEƒXƒzƒC[ƒ‹‚Ì“ü—Í
+            //2.”šƒL[‚Ì“ü—Í
             this.UpdateAsObservable()
                     .Where(_ => Input.GetAxis("Mouse ScrollWheel") != 0 || ItemNumberKeyDown() != 0)
                     .Where(_ => _isCanChangeBringItem)
                     .Subscribe(_ =>
                     {
-                        //ç¹æ§­ãˆç¹§ï½¹ç¹å¸™ï¿½ç¹ï½«ç¸ºï½®ç¸ºï½¿ç¸ºï½®èœˆï½¥èœ‰å¸¶å‡¾
+                        //ƒ}ƒEƒXƒz[ƒ‹‚Ì‚İ‚Ì“ü—Í
                         if (ItemNumberKeyDown() == 0)
                         {
                             scrollValue -= Input.GetAxis("Mouse ScrollWheel") * scrollSense;
@@ -218,7 +211,7 @@ namespace Scenes.Ingame.Player
                             if (_itemSlot[(int)scrollValue].myItemSlotStatus != ItemSlotStatus.unavailable)
                                 _nowIndex.Value = (int)scrollValue;
                         }
-                        //è¬¨ï½°èŸ„åŠ±ãç¹ï½¼ç¸ºï½®ç¸ºï½¿ç¸ºï½®èœˆï½¥èœ‰å¸¶å‡¾
+                        //”šƒL[‚Ì‚İ‚Ì“ü—Í
                         if (Input.GetAxis("Mouse ScrollWheel") == 0)
                         {
                             int temp = ItemNumberKeyDown() - 49;
@@ -230,8 +223,6 @@ namespace Scenes.Ingame.Player
                             }
                         }
                     });
-
-            
         }
 
         private void IntractEvent(bool outlineValue, string popString)
@@ -254,31 +245,19 @@ namespace Scenes.Ingame.Player
                         y += 1;
                     }
                 }
-                Debug.Log($"ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’è¬‡è¬–âˆµç„šï¿½å˜´y}");
+                Debug.Log($"ƒAƒCƒeƒ€Š”F{y}");
             }
 
-
-            if(Input.GetKeyDown(KeyCode.B))
+            if (Input.GetKeyDown(KeyCode.B))
             {
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
-                    
-
+                    {
                         if(_itemForDebug != null)
                         {
                             ItemSlotStruct item = new ItemSlotStruct();
                             item.ChangeInfo(_itemForDebug.GetComponent<ItemEffect>().GetItemData(), ItemSlotStatus.available);
-
-                            if (_itemSlot[0].myItemData != null)
-                            {
-                                ChangeListValue(1, item);
-                            }
-                            else
-                            {
-                                ChangeListValue(0, item);
-                            }
-
-                            
+                            ChangeListValue(0, item);
                             nowBringItem = Instantiate(_itemForDebug);
 
 
@@ -292,22 +271,21 @@ namespace Scenes.Ingame.Player
                             rigid.useGravity = false;
                             rigid.isKinematic = true;
                         }
-
-                    
+        
+                    }
                 }
             }
-
         }
 
         /// <summary>
-        /// è¬¨ï½°èŸ„åŠ±ãç¹ï½¼ç¸ºæ¢§æ¬¾ç¸ºè¼”ï½Œç¸ºæº˜Â°ç¸ºï½®é’ï½ºéš±
+        /// ”šƒL[‚ª‰Ÿ‚³‚ê‚½‚©‚ÌŠm”F
         /// </summary>
         /// <returns></returns>
         private int ItemNumberKeyDown()
         {
             if (Input.anyKeyDown)
             {
-                for (int i = 49; i <= 55; i++)//1ç¹§ï½­ç¹ï½¼ç¸ºä¹ï½‰7ç¹§ï½­ç¹ï½¼ç¸ºï½¾ç¸ºï½§ç¸ºï½®é½ï¿½å³‡ç¹§å‘ˆï½¤æ‡ƒï½´ï½¢
+                for (int i = 49; i <= 55; i++)//1ƒL[‚©‚ç7ƒL[‚Ü‚Å‚Ì”ÍˆÍ‚ğŒŸõ
                 {
                     if (Input.GetKeyDown((KeyCode)i))
                         return i;
@@ -318,19 +296,19 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§ï½¹ç¹ï½­ç¹ï¿½ãƒ¨ç¸ºï½®ç¹ï½ªç¹§ï½¹ç¹åŒ»ï½’èŸç”»å³©ç¸²
+        /// ƒAƒCƒeƒ€ƒXƒƒbƒg‚ÌƒŠƒXƒg‚ğ•ÏXB
         /// </summary>
-        /// <param name="index">èŸç”»å³©ç¸ºåŠ±â—†ç¸ºï¿½Îœç¹§ï½¹ç¹åŒ»ï¿½é¬†ï¿½åˆ†</param>
-        /// <param name="value">è‰ï½£èœˆï½¥ç¸ºå¶ï½‹è®’çŸ©è´</param>
+        /// <param name="index">•ÏX‚µ‚½‚¢ƒŠƒXƒg‚Ì‡”Ô</param>
+        /// <param name="value">‘ã“ü‚·‚é\‘¢‘Ì</param>
         public void ChangeListValue(int index, ItemSlotStruct value)
         {
             _itemSlot[index] = value;
         }
 
         /// <summary>
-        /// ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§å‰ƒï½½ï½¿ç¸ºï¿½ï¿½ç¹§ä¹â†’ç¸ºé˜ªâ†“èœ»ï½¼ç¸ºï½³èœƒï½ºç¸ºå¶ï¿½istç¸ºï½®èŸç”»å³©ï¿½äº¥ï¿½è­›æº·å–§ï¿½å³¨â†“è´ï½¿ç¸º
+        /// ƒAƒCƒeƒ€‚ğg‚¢Ø‚é‚Æ‚«‚ÉŒÄ‚Ño‚·BList‚Ì•ÏXi‰Šú‰»j‚Ég‚¤
         /// </summary>
-        /// <param name="index">èŸç”»å³©ç¸ºåŠ±â—†ç¸ºï¿½Îœç¹§ï½¹ç¹åŒ»ï¿½é¬†ï¿½åˆ†</param>
+        /// <param name="index">•ÏX‚µ‚½‚¢ƒŠƒXƒg‚Ì‡”Ô</param>
         public void ConsumeItem(int index)
         {
             if (nowBringItem != null)
@@ -350,36 +328,23 @@ namespace Scenes.Ingame.Player
             _isCanChangeBringItem = value;
         }
 
-        //è«›è‰ï½¸ï½­é«®ï½»è½£ï½¯ç¹§å®šï½µï½·èœè¼”ï¿½è››æ‡ˆï½­ï½¢ç¸ºå¶ï½‹ç¸ºæº˜ï½ç¸ºï½®é«¢ï½¢è¬¨ï½°
-        public void ActiveHandLight(bool value)
-        {
-            _spotLight.GetComponent<Light>().enabled = value;
-            _myPlayerStatus.ChangeLightRange(value);
-            
-        }
 
-        //è«›è‰ï½¸ï½­é«®ï½»è½£ï½¯ç¸ºï½®ON/OFFç¹§è²ï¿½ç¹§é ‘å´›ç¸ºåŒ»ï½‹é«¢ï½¢è¬¨ï½°
-        public void ChangeSwitchHandLight(HandLightState state)
-        {
-            _switchHandLight[_nowIndex.Value] = state;
-        }
 
-        /// <summary>
-        /// éœ„ï½«è‰ï½£ç¹§ä¸Šï½Šè ï½ºè –ï½¢ç¹§å‘ˆæˆŸç¸ºï½£ç¸ºï½¦ç¸ºï¿½ï½‹ç¸ºç‹—ï½¢ï½ºéš±é˜ªâ˜†ç¹§ä¹â—†ç¹§âˆšï¿½é«¢ï½¢è¬¨ï½°
-        /// </summary>
+
+
         public void CheckHaveDoll()
         {
             for (int i = 0; i < 7; i++)
-            {                    
+            {
                 if (_itemSlot[i].myItemData != null)
                 {
                     if (_itemSlot[i].myItemData.itemID == 7)
                     {
-                        //è‰ï½®ç¸ºï½®ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§å ¤å‡½è¬ŒèˆŒï¼ ç¸ºï½¦ç¸²âˆµï½­ï½»è ï½¡è­ã‚…ï¿½èœ‰ï½¹è­«æ‡Šï½’è¥ï½·èœè¼”ï¼†ç¸ºå¸™ï½‹
+                        //‰¼‚ÌƒAƒCƒeƒ€‚ğ¶¬‚µ‚ÄA€–S‚ÌŒø‰Ê‚ğ‹N“®‚³‚¹‚é
                         GameObject Item = Instantiate(_itemSlot[i].myItemData.prefab);
                         Item.GetComponent<DollEffect>().UniqueEffect(_myPlayerStatus);
 
-                        //ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’éï½´è¢ç¿«â†’ç¹§ï½¢ç¹§ï½¤ç¹ï¿½Î’ç¹§ï½¹ç¹ï½­ç¹ï¿½ãƒ¨ç¸ºï½®è›»æ™„æ‚„è›¹
+                        //ƒAƒCƒeƒ€”j‰ó‚ÆƒAƒCƒeƒ€ƒXƒƒbƒg‚Ì‰Šú‰»
                         Destroy(Item);
                         if (_nowIndex.Value == i && nowBringItem != null)
                         {
@@ -395,7 +360,21 @@ namespace Scenes.Ingame.Player
 
             }
 
+        }
 
+        //‰ù’†“d“”‚ğ‹N“®E’â~‚·‚é‚½‚ß‚ÌŠÖ”
+        public void ActiveHandLight(bool value)
+        {
+            _spotLight.GetComponent<Light>().enabled = value;
+            _myPlayerStatus.ChangeLightRange(value);
+
+        }
+
+
+        //‰ù’†“d“”‚ÌON/OFF‚ğØ‚è‘Ö‚¦‚éŠÖ”
+        public void ChangeSwitchHandLight(HandLightState state)
+        {
+            _switchHandLight[_nowIndex.Value] = state;
         }
     }
 }
