@@ -10,8 +10,8 @@ using DG.Tweening;
 namespace Scenes.Ingame.Player
 {
     /// <summary>
-    /// PlayerStatus‚ÆDisplayPlayerStatusManager‚Ì‹´“n‚µ‚ğs‚¤ƒNƒ‰ƒX
-    /// MV(R)P‚É‚¨‚¯‚éPresenter‚Ì–ğŠ„‚ğ‘z’è
+    /// PlayerStatusã¨DisplayPlayerStatusManagerã®æ©‹æ¸¡ã—ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹
+    /// MV(R)Pã«ãŠã‘ã‚‹Presenterã®å½¹å‰²ã‚’æƒ³å®š
     /// </summary>
     public class PlayerGUIPresenter : MonoBehaviour
     {
@@ -20,44 +20,44 @@ namespace Scenes.Ingame.Player
 
         //model
         [SerializeField] private PlayerStatus[] _playerStatuses;
-        [SerializeField] private PlayerItem _playerItem;//ƒ}ƒ‹ƒ`‚Ì‚ÍƒXƒNƒŠƒvƒg“à‚ÅinputAuthority‚Á‚Ä‚éplayer‚Ì‚ğ‘ã“ü‚³‚¹‚é
-        [SerializeField] private PlayerInsanityManager _playerInsanityManager;//ƒ}ƒ‹ƒ`‚Ì‚ÍƒXƒNƒŠƒvƒg“à‚ÅinputAuthority‚Á‚Ä‚éplayer‚Ì‚ğ‘ã“ü‚³‚¹‚é
+        [SerializeField] private PlayerItem _playerItem;//ãƒãƒ«ãƒã®æ™‚ã¯ã‚¹ã‚¯ãƒªãƒ—ãƒˆå†…ã§inputAuthorityæŒã£ã¦ã‚‹playerã®ã‚’ä»£å…¥ã•ã›ã‚‹
+        [SerializeField] private PlayerInsanityManager _playerInsanityManager;//ãƒãƒ«ãƒã®æ™‚ã¯ã‚¹ã‚¯ãƒªãƒ—ãƒˆå†…ã§inputAuthorityæŒã£ã¦ã‚‹playerã®ã‚’ä»£å…¥ã•ã›ã‚‹
         //View
         [SerializeField] private DisplayPlayerStatusManager _displayPlayerStatusManager;
 
-        [Header("ƒJ[ƒ\ƒ‹İ’è")][SerializeField] private bool _isCurcleSetting = false;
+        [Header("ã‚«ãƒ¼ã‚½ãƒ«è¨­å®š")][SerializeField] private bool _isCurcleSetting = false;
 
-        [Header("ƒQ[ƒ€“àUI(ƒIƒ“ƒ‰ƒCƒ“)")]
-        [SerializeField] private Slider[] _healthSliders;//ŠeƒvƒŒƒCƒ„[‚ÌHPƒo[
-        [SerializeField] private Slider[] _sanValueSliders;//ŠeƒvƒŒƒCƒ„[‚ÌSAN’lƒo[
-        [SerializeField] private TMP_Text[] _healthText;//ŠeƒvƒŒƒCƒ„[‚ÌHPc—Ê•\¦ƒeƒLƒXƒg
-        [SerializeField] private TMP_Text[] _sanValueText;//ŠeƒvƒŒƒCƒ„[‚ÌSAN’lc—Ê•\¦ƒeƒLƒXƒg
-        [SerializeField] private Sprite _itemEmptySprite;//ƒAƒCƒeƒ€ƒXƒƒbƒg‚ª‹ó‚Ì‚Æ‚«‚É‚¢‚ê‚é‰æ‘œ
+        [Header("ã‚²ãƒ¼ãƒ å†…UI(ã‚ªãƒ³ãƒ©ã‚¤ãƒ³)")]
+        [SerializeField] private Slider[] _healthSliders;//å„ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®HPãƒãƒ¼
+        [SerializeField] private Slider[] _sanValueSliders;//å„ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®SANå€¤ãƒãƒ¼
+        [SerializeField] private TMP_Text[] _healthText;//å„ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®HPæ®‹é‡è¡¨ç¤ºãƒ†ã‚­ã‚¹ãƒˆ
+        [SerializeField] private TMP_Text[] _sanValueText;//å„ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®SANå€¤æ®‹é‡è¡¨ç¤ºãƒ†ã‚­ã‚¹ãƒˆ
+        [SerializeField] private Sprite _itemEmptySprite;//ã‚¢ã‚¤ãƒ†ãƒ ã‚¹ãƒ­ãƒƒãƒˆãŒç©ºã®ã¨ãã«ã„ã‚Œã‚‹ç”»åƒ
 
-        [Header("ƒQ[ƒ€“àUI(ƒIƒtƒ‰ƒCƒ“)")]
-        [Header("ƒXƒ^ƒ~ƒiŠÖŒW")]//ƒXƒ^ƒ~ƒiƒQ[ƒWŒn
-        [SerializeField] private RectMask2D _staminaGaugeMask;//ŒÂl‚ÌƒXƒ^ƒ~ƒiƒQ[ƒWƒ}ƒXƒN
-        [SerializeField] private RectTransform _staminaGaugeFrontRect;//ŒÂl‚ÌƒXƒ^ƒ~ƒiƒQ[ƒW
-        [SerializeField] private Image _staminaGaugeFrontImage;//ŒÂl‚ÌƒXƒ^ƒ~ƒiƒQ[ƒW
+        [Header("ã‚²ãƒ¼ãƒ å†…UI(ã‚ªãƒ•ãƒ©ã‚¤ãƒ³)")]
+        [Header("ã‚¹ã‚¿ãƒŸãƒŠé–¢ä¿‚")]//ã‚¹ã‚¿ãƒŸãƒŠã‚²ãƒ¼ã‚¸ç³»
+        [SerializeField] private RectMask2D _staminaGaugeMask;//å€‹äººã®ã‚¹ã‚¿ãƒŸãƒŠã‚²ãƒ¼ã‚¸ãƒã‚¹ã‚¯
+        [SerializeField] private RectTransform _staminaGaugeFrontRect;//å€‹äººã®ã‚¹ã‚¿ãƒŸãƒŠã‚²ãƒ¼ã‚¸
+        [SerializeField] private Image _staminaGaugeFrontImage;//å€‹äººã®ã‚¹ã‚¿ãƒŸãƒŠã‚²ãƒ¼ã‚¸
         [SerializeField] private Image _staminaGaugeBackGround;
 
-        [SerializeField] private GameObject _pop;//ƒAƒCƒeƒ€ƒ|ƒbƒv
-        [SerializeField] private TMP_Text _pop_Text;//ƒAƒCƒeƒ€ƒ|ƒbƒv
+        [SerializeField] private GameObject _pop;//ã‚¢ã‚¤ãƒ†ãƒ ãƒãƒƒãƒ—
+        [SerializeField] private TMP_Text _pop_Text;//ã‚¢ã‚¤ãƒ†ãƒ ãƒãƒƒãƒ—
 
-        [Header("ƒAƒCƒeƒ€ŠÖŒW")]//ƒAƒCƒeƒ€Œn
-        [SerializeField] private Image[] _itemSlots;//ƒAƒCƒeƒ€ƒXƒƒbƒg(7ŒÂ)
-        [SerializeField] private Image[] _itemImages;//ƒAƒCƒeƒ€‚Ì‰æ‘œ(7ŒÂ)
+        [Header("ã‚¢ã‚¤ãƒ†ãƒ é–¢ä¿‚")]//ã‚¢ã‚¤ãƒ†ãƒ ç³»
+        [SerializeField] private Image[] _itemSlots;//ã‚¢ã‚¤ãƒ†ãƒ ã‚¹ãƒ­ãƒƒãƒˆ(7å€‹)
+        [SerializeField] private Image[] _itemImages;//ã‚¢ã‚¤ãƒ†ãƒ ã®ç”»åƒ(7å€‹)
 
-        [Header("”­‹¶ŠÖŒW")]
-        [SerializeField] private Image[] _insanityIcons;//”­‹¶ƒAƒCƒRƒ“(5ŒÂ)
-        [SerializeField] private Sprite[] _insanityIconSprites;//”­‹¶ƒAƒCƒRƒ“‚ÌŒ³‰æ‘œ.EyeParalyze,BodyParalyze,IncreasePulsation,Scream,Hallucination ‚Ì‡”Ô‚Å
+        [Header("ç™ºç‹‚é–¢ä¿‚")]
+        [SerializeField] private Image[] _insanityIcons;//ç™ºç‹‚ã‚¢ã‚¤ã‚³ãƒ³(5å€‹)
+        [SerializeField] private Sprite[] _insanityIconSprites;//ç™ºç‹‚ã‚¢ã‚¤ã‚³ãƒ³ã®å…ƒç”»åƒ.EyeParalyze,BodyParalyze,IncreasePulsation,Scream,Hallucination ã®é †ç•ªã§
 
-        [Header("ô•¶‰r¥ŠÖŒW")]
+        [Header("å‘ªæ–‡è© å”±é–¢ä¿‚")]
         [SerializeField] private Canvas _castGauge;
         [SerializeField] private Image _castGaugeImage;
         private int _myPlayerID = 0;
 
-        //ƒXƒ^ƒ~ƒiƒQ[ƒWŠÖ˜A‚ÌƒtƒB[ƒ‹ƒh
+        //ã‚¹ã‚¿ãƒŸãƒŠã‚²ãƒ¼ã‚¸é–¢é€£ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰
         private float _defaultStaminaGaugeWidth;
 
         // Start is called before the first frame update
@@ -69,34 +69,34 @@ namespace Scenes.Ingame.Player
             if (_isCurcleSetting)
                 CursorSetting(true);
 
-            //ƒvƒŒƒCƒ„[‚Ìì¬‚ªI‚í‚èA”z—ñ‚Ìƒ\[ƒg‚ªI—¹‚µ‚½‚ç’@‚©‚ê‚é
+            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®ä½œæˆãŒçµ‚ã‚ã‚Šã€é…åˆ—ã®ã‚½ãƒ¼ãƒˆãŒçµ‚äº†ã—ãŸã‚‰å©ã‹ã‚Œã‚‹
             _displayPlayerStatusManager.OnCompleteSort
                 .FirstOrDefault()
                 .Subscribe(_ => 
                 {
-                    //DisplayPlayerStatusManager‚É‚ ‚éƒ\[ƒgÏ‚İ‚Ì”z—ñ‚ğæ“¾
+                    //DisplayPlayerStatusManagerã«ã‚ã‚‹ã‚½ãƒ¼ãƒˆæ¸ˆã¿ã®é…åˆ—ã‚’å–å¾—
                     _playerStatuses = _displayPlayerStatusManager.PlayerStatuses;
 
-                    //ŠeƒvƒŒƒCƒ„[‚ÌHP‚âSAN’l‚ª•ÏX‚³‚ê‚½‚Æ‚«‚Ìˆ—‚ğ’Ç‰Á‚·‚éB
+                    //å„ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®HPã‚„SANå€¤ãŒå¤‰æ›´ã•ã‚ŒãŸã¨ãã®å‡¦ç†ã‚’è¿½åŠ ã™ã‚‹ã€‚
                     foreach (var playerStatus in _playerStatuses)
                     {
                         playerStatus.OnPlayerHealthChange
                             .Subscribe(x =>
                             {
-                                //view‚É”½‰f
+                                //viewã«åæ˜ 
                                 ChangeSliderValue(x, playerStatus.playerID, "Health");
                             }).AddTo(this);
 
                         playerStatus.OnPlayerSanValueChange
                             .Subscribe(x =>
                             {
-                                //view‚É”½‰f
+                                //viewã«åæ˜ 
                                 ChangeSliderValue(x, playerStatus.playerID, "SanValue");
                             }).AddTo(this);
                     }
 
-                    //‘€ì‚·‚éƒLƒƒƒ‰ƒNƒ^[‚ÌƒXƒ^ƒ~ƒiƒQ[ƒW‚É‚¾‚¯AƒXƒ^ƒ~ƒiƒQ[ƒW‚ğ•ÏX‚³‚¹‚éˆ—‚ğ’Ç‰Á‚·‚éB
-                    //PhotonFusion‚¾‚Á‚½‚çAinputAuthority‚ğ‚ÂƒLƒƒƒ‰ƒNƒ^[‚Ì‚İ‚Éw’è
+                    //æ“ä½œã™ã‚‹ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ã‚¹ã‚¿ãƒŸãƒŠã‚²ãƒ¼ã‚¸ã«ã ã‘ã€ã‚¹ã‚¿ãƒŸãƒŠã‚²ãƒ¼ã‚¸ã‚’å¤‰æ›´ã•ã›ã‚‹å‡¦ç†ã‚’è¿½åŠ ã™ã‚‹ã€‚
+                    //PhotonFusionã ã£ãŸã‚‰ã€inputAuthorityã‚’æŒã¤ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ã¿ã«æŒ‡å®š
                     _playerStatuses[0].OnPlayerStaminaChange
                          .Subscribe(x =>
                          {
@@ -127,27 +127,27 @@ namespace Scenes.Ingame.Player
                             .OnComplete(() => _castGauge.enabled = false);
                     }).AddTo(this);
 
-                    //ƒAƒCƒeƒ€ŠÖŒW‚Ìˆ—‚Ì’Ç‰Á
-                    //PlayerItemƒXƒNƒŠƒvƒg‚Ìæ“¾.ƒ}ƒ‹ƒ`À‘•‚Ì‚Æ‚«‚ÍinputAuthority‚ğ‚ÂƒLƒƒƒ‰ƒNƒ^[‚Ì‚İ‚Éw’è
+                    //ã‚¢ã‚¤ãƒ†ãƒ é–¢ä¿‚ã®å‡¦ç†ã®è¿½åŠ 
+                    //PlayerItemã‚¹ã‚¯ãƒªãƒ—ãƒˆã®å–å¾—.ãƒãƒ«ãƒå®Ÿè£…ã®ã¨ãã¯inputAuthorityã‚’æŒã¤ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ã¿ã«æŒ‡å®š
                     _playerItem = GameObject.FindWithTag("Player").GetComponent<PlayerItem>();
 
-                    //Œ»İ‘I‘ğ‚³‚ê‚Ä‚¢‚éƒXƒƒbƒg‚ğ‹­’²•\¦
+                    //ç¾åœ¨é¸æŠã•ã‚Œã¦ã„ã‚‹ã‚¹ãƒ­ãƒƒãƒˆã‚’å¼·èª¿è¡¨ç¤º
                     _playerItem.OnNowIndexChange
                         .Skip(1)
                         .Subscribe(x =>
                         {
-                            //‘S•”‚ÌƒXƒƒbƒg‚ÌF‚ğŒ³‚ÌŠDF‚É–ß‚·
+                            //å…¨éƒ¨ã®ã‚¹ãƒ­ãƒƒãƒˆã®è‰²ã‚’å…ƒã®ç°è‰²ã«æˆ»ã™
                             for (int i = 0; i < _itemSlots.Length; i++)
                             {
                                 if (_playerItem.ItemSlots[i].myItemSlotStatus == ItemSlotStatus.available)
                                     _itemSlots[i].color = Color.white;
                             }
                             
-                            //‘I‘ğ‚³‚ê‚Ä‚¢‚éƒXƒƒbƒg‚¾‚¯ÔF‚É•Ï‰»
+                            //é¸æŠã•ã‚Œã¦ã„ã‚‹ã‚¹ãƒ­ãƒƒãƒˆã ã‘èµ¤è‰²ã«å¤‰åŒ–
                             _itemSlots[x].color = Color.red;
                         }).AddTo(this);
 
-                    //–Úü‚Ìæ‚ÉƒAƒCƒeƒ€‚©StageIntract‚ª‚ ‚é‚Æƒ|ƒbƒv‚ğ•\¦‚³‚¹‚é
+                    //ç›®ç·šã®å…ˆã«ã‚¢ã‚¤ãƒ†ãƒ ã‹StageIntractãŒã‚ã‚‹ã¨ãƒãƒƒãƒ—ã‚’è¡¨ç¤ºã•ã›ã‚‹
                     _playerItem.OnPopActive
                         .Subscribe(x =>
                         {
@@ -164,7 +164,7 @@ namespace Scenes.Ingame.Player
 
                         });
 
-                    //ƒAƒCƒeƒ€æ“¾E”jŠü‚ÉƒAƒCƒeƒ€ƒXƒƒbƒg‚Ì‰æ‘œ‚ğ•ÏX‚³‚¹‚éB
+                    //ã‚¢ã‚¤ãƒ†ãƒ å–å¾—ãƒ»ç ´æ£„æ™‚ã«ã‚¢ã‚¤ãƒ†ãƒ ã‚¹ãƒ­ãƒƒãƒˆã®ç”»åƒã‚’å¤‰æ›´ã•ã›ã‚‹ã€‚
                     _playerItem.OnItemSlotReplace
                         .Subscribe(replaceEvent =>
                         {
@@ -174,19 +174,21 @@ namespace Scenes.Ingame.Player
                             }
                             else
                             {
-                                _itemImages[replaceEvent.Index].sprite = _itemEmptySprite;
+
+                                _itemImages[replaceEvent.Index].sprite = _itemEmptySprite; 
+
 
                             }
 
-                            //—˜—p•s‰Â‚ÌƒXƒƒbƒg‚Ì˜g‚ğÂ‚É•Ï‰»
+                            //åˆ©ç”¨ä¸å¯ã®ã‚¹ãƒ­ãƒƒãƒˆã®æ ã‚’é’ã«å¤‰åŒ–
                             if (_playerItem.ItemSlots[replaceEvent.Index].myItemSlotStatus == ItemSlotStatus.unavailable)
                                 _itemSlots[replaceEvent.Index].color = Color.blue;
                             else
                             { 
-                                //æ‚ÉŠî–{F‚É–ß‚·
+                                //å…ˆã«åŸºæœ¬è‰²ã«æˆ»ã™
                                 _itemSlots[replaceEvent.Index].color = Color.white;
 
-                                //‚à‚µ‘I‘ğ’†‚ÌƒAƒCƒeƒ€ƒXƒƒbƒg‚È‚çÔF‚É–ß‚·
+                                //ã‚‚ã—é¸æŠä¸­ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚¹ãƒ­ãƒƒãƒˆãªã‚‰èµ¤è‰²ã«æˆ»ã™
                                 if(replaceEvent.Index == _playerItem.nowIndex)
                                     _itemSlots[replaceEvent.Index].color = Color.red;
 
@@ -194,10 +196,10 @@ namespace Scenes.Ingame.Player
 
                         }).AddTo(this);
 
-                    //PlayerInsanityManagerƒXƒNƒŠƒvƒg‚Ìæ“¾.ƒ}ƒ‹ƒ`À‘•‚Ì‚Æ‚«‚ÍinputAuthority‚ğ‚ÂƒLƒƒƒ‰ƒNƒ^[‚Ì‚İ‚Éw’è
+                    //PlayerInsanityManagerã‚¹ã‚¯ãƒªãƒ—ãƒˆã®å–å¾—.ãƒãƒ«ãƒå®Ÿè£…ã®ã¨ãã¯inputAuthorityã‚’æŒã¤ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ã¿ã«æŒ‡å®š
                     _playerInsanityManager = GameObject.FindWithTag("Player").GetComponent<PlayerInsanityManager>();
 
-                    //”­‹¶‚ÌƒXƒNƒŠƒvƒg‚ğŠÇ—‚·‚éList‚É—v‘f‚ª’Ç‰Á‚³‚ê‚½‚Æ‚«‚ÉAƒAƒCƒRƒ“‚ğ•Ï‰»‚³‚¹‚éB
+                    //ç™ºç‹‚ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ç®¡ç†ã™ã‚‹Listã«è¦ç´ ãŒè¿½åŠ ã•ã‚ŒãŸã¨ãã«ã€ã‚¢ã‚¤ã‚³ãƒ³ã‚’å¤‰åŒ–ã•ã›ã‚‹ã€‚
                     _playerInsanityManager.OnInsanitiesAdd
                         .Subscribe(addEvent =>
                         {
@@ -225,35 +227,35 @@ namespace Scenes.Ingame.Player
                             }
                         }).AddTo(this);
 
-                    //”­‹¶‚ÌƒXƒNƒŠƒvƒg‚ğŠÇ—‚·‚éList‚Ì—v‘f‚ªíœ‚³‚ê‚½‚Æ‚«‚ÉAƒAƒCƒRƒ“‚ğ•Ï‰»‚³‚¹‚éB
+                    //ç™ºç‹‚ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã‚’ç®¡ç†ã™ã‚‹Listã®è¦ç´ ãŒå‰Šé™¤ã•ã‚ŒãŸã¨ãã«ã€ã‚¢ã‚¤ã‚³ãƒ³ã‚’å¤‰åŒ–ã•ã›ã‚‹ã€‚
                     _playerInsanityManager.OnInsanitiesRemove
                         .Subscribe(removeEvent =>
                         {
-                            _insanityIcons[removeEvent.Index].color -= new Color(0, 0, 0, 1.0f);//“§–¾‚É‚·‚é
+                            _insanityIcons[removeEvent.Index].color -= new Color(0, 0, 0, 1.0f);//é€æ˜ã«ã™ã‚‹
                             _insanityIcons[removeEvent.Index].sprite = null;
                         }).AddTo(this);
 
-                    //ô”]ó‘Ô‚É‰‚¶‚ÄƒAƒCƒRƒ“‚ğ•Ï‰»‚³‚¹‚éB
+                    //æ´—è„³çŠ¶æ…‹ã«å¿œã˜ã¦ã‚¢ã‚¤ã‚³ãƒ³ã‚’å¤‰åŒ–ã•ã›ã‚‹ã€‚
                     _playerInsanityManager.OnPlayerBrainwashedChange
-                        .Skip(1)//‰Šú‰»‚Ì‚Í–³‹
+                        .Skip(1)//åˆæœŸåŒ–ã®æ™‚ã¯ç„¡è¦–
                         .Subscribe(x =>
                         {
-                            if (x)//ô”]ó‘Ô‚É‚È‚Á‚½‚Æ‚«
+                            if (x)//æ´—è„³çŠ¶æ…‹ã«ãªã£ãŸã¨ã
                             {
                                 for (int i = 0; i < _insanityIcons.Length; i++)
-                                    _insanityIcons[i].color -= new Color(0, 0, 0, 1.0f);//“§–¾‚É‚·‚é
+                                    _insanityIcons[i].color -= new Color(0, 0, 0, 1.0f);//é€æ˜ã«ã™ã‚‹
                             }
-                            else//ô”]ó‘Ô‚ª‰ğœ‚³‚ê‚½‚Æ‚«
+                            else//æ´—è„³çŠ¶æ…‹ãŒè§£é™¤ã•ã‚ŒãŸã¨ã
                             {
                                 for (int i = 0; i < _insanityIcons.Length; i++)
-                                    _insanityIcons[i].color += new Color(0, 0, 0, 1.0f);//•s“§–¾‚É‚·‚é
+                                    _insanityIcons[i].color += new Color(0, 0, 0, 1.0f);//ä¸é€æ˜ã«ã™ã‚‹
                             }
                         }).AddTo(this);
                         
 
                 }).AddTo(this);
 
-            //ƒCƒ“ƒXƒ^ƒ“ƒX‚Ìİ’è
+            //ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®è¨­å®š
             if (Instance == null)
                 Instance = this;
             else
@@ -261,9 +263,9 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// ƒJ[ƒ\ƒ‹‚Ìİ’è‚ğs‚¤ŠÖ”
+        /// ã‚«ãƒ¼ã‚½ãƒ«ã®è¨­å®šã‚’è¡Œã†é–¢æ•°
         /// </summary>
-        /// <param name="WannaLock">Lock‚µ‚½‚¢‚©”Û‚©</param>
+        /// <param name="WannaLock">Lockã—ãŸã„ã‹å¦ã‹</param>
         public void CursorSetting(bool WannaLock)
         {
             if (WannaLock)
@@ -280,11 +282,11 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// Slider‚Ì’l‚ğ•Ï‚¦‚éˆ×‚ÌŠÖ”.Slider,Text‚É’¼ÚQÆ‚µ‚Ä‚¢‚é
+        /// Sliderã®å€¤ã‚’å¤‰ãˆã‚‹ç‚ºã®é–¢æ•°.Slider,Textã«ç›´æ¥å‚ç…§ã—ã¦ã„ã‚‹
         /// </summary>
-        /// <param name="value">Slinder.Value‚É‘ã“ü‚·‚é’l</param>
-        /// <param name="ID">ƒvƒŒƒCƒ„[ID</param>
-        /// <param name="mode">Health(‘Ì—Í), SanValue(SAN’l)‚Ç‚¿‚ç‚ğ•ÏX‚·‚é‚Ì‚©‚ğŒˆ’è</param>
+        /// <param name="value">Slinder.Valueã«ä»£å…¥ã™ã‚‹å€¤</param>
+        /// <param name="ID">ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ID</param>
+        /// <param name="mode">Health(ä½“åŠ›), SanValue(SANå€¤)ã©ã¡ã‚‰ã‚’å¤‰æ›´ã™ã‚‹ã®ã‹ã‚’æ±ºå®š</param>
         public void ChangeSliderValue(int value, int ID, string mode)
         {
             if (mode == "Health")
@@ -302,18 +304,18 @@ namespace Scenes.Ingame.Player
 
         public void ChangeStaminaGauge(int value)
         {
-            //  DoTween‚Ì“®ì‚ğ”jŠü
+            //  DoTweenã®å‹•ä½œã‚’ç ´æ£„
             _staminaGaugeFrontImage.DOKill();
             _staminaGaugeBackGround.DOKill();
             
-            //ƒXƒ^ƒ~ƒi‚Ì’l‚ğ0`1‚Ì’l‚É•â³
+            //ã‚¹ã‚¿ãƒŸãƒŠã®å€¤ã‚’0ï½1ã®å€¤ã«è£œæ­£
             float fillAmount = (float)value / _playerStatuses[_myPlayerID].stamina_max;
             float maskValue = _defaultStaminaGaugeWidth * (1 - fillAmount) / 2;
 
-            // RectMask2D‚Ìleft‚Æright‚Ì’l‚ğXV
+            // RectMask2Dã®leftã¨rightã®å€¤ã‚’æ›´æ–°
             _staminaGaugeMask.padding = new Vector4(maskValue,0, maskValue, 0);
             
-            //ƒXƒ^ƒ~ƒiƒQ[ƒW‚ÌF•ÏX
+            //ã‚¹ã‚¿ãƒŸãƒŠã‚²ãƒ¼ã‚¸ã®è‰²å¤‰æ›´
             Image image = _staminaGaugeFrontImage.GetComponent<Image>();
             if (0 <= fillAmount && fillAmount <= 0.1)
             {
