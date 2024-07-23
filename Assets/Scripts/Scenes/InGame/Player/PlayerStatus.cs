@@ -50,8 +50,6 @@ namespace Scenes.Ingame.Player
         [SerializeField] private PlayerMagic _playerMagic;
         [SerializeField] private PlayerItem _playerItem;
 
-        [SerializeField] private FadeBlackImage _fadeBlackImage;
-
         private Subject<float> castEvent = new Subject<float>();//呪文の詠唱時間を発行
 
         //その他のSubject
@@ -410,12 +408,6 @@ namespace Scenes.Ingame.Player
 
                 _deathEventCount = 0;
                 _startReviveAnimation = true;
-
-                //画面暗転を解除
-                if (_fadeBlackImage != null)
-                {
-                    _fadeBlackImage.FadeOutImage();
-                }
             }
             else //死んだとき
             {
@@ -433,23 +425,7 @@ namespace Scenes.Ingame.Player
                 _playerMagic.ChangeCanUseMagicBool(false);
                 _playerItem.ChangeCanUseItem(false);
                 _deathEventCount = 0;
-
-                //画面を暗転させる
-                if (_fadeBlackImage == null)
-                {
-                    _fadeBlackImage = FindObjectOfType<FadeBlackImage>();                    
-                }
-                _fadeBlackImage.FadeInImage();
             }
-        }
-
-        /// <summary>
-        /// _fadeBlackImageをセットするための関数
-        /// </summary>
-        /// <param name="script"></param>
-        public void SetFadeBlackImage(FadeBlackImage script)
-        {
-            _fadeBlackImage = script;
         }
 
         /// <summary>

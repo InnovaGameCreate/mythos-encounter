@@ -18,6 +18,32 @@ namespace Scenes.Ingame.InGameSystem.UI
         [SerializeField] private Image _blackImage;
         [SerializeField] private Canvas _thisCanvas;
 
+        public void SubscribeFadePanelEvent()
+        {
+            IngameManager.Instance.OnPlayerSpawnEvent
+                .Subscribe(_ =>
+                {
+                    PlayerStatus[] _playerStatuses = FindObjectsOfType<PlayerStatus>();
+                    foreach (PlayerStatus playerStatus in _playerStatuses)
+                    {
+                        playerStatus.OnPlayerSurviveChange
+                            .Skip(1)
+                            .Subscribe(x =>
+                            {
+                                if (x)//ê∂Ç´ï‘Ç¡ÇΩÇ∆Ç´
+                                {
+                                    FadeOutImage();
+                                }
+                                else //éÄÇÒÇæÇ∆Ç´
+                                {
+                                    FadeInImage();
+                                }
+                            }).AddTo(this);
+                    }
+                    Debug.Log("éÄñSéûÇÃà√ì]Ç™Ç≈Ç´ÇÈÇÊÇ§Ç…Ç»Ç¡ÇΩÇÊ");
+                }).AddTo(this);
+        }
+
         /// <summary>
         /// âÊñ à√ì]
         /// </summary>
