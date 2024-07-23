@@ -8,6 +8,7 @@ using TMPro;
 
 namespace Scenes.Ingame.Player
 {
+
     /// <summary>
     /// マップに関する処理を行うスクリプト
     /// </summary>
@@ -15,20 +16,24 @@ namespace Scenes.Ingame.Player
     {
         const float WALLSIZE = 5.85f;
         const float FLOOR_1F = -533.91f;//一階の様子を撮影するのに最適なy座標
-        const float FLOOR_2F = -528.4f;
-        const float PROJECTIONSIZE_MAX = 55;//カメラの射角の最大値
-
+        const float FLOOR_2F = -528.05f;
+        const float PROJECTIONSIZE_MAX = 38.5f;//カメラの射角の最大値(マップ半径19のときは55)
+        const float PROJECTIONSIZE_FOLLOW = 15;//プレイヤー追従時のカメラの射角
+        const float STAGERADIUS = 13;//ステージの半径（タイルの枚数）
+        private Vector3 _defaultPos;
 
         [SerializeField] private GameObject _mapPanel;
         [SerializeField] private TMP_Text _mapText;
         [SerializeField] private GameObject _mapCamera;
+        [SerializeField] private Camera _mapCamera_camera;
+
         private bool _isOpenMap = false;
         private int _nowViewFloor;
 
         private KeyCode _mapKey = KeyCode.M;
         private GameObject _player;
         private PlayerStatus _playerStatus;
-        [SerializeField]private MeshRenderer[] _fogMeshRenderers = new MeshRenderer[2];
+        [SerializeField]private MeshRenderer[] _fogMeshRenderers = new MeshRenderer[2];//AOSFogで生成されたFogのMeshRenderer
         // Start is called before the first frame update
         void Start()
         {
@@ -41,6 +46,8 @@ namespace Scenes.Ingame.Player
                     //オンライン対応の際はInputAuthorityで見分ける
                 }).AddTo(this);
 
+            _defaultPos = _mapCamera.transform.localPosition;
+
             //Mapキーの指定を行う
             //今後実装
 
@@ -52,22 +59,23 @@ namespace Scenes.Ingame.Player
                 .ThrottleFirst(TimeSpan.FromMilliseconds(100))
                 .Subscribe(_ =>
                 {
-                    if (_isOpenMap)
+                    if (_isOpenMap)//マップが開いている状態の時
                     {
                         PlayerGUIPresenter.Instance.CursorSetting(true);
-                        _mapCamera.SetActive(false);
                         _mapPanel.SetActive(false);
 
                         _isOpenMap = false;
+                        _mapCamera_camera.orthographicSize = PROJECTIONSIZE_FOLLOW;
                     }
-                    else
+                    else //マップが閉じている状態のとき
                     {
                         PlayerGUIPresenter.Instance.CursorSetting(false);
+                        _mapCamera_camera.orthographicSize = PROJECTIONSIZE_MAX;
 
                         //Playerの場所に応じてマップを切り替える
                         if (_player.transform.position.y < WALLSIZE)//1階にいる場合
                         {
-                            _mapCamera.transform.localPosition = new Vector3(_mapCamera.transform.localPosition.x, FLOOR_1F, _mapCamera.transform.localPosition.z);
+                            _mapCamera.transform.localPosition = new Vector3(_defaultPos.x, FLOOR_1F, _defaultPos.z);
                             _fogMeshRenderers[0].enabled = true;
                             _fogMeshRenderers[1].enabled = false;
                             _nowViewFloor = 1;
@@ -75,13 +83,12 @@ namespace Scenes.Ingame.Player
                         }
                         else if (WALLSIZE <= _player.transform.position.y)//2階にいる場合
                         {
-                            _mapCamera.transform.localPosition = new Vector3(_mapCamera.transform.localPosition.x, FLOOR_2F, _mapCamera.transform.localPosition.z);
+                            _mapCamera.transform.localPosition = new Vector3(_defaultPos.x, FLOOR_2F, _defaultPos.z);
                             _fogMeshRenderers[0].enabled = false;
                             _fogMeshRenderers[1].enabled = true;
                             _nowViewFloor = 2;
                         }
 
-                        _mapCamera.SetActive(true);
                         _mapPanel.SetActive(true);
                         _mapText.text = "Floor" + _nowViewFloor.ToString();
 
@@ -97,7 +104,7 @@ namespace Scenes.Ingame.Player
         {
             if (_nowViewFloor == 1)
             {
-                _mapCamera.transform.localPosition = new Vector3(_mapCamera.transform.localPosition.x, FLOOR_2F, _mapCamera.transform.localPosition.z);
+                _mapCamera.transform.localPosition = new Vector3(_defaultPos.x, FLOOR_2F, _defaultPos.z);
                 _fogMeshRenderers[0].enabled = false;
                 _fogMeshRenderers[1].enabled = true;
                 _nowViewFloor = 2;
@@ -105,11 +112,31 @@ namespace Scenes.Ingame.Player
             }
             else if (_nowViewFloor == 2)
             {
-                _mapCamera.transform.localPosition = new Vector3(_mapCamera.transform.localPosition.x, FLOOR_1F, _mapCamera.transform.localPosition.z);
+                _mapCamera.transform.localPosition = new Vector3(_defaultPos.x, FLOOR_1F, _defaultPos.z);
                 _fogMeshRenderers[0].enabled = true;
                 _fogMeshRenderers[1].enabled = false;
                 _nowViewFloor = 1;
                 _mapText.text = "Floor1";
+            }
+        }
+
+        public void Update()
+        {
+            if (!_isOpenMap && _player != null)
+            {
+                //Playerの場所に応じてマップを切り替える
+                if (_player.transform.position.y < WALLSIZE)//1階にいる場合
+                {
+                    _mapCamera.transform.localPosition = new Vector3(this.transform.InverseTransformPoint(_player.transform.position).x, FLOOR_1F, this.transform.InverseTransformPoint(_player.transform.position).z);
+                    _fogMeshRenderers[0].enabled = true;
+                    _fogMeshRenderers[1].enabled = false;
+                }
+                else if (WALLSIZE <= _player.transform.position.y)//2階にいる場合
+                {
+                    _mapCamera.transform.localPosition = new Vector3(this.transform.InverseTransformPoint(_player.transform.position).x, FLOOR_2F, this.transform.InverseTransformPoint(_player.transform.position).z);
+                    _fogMeshRenderers[0].enabled = false;
+                    _fogMeshRenderers[1].enabled = true;
+                }
             }
         }
 
