@@ -1,12 +1,8 @@
 using Scenes.Ingame.Stage;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Burst.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Progress;
 using System.Runtime.InteropServices;
-using UnityEngine.UIElements;
 
 
 namespace Scenes.Ingame.Enemy

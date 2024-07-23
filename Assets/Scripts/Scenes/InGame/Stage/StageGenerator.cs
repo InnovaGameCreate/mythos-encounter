@@ -30,8 +30,17 @@ namespace Scenes.Ingame.Stage
         const float TILESIZE = 5.85f;
         const int OFFSET = 2;//通路を作らない範囲
         private bool playerSpawnRoom = false;
+        private bool escapeSpawnRoom = false;
         private bool viewDebugLog = false;//確認用のデバックログを表示する
         private CancellationTokenSource source = new CancellationTokenSource();
+        [Header("Room Size Count")]
+        [SerializeField]
+        private int LARGEROOM = 20;
+        [SerializeField]
+        private int MEDIUMROOM = 12;
+        [SerializeField]
+        private int SMALLROOM = 8;
+
         [Header("Parent")]
         [SerializeField]
         private GameObject floorObject;
@@ -68,7 +77,7 @@ namespace Scenes.Ingame.Stage
             {
                 RoomData[,] targetFloor = new RoomData[(int)_stageSize.x, (int)_stageSize.y];   //データの初期化
                 RoomPlotId(RoomType.room2x2Stair, new Vector2(0, 0), targetFloor);              //確定の階段部屋データの入力
-                RandomFullSpaceRoomPlot(targetFloor, 20, 12, 8);                                //データに部屋のIDの割り当て
+                RandomFullSpaceRoomPlot(targetFloor, LARGEROOM, MEDIUMROOM, SMALLROOM);                                //データに部屋のIDの割り当て
                 if (viewDebugLog) DebugStageData(targetFloor);
                 await RommShaping(token, targetFloor);                                          //空間を埋めるように部屋の大きさを調整
                 targetFloor = GenerateAisle(token, targetFloor);
@@ -98,7 +107,16 @@ namespace Scenes.Ingame.Stage
                 await GenerateWall(token, targetFloor, floor - 1);                              //壁の生成
             }
             floorObject.GetComponent<NavMeshSurface>().BuildNavMesh();                          //NavMeshのbake
+            ErrorCheck();
             IngameManager.Instance.SetReady(ReadyEnum.StageReady);                              //ステージ生成完了を通知
+        }
+        private void ErrorCheck()
+        {
+            if (!playerSpawnRoom || !escapeSpawnRoom)
+            {
+                if (!playerSpawnRoom) Debug.LogError($"playerSpawnRoomが生成されていません");
+                if (!escapeSpawnRoom) Debug.LogError($"escapeSpawnRoomが生成されていません");
+            }
         }
         private void InitialSet()
         {
@@ -130,7 +148,7 @@ namespace Scenes.Ingame.Stage
             {
                 for (int x = 0; x < _stageSize.x + 1; x++)
                 {
-                    instantiatePosition = ToVector3(x * TILESIZE, (floor + 1) * 5.9f, y * TILESIZE);
+                    instantiatePosition = ToVector3(x * TILESIZE, (floor + 1) * 5.84f, y * TILESIZE);
                     checkPosition = ToVector2(x, y);
                     if (floor == 0)
                     {
@@ -176,11 +194,16 @@ namespace Scenes.Ingame.Stage
                         switch (stage[x, y].RoomType)
                         {
                             case RoomType.room2x2:
-                                if (!playerSpawnRoom)
+                                if (!playerSpawnRoom && x >= 3 && y >= 3)
                                 {
                                     Instantiate(_prefabPool.getPlayerSpawnRoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
                                     _spawnPosition = instantiatePosition;
                                     playerSpawnRoom = true;
+                                }
+                                else if (!escapeSpawnRoom && x >= 3 && y >= 3)
+                                {
+                                    Instantiate(_prefabPool.getEscapeSpawnRoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
+                                    escapeSpawnRoom = true;
                                 }
                                 else
                                 {

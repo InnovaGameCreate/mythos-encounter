@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7201e6afb63bb241ac8b64f7cd95a71, type: 3}
   m_Name: Bandage
   m_EditorClassIdentifier: 
-  itemID: 1
+  itemID: 2
   itemName: Bandage
   itemSprite: {fileID: 21300000, guid: b980c0241f79eeb469860206c65a881f, type: 3}
   price: 50

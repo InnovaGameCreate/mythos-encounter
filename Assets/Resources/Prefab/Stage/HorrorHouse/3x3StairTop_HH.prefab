@@ -342,47 +342,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: Lamp_01
       objectReference: {fileID: 0}
+    - target: {fileID: 6769199311058943748, guid: e386b79f169b03e488d2b2dd8c34dd97, type: 3}
+      propertyPath: m_Intensity
+      value: 7.957747
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5231189263385663405, guid: e386b79f169b03e488d2b2dd8c34dd97, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5256986359003515693}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e386b79f169b03e488d2b2dd8c34dd97, type: 3}
 --- !u!4 &2394521363833700722 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2344208640567362491, guid: e386b79f169b03e488d2b2dd8c34dd97, type: 3}
   m_PrefabInstance: {fileID: 122513258246505161}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &5272496644972057956 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5231189263385663405, guid: e386b79f169b03e488d2b2dd8c34dd97, type: 3}
-  m_PrefabInstance: {fileID: 122513258246505161}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &5256986359003515693
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5272496644972057956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Version: 3
-  m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
-  m_LightLayerMask: 1
-  m_RenderingLayers: 1
-  m_CustomShadowLayers: 0
-  m_ShadowLayerMask: 1
-  m_ShadowRenderingLayers: 1
-  m_LightCookieSize: {x: 1, y: 1}
-  m_LightCookieOffset: {x: 0, y: 0}
-  m_SoftShadowQuality: 0
 --- !u!1001 &180603752924005196
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3278,7 +3251,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4644402684280153642, guid: b8991699bf60e70469f60901c1c88e01, type: 3}
       propertyPath: m_Intensity
-      value: 0.35
+      value: 15.915494
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

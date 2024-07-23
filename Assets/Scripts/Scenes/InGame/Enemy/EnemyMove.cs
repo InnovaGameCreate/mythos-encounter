@@ -9,7 +9,7 @@ using Scenes.Ingame.Player;
 namespace Scenes.Ingame.Enemy
 {
     /// <summary>
-    /// “GƒLƒƒƒ‰ƒNƒ^[‚ÌˆÚ“®‚ğŠÇ—‚·‚é
+    /// æ•µã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®ç§»å‹•ã‚’ç®¡ç†ã™ã‚‹
     /// </summary>
     public class EnemyMove : MonoBehaviour
     {
@@ -20,23 +20,28 @@ namespace Scenes.Ingame.Enemy
         [SerializeField] private bool _staminaOver = false;
 
 
-        private float _staminaChangeCount = 0;//ƒXƒ^ƒ~ƒi‚ğ–ˆ•bŒ¸‚ç‚·‚Ì‚Ég—p
+        private float _staminaChangeCount = 0;//ã‚¹ã‚¿ãƒŸãƒŠã‚’æ¯ç§’æ¸›ã‚‰ã™ã®ã«ä½¿ç”¨
         private Vector3 _movePosition;
 
         public Vector3 GetMovePosition() {
             return _movePosition;
         }
 
+        private Vector3 _initialPosition = new Vector3(30,0,18);//åˆæœŸä½ç½®ä¿å­˜ç”¨å¤‰æ•°
+       
+
+
 
 
 
         /// <summary>
-        /// ‰Šú‰»ˆ—ŠO•”‚©‚çŒÄ‚Ño‚·
+        /// åˆæœŸåŒ–å‡¦ç†å¤–éƒ¨ã‹ã‚‰å‘¼ã³å‡ºã™
         /// </summary>
         public void Init() {
             _myAgent = GetComponent<NavMeshAgent>();
-            if (_myAgent == null) Debug.LogError("NavMeshAgent‚ª”F¯‚Å‚«‚Ü‚¹‚ñ");
+            if (_myAgent == null) Debug.LogError("NavMeshAgentãŒèªè­˜ã§ãã¾ã›ã‚“");
             _myAgent.destination = this.transform.position;
+            _initialPosition = this.transform.position;
 
         }
 
@@ -53,7 +58,7 @@ namespace Scenes.Ingame.Enemy
 
             _staminaChangeCount += Time.deltaTime;
             if (_staminaChangeCount > 1) 
-            {//–ˆ•bˆ—
+            {//æ¯ç§’å‡¦ç†
                 Debug.Log(_enemyStatus.Stamina);
                 _staminaChangeCount -= 1;
                 switch (_enemyStatus.ReturnEnemyState)
@@ -61,7 +66,7 @@ namespace Scenes.Ingame.Enemy
                     case EnemyState.Patrolling:
                         _myAgent.speed = _enemyStatus.ReturnPatrollingSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
-                        { //ƒXƒ^ƒ~ƒi‚ªí‚ê‚Ä‚¢‚½‚ç
+                        { //ã‚¹ã‚¿ãƒŸãƒŠãŒå‰Šã‚Œã¦ã„ãŸã‚‰
                             _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
                         }
                         else if (_enemyStatus.ReturnStaminaBase < _enemyStatus.Stamina)
@@ -72,7 +77,7 @@ namespace Scenes.Ingame.Enemy
                     case EnemyState.Searching:
                         _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
                         if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
-                        { //ƒXƒ^ƒ~ƒi‚ªí‚ê‚Ä‚¢‚½‚ç
+                        { //ã‚¹ã‚¿ãƒŸãƒŠãŒå‰Šã‚Œã¦ã„ãŸã‚‰
                             _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
                         }
                         else if(_enemyStatus.ReturnStaminaBase < _enemyStatus.Stamina)
@@ -81,36 +86,36 @@ namespace Scenes.Ingame.Enemy
                         }
                         break;
                     case EnemyState.Chase:
-                        //ƒXƒ^ƒ~ƒiü‚è‚Ìˆ—‚ğ‚·‚é
+                        //ã‚¹ã‚¿ãƒŸãƒŠå‘¨ã‚Šã®å‡¦ç†ã‚’ã™ã‚‹
                         if (_staminaOver)
-                        { //ƒXƒ^ƒ~ƒi‚ªØ‚êØ‚Á‚½‚©‚Ç‚¤‚©
+                        { //ã‚¹ã‚¿ãƒŸãƒŠãŒåˆ‡ã‚Œåˆ‡ã£ãŸã‹ã©ã†ã‹
                             if (_enemyStatus.ReturnStaminaBase <= _enemyStatus.Stamina && !(_enemyStatus.ReturnStaminaBase == 0))
-                            { //‰ñ•œ‚µ‚½ó‘Ô‚É‚ ‚é‚©‚Ç‚¤‚©
+                            { //å›å¾©ã—ãŸçŠ¶æ…‹ã«ã‚ã‚‹ã‹ã©ã†ã‹
                                 _staminaOver = false;
                             }
                             else
-                            {//‰ñ•œ‚µ‚«‚Á‚Ä‚¢‚È‚¢‚È‚ç‰ñ•œ‚·‚é
+                            {//å›å¾©ã—ãã£ã¦ã„ãªã„ãªã‚‰å›å¾©ã™ã‚‹
                                 if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
-                                { //ƒXƒ^ƒ~ƒi‚ªí‚ê‚Ä‚¢‚½‚çA‚±‚ê‚ª‚ ‚é‚Ì‚ÍƒXƒ^ƒ~ƒi‚ª0‚ÌƒLƒƒƒ‰‚ª‚¢‚½‚É‚Ü‚Æ‚à‚É“®‚©‚·‚½‚ß
+                                { //ã‚¹ã‚¿ãƒŸãƒŠãŒå‰Šã‚Œã¦ã„ãŸã‚‰ã€ã“ã‚ŒãŒã‚ã‚‹ã®ã¯ã‚¹ã‚¿ãƒŸãƒŠãŒ0ã®ã‚­ãƒ£ãƒ©ãŒã„ãŸæ™‚ã«ã¾ã¨ã‚‚ã«å‹•ã‹ã™ãŸã‚
                                     _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
                                 }
                             }
 
                         }
                         else
-                        { //‚Ü‚¾ƒXƒ^ƒ~ƒi‚ªØ‚êØ‚Á‚Ä–³‚¢ê‡
+                        { //ã¾ã ã‚¹ã‚¿ãƒŸãƒŠãŒåˆ‡ã‚Œåˆ‡ã£ã¦ç„¡ã„å ´åˆ
                             if (0 >= _enemyStatus.Stamina)
-                            { //‚½‚Á‚½¡Ø‚êØ‚Á‚½‚©‚Ç‚¤‚©
+                            { //ãŸã£ãŸä»Šåˆ‡ã‚Œåˆ‡ã£ãŸã‹ã©ã†ã‹
                                 _staminaOver = true;
                                 if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
-                                { //ƒXƒ^ƒ~ƒi‚ªí‚ê‚Ä‚¢‚½‚çA‚±‚ê‚ª‚ ‚é‚Ì‚ÍƒXƒ^ƒ~ƒi‚ª0‚ÌƒLƒƒƒ‰‚ª‚¢‚½‚É‚Ü‚Æ‚à‚É“®‚©‚·‚½‚ß
+                                { //ã‚¹ã‚¿ãƒŸãƒŠãŒå‰Šã‚Œã¦ã„ãŸã‚‰ã€ã“ã‚ŒãŒã‚ã‚‹ã®ã¯ã‚¹ã‚¿ãƒŸãƒŠãŒ0ã®ã‚­ãƒ£ãƒ©ãŒã„ãŸæ™‚ã«ã¾ã¨ã‚‚ã«å‹•ã‹ã™ãŸã‚
                                     _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
                                 }
                             }
                             else
                             {
                                 if (0 < _enemyStatus.Stamina)
-                                { //ƒXƒ^ƒ~ƒi‚ğí‚ê‚é‚È‚çA‚±‚ê‚ª‚ ‚é‚Ì‚ÍƒXƒ^ƒ~ƒi‚ª0‚ÌƒLƒƒƒ‰‚ª‚¢‚½‚É‚Ü‚Æ‚à‚É“®‚©‚·‚½‚ß
+                                { //ã‚¹ã‚¿ãƒŸãƒŠã‚’å‰Šã‚Œã‚‹ãªã‚‰ã€ã“ã‚ŒãŒã‚ã‚‹ã®ã¯ã‚¹ã‚¿ãƒŸãƒŠãŒ0ã®ã‚­ãƒ£ãƒ©ãŒã„ãŸæ™‚ã«ã¾ã¨ã‚‚ã«å‹•ã‹ã™ãŸã‚
                                     _enemyStatus.StaminaChange(_enemyStatus.Stamina - 1);
                                 }
                             }
@@ -125,35 +130,35 @@ namespace Scenes.Ingame.Enemy
                         }
                         break;
                     case EnemyState.Attack:
-                        //ƒXƒ^ƒ~ƒiü‚è‚Ìˆ—‚ğ‚·‚é
+                        //ã‚¹ã‚¿ãƒŸãƒŠå‘¨ã‚Šã®å‡¦ç†ã‚’ã™ã‚‹
                         if (_staminaOver)
-                        { //ƒXƒ^ƒ~ƒi‚ªØ‚êØ‚Á‚½‚©‚Ç‚¤‚©
+                        { //ã‚¹ã‚¿ãƒŸãƒŠãŒåˆ‡ã‚Œåˆ‡ã£ãŸã‹ã©ã†ã‹
                             if (_enemyStatus.ReturnStaminaBase <= _enemyStatus.Stamina && !(_enemyStatus.ReturnStaminaBase == 0))
-                            { //‰ñ•œ‚µ‚½ó‘Ô‚É‚ ‚é‚©‚Ç‚¤‚©
+                            { //å›å¾©ã—ãŸçŠ¶æ…‹ã«ã‚ã‚‹ã‹ã©ã†ã‹
                                 _staminaOver = false;
                             }
                             else
-                            {//‰ñ•œ‚µ‚«‚Á‚Ä‚¢‚È‚¢‚È‚ç‰ñ•œ‚·‚é
+                            {//å›å¾©ã—ãã£ã¦ã„ãªã„ãªã‚‰å›å¾©ã™ã‚‹
                                 if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
-                                { //ƒXƒ^ƒ~ƒi‚ªí‚ê‚Ä‚¢‚½‚çA‚±‚ê‚ª‚ ‚é‚Ì‚ÍƒXƒ^ƒ~ƒi‚ª0‚ÌƒLƒƒƒ‰‚ª‚¢‚½‚É‚Ü‚Æ‚à‚É“®‚©‚·‚½‚ß
+                                { //ã‚¹ã‚¿ãƒŸãƒŠãŒå‰Šã‚Œã¦ã„ãŸã‚‰ã€ã“ã‚ŒãŒã‚ã‚‹ã®ã¯ã‚¹ã‚¿ãƒŸãƒŠãŒ0ã®ã‚­ãƒ£ãƒ©ãŒã„ãŸæ™‚ã«ã¾ã¨ã‚‚ã«å‹•ã‹ã™ãŸã‚
                                     _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
                                 }
                             }
                         }
                         else
-                        { //‚Ü‚¾ƒXƒ^ƒ~ƒi‚ªØ‚êØ‚Á‚Ä–³‚¢ê‡
+                        { //ã¾ã ã‚¹ã‚¿ãƒŸãƒŠãŒåˆ‡ã‚Œåˆ‡ã£ã¦ç„¡ã„å ´åˆ
                             if (0 >= _enemyStatus.Stamina)
-                            { //‚½‚Á‚½¡Ø‚êØ‚Á‚½‚©‚Ç‚¤‚©
+                            { //ãŸã£ãŸä»Šåˆ‡ã‚Œåˆ‡ã£ãŸã‹ã©ã†ã‹
                                 _staminaOver = true;
                                 if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
-                                { //ƒXƒ^ƒ~ƒi‚ªí‚ê‚Ä‚¢‚½‚çA‚±‚ê‚ª‚ ‚é‚Ì‚ÍƒXƒ^ƒ~ƒi‚ª0‚ÌƒLƒƒƒ‰‚ª‚¢‚½‚É‚Ü‚Æ‚à‚É“®‚©‚·‚½‚ß
+                                { //ã‚¹ã‚¿ãƒŸãƒŠãŒå‰Šã‚Œã¦ã„ãŸã‚‰ã€ã“ã‚ŒãŒã‚ã‚‹ã®ã¯ã‚¹ã‚¿ãƒŸãƒŠãŒ0ã®ã‚­ãƒ£ãƒ©ãŒã„ãŸæ™‚ã«ã¾ã¨ã‚‚ã«å‹•ã‹ã™ãŸã‚
                                     _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
                                 }
                             }
                             else
                             {
                                 if (0 < _enemyStatus.Stamina)
-                                { //ƒXƒ^ƒ~ƒi‚ğí‚ê‚é‚È‚çA‚±‚ê‚ª‚ ‚é‚Ì‚ÍƒXƒ^ƒ~ƒi‚ª0‚ÌƒLƒƒƒ‰‚ª‚¢‚½‚É‚Ü‚Æ‚à‚É“®‚©‚·‚½‚ß
+                                { //ã‚¹ã‚¿ãƒŸãƒŠã‚’å‰Šã‚Œã‚‹ãªã‚‰ã€ã“ã‚ŒãŒã‚ã‚‹ã®ã¯ã‚¹ã‚¿ãƒŸãƒŠãŒ0ã®ã‚­ãƒ£ãƒ©ãŒã„ãŸæ™‚ã«ã¾ã¨ã‚‚ã«å‹•ã‹ã™ãŸã‚
                                     _enemyStatus.StaminaChange(_enemyStatus.Stamina - 1);
                                 }
                             }
@@ -171,7 +176,7 @@ namespace Scenes.Ingame.Enemy
 
                         break;
                     default:
-                        Debug.LogWarning("‘z’èŠO‚ÌEnemyStatus");
+                        Debug.LogWarning("æƒ³å®šå¤–ã®EnemyStatus");
                         break;
                     
                 }
@@ -182,6 +187,18 @@ namespace Scenes.Ingame.Enemy
         {
             _movePosition = targetPosition;
             _myAgent.destination = targetPosition;
+        }
+
+        /// <summary>
+        /// åº§æ¨™ã‚’åˆæœŸä½ç½®ã«ç§»å‹•ã™ã‚‹é–¢æ•°
+        /// </summary>
+        public void ResetPosition()
+        {
+            _myAgent.enabled = false;
+            _enemyStatus.SetEnemyState(EnemyState.Patrolling);
+            transform.position = _initialPosition;
+            _myAgent.enabled = true;
+
         }
     }
 }

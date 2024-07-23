@@ -20,7 +20,7 @@ namespace Scenes.Ingame.Player
                 var item = ownerPlayerItem.ItemSlots[i];
                 if ( i != ownerPlayerItem.nowIndex) {
                     if (item.myItemData != null) {
-                        if (item.myItemData.itemID == 3) {
+                        if (item.myItemData.itemID == 6) {
                             _isHaveCharm = true;
                         }
                     }

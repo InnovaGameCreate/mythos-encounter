@@ -13,6 +13,7 @@ namespace Scenes.Ingame.Player
     public class PlayerMagic : MonoBehaviour
     {
         private bool _isCanUseMagic = true;//現在魔法が使えるか否か
+        private bool _isUsedMagic = false;//魔法を1度使ったか否か
         [SerializeField] private Magic _myMagic;//使用可能な魔法
 
         private Subject<Unit> _FinishUseMagic = new Subject<Unit>();//魔法の詠唱が終わり、効果が発動したらイベントが発生.
@@ -84,7 +85,7 @@ namespace Scenes.Ingame.Player
                     }
                 });
 
-            //攻撃くらったときを示すBoolがTrueになったときに呪文詠唱を中断
+            //攻撃くらったときのイベントが発行されたときに呪文詠唱を中断
             myPlayerStatus.OnEnemyAttackedMe
                 .Where(_ => _isCanUseMagic)
                 .Subscribe(_ =>
@@ -106,12 +107,22 @@ namespace Scenes.Ingame.Player
                     //詠唱中の移動速度50%Downを解除
                     myPlayerStatus.UseMagic(false);
                     myPlayerStatus.ChangeSpeed();
+                    _isUsedMagic = true;
                 }).AddTo(this);
         }
 
         public void ChangeCanUseMagicBool(bool value)
         {
             _isCanUseMagic = false;
+        }
+
+        /// <summary>
+        /// 既に１度呪文を使ったかを管理しているBoolの値を取得する関数
+        /// </summary>
+        /// <returns>_isUsedMagicの値</returns>
+        public bool GetUsedMagicBool()
+        { 
+            return _isUsedMagic;
         }
     }
 }

@@ -358,7 +358,7 @@ Transform:
   - {fileID: 4262955829018097603}
   - {fileID: 2997796602784301469}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2817882825628233842
 MonoBehaviour:
@@ -372,7 +372,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6c2c06b8e9a24944bbd947e4141d58f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stageSize: {x: 18, y: 18}
+  _stageSize: {x: 12, y: 12}
+  LARGEROOM: 9
+  MEDIUMROOM: 5
+  SMALLROOM: 4
   floorObject: {fileID: 1938581473151959162}
   secondFloorObject: {fileID: 8953441585888980059}
   outSideWallObject: {fileID: 1744168106335570809}
@@ -398,6 +401,7 @@ MonoBehaviour:
   wallXDoorPrefab: {fileID: 3064727835192536343, guid: 8457aec2305875b45b017bcb1dee3ab9, type: 3}
   wallYDoorPrefab: {fileID: 109861664846363845, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
   playerSpawnRoomPrefab: {fileID: 8786186942910803785, guid: fb3b94e0d3de78842a2c2cdd2820335d, type: 3}
+  escapeSpawnRoomPrefab: {fileID: 8786186942910803785, guid: d7b4bafd6d0cc6c4b8672dd9b1ed1882, type: 3}
   _2x2RoomPrefab:
   - {fileID: 8786186942910803785, guid: 7db0cf38dce9fa64999c1eb0a4233904, type: 3}
   - {fileID: 8786186942910803785, guid: 22cdd846fff648f4bba972715526e4a8, type: 3}
@@ -442,7 +446,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7488444315121541053}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 55.575, y: 0, z: 35.725}
+  m_LocalPosition: {x: 38.025, y: 0, z: 18.175}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
