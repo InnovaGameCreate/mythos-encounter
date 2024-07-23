@@ -18,36 +18,36 @@ using Scenes.Ingame.Stage;
 namespace Scenes.Ingame.Enemy
 {
     /// <summary>
-    /// “GƒLƒƒƒ‰‚ğì¬‚·‚é
+    /// æ•µã‚­ãƒ£ãƒ©ã‚’ä½œæˆã™ã‚‹
     /// </summary>
     public class EnemySpawner : MonoBehaviour
     {
         public static EnemySpawner Instance;
 
-        [Header("ƒfƒoƒbƒO‚·‚é‚©‚Ç‚¤‚©")]
+        [Header("ãƒ‡ãƒãƒƒã‚°ã™ã‚‹ã‹ã©ã†ã‹")]
         [SerializeField] private bool _debugMode;
-        [SerializeField][Tooltip("InGameManager–³‚µ‚Å‹@”\‚³‚¹‚é‚©‚Ç‚¤‚©")] private bool _nonInGameManagerMode;
-        [SerializeField][Tooltip("ƒfƒoƒbƒO‚Éì¬‚·‚é“G")] private EnemyName _enemyName;
+        [SerializeField][Tooltip("InGameManagerç„¡ã—ã§æ©Ÿèƒ½ã•ã›ã‚‹ã‹ã©ã†ã‹")] private bool _nonInGameManagerMode;
+        [SerializeField][Tooltip("ãƒ‡ãƒãƒƒã‚°æ™‚ã«ä½œæˆã™ã‚‹æ•µ")] private EnemyName _enemyName;
 
-        [Header("ƒ}ƒbƒv‚Ìİ’è")]
-        [Header("ƒXƒLƒƒƒ“‚·‚éƒ}ƒbƒv‚ÉŠÖ‚µ‚Ä")]
+        [Header("ãƒãƒƒãƒ—ã®è¨­å®š")]
+        [Header("ã‚¹ã‚­ãƒ£ãƒ³ã™ã‚‹ãƒãƒƒãƒ—ã«é–¢ã—ã¦")]
         [SerializeField]
-        [Tooltip("©“®‚Å¶¬‚³‚ê‚é‚Ì‚Å‘}“ü‚µ‚È‚¢–")]
+        [Tooltip("è‡ªå‹•ã§ç”Ÿæˆã•ã‚Œã‚‹ã®ã§æŒ¿å…¥ã—ãªã„äº‹")]
         private EnemyVisibilityMap _enemyVisibilityMap;
         [SerializeField]
-        [Tooltip("Šeƒ}ƒX–Ú‚Ì”")]
+        [Tooltip("å„ãƒã‚¹ç›®ã®æ•°")]
         private byte _x, _y, _z;
         [SerializeField]
-        [Tooltip("ƒ}ƒbƒv‚Ìƒ}ƒX–Ú‚Ì•")]
+        [Tooltip("ãƒãƒƒãƒ—ã®ãƒã‚¹ç›®ã®å¹…")]
         private float _range;
         [SerializeField]
-        [Tooltip("Å‚à‹ŠE‚Ì’·‚¢“G‚Ì‹ŠE‚Ì‹——£")]
+        [Tooltip("æœ€ã‚‚è¦–ç•Œã®é•·ã„æ•µã®è¦–ç•Œã®è·é›¢")]
         private float _maxVisiviilityRange;
         [SerializeField]
-        [Tooltip("ƒ}ƒbƒv‚Ìƒ}ƒX–Ú‚ÌÅ‚à¶‰º‚Ìƒ}ƒX–Ú‚Ì’†S•”")]
+        [Tooltip("ãƒãƒƒãƒ—ã®ãƒã‚¹ç›®ã®æœ€ã‚‚å·¦ä¸‹ã®ãƒã‚¹ç›®ã®ä¸­å¿ƒéƒ¨")]
         private Vector3 _centerPosition;
 
-        [Header("ì¬‚·‚é“G‚ÌƒvƒŒƒnƒuˆê——")]
+        [Header("ä½œæˆã™ã‚‹æ•µã®ãƒ—ãƒ¬ãƒãƒ–ä¸€è¦§")]
         [SerializeField] private GameObject _testEnemy;
         [SerializeField] private GameObject _deepOnes;
         [SerializeField] private GameObject _spawnOfCthulhu;
@@ -55,7 +55,7 @@ namespace Scenes.Ingame.Enemy
 
 
 
-        [Header("¶¬‚·‚éÛ‚Ìİ’è")]
+        [Header("ç”Ÿæˆã™ã‚‹éš›ã®è¨­å®š")]
         [SerializeField] private Vector3 _enemySpawnPosition;
 
 
@@ -73,7 +73,7 @@ namespace Scenes.Ingame.Enemy
             }
             else
             {
-                IngameManager.Instance.OnPlayerSpawnEvent.Subscribe(_ => InitialSpawn(_cancellationTokenSource.Token).Forget());//ƒvƒŒƒCƒ„[ƒXƒ|[ƒ“‚Íƒ}ƒbƒv‚ªŠ®¬‚µ‚Ä‚©‚çs‚í‚ê‚é
+                IngameManager.Instance.OnPlayerSpawnEvent.Subscribe(_ => InitialSpawn(_cancellationTokenSource.Token).Forget());//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¹ãƒãƒ¼ãƒ³ã¯ãƒãƒƒãƒ—ãŒå®Œæˆã—ã¦ã‹ã‚‰è¡Œã‚ã‚Œã‚‹
             }
 
             if (Instance == null)
@@ -86,15 +86,15 @@ namespace Scenes.Ingame.Enemy
 
         private async UniTaskVoid InitialSpawn(CancellationToken token)
         {
-            //ƒhƒA‚ğ“üè
+            //ãƒ‰ã‚¢ã‚’å…¥æ‰‹
             _doors = new List<StageDoor>(FindObjectsOfType<StageDoor>());
 
-            //‘S‚Ä‚ÌƒhƒA‚ª“®‚«I‚í‚Á‚½‚©Šm”F‚·‚é
+            //å…¨ã¦ã®ãƒ‰ã‚¢ãŒå‹•ãçµ‚ã‚ã£ãŸã‹ç¢ºèªã™ã‚‹
             bool stop = false;
             while (!stop)
             {
                 stop = true;
-                //‘S‚Ä‚ÌƒhƒA‚ª“®‚«I‚í‚Á‚½‚©Šm”F‚·‚é
+                //å…¨ã¦ã®ãƒ‰ã‚¢ãŒå‹•ãçµ‚ã‚ã£ãŸã‹ç¢ºèªã™ã‚‹
                 for (int i = 0; i < _doors.Count; i++)
                 {
                     if (_doors[i].ReturnIsAnimation)
@@ -107,28 +107,28 @@ namespace Scenes.Ingame.Enemy
                 }
             }
 
-            /*      ‚È‚º‚±‚ê‚ªãè‚­‚¢‚©‚ñ‚Ì‚¾IH
-            //‘S‚Ä‚ÌƒhƒA‚ª“®‚«I‚í‚Á‚½‚©Šm”F‚·‚é
+            /*      ãªãœã“ã‚ŒãŒä¸Šæ‰‹ãã„ã‹ã‚“ã®ã ï¼ï¼Ÿ
+            //å…¨ã¦ã®ãƒ‰ã‚¢ãŒå‹•ãçµ‚ã‚ã£ãŸã‹ç¢ºèªã™ã‚‹
             for (int i = 0; i < _doors.Count; i++)
             {
-                Debug.Log("‚±‚±‚Ü‚Å2");
+                Debug.Log("ã“ã“ã¾ã§2");
                 await UniTask.WaitWhile(() => !_doors[i].ReturnIsAnimation);
-                Debug.Log("‚±‚±‚Ü‚Å3");
+                Debug.Log("ã“ã“ã¾ã§3");
             }
             */
 
-            //‘S‚Ä‚ÌƒhƒA‚ğ•Â‚ß‚é
+            //å…¨ã¦ã®ãƒ‰ã‚¢ã‚’é–‰ã‚ã‚‹
             for (int i = 0; i < _doors.Count; i++)
             {
                 _doors[i].ChangeDoorQuickOpen(false);
             }
 
-            //‘S‚Ä‚ÌƒhƒA‚ª“®‚«I‚í‚Á‚½‚©Šm”F‚·‚é
+            //å…¨ã¦ã®ãƒ‰ã‚¢ãŒå‹•ãçµ‚ã‚ã£ãŸã‹ç¢ºèªã™ã‚‹
             stop = false;
             while (!stop)
             {
                 stop = true;
-                //‘S‚Ä‚ÌƒhƒA‚ª“®‚«I‚í‚Á‚½‚©Šm”F‚·‚é
+                //å…¨ã¦ã®ãƒ‰ã‚¢ãŒå‹•ãçµ‚ã‚ã£ãŸã‹ç¢ºèªã™ã‚‹
                 for (int i = 0; i < _doors.Count; i++)
                 {
                     if (_doors[i].ReturnIsAnimation)
@@ -139,7 +139,7 @@ namespace Scenes.Ingame.Enemy
                 }
             }
 
-            //ƒ}ƒbƒv‚ğƒXƒLƒƒƒ“
+            //ãƒãƒƒãƒ—ã‚’ã‚¹ã‚­ãƒ£ãƒ³
             _enemyVisibilityMap = new EnemyVisibilityMap();
             _enemyVisibilityMap.debugMode = _debugMode;
             _enemyVisibilityMap.maxVisivilityRange = _maxVisiviilityRange;
@@ -150,23 +150,23 @@ namespace Scenes.Ingame.Enemy
             //_doors[0].gameObject.transform.position = _doors[0].gameObject.transform.position + new Vector3(5,0,5);
 
 
-            //ƒRƒ‰ƒCƒ_[‚ÌXV‚ğ‘Ò‚Â
+            //ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®æ›´æ–°ã‚’å¾…ã¤
             await UniTask.DelayFrame(2, PlayerLoopTiming.FixedUpdate, token);
             _enemyVisibilityMap.NeedOpenDoorScan();
 
 
-            //‘S‚Ä‚ÌƒhƒA‚ğŠJ‚¯‚é
+            //å…¨ã¦ã®ãƒ‰ã‚¢ã‚’é–‹ã‘ã‚‹
             for (int i = 0; i < _doors.Count; i++)
             {
                 _doors[i].ChangeDoorQuickOpen(true);
             }
 
-            //‘S‚Ä‚ÌƒhƒA‚ª“®‚«I‚í‚Á‚½‚©Šm”F‚·‚é
+            //å…¨ã¦ã®ãƒ‰ã‚¢ãŒå‹•ãçµ‚ã‚ã£ãŸã‹ç¢ºèªã™ã‚‹
             stop = false;
             while (!stop)
             {
                 stop = true;
-                //‘S‚Ä‚ÌƒhƒA‚ª“®‚«I‚í‚Á‚½‚©Šm”F‚·‚é
+                //å…¨ã¦ã®ãƒ‰ã‚¢ãŒå‹•ãçµ‚ã‚ã£ãŸã‹ç¢ºèªã™ã‚‹
                 for (int i = 0; i < _doors.Count; i++)
                 {
                     if (_doors[i].ReturnIsAnimation)
@@ -176,12 +176,12 @@ namespace Scenes.Ingame.Enemy
                     }
                 }
             }
-            //ƒRƒ‰ƒCƒ_[‚ÌXV‚ğ‘Ò‚Â
+            //ã‚³ãƒ©ã‚¤ãƒ€ãƒ¼ã®æ›´æ–°ã‚’å¾…ã¤
             await UniTask.DelayFrame(2, PlayerLoopTiming.FixedUpdate, token);
             _enemyVisibilityMap.NeedCloseDoorScan();
 
 
-            //‘S‚Ä‚ÌƒhƒA‚ğ‰Šúó‘Ô‚É‚·‚é
+            //å…¨ã¦ã®ãƒ‰ã‚¢ã‚’åˆæœŸçŠ¶æ…‹ã«ã™ã‚‹
             for (int i = 0; i < _doors.Count; i++)
             {
                 _doors[i].ChangeDoorInitial();
@@ -189,20 +189,22 @@ namespace Scenes.Ingame.Enemy
 
             if (_nonInGameManagerMode)
             {
-                EnemySpawn(_enemyName, new Vector3(-10, _centerPosition.y + 3, -10));
+
+                EnemySpawn(EnemyName.TestEnemy, _enemySpawnPosition);
+
             }
             else
             {
-                //‚±‚±‚ÅEnemy§ì
+                //ã“ã“ã§Enemyåˆ¶ä½œ
                 EnemySpawn(_enemyName, _enemySpawnPosition);
-                //“G‚Ì•¦‚«‚ªŠ®—¹‚µ‚½‚±‚Æ‚ğ’m‚ç‚¹‚é
+                //æ•µã®æ²¸ããŒå®Œäº†ã—ãŸã“ã¨ã‚’çŸ¥ã‚‰ã›ã‚‹
                 IngameManager.Instance.SetReady(ReadyEnum.EnemyReady);
             }
         }
 
 
 
-        public void EnemySpawn(EnemyName enemeyName, Vector3 spownPosition)//ˆÊ’u‚ğw’è‚µ‚ÄƒXƒ|[ƒ“‚³‚¹‚½‚¢ê‡
+        public void EnemySpawn(EnemyName enemeyName, Vector3 spownPosition)//ä½ç½®ã‚’æŒ‡å®šã—ã¦ã‚¹ãƒãƒ¼ãƒ³ã•ã›ãŸã„å ´åˆ
         {
             GameObject createEnemy;
             EnemyStatus createEnemyStatus;
@@ -212,27 +214,27 @@ namespace Scenes.Ingame.Enemy
 
                 case EnemyName.TestEnemy:
                     createEnemy = GameObject.Instantiate(_testEnemy, spownPosition, Quaternion.identity);
-                    if (_debugMode) Debug.Log("ƒGƒlƒ~[‚Í§ì‚³‚ê‚Ü‚µ‚½");
+                    if (_debugMode) Debug.Log("ã‚¨ãƒãƒŸãƒ¼ã¯åˆ¶ä½œã•ã‚Œã¾ã—ãŸ");
                     break;
                 case EnemyName.DeepOnes:
                     createEnemy = GameObject.Instantiate(_deepOnes, spownPosition, Quaternion.identity);
-                    if (_debugMode) Debug.Log("ƒGƒlƒ~[‚Í§ì‚³‚ê‚Ü‚µ‚½");
+                    if (_debugMode) Debug.Log("ã‚¨ãƒãƒŸãƒ¼ã¯åˆ¶ä½œã•ã‚Œã¾ã—ãŸ");
                     break;
                 case EnemyName.SpawnOfCthulhu:
                     createEnemy = GameObject.Instantiate(_spawnOfCthulhu, spownPosition, Quaternion.identity);
-                    if (_debugMode) Debug.Log("ƒGƒlƒ~[‚Í§ì‚³‚ê‚Ü‚µ‚½");
+                    if (_debugMode) Debug.Log("ã‚¨ãƒãƒŸãƒ¼ã¯åˆ¶ä½œã•ã‚Œã¾ã—ãŸ");
                     break;
                 case EnemyName.MiGo:
                     createEnemy = GameObject.Instantiate(_MiGo, spownPosition, Quaternion.identity);
-                    if (_debugMode) Debug.Log("ƒGƒlƒ~[‚Í§ì‚³‚ê‚Ü‚µ‚½");
+                    if (_debugMode) Debug.Log("ã‚¨ãƒãƒŸãƒ¼ã¯åˆ¶ä½œã•ã‚Œã¾ã—ãŸ");
                     break;
                 default:
-                    Debug.LogError("‚±‚ÌƒXƒNƒŠƒvƒg‚ÉA‚·‚×‚Ä‚Ì“G‚ÌƒvƒŒƒnƒu‚ªŠi”[‰Â”\‚©‚ğŠm”F‚µ‚Ä‚­‚¾‚³‚¢");
+                    Debug.LogError("ã“ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã«ã€ã™ã¹ã¦ã®æ•µã®ãƒ—ãƒ¬ãƒãƒ–ãŒæ ¼ç´å¯èƒ½ã‹ã‚’ç¢ºèªã—ã¦ãã ã•ã„");
                     return;
             }
             if (createEnemy.TryGetComponent<EnemyStatus>(out createEnemyStatus))
             {
-                if (_debugMode) Debug.Log("ì¬‚µ‚½“G‚É‚ÍEnemyStatusƒNƒ‰ƒX‚ª‚ ‚è‚Ü‚·");
+                if (_debugMode) Debug.Log("ä½œæˆã—ãŸæ•µã«ã¯EnemyStatusã‚¯ãƒ©ã‚¹ãŒã‚ã‚Šã¾ã™");
                 createEnemyVisiviityMap.DontApproachPlayer();
                 createEnemyStatus.Init(createEnemyVisiviityMap);
 
