@@ -218,9 +218,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hpBase: 10
-  _patrollingSpeedBase: 3
-  _searchSpeedBase: 6
-  _chaseSpeedBase: 4.3
+  _patrollingSpeedBase: 4.5
+  _searchSpeedBase: 6.5
+  _chaseSpeedBase: 7
   _audiometerPowerBase: 100
   _reactToLightBase: 1
   _flyingBase: 0
