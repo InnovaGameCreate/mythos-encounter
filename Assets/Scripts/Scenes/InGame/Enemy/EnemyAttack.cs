@@ -32,7 +32,7 @@ namespace Scenes.Ingame.Enemy
         [SerializeField][Tooltip("遠隔攻撃の間隔")] private float _shotTime;
         [SerializeField][Tooltip("遠隔攻撃の射程")] private float _shotRange;
         [SerializeField][Tooltip("弾丸")] private GameObject _ballet;
-
+        [SerializeField][Tooltip("弾丸")] private bool _hitScan;
 
 
 
@@ -139,7 +139,15 @@ namespace Scenes.Ingame.Enemy
                                     _attackTimeCount = 0;
                                     _shotTimeCount = 0;
                                     if (_debugMode) Debug.Log("ここで遠隔攻撃！");
-                                    GameObject.Instantiate(_ballet, this.transform.position + new Vector3(0,2,0) + this.transform.forward, Quaternion.identity);
+                                    if (_hitScan)
+                                    {
+                                        GameObject makeBullet;
+                                        makeBullet = GameObject.Instantiate(_ballet, this.transform.position + new Vector3(0, 2, 0) + this.transform.forward, Quaternion.identity);
+                                        makeBullet.GetComponent<EnemyHitScanBullet>().Init(_player,_playerStatus);
+                                    }
+                                    else {
+                                        GameObject.Instantiate(_ballet, this.transform.position + new Vector3(0, 2, 0) + this.transform.forward, Quaternion.identity);
+                                    }
                                 }
 
 
