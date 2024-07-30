@@ -65,7 +65,7 @@ MonoBehaviour:
   _ballet: {fileID: 2261882221392382239, guid: 39e56c2c101133e4ba9db45ecad211dd, type: 3}
   _enemyStatus: {fileID: 3554846491491567640}
   _enemySearch: {fileID: 7631687704071867374}
-  _enemyMove: {fileID: 6372555738571843037}
+  _myEnemyMove: {fileID: 0}
 --- !u!114 &6372555738571843037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -111,9 +111,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hpBase: 10
-  _patrollingSpeedBase: 10
-  _searchSpeedBase: 10
-  _chaseSpeedBase: 14
+  _patrollingSpeedBase: 3
+  _searchSpeedBase: 4
+  _chaseSpeedBase: 5
   _audiometerPowerBase: 100
   _reactToLightBase: 1
   _flyingBase: 0

@@ -190,7 +190,7 @@ namespace Scenes.Ingame.Enemy
             if (_nonInGameManagerMode)
             {
 
-                EnemySpawn(EnemyName.TestEnemy, _enemySpawnPosition);
+                EnemySpawn(_enemyName, _enemySpawnPosition);
 
             }
             else
