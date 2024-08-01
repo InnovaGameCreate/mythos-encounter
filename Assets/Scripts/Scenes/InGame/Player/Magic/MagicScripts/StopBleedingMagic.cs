@@ -61,7 +61,9 @@ namespace Scenes.Ingame.Player
                     {
                         PlayerStatus playerStatus;
                         results[i].gameObject.TryGetComponent<PlayerStatus>(out playerStatus);
-                        playerStatus.ChangeBleedingBool(false);
+
+                        if(playerStatus != null)
+                            playerStatus.ChangeBleedingBool(false);
                     }
 
                     //SANílå∏è≠
