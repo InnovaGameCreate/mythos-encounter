@@ -74,7 +74,7 @@ GameObject:
   - component: {fileID: 4646188634127463172}
   m_Layer: 0
   m_Name: TestEnemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -120,7 +120,7 @@ MonoBehaviour:
   _ballet: {fileID: 2261882221392382239, guid: 39e56c2c101133e4ba9db45ecad211dd, type: 3}
   _enemyStatus: {fileID: 7000828227398978958}
   _enemySearch: {fileID: 41553992271996288}
-  _enemyMove: {fileID: 7130656707961021328}
+  _myEnemyMove: {fileID: 0}
 --- !u!114 &7130656707961021328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,9 +166,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hpBase: 10
-  _patrollingSpeedBase: 1
-  _searchSpeedBase: 2
-  _chaseSpeedBase: 3
+  _patrollingSpeedBase: 2
+  _searchSpeedBase: 4
+  _chaseSpeedBase: 6
   _audiometerPowerBase: 100
   _reactToLightBase: 1
   _flyingBase: 1

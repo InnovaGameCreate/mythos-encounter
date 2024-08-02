@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7201e6afb63bb241ac8b64f7cd95a71, type: 3}
   m_Name: Charm
   m_EditorClassIdentifier: 
-  itemID: 3
+  itemID: 6
   itemName: Charm
   itemSprite: {fileID: 21300000, guid: 23aa9f311b7cb4845a0648df6c184c26, type: 3}
   price: 200
