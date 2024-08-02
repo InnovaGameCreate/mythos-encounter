@@ -29,7 +29,7 @@ namespace Scenes.Ingame.Stage
         private RoomData[,] _firsrFloorData;
         private RoomData[,] _secondFloorData;
         private List<GameObject> instantiateRooms = new List<GameObject>();
-        private GameObject spawnPositionRoom;
+        private GameObject spawnPositionRoom = null;
         private GameObject instantiateRoom;
         private int roomId = 0;
         const float TILESIZE = 5.85f;
@@ -37,6 +37,8 @@ namespace Scenes.Ingame.Stage
         private bool playerSpawnRoom = false;
         private bool viewDebugLog = false;//確認用のデバックログを表示する
         private CancellationTokenSource source = new CancellationTokenSource();
+        [SerializeField]
+        LineRenderer line;//デバック用のライン表示
         [Header("Room Size Count")]
         [SerializeField]
         private int LARGEROOM = 20;
@@ -245,6 +247,11 @@ namespace Scenes.Ingame.Stage
                                 else
                                 {
                                     instantiateRoom = Instantiate(_prefabPool.get2x2RoomPrefab[UnityEngine.Random.Range(0, _prefabPool.get2x2RoomPrefab.Length)], instantiatePosition, Quaternion.identity, roomObject.transform);
+                                    if(spawnPositionRoom == null)
+                                    {
+                                        spawnPositionRoom = instantiateRoom;
+                                        _spawnPosition = instantiatePosition;
+                                    }
                                 }
                                 break;
                             case RoomType.room2x2Stair:
@@ -937,7 +944,8 @@ namespace Scenes.Ingame.Stage
             }
             else
             {
-                Debug.LogError("Can't get NavMeshAgent");
+                spawnPositionRoom.AddComponent<NavMeshAgent>();
+                agent = spawnPositionRoom.GetComponent<NavMeshAgent>();
             }
             foreach (GameObject target in instantiateRooms)
             {
@@ -945,8 +953,7 @@ namespace Scenes.Ingame.Stage
 
                 if (!IsConnected(agent, target.transform.position))
                 {
-                    Debug.LogWarning($"is not path room is {target.gameObject.name}");
-                    target.gameObject.name = "unPathedRoom";
+                    target.gameObject.name = "UnPathedRoom";
                     return false;
                 }
             }
@@ -956,9 +963,18 @@ namespace Scenes.Ingame.Stage
         //移転間のパスが通っているかを確認
         bool IsConnected(NavMeshAgent agent, Vector3 targetPosition)
         {
-            if(agent == null) return false;
+            if (agent == null)
+            {
+                Debug.LogWarning("agent is null");
+                return false;
+            }
             NavMeshPath path = new NavMeshPath();
             agent.CalculatePath(targetPosition, path);
+            if(viewDebugLog && path.status == NavMeshPathStatus.PathPartial)
+            {
+                line.SetVertexCount(path.corners.Length);
+                line.SetPositions(path.corners);
+            }
 
             return path.status == NavMeshPathStatus.PathComplete;
         }
