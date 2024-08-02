@@ -8,7 +8,6 @@ using Scenes.Ingame.InGameSystem;
 using UniRx;
 using Unity.AI.Navigation;
 using UnityEngine.AI;
-using Unity.VisualScripting.Antlr3.Runtime;
 using System;
 
 namespace Scenes.Ingame.Stage
@@ -83,7 +82,7 @@ namespace Scenes.Ingame.Stage
             for (int floor = 1; floor <= 2; floor++)
             {
                 RoomData[,] targetFloor = new RoomData[(int)_stageSize.x, (int)_stageSize.y];   //データの初期化
-                RoomPlotId(RoomType.room2x2Stair, new Vector2((int)_stageSize.x - 2, (int)_stageSize.y - 2), targetFloor);//確定の階段部屋データの入力
+                RoomPlotId(RoomType.room3x3Stair, new Vector2((int)_stageSize.x - 3, (int)_stageSize.y - 3), targetFloor);//確定の階段部屋データの入力
                 RandomFullSpaceRoomPlot(targetFloor, LARGEROOM, MEDIUMROOM, SMALLROOM);                                //データに部屋のIDの割り当て
                 if (viewDebugLog) DebugStageData(targetFloor);
                 await RommShaping(token, targetFloor);                                          //空間を埋めるように部屋の大きさを調整
@@ -93,7 +92,7 @@ namespace Scenes.Ingame.Stage
                 switch (floor)
                 {
                     case 1:
-                        _stairPosition.Add(ToVector2(1, 1));
+                        _stairPosition.Add(ToVector2((int)_stageSize.x, (int)_stageSize.y));
                         _firsrFloorData = targetFloor;
                         break;
                     case 2:
@@ -926,7 +925,11 @@ namespace Scenes.Ingame.Stage
         //プレイヤースポーン部屋からすべての部屋に移動できるかを確認
         private bool CheckPath()
         {
-            if (spawnPositionRoom== null) return false;
+            if (spawnPositionRoom == null)
+            {
+                Debug.LogError("RespawnRoom is not exist");
+                return false;
+            }
             NavMeshAgent agent = new NavMeshAgent();
             if (spawnPositionRoom.TryGetComponent(out NavMeshAgent nagent))
             {
@@ -942,6 +945,8 @@ namespace Scenes.Ingame.Stage
 
                 if (!IsConnected(agent, target.transform.position))
                 {
+                    Debug.LogWarning($"is not path room is {target.gameObject.name}");
+                    target.gameObject.name = "unPathedRoom";
                     return false;
                 }
             }
