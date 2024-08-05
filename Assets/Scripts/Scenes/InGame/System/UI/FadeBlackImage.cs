@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Scenes.Ingame.Manager;
+using Scenes.Ingame.Player;
+using UniRx;
 
 namespace Scenes.Ingame.InGameSystem.UI
 {
@@ -14,6 +17,32 @@ namespace Scenes.Ingame.InGameSystem.UI
     {
         [SerializeField] private Image _blackImage;
         [SerializeField] private Canvas _thisCanvas;
+
+        public void SubscribeFadePanelEvent()
+        {
+            IngameManager.Instance.OnPlayerSpawnEvent
+                .Subscribe(_ =>
+                {
+                    PlayerStatus[] _playerStatuses = FindObjectsOfType<PlayerStatus>();
+                    foreach (PlayerStatus playerStatus in _playerStatuses)
+                    {
+                        playerStatus.OnPlayerSurviveChange
+                            .Skip(1)
+                            .Subscribe(x =>
+                            {
+                                if (x)//ê∂Ç´ï‘Ç¡ÇΩÇ∆Ç´
+                                {
+                                    FadeOutImage();
+                                }
+                                else //éÄÇÒÇæÇ∆Ç´
+                                {
+                                    FadeInImage();
+                                }
+                            }).AddTo(this);
+                    }
+                    Debug.Log("éÄñSéûÇÃà√ì]Ç™Ç≈Ç´ÇÈÇÊÇ§Ç…Ç»Ç¡ÇΩÇÊ");
+                }).AddTo(this);
+        }
 
         /// <summary>
         /// âÊñ à√ì]
@@ -30,7 +59,15 @@ namespace Scenes.Ingame.InGameSystem.UI
         public void FadeOutImage()
         {
             _thisCanvas.sortingOrder = -1;
-            _blackImage.DOFade(0, 0.5f);
+            var sequence = DOTween.Sequence(); //Sequenceê∂ê¨
+
+            //TweenÇÇ¬Ç»Ç∞ÇÈ
+            sequence.Append(_blackImage.DOFade(0.3f, 4))
+                    .Append(_blackImage.DOFade(0.95f, 3))
+                    .Append(_blackImage.DOFade(0f, 5));
+
+            sequence.Play();
+
         }
 
         /// <summary>
