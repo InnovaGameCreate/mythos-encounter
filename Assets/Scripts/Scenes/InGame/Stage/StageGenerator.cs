@@ -119,14 +119,13 @@ namespace Scenes.Ingame.Stage
             if (CheckPath())
             {
                 Debug.Log("ComplateGenerate");
+                ErrorCheck();
                 IngameManager.Instance.SetReady(ReadyEnum.StageReady);                              //ステージ生成完了を通知
             }
             else
             {
                 ReGenerateWall(token).Forget();
             }
-            ErrorCheck();
-            IngameManager.Instance.SetReady(ReadyEnum.StageReady);                              //ステージ生成完了を通知
         }
         private void ErrorCheck()
         {
@@ -174,6 +173,7 @@ namespace Scenes.Ingame.Stage
                             if (CheckPath())
                             {
                                 Debug.Log("ComplateGenerate");
+                                ErrorCheck();
                                 IngameManager.Instance.SetReady(ReadyEnum.StageReady);                              //ステージ生成完了を通知
                                 return;
                             }
@@ -183,6 +183,8 @@ namespace Scenes.Ingame.Stage
                 }
             }
             Debug.Log("ReGenerateStage...Over");
+            ErrorCheck();
+            IngameManager.Instance.SetReady(ReadyEnum.StageReady);                              //ステージ生成完了を通知
         }
         private async UniTask GenerateStage(CancellationToken token, RoomData[,] stage, int floor)
         {
