@@ -80,9 +80,8 @@ public class WebDataRequest : MonoBehaviour
     public static List<SpellStruct> GetSpellDataArrayList { get => SpellDataArrayList; }
     public static List<PlayerDataStruct> GetPlayerDataArrayList { get => PlayerDataArrayList; }
     public static List<EnemyDataStruct> GetEnemyDataArrayList { get => EnemyDataArrayList; }
-    void Start()
+    void Awake()
     {
-
         _timeOutToken = new CancellationTokenSource();
         _loadSuccessToken = new CancellationTokenSource();
         TimeOutTimer(_loadSuccessToken.Token).Forget();
