@@ -10,6 +10,8 @@ namespace Scenes.Ingame.Player
     /// </summary>
     public class PlayerSoundManager : MonoBehaviour
     {
+        [SerializeField] private Animator _animator;
+
         [SerializeField] private AudioSource _audio;
         [SerializeField] private AudioClip[] _footClips;//足音のClip
         [SerializeField] private AudioClip[] _screamClips;//悲鳴のClip
@@ -61,21 +63,40 @@ namespace Scenes.Ingame.Player
 
         }
 
-        private void WalkingFootSound(int order)
+        /// <summary>
+        /// 歩行時の足音を鳴らす関数
+        /// </summary>
+        /// <param name="footInfo">足の順番と音を鳴らす処理を無視するか否か（重複対策）</param>
+        private void WalkingFootSound(string footInfo)
         {
             if (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Walk)
                 return;
 
+
             _audio.volume = 0.5f;
             //アニメーション中のイベントの順番に応じて足音を変える
             //左足→右足
-            if (order == 0)//左
+            if (footInfo == "LeftFoot")//左
             {
                 _audio.PlayOneShot(_footClips[1]);
             }
-            else//右
+            else if (footInfo == "LeftFootIgnore")
+            {
+                if(_animator.GetFloat("Direction") == 0 || _animator.GetFloat("Direction") == 0.25 || _animator.GetFloat("Direction") == 0.5 || _animator.GetFloat("Direction") == 0.75)
+                    _audio.PlayOneShot(_footClips[1]);
+                else
+                    return;
+            }
+            else if (footInfo == "RightFoot")//右
             {
                 _audio.PlayOneShot(_footClips[2]);
+            }
+            else if (footInfo == "RightFootIgnore")
+            {
+                if (_animator.GetFloat("Direction") == 0 || _animator.GetFloat("Direction") == 0.25 || _animator.GetFloat("Direction") == 0.5 || _animator.GetFloat("Direction") == 0.75)
+                    _audio.PlayOneShot(_footClips[2]);
+                else
+                    return;
             }
         }
 

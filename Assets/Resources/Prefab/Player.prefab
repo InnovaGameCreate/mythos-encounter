@@ -746,6 +746,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49365891cf10dc7478222266a286094d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animator: {fileID: 7828239267385386567}
   _audio: {fileID: 2478478512199155072}
   _footClips:
   - {fileID: 8300000, guid: 92aa88c7813d51e48be80e2c82bc4c34, type: 3}
