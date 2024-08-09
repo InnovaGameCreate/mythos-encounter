@@ -172,27 +172,37 @@ namespace Scenes.Ingame.Player
 
         private void Move()
         {
+            float forward = 0;
+            float right = 0;
+
             _moveVelocity = Vector3.zero;
             if (Input.GetKey(KeyCode.W))
             {
                 _moveVelocity += transform.forward;
+                forward++;
             }
             if (Input.GetKey(KeyCode.S))
             {
                 _moveVelocity -= transform.forward;
+                forward--;
             }
             if (Input.GetKey(KeyCode.A))
             {
                 _moveVelocity -= transform.right;
+                right++;
             }
             if (Input.GetKey(KeyCode.D))
             {
                 _moveVelocity += transform.right;
+                right--;
             }
 
             //移動させる
             _moveVelocity = _moveVelocity.normalized;
             _characterController.Move(_moveVelocity * Time.deltaTime * moveSpeed * _moveAdjustValue);
+
+            //プレイヤーの向きをアニメーターに認識させる
+            SetPlayerMoveDirection(forward, right);
 
             //CharacterControllerの速度に応じて状態を変化
             //1.0ずつずらしているのは、壁に向かって移動しているときに値が0ではないことと、多少の外れ値を対策するため
@@ -223,6 +233,48 @@ namespace Scenes.Ingame.Player
             {
                 _myPlayerStatus.ChangePlayerActionState(PlayerActionState.Idle);
                 _animator.SetFloat("MovementSpeed", _characterController.velocity.magnitude);
+            }
+        }
+
+        /// <summary>
+        /// プレイヤーの向きをアニメーターに認識させる関数
+        /// </summary>
+        /// <param name="forward">前後方向</param>
+        /// <param name="right">左右方向</param>
+        private void SetPlayerMoveDirection(float forward, float right)
+        {
+            /*アニメーターのパラメーター「Direction」の定義について
+             *0.00: 前向き
+             *0.25: 左向き
+             *0.50: 後ろ向き
+             *0.75: 右向き
+             */
+
+            //前向きに移動
+            if (forward == 1)
+            {
+                if (right == 0)//入力なし
+                    _animator.SetFloat("Direction", 0);
+                else if (right == 1)//右
+                    _animator.SetFloat("Direction", 0.875f);
+                else if (right == -1)//左
+                    _animator.SetFloat("Direction", 0.125f);
+            }
+            else if (forward == 0)//前後方向の入力なし
+            {
+                if (right == 1)//右
+                    _animator.SetFloat("Direction", 0.75f);
+                else if (right == -1)//左
+                    _animator.SetFloat("Direction", 0.25f);
+            }
+            else if (forward == -1)//後ろ向きに移動
+            {
+                if (right == 0)//入力なし
+                    _animator.SetFloat("Direction", 0.5f);
+                else if (right == 1)//右
+                    _animator.SetFloat("Direction", 0.625f);
+                else if (right == -1)//左
+                    _animator.SetFloat("Direction", 0.375f);
             }
         }
 
