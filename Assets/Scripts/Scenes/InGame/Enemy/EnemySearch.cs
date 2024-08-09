@@ -152,9 +152,9 @@ namespace Scenes.Ingame.Enemy
                         //‚È‚ñ‚Ì­Õ‚àŒ©‚Â‚©‚ç‚È‚©‚Á‚½ê‡•’Ê‚É„‰ñ‚·‚é
                         _myVisivilityMap.CheckVisivility(this.transform.position, _visivilityRange);
                         
-                        if (_myEneyMove.endMove)//ˆÚ“®‚ªI‚í‚Á‚Ä‚¢‚éê‡
+                        if (_myEneyMove._endMove)//ˆÚ“®‚ªI‚í‚Á‚Ä‚¢‚éê‡
                         {
-                            Debug.Log(_myEneyMove.GetMovePosition());
+                            if (_debugMode) { Debug.Log(_myEneyMove.GetMovePosition()); }
                             _myVisivilityMap.ChangeGridWatchNum(_myEneyMove.GetMovePosition(), 1, true);
                             //­Õ‚Ì‚ ‚Á‚½êŠ‚Ü‚Å—ˆ‚½‚ª‰½‚à‚¢‚È‚©‚Á‚½ê‡‚±‚±‚ªÀs‚³‚ê‚é‚Ì‚ÅStatus‚ğ‘‚«Š·‚¦‚é
                             _enemyStatus.SetEnemyState(EnemyState.Patrolling);
