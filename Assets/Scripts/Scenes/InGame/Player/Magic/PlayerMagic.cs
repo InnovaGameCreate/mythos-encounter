@@ -51,9 +51,9 @@ namespace Scenes.Ingame.Player
                     else//呪文をまだ詠唱していないとき
                     {
                         //San値が10以下のときは詠唱できない
-                        if (myPlayerStatus.nowPlayerSanValue <= 10)
+                        if (myPlayerStatus.nowPlayerSanValue <= _myMagic.consumeSanValue)
                         {
-                            Debug.Log("SAN値が10以下なので詠唱できません");
+                            Debug.Log("SAN値が足りないので詠唱できません");
                             return;
                         }
 
@@ -65,7 +65,14 @@ namespace Scenes.Ingame.Player
                                 if (myPlayerStatus.nowPlayerSanValue > 50)
                                 {
                                     needMagic = false;
-                                    Debug.Log("呪文を使う必要がありません");
+                                    Debug.Log("発狂していないので呪文を使う必要がありません");
+                                }
+                                break;
+                            case RecoverMagic:
+                                if (myPlayerStatus.nowPlayerHealth == myPlayerStatus.health_max)
+                                {
+                                    needMagic = false;
+                                    Debug.Log("体力減っていないので呪文を使う必要がありません");
                                 }
                                 break;
                             default:

@@ -76,6 +76,8 @@ namespace Scenes.Ingame.Player
         
         //一部情報の開示
         public int playerID { get { return _playerID; } }
+        public int health_max { get { return _healthBase; } }
+        public int nowPlayerHealth { get { return _health.Value; } }
         public int stamina_max { get { return _staminaBase; } }
         public int nowStaminaValue { get { return _stamina.Value; } }
         public int nowPlayerSanValue { get { return _san.Value; } }
@@ -101,6 +103,7 @@ namespace Scenes.Ingame.Player
         private bool _isUseItem = false;
         private bool _isUseMagic = false;
         private bool _isHaveCharm = false;
+        private bool _isProtect = false;//バリア呪文でダメージを防ぐか否か
         private bool _isUseEscapePoint = false;
         private bool _isPulsationBleeding = false;
 
@@ -211,7 +214,40 @@ namespace Scenes.Ingame.Player
             }
             else if (mode == "Damage")
             {
+                if (_isProtect)
+                {
+                    _isProtect = false;
+                    Debug.Log("呪文によりダメージが無効化されました。");
+                    return;
+                }
+
                 _health.Value = Mathf.Max(0, _health.Value - value);
+                lastHP = _health.Value;
+            }
+        }
+
+        /// <summary>
+        /// 体力を変更させるための関数(最大体力の比率を用いて計算する用)
+        /// </summary>
+        /// <param name="value">変更量（比率）</param>
+        /// <param name="mode">Heal(回復), Damage(減少)の二つのみ</param>
+        public void ChangeHealth(float value, string mode)
+        {
+            if (mode == "Heal")
+            {
+                _health.Value = Mathf.Min(100, _health.Value + (int)(_healthBase * value));
+                lastHP = _health.Value;
+            }
+            else if (mode == "Damage")
+            {
+                if (_isProtect)
+                {
+                    _isProtect = false;
+                    Debug.Log("呪文によりダメージが無効化されました。");
+                    return;
+                }
+
+                _health.Value = Mathf.Max(0, _health.Value - (int)(_healthBase * value));
                 lastHP = _health.Value;
             }
         }
@@ -282,6 +318,15 @@ namespace Scenes.Ingame.Player
         public void HaveCharm(bool value)
         {
             _isHaveCharm = value;
+        }
+
+        /// <summary>
+        /// バリア呪文を使ったときに_isProtectをtrueにさせる関数
+        /// </summary>
+        /// <param name="value"></param>
+        public void UseProtectMagic(bool value)
+        { 
+            _isProtect = value;
         }
 
         /// <summary>
