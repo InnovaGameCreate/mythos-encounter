@@ -78,6 +78,7 @@ namespace Scenes.Ingame.Enemy
         private IntReactiveProperty _atackPower = new IntReactiveProperty();
 
         private BoolReactiveProperty _isBind = new BoolReactiveProperty(false);//çSë©èÛë‘Ç≈Ç†ÇÈÇ©î€Ç©
+        private FloatReactiveProperty _stiffnessTime = new FloatReactiveProperty(0);//çdíºéûä‘
 
         public IObservable<int> OnHpChange { get { return _hp; } }
         public IObservable<float> OnPatrollingSpeedChange { get { return _patrollingSpeed; } }
@@ -93,6 +94,10 @@ namespace Scenes.Ingame.Enemy
         public IObservable<int> OnAtackPowerChange { get { return _atackPower; } }
 
         public IObservable<bool> OnBindChange { get { return _isBind; } }
+
+        public IObservable<float> OnStiffnessTimeChange { get { return _stiffnessTime; } }
+
+
 
 
         //##########GetÇ∆Ç©SetÇÃÇ©ÇΩÇ‹ÇË
@@ -110,6 +115,8 @@ namespace Scenes.Ingame.Enemy
         public int ReturnHorror { get { return _horror.Value; } }
         public int ReturnAtackPower { get { return _atackPower.Value; } }
         public bool ReturnBind { get { return _isBind.Value; } }
+
+        public float GetStiffnessTime { get { return _stiffnessTime.Value; } }
 
 
 
@@ -173,6 +180,14 @@ namespace Scenes.Ingame.Enemy
         void Update()
         {
             if (_debugMode && Input.GetKey(KeyCode.Z)) { FallBack(); }
+            if (_stiffnessTime.Value > 0) { 
+                _stiffnessTime.Value -= Time.deltaTime;
+                if (_stiffnessTime.Value < 0)
+                {
+                    _stiffnessTime.Value = 0;
+                }
+            }
+
         }
 
         public void SetEnemyState(EnemyState state) {
@@ -244,6 +259,10 @@ namespace Scenes.Ingame.Enemy
         public void ChangeBindBool(bool value)
         {
             _isBind.Value = value;
+        }
+
+        public void ChangeStiffnessTime(float value) { 
+            _stiffnessTime.Value += value;
         }
     }
 }
