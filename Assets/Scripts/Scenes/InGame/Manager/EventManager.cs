@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 using Scenes.Ingame.Enemy;
+using Data;
 
 namespace Scenes.Ingame.Manager
 {
@@ -21,7 +22,7 @@ namespace Scenes.Ingame.Manager
         CancellationTokenSource _source = new CancellationTokenSource();
 
         public int GetGameTime { get => _gameTime; }
-        public bool GetContact { get => _chaseCount == 0 ? false : true; }
+        public bool GetContact { get => PlayerInformationFacade.Instance.IsFarstContactEnemy(0); }//TODO後から敵キャラクターのIDを取得する
         public bool GetUniqueItem { get => _getUniqueItem; }
         public static EventManager Instance;
         private void Awake()
