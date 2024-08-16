@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Cysharp.Threading.Tasks.Triggers;
 using Scenes.Ingame.Manager;
 using System;
@@ -38,9 +39,10 @@ namespace Data
             Instance = this;
             DecodeData();
         }
-        private async Task DecodeData()
+        private async UniTaskVoid DecodeData()
         {
-            await Task.Delay(1000);
+            await UniTask.WaitUntil(() => WebDataRequest.OnCompleteLoadData);
+            await Task.Delay(100);
             int itemSize = WebDataRequest.GetItemDataArrayList.Count;//ƒAƒCƒeƒ€‚Ì”
             int spellSize = WebDataRequest.GetSpellDataArrayList.Count;//“G‚Ì”
             int mythCreatureSize = WebDataRequest.GetEnemyDataArrayList.Count;//“G‚Ì”
@@ -60,19 +62,20 @@ namespace Data
             var data = WebDataRequest.GetPlayerDataArrayList.Where(data => data.Id == characterId).FirstOrDefault();
             for (int i = 0; i < data.Spell.Length; i++)
             {
-                _spell.Add(int.Parse(data.Spell[i]), true);
+                _spell[int.Parse(data.Spell[i])] =  true;
             }
             for (int i = 0; i < data.Items.Length; i++)
             {
                 var decode = data.Items[i].Split('=');
                 if (decode.Length > 2) Debug.LogError("Failed decode item data");
-                _items.Add(int.Parse(decode[0]), int.Parse(decode[1]));
+                _items[int.Parse(decode[0])] = int.Parse(decode[1]);
             }
             for (int i = 0; i < data.MythCreature.Length; i++)
             {
                 var decode = data.MythCreature[i].Split('=');
-                if (decode.Length > 2) Debug.LogError("Failed decode mythCreature data");
-                _mythCreature.Add(int.Parse(decode[0]), int.Parse(decode[1]));
+                if (decode.Length > 2) Debug.LogError($"Failed decode mythCreature data. {data.MythCreature[i]}");
+                 Debug.Log($"decode  {data.MythCreature[i]}");
+                _mythCreature[int.Parse(decode[0])] = int.Parse(decode[1]);
             }
             Debug.Log("end");
         }

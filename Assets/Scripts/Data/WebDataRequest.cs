@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using UniRx;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -80,6 +81,7 @@ public class WebDataRequest : MonoBehaviour
     public static List<SpellStruct> GetSpellDataArrayList { get => SpellDataArrayList; }
     public static List<PlayerDataStruct> GetPlayerDataArrayList { get => PlayerDataArrayList; }
     public static List<EnemyDataStruct> GetEnemyDataArrayList { get => EnemyDataArrayList; }
+    public static bool OnCompleteLoadData = false;
     void Awake()
     {
         _timeOutToken = new CancellationTokenSource();
@@ -127,6 +129,7 @@ public class WebDataRequest : MonoBehaviour
         ConvertStringToSpellData(DataArrayList[(int)DataType.SpellTable]);
         ConvertStringToPlayerData(DataArrayList[(int)DataType.CharacterTable]);
         ConvertStringToEnemyData(DataArrayList[(int)DataType.EnemyTable]);
+        OnCompleteLoadData = true;
         _loadSuccessToken.Cancel();
     }
     /// <summary>
