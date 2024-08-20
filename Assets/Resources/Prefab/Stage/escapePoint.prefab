@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 653164166661437279}
   m_Layer: 10
   m_Name: escapePoint
-  m_TagString: StageIntract
+  m_TagString: EscapePoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

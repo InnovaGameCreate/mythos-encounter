@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using DG.Tweening;
+using System.Linq;
 
 public class CompassMove : MonoBehaviour
 {
     private GameObject _escapePoint;
-    private GameObject[] _Enemys;
+    private GameObject[] _enemys;
     private float distance;
     private bool _isEnabled = true;
     [Header("êjÇÃâÒì]ë¨ìx")]
@@ -18,54 +19,14 @@ public class CompassMove : MonoBehaviour
     [SerializeField] private float _unusableDistance;
     private void Start()
     {
-        _escapePoint = GameObject.Find("escapePoint(Clone)");
-        _Enemys = GameObject.FindGameObjectsWithTag("Enemy");
+        _escapePoint = GameObject.FindGameObjectWithTag("EscapePoint");
+        _enemys = GameObject.FindGameObjectsWithTag("Enemy");
     }
     void Update()
     {
 
-        for (int i = 0; i < _Enemys.Length; i++)
-        {
-            Vector3 vector = _Enemys[i].transform.position - this.transform.position;
-
-
-            if (i == 0)
-            {
-                distance = vector.magnitude;
-            }
-
-            else
-            {
-                if (vector.magnitude < distance)
-                {
-                    distance = vector.magnitude;
-                }
-            }
-
-        }
-
-
-        if (distance >= _unusableDistance)
-        {
-            if (_escapePoint)
-            {
-                if (!_isEnabled)
-                {
-                    this.transform.DOPause();
-                    _isEnabled = true;
-                }
-
-                var _targetDirection = _escapePoint.transform.position - this.transform.position;
-                _targetDirection.y = 0;
-
-                var lookRotation = Quaternion.LookRotation(_targetDirection, Vector3.up);
-                transform.rotation = Quaternion.Lerp(this.transform.rotation, lookRotation, Time.deltaTime * _rotateSpeed);
-
-                Vector3 currentRotation = transform.localEulerAngles;
-                transform.localRotation = Quaternion.Euler(0, currentRotation.y, 0);
-            }
-        }
-        else
+        if(_enemys.Any(enemy =>
+            Vector3.Distance(enemy.transform.position, this.transform.position) < _unusableDistance))
         {
             if (_isEnabled)
             {
@@ -73,6 +34,32 @@ public class CompassMove : MonoBehaviour
                 _isEnabled = false;
             }
         }
+        else
+        {
+            {
+                if (_escapePoint)
+                {
+                    if (!_isEnabled)
+                    {
+                        this.transform.DOPause();
+                        _isEnabled = true;
+                    }
+
+                    var _targetDirection = _escapePoint.transform.position - this.transform.position;
+                    _targetDirection.y = 0;
+
+                    var lookRotation = Quaternion.LookRotation(_targetDirection, Vector3.up);
+                    transform.rotation = Quaternion.Lerp(this.transform.rotation, lookRotation, Time.deltaTime * _rotateSpeed);
+
+                    Vector3 currentRotation = transform.localEulerAngles;
+                    transform.localRotation = Quaternion.Euler(0, currentRotation.y, 0);
+                }
+            }
+        }
+
+
+
+#if UNITY_EDITOR
 
         if (Input.GetKeyDown(KeyCode.T))
         {
@@ -83,9 +70,11 @@ public class CompassMove : MonoBehaviour
 
         if (Input.GetKeyUp(KeyCode.L))
         {
-            _Enemys = GameObject.FindGameObjectsWithTag("Enemy");
+            _enemys = GameObject.FindGameObjectsWithTag("Enemy");
 
         }
+#endif
+
     }
 
     void BrokeRotate()
