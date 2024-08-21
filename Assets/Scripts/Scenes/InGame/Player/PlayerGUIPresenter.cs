@@ -55,6 +55,10 @@ namespace Scenes.Ingame.Player
         [Header("呪文詠唱関係")]
         [SerializeField] private Canvas _castGauge;
         [SerializeField] private Image _castGaugeImage;
+        [SerializeField] private TMP_Text _castTimeText;
+        private Sequence castSequence;
+        private bool _isCasting = false;//呪文の詠唱 or 脱出の詠唱を行っているか否か
+
         private int _myPlayerID = 0;
 
         //スタミナゲージ関連のフィールド
@@ -115,16 +119,41 @@ namespace Scenes.Ingame.Player
                                 
                          }).AddTo(this);
 
-
-                    _playerStatuses[0].OnCastEvente
+                    //呪文の詠唱・脱出地点の詠唱開始時にゲージを表示
+                    _playerStatuses[0].OnCastEvent
                     .Subscribe(time =>
                     {
                         _castGauge.enabled = true;
-                        DOTween.Sequence()
+                        _isCasting = true;
+                        StartCoroutine(DisPlayRemainCastTime(time));
+
+                        //シークエンス初期化
+                        castSequence = DOTween.Sequence();
+                        castSequence
                             .Append(_castGaugeImage.DOFillAmount(1, time))
                             .SetDelay(0.5f)
                             .Append(_castGaugeImage.DOFillAmount(0, 0))
-                            .OnComplete(() => _castGauge.enabled = false);
+                            .OnComplete(() =>
+                            {
+                                _castGauge.enabled = false;
+                                _isCasting = false;
+                            });
+
+                        castSequence.Play()
+                        .OnKill(() =>
+                        {
+                            Debug.Log("Sequence is Killed");
+                            _castGaugeImage.fillAmount = 0f;
+                            _castGauge.enabled = false;
+                            _isCasting = false;
+                        });
+
+                    }).AddTo(this);
+
+                    _playerStatuses[0].OnCancelCastEvent
+                    .Subscribe(_ =>
+                    {
+                        castSequence.Kill();                       
                     }).AddTo(this);
 
                     //アイテム関係の処理の追加
@@ -174,10 +203,7 @@ namespace Scenes.Ingame.Player
                             }
                             else
                             {
-
                                 _itemImages[replaceEvent.Index].sprite = _itemEmptySprite; 
-
-
                             }
 
                             //利用不可のスロットの枠を青に変化
@@ -310,25 +336,38 @@ namespace Scenes.Ingame.Player
             
             //スタミナの値を0～1の値に補正
             float fillAmount = (float)value / _playerStatuses[_myPlayerID].stamina_max;
-            float maskValue = _defaultStaminaGaugeWidth * (1 - fillAmount) / 2;
+            _staminaGaugeFrontImage.fillAmount = fillAmount;
+
+            //float maskValue = _defaultStaminaGaugeWidth * (1 - fillAmount) / 2;
 
             // RectMask2Dのleftとrightの値を更新
-            _staminaGaugeMask.padding = new Vector4(maskValue,0, maskValue, 0);
-            
+            //_staminaGaugeMask.padding = new Vector4(maskValue,0, maskValue, 0);
+
             //スタミナゲージの色変更
-            Image image = _staminaGaugeFrontImage.GetComponent<Image>();
-            if (0 <= fillAmount && fillAmount <= 0.1)
+            if (0 <= fillAmount && fillAmount <= 0.2)
             {
-                image.DOColor(Color.red, 0f);
+                _staminaGaugeFrontImage.DOColor(Color.red, 0f);
             }
             else if (0.1 < fillAmount && fillAmount <= 0.5)
             {
-                image.DOColor(new Color(1.0f, 0.5f, 0.0f), 0f);
+                _staminaGaugeFrontImage.DOColor(new Color(1.0f, 0.5f, 0.0f), 0f);
             }
             else
             {
-                image.DOColor(Color.white, 0f);
+                _staminaGaugeFrontImage.DOColor(Color.white, 0f);
             }
+        }
+
+        private IEnumerator DisPlayRemainCastTime(float castTime)
+        {
+            float timer = castTime;
+            while (_isCasting) 
+            {
+                yield return null;
+                timer = Mathf.Max(0, timer -= Time.deltaTime);
+                _castTimeText.text = "Cast：" + timer.ToString("F1");
+            }
+            yield break;
         }
     }
 }
