@@ -166,7 +166,7 @@ namespace Scenes.Ingame.Enemy
                                 if (_debugMode) Debug.Log("追跡中光が見えた");
                                 _myEnemyMove.SetMovePosition(nextPositionCandidate);
                             }
-                            else if (_myEnemyMove.endMove)
+                            else if (_myEnemyMove._endMove)
                             { //移動が終了している場合
                                 if (_playerStatus.nowPlayerActionState == PlayerActionState.Sneak && Mathf.Pow((float)(_playerStatus.nowPlayerSneakVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)//忍音が聞こえるかどうか
                                 {
@@ -195,7 +195,7 @@ namespace Scenes.Ingame.Enemy
                                 {
                                     //なんの痕跡も見つからなかった場合普通に巡回する
                                     _myVisivilityMap.CheckVisivility(this.transform.position, _visivilityRange);
-                                    if (_myEnemyMove.endMove)//移動が終わっている場合
+                                    if (_myEnemyMove._endMove)//移動が終わっている場合
                                     {
                                         _myVisivilityMap.ChangeGridWatchNum(_myEnemyMove.GetMovePosition(), 1, true);
                                         //あらたな移動先を取得するメソッドを書き込む

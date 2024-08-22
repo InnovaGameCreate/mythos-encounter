@@ -13,7 +13,7 @@ namespace Scenes.Ingame.Enemy
     /// </summary>
     public class EnemyMove : MonoBehaviour
     {
-        public bool endMove;
+        public bool _endMove;
         private NavMeshAgent _myAgent;
         [SerializeField] EnemyStatus _enemyStatus;
 
@@ -50,10 +50,10 @@ namespace Scenes.Ingame.Enemy
         {
             if (Vector3.Magnitude(this.transform.position - _myAgent.path.corners[_myAgent.path.corners.Length - 1]) < 1.5f) 
             { 
-                endMove = true; 
+                _endMove = true; 
             } else 
             {
-                endMove = false; 
+                _endMove = false; 
             }
 
             _staminaChangeCount += Time.deltaTime;
@@ -197,6 +197,7 @@ namespace Scenes.Ingame.Enemy
             _myAgent.enabled = false;
             _enemyStatus.SetEnemyState(EnemyState.Patrolling);
             transform.position = _initialPosition;
+            _endMove = true;
             _myAgent.enabled = true;
 
         }
