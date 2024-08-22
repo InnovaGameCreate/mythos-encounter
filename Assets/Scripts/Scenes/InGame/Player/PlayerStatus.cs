@@ -146,7 +146,9 @@ namespace Scenes.Ingame.Player
                 Where(x => x == true).
                 Subscribe(_ => StartCoroutine(Bleeding(bleedingDamage))).AddTo(this);//出血状態になったときに出血処理を開始
 
-            OnEnemyAttackedMe.Subscribe(x => cancelCastEvent.OnNext(default)).AddTo(this);//攻撃を受けた際に脱出・呪文の詠唱時間UIを非表示にする
+            OnEnemyAttackedMe
+                .Where(_ => _isUseMagic)
+                .Subscribe(x => cancelCastEvent.OnNext(default)).AddTo(this);//攻撃を受けた際に呪文の詠唱時間UIを非表示にする
 
             _survive
                 .Skip(1)
