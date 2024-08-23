@@ -33,16 +33,7 @@ namespace Scenes.Ingame.Enemy
         [SerializeField][Tooltip("‰Šú‚ÌState")] private EnemyState _enemyStateBase;
 
         [Header("“GƒLƒƒƒ‰‚ÌUŒ‚«”\‚Ì‰Šú’l")]
-        [SerializeField][Tooltip("UŒ‚—Í‚Ì‰Šú’l")] private int _atackPowerBase;
         [SerializeField][Tooltip("San‚Ö‚ÌUŒ‚—Í")] private int _horrorBase;
-        /*g—p‘‚É‘‚¢‚Ä‚¢‚È‚¢‚¯‚Ç’Ç‰Á‚µ‚½•Ï”ŒR’cB¡‚ÍEnemyAtack‚É‚ ‚é‚¯‚ÇA‚±‚ê‚ ‚Á‚Ä‚¾‚¢‚¶‚å‚¤‚Ô‚»‚¤‚È‚ç‚±‚±‚É‚Ë‚¶‚±‚ñ‚ÅUniRx‚É‘Î‰‚³‚¹‚é
-         * 
-        [SerializeField][Tooltip("UŒ‚‚ÌƒŒ[ƒg‚Ì‰Šú’l")] private float _atackrateBase;
-        [SerializeField][Tooltip("‰“ŠuUŒ‚‰Â”\‚Å‚ ‚é‚©‚Ç‚¤‚©")] private bool _canShot;
-        [SerializeField][Tooltip("‰“ŠuUŒ‚‚Ì‰Šú’l")] private int _ShotPower;
-        [SerializeField][Tooltip("‰“ŠuUŒ‚‚ÌƒŒ[ƒg‚Ì‰Šú’l")]private float _shotRateBase;
-        [SerializeField][Tooltip("‰“ŠuUŒ‚‚ÌË’ö‚Ì‰Šú’l")] private float _shotRateBase;
-        */
 
         [Header("‚»‚Ì‘¼")]
         [SerializeField][Tooltip("“P‘Ş‚É—‚Æ‚·ƒ†ƒj[ƒNƒAƒCƒeƒ€")] private GameObject _uniqueItem;
@@ -91,7 +82,6 @@ namespace Scenes.Ingame.Enemy
         public IObservable<EnemyState> OnEnemyStateChange { get { return _enemyState; } }
 
         public IObservable<int> OnHorrorChange { get { return _horror; } }
-        public IObservable<int> OnAtackPowerChange { get { return _atackPower; } }
 
         public IObservable<bool> OnBindChange { get { return _isBind; } }
 
@@ -113,7 +103,6 @@ namespace Scenes.Ingame.Enemy
         public EnemyState ReturnEnemyState { get { return _enemyState.Value; } }
 
         public int ReturnHorror { get { return _horror.Value; } }
-        public int ReturnAtackPower { get { return _atackPower.Value; } }
         public bool ReturnBind { get { return _isBind.Value; } }
 
         public float GetStiffnessTime { get { return _stiffnessTime.Value; } }
@@ -204,7 +193,6 @@ namespace Scenes.Ingame.Enemy
             _searcSpeed.Value = _searchSpeedBase;
             _searcSpeed.Value = _searchSpeedBase;
             _chaseSpeed.Value = _chaseSpeedBase;
-            _atackPower.Value = _atackPowerBase;
             _audiometerPower.Value = _audiometerPowerBase;
             _reactToLight.Value = _reactToLightBase;
             _flying.Value = _flyingBase;

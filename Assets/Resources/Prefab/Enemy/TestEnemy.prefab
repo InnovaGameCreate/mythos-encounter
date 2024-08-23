@@ -72,6 +72,8 @@ GameObject:
   - component: {fileID: 5811591338526085470}
   - component: {fileID: -7704791025581564905}
   - component: {fileID: 4646188634127463172}
+  - component: {fileID: 3881673920415878492}
+  - component: {fileID: 3252102760658322517}
   m_Layer: 0
   m_Name: TestEnemy
   m_TagString: Enemy
@@ -113,11 +115,13 @@ MonoBehaviour:
   _blindChaseTime: 10
   _debugMode: 1
   _attackTime: 5
-  _atackRange: 5
   canShot: 1
   _shotTime: 10
   _shotRange: 15
   _ballet: {fileID: 2261882221392382239, guid: 39e56c2c101133e4ba9db45ecad211dd, type: 3}
+  _enemyAttackBehaviours:
+  - {fileID: 3881673920415878492}
+  - {fileID: 3252102760658322517}
   _enemyStatus: {fileID: 7000828227398978958}
   _enemySearch: {fileID: 41553992271996288}
   _myEnemyMove: {fileID: 0}
@@ -333,6 +337,38 @@ MonoBehaviour:
   _audioSource: {fileID: -7704791025581564905}
   _slowClips: {fileID: 8300000, guid: adad1fba77f72c246b6a4105da88f4e4, type: 3}
   _fastClips: {fileID: 8300000, guid: 3438abfd7ea396946ba28932cf24ffaa, type: 3}
+--- !u!114 &3881673920415878492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9201936745783884321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9992cc57cd386f4ba479ed49a47ac8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stiffness: 5
+  _range: 0
+  _mass: 0
+  _damage: 0
+--- !u!114 &3252102760658322517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9201936745783884321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fc6e73eff08184b92d3c792c331683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stiffness: 10
+  _range: 15
+  _mass: 0
+  _damage: 0
 --- !u!1001 &1945881014760464139
 PrefabInstance:
   m_ObjectHideFlags: 0
