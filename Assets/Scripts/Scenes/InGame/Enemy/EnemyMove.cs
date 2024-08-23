@@ -28,8 +28,8 @@ namespace Scenes.Ingame.Enemy
             return _movePosition;
         }
 
-        private Vector3 _initialPosition = new Vector3(30,0,18);//初期位置保存用変数
-       
+        private Vector3 _initialPosition = new Vector3(30, 0, 18);//初期位置保存用変数
+
 
 
 
@@ -48,8 +48,8 @@ namespace Scenes.Ingame.Enemy
                 {
                     _stiffness = true;
                 }
-                else { 
-                    _stiffness= false;
+                else {
+                    _stiffness = false;
                 }
             }
             ).AddTo(this);
@@ -59,12 +59,12 @@ namespace Scenes.Ingame.Enemy
         // Update is called once per frame
         void FixedUpdate()
         {
-            if (Vector3.Magnitude(this.transform.position - _myAgent.path.corners[_myAgent.path.corners.Length - 1]) < 1.5f) 
-            { 
-                _endMove = true; 
-            } else 
+            if (Vector3.Magnitude(this.transform.position - _myAgent.path.corners[_myAgent.path.corners.Length - 1]) < 1.5f)
             {
-                _endMove = false; 
+                _endMove = true;
+            } else
+            {
+                _endMove = false;
             }
 
             _staminaChangeCount += Time.deltaTime;
@@ -76,19 +76,19 @@ namespace Scenes.Ingame.Enemy
                 {//硬直中は移動不能に
                     _myAgent.speed = 0;
                 }
-                else 
-                { 
-
-                switch (_enemyStatus.ReturnEnemyState)
+                else
                 {
-                    case EnemyState.Patrolling:
-                        _myAgent.speed = _enemyStatus.ReturnPatrollingSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
-                        if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
-                        { //スタミナが削れていたら
-                            _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
-                        }
-                        else if (_enemyStatus.ReturnStaminaBase < _enemyStatus.Stamina)
-                        {
+
+                    switch (_enemyStatus.ReturnEnemyState)
+                    {
+                        case EnemyState.Patrolling:
+                            _myAgent.speed = _enemyStatus.ReturnPatrollingSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                            if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
+                            { //スタミナが削れていたら
+                                _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
+                            }
+                            else if (_enemyStatus.ReturnStaminaBase < _enemyStatus.Stamina)
+                            {
 
 
                                 _staminaOver = false;
@@ -143,16 +143,16 @@ namespace Scenes.Ingame.Enemy
 
 
 
-                        
-                        if (_staminaOver)
-                        {
-                            _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
-                        }
-                        else
-                        {
-                            _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
-                        }
-                        break;
+
+                            if (_staminaOver)
+                            {
+                                _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                            }
+                            else
+                            {
+                                _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                            }
+                            break;
 
 
                         case EnemyState.Attack:
@@ -193,29 +193,32 @@ namespace Scenes.Ingame.Enemy
 
 
 
-                        
-                        if (_staminaOver)
-                        {
-                            _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
-                        }
-                        else
-                        {
-                            _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
-                        }
-                        break;
-                    case EnemyState.FallBack: 
 
-                        break;
-                    default:
-                        Debug.LogWarning("想定外のEnemyStatus");
-                        break;
-                    
+                            if (_staminaOver)
+                            {
+                                _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                            }
+                            else
+                            {
+                                _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                            }
+                            break;
+                        case EnemyState.FallBack:
 
+                            break;
+                        default:
+                            Debug.LogWarning("想定外のEnemyStatus");
+                            break;
+
+
+                    }
                 }
             }
+
+           
         }
 
-        public void SetMovePosition(Vector3 targetPosition) 
+        public void SetMovePosition(Vector3 targetPosition)
         {
             _movePosition = targetPosition;
             _myAgent.destination = targetPosition;
@@ -238,8 +241,9 @@ namespace Scenes.Ingame.Enemy
         /// 硬直状態を変更します
         /// </summary>
         /// <param name="value">変更する値</param>
-        public void ChangeStiffness(bool value) { 
+        public void ChangeStiffness(bool value)
+        {
             _stiffness = value;
         }
-    }
+    } 
 }
