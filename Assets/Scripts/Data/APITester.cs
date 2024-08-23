@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UniRx;
 using Data;
 using Unity.VisualScripting;
+using System;
 public class APITester : MonoBehaviour
 {
     [SerializeField]
@@ -26,6 +27,10 @@ public class APITester : MonoBehaviour
     private Button _EnemyFacadeButton;
     [SerializeField]
     private Button _PutPlayerDataButton;
+    [SerializeField]
+    private TMP_InputField _IdInput;
+    [SerializeField]
+    private TMP_InputField _NameIput;
     void Start()
     {
         _itemTableButton.OnClickAsObservable().Subscribe(_ => ViewItemTable()).AddTo(this);
@@ -126,6 +131,14 @@ public class APITester : MonoBehaviour
     }
     private void PutPlayerDebugData()
     {
-        WebDataRequest.PutPlayerData().Forget();
+        int id = int.Parse(_IdInput.text);
+        if(id < 9000)
+        {
+            Debug.LogError("ƒeƒXƒg‚Å‚Í9000ˆÈã‚Ì”Žš‚ð“ü—Í‚µ‚Ä‚­‚¾‚³‚¢");
+            return;
+        }
+        PlayerDataStruct sendData = new PlayerDataStruct();
+        sendData.PlayerDataSet(id, _NameIput.text, DateTime.Now, DateTime.UtcNow, 9900, new string[3] { "1=1", "2=1", "3=2" }, new string[3] { "1=1", "2=1", "3=2" }, new string[3] { "1", "2", "3" }, 10);
+        WebDataRequest.PutPlayerData(sendData).Forget();
     }
 }

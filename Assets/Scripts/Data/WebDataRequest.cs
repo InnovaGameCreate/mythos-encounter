@@ -135,11 +135,9 @@ public class WebDataRequest : MonoBehaviour
         OnCompleteLoadData = true;
         _loadSuccessToken.Cancel();
     }
-    public static async UniTaskVoid PutPlayerData()
+    public static async UniTaskVoid PutPlayerData(PlayerDataStruct sendData)
     {
         var token = new CancellationTokenSource().Token;
-        PlayerDataStruct sendData = new PlayerDataStruct();
-        sendData.PlayerDataSet(9999, "DEBUG_USER", DateTime.Now, DateTime.UtcNow, 9900, new string[3] { "1=1", "2=1", "3=2" }, new string[3] { "1=1", "2=1", "3=2" }, new string[3] { "1", "2", "3" }, 10);
 
         string jsonData = JsonMapper.ToJson(sendData);
         WWWForm form = new WWWForm();
