@@ -8,7 +8,6 @@ namespace Scenes.Ingame.Enemy
 {
     public class EnemyShootingAtackBehaviour : EnemyAttackBehaviour
     {
-        [SerializeField] private int _damage;
         [SerializeField] private GameObject _bullet;
         [SerializeField][Tooltip("’e‚Ìo‚Ä‚­‚éêŠ")] private GameObject _hand;
         

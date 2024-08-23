@@ -11,6 +11,7 @@ using UnityEditor.Rendering;
 public class EnemyBallet : MonoBehaviour
 {
     [SerializeField] private int _damage;
+    [SerializeField] private int _breedDamage;
     [SerializeField] private float _speed;
     [SerializeField] private float _lifeTime;
     [SerializeField] private Rigidbody _rigidbody;

@@ -9,6 +9,7 @@ namespace Scenes.Ingame.Enemy
     public class EnemyCloseAtackBehaviour : EnemyAttackBehaviour
     {
         [SerializeField] private int _damage;
+        [SerializeField] private int _breedDamage;
         // Start is called before the first frame update
         void Start()
         {

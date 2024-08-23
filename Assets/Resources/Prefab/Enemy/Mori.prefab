@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damage: 10
+  _breedDamage: 50
   _speed: 50
   _lifeTime: 20
   _rigidbody: {fileID: 525937747241424695}

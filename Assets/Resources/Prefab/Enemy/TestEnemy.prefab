@@ -347,6 +347,7 @@ MonoBehaviour:
   _range: 5
   _mass: 1
   _damage: 5
+  _breedDamage: 5
 --- !u!114 &3252102760658322517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -362,7 +363,6 @@ MonoBehaviour:
   _stiffness: 1
   _range: 1000
   _mass: 10
-  _damage: 5
   _bullet: {fileID: 2261882221392382239, guid: af41eff741c24b740a037720d7460db2, type: 3}
   _hand: {fileID: 8470773532925398790}
 --- !u!1001 &1945881014760464139

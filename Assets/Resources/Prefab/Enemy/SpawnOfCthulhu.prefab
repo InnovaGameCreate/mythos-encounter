@@ -290,6 +290,7 @@ MonoBehaviour:
   _range: 3
   _mass: 100
   _damage: 70
+  _breedDamage: 30
 --- !u!1 &5563363999148163310
 GameObject:
   m_ObjectHideFlags: 0
