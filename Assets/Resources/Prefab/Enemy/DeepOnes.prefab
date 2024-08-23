@@ -124,6 +124,8 @@ GameObject:
   - component: {fileID: 1737251985559039451}
   - component: {fileID: 6785901014579326764}
   - component: {fileID: 7371785723401529223}
+  - component: {fileID: -6877180654909065778}
+  - component: {fileID: -1417630428139418448}
   m_Layer: 0
   m_Name: DeepOnes
   m_TagString: Enemy
@@ -164,12 +166,9 @@ MonoBehaviour:
   _visivilityRange: 20
   _blindChaseTime: 0
   _debugMode: 0
-  _attackTime: 5
-  _atackRange: 5
-  canShot: 1
-  _shotTime: 10
-  _shotRange: 15
-  _ballet: {fileID: 2261882221392382239, guid: 39e56c2c101133e4ba9db45ecad211dd, type: 3}
+  _enemyAttackBehaviours:
+  - {fileID: -6877180654909065778}
+  - {fileID: -1417630428139418448}
   _enemyStatus: {fileID: 227141341248401291}
   _enemySearch: {fileID: 651126892439209470}
   _myEnemyMove: {fileID: 0}
@@ -227,7 +226,6 @@ MonoBehaviour:
   _staminaBase: 5
   _actionCoolTimeBase: 600
   _enemyStateBase: 1
-  _atackPowerBase: 50
   _horrorBase: 1
   _uniqueItem: {fileID: 6146547148148849240, guid: 1460fd555e5df4f4ba1ca88617706b73, type: 3}
   _enemyMagics: 
@@ -385,6 +383,38 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-6877180654909065778
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6990575043391720951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9992cc57cd386f4ba479ed49a47ac8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stiffness: 3
+  _range: 2
+  _mass: 100
+  _damage: 50
+--- !u!114 &-1417630428139418448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6990575043391720951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fc6e73eff08184b92d3c792c331683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stiffness: 3
+  _range: 15
+  _mass: 10
+  _damage: 30
 --- !u!1001 &9117532595097646355
 PrefabInstance:
   m_ObjectHideFlags: 0

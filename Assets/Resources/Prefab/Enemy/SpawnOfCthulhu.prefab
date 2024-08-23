@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: -6560108259669412476}
   - component: {fileID: 3253462088583653797}
   - component: {fileID: 1768430814085762199}
+  - component: {fileID: 5634362069311426784}
   m_Layer: 0
   m_Name: SpawnOfCthulhu
   m_TagString: Enemy
@@ -57,12 +58,8 @@ MonoBehaviour:
   _visivilityRange: 10
   _blindChaseTime: 10
   _debugMode: 1
-  _attackTime: 5
-  _atackRange: 5
-  canShot: 1
-  _shotTime: 10
-  _shotRange: 15
-  _ballet: {fileID: 2261882221392382239, guid: 39e56c2c101133e4ba9db45ecad211dd, type: 3}
+  _enemyAttackBehaviours:
+  - {fileID: 5634362069311426784}
   _enemyStatus: {fileID: 3554846491491567640}
   _enemySearch: {fileID: 7631687704071867374}
   _myEnemyMove: {fileID: 0}
@@ -120,7 +117,6 @@ MonoBehaviour:
   _staminaBase: 5
   _actionCoolTimeBase: 480
   _enemyStateBase: 1
-  _atackPowerBase: 80
   _horrorBase: 1
   _uniqueItem: {fileID: 6146547148148849240, guid: 1460fd555e5df4f4ba1ca88617706b73, type: 3}
   _enemyMagics: 
@@ -278,6 +274,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &5634362069311426784
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502827998043956805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9992cc57cd386f4ba479ed49a47ac8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stiffness: 5
+  _range: 3
+  _mass: 100
+  _damage: 70
 --- !u!1 &5563363999148163310
 GameObject:
   m_ObjectHideFlags: 0
