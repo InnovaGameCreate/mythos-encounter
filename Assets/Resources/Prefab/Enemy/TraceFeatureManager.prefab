@@ -65,3 +65,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e31d0ce6a7373463ba43d51402d3c363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _debugAddTrace: 1
+  _deugType: 000000000200000001000000

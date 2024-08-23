@@ -7,8 +7,8 @@ public class BreathFeature : MonoBehaviour
 {
     CancellationTokenSource _cancellationTokenSource;
     AudioSource _audioSource;
-    private const float MINTIME = 5;
-    private const float MAXTIME = 8;
+    private const float MINTIME = 15;
+    private const float MAXTIME = 20;
     void Start()
     {
         _cancellationTokenSource = new CancellationTokenSource();

@@ -7,8 +7,8 @@ public class GrowlFeature : MonoBehaviour
 {
     CancellationTokenSource _cancellationTokenSource;
     AudioSource _audioSource;
-    private const float MINTIME = 10;
-    private const float MAXTIME = 20;
+    private const float MINTIME = 40;
+    private const float MAXTIME = 60;
     void Start()
     {
         _cancellationTokenSource = new CancellationTokenSource();
