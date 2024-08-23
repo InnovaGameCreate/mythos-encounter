@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _checkRate: 0.5
-  _visivilityRange: 25
+  _visivilityRange: 10000
   _blindChaseTime: 10
   _debugMode: 1
   _enemyAttackBehaviours:
@@ -150,7 +150,7 @@ MonoBehaviour:
   _checkRate: 1
   _debugMode: 0
   _myEneyMove: {fileID: 7130656707961021328}
-  _visivilityRange: 25
+  _visivilityRange: 10000
   _enemyStatus: {fileID: 7000828227398978958}
 --- !u!114 &7000828227398978958
 MonoBehaviour:
@@ -343,9 +343,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b9992cc57cd386f4ba479ed49a47ac8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stiffness: 5
+  _stiffness: 1
   _range: 5
-  _mass: 10
+  _mass: 20
   _damage: 5
 --- !u!114 &3252102760658322517
 MonoBehaviour:
@@ -359,7 +359,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89fc6e73eff08184b92d3c792c331683, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stiffness: 10
+  _stiffness: 1
   _range: 1000
   _mass: 10
   _damage: 5

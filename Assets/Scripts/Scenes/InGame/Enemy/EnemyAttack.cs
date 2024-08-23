@@ -27,7 +27,7 @@ namespace Scenes.Ingame.Enemy
 
 
         [Header("攻撃動作")]
-        [SerializeField][Tooltip("攻撃スクリプトたち")] private List<EnemyAttackBehaviour> _enemyAttackBehaviours;
+        [SerializeField][Tooltip("攻撃スクリプトたち、射程の短いものから長いものの順番で入れてください")] private List<EnemyAttackBehaviour> _enemyAttackBehaviours;
         //private float _massSUM;
         private float _atackRange;//最も射程の長い攻撃
         private float _massSUM;//使用可能な攻撃の重み付け
@@ -83,7 +83,6 @@ namespace Scenes.Ingame.Enemy
             /*
              #####################射程順に並び変える
              */
-            _enemyAttackBehaviours.Sort((a, b) => a.GetRange().CompareTo(b.GetRange()));
             _atackRange = _enemyAttackBehaviours[_enemyAttackBehaviours.Count -1].GetRange();
 
 
@@ -132,10 +131,11 @@ namespace Scenes.Ingame.Enemy
                                 for (int i = 0; i < _enemyAttackBehaviours.Count; i++)
                                 {
                                     _massSUM -= _enemyAttackBehaviours[i].GetMass();
-                                    if (_massSUM < 0)
+                                    if (_massSUM <= _pickNum)
                                     {
                                         _enemyAttackBehaviours[i].Behaviour(_playerStatus);
                                         _enemyStatus.ChangeStiffnessTime(_enemyAttackBehaviours[i].GetStiffness());
+                                        break;
                                     }
                                 }
 

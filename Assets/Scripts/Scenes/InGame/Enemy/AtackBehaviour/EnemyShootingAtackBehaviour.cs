@@ -23,7 +23,7 @@ namespace Scenes.Ingame.Enemy
 
         public override void Behaviour(PlayerStatus target)
         {
-            Debug.Log("‹ßÚUŒ‚I");
+            Debug.Log("‰“ŠuUŒ‚I");
             target.ChangeHealth(_damage, "Damage");
             target.OnEnemyAttackedMeEvent.OnNext(Unit.Default);
         }
