@@ -10,6 +10,9 @@ namespace Scenes.Ingame.Stage
         [SerializeField] private int _keep;
         [SerializeField] private int _msv;
         private int _difference;
+        private int _max = 28;
+        private int _min = 12;
+
 
         void Start()
         {
@@ -62,9 +65,17 @@ namespace Scenes.Ingame.Stage
                 if (_keep == _temperature)
                 {
                     if (Random.Range(0, 2) == 0)
+                    {
                         _temperature += 3;
+                        if (_max < _temperature)
+                            _temperature = _max;
+                    }
                     else
+                    {
                         _temperature -= 3;
+                        if (_temperature < _min)
+                            _temperature = _min;
+                    }
                     _keep = _temperature;
                     yield return new WaitForSeconds(10f);
                 }
