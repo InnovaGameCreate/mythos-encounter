@@ -7,6 +7,8 @@ using System.Threading;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Networking;
+using LitJson;
+using Unity.VisualScripting.Antlr3.Runtime;
 
 public enum DataType
 {
@@ -68,6 +70,7 @@ public class WebDataRequest : MonoBehaviour
           "https://igc.deca.jp/mythos-encounter/spell-get.php",
           "https://igc.deca.jp/mythos-encounter/player-get.php",
           "https://igc.deca.jp/mythos-encounter/enemy-get.php"};
+    private const String PLAYERPUTPHP = "https://igc.deca.jp/mythos-encounter/player-put.php";
     private static List<EnemyDataStruct> EnemyDataArrayList = new List<EnemyDataStruct>();
     private static List<ItemDataStruct> ItemDataArrayList = new List<ItemDataStruct>();
     private static List<SpellStruct> SpellDataArrayList = new List<SpellStruct>();
@@ -131,6 +134,42 @@ public class WebDataRequest : MonoBehaviour
         ConvertStringToEnemyData(DataArrayList[(int)DataType.EnemyTable]);
         OnCompleteLoadData = true;
         _loadSuccessToken.Cancel();
+    }
+    public static async UniTaskVoid PutPlayerData()
+    {
+        var token = new CancellationTokenSource().Token;
+        PlayerDataStruct sendData = new PlayerDataStruct();
+        sendData.PlayerDataSet(9999, "DEBUG_USER", DateTime.Now, DateTime.UtcNow, 9900, new string[3] { "1=1", "2=1", "3=2" }, new string[3] { "1=1", "2=1", "3=2" }, new string[3] { "1", "2", "3" }, 10);
+
+        string jsonData = JsonMapper.ToJson(sendData);
+        WWWForm form = new WWWForm();
+        form.AddField("user", jsonData);
+
+        using (UnityWebRequest www = UnityWebRequest.Post(PLAYERPUTPHP, form))
+        {
+            var asyncOp = www.SendWebRequest();
+
+            while (!asyncOp.isDone)
+            {
+                if (token.IsCancellationRequested)
+                {
+                    www.Abort();
+                    throw new OperationCanceledException();
+                }
+                await UniTask.Yield(); // 一時的に処理を中断
+            }
+
+            if (www.result != UnityWebRequest.Result.Success)
+            {
+                Debug.Log("error: " + www.error);
+            }
+            else
+            {
+                Debug.Log($"SEND JSON = {jsonData}");
+                Debug.Log("text: " + www.downloadHandler.text);
+                PlayerDataStruct user = JsonMapper.ToObject<PlayerDataStruct>(www.downloadHandler.text);
+            }
+        }
     }
     /// <summary>
     /// 読み込みが終わらなかったらタイムアウトさせて処理を中断する
@@ -262,6 +301,7 @@ public class WebDataRequest : MonoBehaviour
             string[] items = dataRecord[(int)PlayerFormat.item].Split(',');
             string[] spell = dataRecord[(int)PlayerFormat.epell].Split(',');
             string[] enemy = dataRecord[(int)PlayerFormat.enemy].Split(',');
+
             inputTempData.PlayerDataSet(
                 int.Parse(dataRecord[(int)PlayerFormat.id]),//ID
                 dataRecord[(int)PlayerFormat.name],//名前

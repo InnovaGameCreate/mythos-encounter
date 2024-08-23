@@ -24,6 +24,8 @@ public class APITester : MonoBehaviour
     private Button _SpellFacadeButton;
     [SerializeField]
     private Button _EnemyFacadeButton;
+    [SerializeField]
+    private Button _PutPlayerDataButton;
     void Start()
     {
         _itemTableButton.OnClickAsObservable().Subscribe(_ => ViewItemTable()).AddTo(this);
@@ -34,6 +36,7 @@ public class APITester : MonoBehaviour
         _itemFacadeButton.OnClickAsObservable().Subscribe(_ => ViewItemFacade()).AddTo(this);
         _SpellFacadeButton.OnClickAsObservable().Subscribe(_ => ViewSpellFacade()).AddTo(this);
         _EnemyFacadeButton.OnClickAsObservable().Subscribe(_ => ViewEnemyFacade()).AddTo(this);
+        _PutPlayerDataButton.OnClickAsObservable().Subscribe(_ => PutPlayerDebugData()).AddTo(this);
     }
 
     private void ViewItemTable()
@@ -120,5 +123,9 @@ public class APITester : MonoBehaviour
         {
             _textMeshPro.text += $"–¢‘˜‹ö‚Ì“G‚Ìid‚Í {item}\n";
         }
+    }
+    private void PutPlayerDebugData()
+    {
+        WebDataRequest.PutPlayerData().Forget();
     }
 }
