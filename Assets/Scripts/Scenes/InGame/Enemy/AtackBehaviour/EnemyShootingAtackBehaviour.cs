@@ -21,7 +21,7 @@ namespace Scenes.Ingame.Enemy
 
         }
 
-        public virtual void Behaviour(PlayerStatus target)
+        public override void Behaviour(PlayerStatus target)
         {
             Debug.Log("‹ßÚUŒ‚I");
             target.ChangeHealth(_damage, "Damage");
