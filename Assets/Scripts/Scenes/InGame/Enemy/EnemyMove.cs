@@ -70,7 +70,6 @@ namespace Scenes.Ingame.Enemy
             _staminaChangeCount += Time.deltaTime;
             if (_staminaChangeCount > 1)
             {//毎秒処理
-                Debug.Log(_enemyStatus.Stamina);
                 _staminaChangeCount -= 1;
                 if (_stiffness)
                 {//硬直中は移動不能に
