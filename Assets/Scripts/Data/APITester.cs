@@ -131,6 +131,11 @@ public class APITester : MonoBehaviour
     }
     private void PutPlayerDebugData()
     {
+        if (_NameIput == null || _IdInput == null)
+        {
+            Debug.LogError("Name‚©Id‚Ì“ü—Í‚ª‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            return;
+        }
         int id = int.Parse(_IdInput.text);
         if(id < 9000)
         {
