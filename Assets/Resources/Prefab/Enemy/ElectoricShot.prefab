@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 525937747241424695}
   - component: {fileID: 6900646090663490225}
   m_Layer: 0
-  m_Name: Mori
+  m_Name: ElectoricShot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -48,10 +48,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damage: 10
-  _speed: 50
+  _speed: 100
   _lifeTime: 20
   _rigidbody: {fileID: 525937747241424695}
-  _accuracy: 0.8
+  _accuracy: 0.3
   _shootingErrorDistance: 1
   _hitPositionSetting: {x: 0, y: 1, z: 0}
 --- !u!54 &525937747241424695

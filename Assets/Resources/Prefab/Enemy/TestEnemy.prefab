@@ -345,7 +345,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _stiffness: 1
   _range: 5
-  _mass: 20
+  _mass: 1
   _damage: 5
 --- !u!114 &3252102760658322517
 MonoBehaviour:
@@ -363,6 +363,8 @@ MonoBehaviour:
   _range: 1000
   _mass: 10
   _damage: 5
+  _bullet: {fileID: 2261882221392382239, guid: af41eff741c24b740a037720d7460db2, type: 3}
+  _hand: {fileID: 8470773532925398790}
 --- !u!1001 &1945881014760464139
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -473,3 +475,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c622677c7034f94b87e93c6e05829d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &8470773532925398790 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7966608104831176717, guid: d70b9fd8b26060c46aa112a5e424b4c1, type: 3}
+  m_PrefabInstance: {fileID: 1945881014760464139}
+  m_PrefabAsset: {fileID: 0}

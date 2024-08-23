@@ -16,6 +16,7 @@ public class EnemyBallet : MonoBehaviour
     [SerializeField] private Rigidbody _rigidbody;
     [SerializeField][Tooltip("命中率、1なら必中")] private float _accuracy;
     [SerializeField][Tooltip("命中しなかった場合、対象からどれだけの距離をずらして弾頭を飛翔させるか")] private float _shootingErrorDistance;
+    [SerializeField][Tooltip("ターゲット座標に対する補正、プレイヤー座標が地面に触れていることに対応")]private Vector3 _hitPositionSetting;
     
     private PlayerStatus _targetStatus;
     private GameObject _target;
@@ -32,12 +33,12 @@ public class EnemyBallet : MonoBehaviour
         if (UnityEngine.Random.RandomRange(0f,1f) <= _accuracy) { 
             _hit = true;
         }
-        this.transform.LookAt(_target.transform);
+        this.transform.rotation = Quaternion.LookRotation((_target.transform.position + _hitPositionSetting + _shootingErrorVector - this.transform.position), Vector3.up);
         _shootingErrorVector = new Vector3(0, 0, 0);
         if (!_hit)
         {
             float _targetAngleY;
-            _targetAngleY = Mathf.Atan2(_target.transform.position.x - this.transform.position.x, _target.transform.position.z - this.transform.position.z);
+            _targetAngleY = Mathf.Atan2(_target.transform.position.x + _hitPositionSetting.x - this.transform.position.x, _target.transform.position.z + _hitPositionSetting.z - this.transform.position.z);
             if (UnityEngine.Random.RandomRange(0, 2) == 0)//左右どちらにずらすか
             {
                 _targetAngleY += Mathf.PI / 4;
@@ -56,7 +57,7 @@ public class EnemyBallet : MonoBehaviour
             {
                 _shootingErrorVector.z = -_shootingErrorDistance;
             }
-            this.transform.rotation = Quaternion.LookRotation((_target.transform.position + _shootingErrorVector - this.transform.position), Vector3.up);
+            this.transform.rotation = Quaternion.LookRotation((_target.transform.position + _hitPositionSetting + _shootingErrorVector - this.transform.position), Vector3.up);
         }
 
 
@@ -71,12 +72,12 @@ public class EnemyBallet : MonoBehaviour
             transform.position += transform.forward * _speed * Time.deltaTime;
             if (!_overShoot)
             {//相手の座標を超えていないのであれば
-                this.transform.rotation = Quaternion.LookRotation((_target.transform.position + _shootingErrorVector - this.transform.position), Vector3.up);
-                if ((this.transform.position - _target.transform.position).magnitude < _speed * Time.deltaTime)
+                this.transform.rotation = Quaternion.LookRotation((_target.transform.position + _hitPositionSetting + _shootingErrorVector - this.transform.position), Vector3.up);
+                if ((this.transform.position - _target.transform.position - _hitPositionSetting).magnitude < _speed * Time.deltaTime)
                 {//次フレームで目標地点(敵の位置+誤差)へ到達する場合
                     _overShoot = true;
                     if (_hit) { //命中する場合
-                        this.transform.position += this.transform.forward * (this.transform.position - _target.transform.position).magnitude;
+                        this.transform.position += this.transform.forward * (this.transform.position - _target.transform.position - _hitPositionSetting).magnitude;
                         this.transform.parent = _target.transform;
                         _stop = true;
 
@@ -95,13 +96,14 @@ public class EnemyBallet : MonoBehaviour
 
 
 
-    
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if (!_hit) { //壁などにぶつかった
-            _stop = true;
+        if (!_hit)
+        { //壁などにぶつかった
+            if (!other.CompareTag("Enemy")) {
+                _stop = true;
+            }
         }
-        
     }
-    
+
 }

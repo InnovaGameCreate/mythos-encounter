@@ -10,6 +10,7 @@ namespace Scenes.Ingame.Enemy
     {
         [SerializeField] private int _damage;
         [SerializeField] private GameObject _bullet;
+        [SerializeField][Tooltip("’e‚Ìo‚Ä‚­‚éêŠ")] private GameObject _hand;
         
         // Start is called before the first frame update
         void Start()
@@ -26,7 +27,7 @@ namespace Scenes.Ingame.Enemy
         public override void Behaviour(PlayerStatus targetStatus)
         {
             Debug.Log("‰“ŠuUŒ‚I");
-            GameObject.Instantiate(_bullet,this.transform.position,_bullet.transform.rotation);
+            GameObject.Instantiate(_bullet,_hand.transform.position,_bullet.transform.rotation).GetComponent<EnemyBallet>().Init(targetStatus);
             /*
             target.ChangeHealth(_damage, "Damage");
             target.OnEnemyAttackedMeEvent.OnNext(Unit.Default);

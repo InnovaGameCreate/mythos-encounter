@@ -171,7 +171,7 @@ MonoBehaviour:
   - {fileID: -1417630428139418448}
   _enemyStatus: {fileID: 227141341248401291}
   _enemySearch: {fileID: 651126892439209470}
-  _myEnemyMove: {fileID: 0}
+  _myEnemyMove: {fileID: 153174845251746693}
 --- !u!114 &153174845251746693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,6 +415,8 @@ MonoBehaviour:
   _range: 15
   _mass: 10
   _damage: 30
+  _bullet: {fileID: 2261882221392382239, guid: 39e56c2c101133e4ba9db45ecad211dd, type: 3}
+  _hand: {fileID: 5088418229967577375}
 --- !u!1001 &9117532595097646355
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -535,5 +537,10 @@ PrefabInstance:
 --- !u!4 &5088418229967224081 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4042626066257692674, guid: b86585f53cd7c9d4b809536d1be0af4d, type: 3}
+  m_PrefabInstance: {fileID: 9117532595097646355}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5088418229967577375 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4042626066257400844, guid: b86585f53cd7c9d4b809536d1be0af4d, type: 3}
   m_PrefabInstance: {fileID: 9117532595097646355}
   m_PrefabAsset: {fileID: 0}

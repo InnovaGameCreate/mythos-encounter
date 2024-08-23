@@ -62,7 +62,7 @@ MonoBehaviour:
   - {fileID: 5634362069311426784}
   _enemyStatus: {fileID: 3554846491491567640}
   _enemySearch: {fileID: 7631687704071867374}
-  _myEnemyMove: {fileID: 0}
+  _myEnemyMove: {fileID: 6372555738571843037}
 --- !u!114 &6372555738571843037
 MonoBehaviour:
   m_ObjectHideFlags: 0
