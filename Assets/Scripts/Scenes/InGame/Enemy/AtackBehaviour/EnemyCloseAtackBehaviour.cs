@@ -6,7 +6,7 @@ using UniRx;
 namespace Scenes.Ingame.Enemy
 {
 
-    public class EnemyCloseAtackBehaviour : MonoBehaviour
+    public class EnemyCloseAtackBehaviour : EnemyAttackBehaviour
     {
         [SerializeField] private int _damage;
         // Start is called before the first frame update

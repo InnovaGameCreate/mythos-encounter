@@ -6,7 +6,7 @@ using Scenes.Ingame.Player;
 
 namespace Scenes.Ingame.Enemy
 {
-    public class EnemyShootingAtackBehaviour : MonoBehaviour
+    public class EnemyShootingAtackBehaviour : EnemyAttackBehaviour
     {
         [SerializeField] private int _damage;
         // Start is called before the first frame update
