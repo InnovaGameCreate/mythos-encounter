@@ -9,6 +9,8 @@ namespace Scenes.Ingame.Enemy
     public class EnemyShootingAtackBehaviour : EnemyAttackBehaviour
     {
         [SerializeField] private int _damage;
+        [SerializeField] private GameObject _bullet;
+        
         // Start is called before the first frame update
         void Start()
         {
@@ -21,11 +23,14 @@ namespace Scenes.Ingame.Enemy
 
         }
 
-        public override void Behaviour(PlayerStatus target)
+        public override void Behaviour(PlayerStatus targetStatus)
         {
             Debug.Log("âìäuçUåÇÅI");
+            GameObject.Instantiate(_bullet,this.transform.position,_bullet.transform.rotation);
+            /*
             target.ChangeHealth(_damage, "Damage");
             target.OnEnemyAttackedMeEvent.OnNext(Unit.Default);
+            */
         }
     }
 }

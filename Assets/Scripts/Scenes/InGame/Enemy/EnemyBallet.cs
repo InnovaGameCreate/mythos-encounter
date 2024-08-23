@@ -3,6 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using System;
+using DG.Tweening;
+using TMPro;
+using UnityEditor.Rendering;
 
 public class EnemyBallet : MonoBehaviour
 {
@@ -10,32 +14,94 @@ public class EnemyBallet : MonoBehaviour
     [SerializeField] private float _speed;
     [SerializeField] private float _lifeTime;
     [SerializeField] private Rigidbody _rigidbody;
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField][Tooltip("命中率、1なら必中")] private float _accuracy;
+    [SerializeField][Tooltip("命中しなかった場合、対象からどれだけの距離をずらして弾頭を飛翔させるか")] private float _shootingErrorDistance;
+    
+    private PlayerStatus _targetStatus;
+    private GameObject _target;
+    private bool _hit = false;//命中するかどうか
+    private Vector3 _shootingErrorVector;
+    private bool _overShoot;//相手を超えたら
+    private bool _stop;//停止する
+
+
+    public void Init(PlayerStatus target)
     {
-        this.transform.LookAt(GameObject.FindWithTag("Player").transform.position);
-        _rigidbody.velocity = transform.forward * _speed;
-        Debug.Log("発射");
+        _targetStatus = target;
+        _target = _targetStatus.gameObject;
+        if (UnityEngine.Random.RandomRange(0f,1f) <= _accuracy) { 
+            _hit = true;
+        }
+        this.transform.LookAt(_target.transform);
+        _shootingErrorVector = new Vector3(0, 0, 0);
+        if (!_hit)
+        {
+            float _targetAngleY;
+            _targetAngleY = Mathf.Atan2(_target.transform.position.x - this.transform.position.x, _target.transform.position.z - this.transform.position.z);
+            if (UnityEngine.Random.RandomRange(0, 2) == 0)//左右どちらにずらすか
+            {
+                _targetAngleY += Mathf.PI / 4;
+            }
+            else
+            {
+                _targetAngleY += Mathf.PI / -4;
+            }
+            _shootingErrorVector.x = _shootingErrorDistance * Mathf.Cos(_targetAngleY);
+            _shootingErrorVector.z = _shootingErrorDistance * Mathf.Sin(_targetAngleY);
+            if (UnityEngine.Random.RandomRange(0, 2) == 0)//上下どちらにずらすか
+            {
+                _shootingErrorVector.z = _shootingErrorDistance; 
+            }
+            else
+            {
+                _shootingErrorVector.z = -_shootingErrorDistance;
+            }
+            this.transform.rotation = Quaternion.LookRotation((_target.transform.position + _shootingErrorVector - this.transform.position), Vector3.up);
+        }
+
+
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+            
+        if (!_stop)
+        {
+            transform.position += transform.forward * _speed * Time.deltaTime;
+            if (!_overShoot)
+            {//相手の座標を超えていないのであれば
+                this.transform.rotation = Quaternion.LookRotation((_target.transform.position + _shootingErrorVector - this.transform.position), Vector3.up);
+                if ((this.transform.position - _target.transform.position).magnitude < _speed * Time.deltaTime)
+                {//次フレームで目標地点(敵の位置+誤差)へ到達する場合
+                    _overShoot = true;
+                    if (_hit) { //命中する場合
+                        this.transform.position += this.transform.forward * (this.transform.position - _target.transform.position).magnitude;
+                        this.transform.parent = _target.transform;
+                        _stop = true;
+
+                        //ダメージの処理
+                        _targetStatus.ChangeHealth(_damage, "Damage");
+                        _targetStatus.OnEnemyAttackedMeEvent.OnNext(Unit.Default);
+                    }
+                }
+            }
+            
+        }
         _lifeTime -= Time.deltaTime;
         
         if (_lifeTime < 0) { Destroy(this.gameObject); }
     }
 
+
+
+    
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Player") { //命中だ！
-            PlayerStatus playerStatus = collision.gameObject.GetComponent<PlayerStatus>();
-            playerStatus.ChangeHealth(_damage, "Damage");
-            playerStatus.OnEnemyAttackedMeEvent.OnNext(Unit.Default);
-            Destroy(this.gameObject);
-        } else if (collision.gameObject.tag == "Stage") {
-            Destroy(this.gameObject);
+        if (!_hit) { //壁などにぶつかった
+            _stop = true;
         }
         
     }
+    
 }
