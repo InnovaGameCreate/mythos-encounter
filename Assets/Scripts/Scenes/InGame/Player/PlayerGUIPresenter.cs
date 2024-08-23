@@ -29,6 +29,7 @@ namespace Scenes.Ingame.Player
 
         [Header("ゲーム内UI(オンライン)")]
         [SerializeField] private Slider[] _healthSliders;//各プレイヤーのHPバー
+        [SerializeField] private Slider[] _bleedingHealthSliders;//各プレイヤーの出血処理用HPバー
         [SerializeField] private Slider[] _sanValueSliders;//各プレイヤーのSAN値バー
         [SerializeField] private TMP_Text[] _healthText;//各プレイヤーのHP残量表示テキスト
         [SerializeField] private TMP_Text[] _sanValueText;//各プレイヤーのSAN値残量表示テキスト
@@ -85,6 +86,15 @@ namespace Scenes.Ingame.Player
                                 //viewに反映
                                 ChangeSliderValue(x, playerStatus.playerID, "Health");
                             }).AddTo(this);
+
+                        playerStatus.OnPlayerBleedingHealthChange
+                            .Subscribe(x =>
+                            {
+                                //viewに反映
+                                ChangeSliderValue(x, playerStatus.playerID, "Bleeding");
+                            }).AddTo(this);
+
+
 
                         playerStatus.OnPlayerSanValueChange
                             .Subscribe(x =>
@@ -291,6 +301,13 @@ namespace Scenes.Ingame.Player
                 _healthSliders[ID].value = value;
                 // _healthText[ID].text = value.ToString();
             }
+
+            if (mode == "Bleeding")
+            {
+                _bleedingHealthSliders[ID].value = value;
+                // _healthText[ID].text = value.ToString();
+            }
+
 
             else if (mode == "SanValue")
             {
