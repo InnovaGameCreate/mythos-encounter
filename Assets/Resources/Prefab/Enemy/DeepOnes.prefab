@@ -226,6 +226,7 @@ MonoBehaviour:
   _staminaBase: 5
   _actionCoolTimeBase: 600
   _enemyStateBase: 1
+  _footSoundBase: 0.79999995
   _horrorBase: 1
   _uniqueItem: {fileID: 6146547148148849240, guid: 1460fd555e5df4f4ba1ca88617706b73, type: 3}
   _enemyMagics: 

@@ -13,7 +13,7 @@ namespace Scenes.Ingame.Enemy
     /// </summary>
     public class EnemyMove : MonoBehaviour
     {
-        public bool endMove;
+        public bool _endMove;
         private NavMeshAgent _myAgent;
         [SerializeField] EnemyStatus _enemyStatus;
 
@@ -61,32 +61,36 @@ namespace Scenes.Ingame.Enemy
         {
             if (Vector3.Magnitude(this.transform.position - _myAgent.path.corners[_myAgent.path.corners.Length - 1]) < 1.5f) 
             { 
-                endMove = true; 
+                _endMove = true; 
             } else 
             {
-                endMove = false; 
+                _endMove = false; 
             }
 
             _staminaChangeCount += Time.deltaTime;
             if (_staminaChangeCount > 1)
             {//毎秒処理
                 _staminaChangeCount -= 1;
+
                 if (_stiffness)
                 {//硬直中は移動不能に
                     _myAgent.speed = 0;
                 }
                 else 
                 { 
-                    switch (_enemyStatus.ReturnEnemyState)
-                    {
-                        case EnemyState.Patrolling:
-                            _myAgent.speed = _enemyStatus.ReturnPatrollingSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
-                            if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
-                            { //スタミナが削れていたら
-                                _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
-                            }
-                            else if (_enemyStatus.ReturnStaminaBase < _enemyStatus.Stamina)
-                            {
+
+                switch (_enemyStatus.ReturnEnemyState)
+                {
+                    case EnemyState.Patrolling:
+                        _myAgent.speed = _enemyStatus.ReturnPatrollingSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                        if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
+                        { //スタミナが削れていたら
+                            _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
+                        }
+                        else if (_enemyStatus.ReturnStaminaBase < _enemyStatus.Stamina)
+                        {
+
+
                                 _staminaOver = false;
                             }
                             break;
@@ -136,15 +140,21 @@ namespace Scenes.Ingame.Enemy
                                     }
                                 }
                             }
-                            if (_staminaOver)
-                            {
-                                _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
-                            }
-                            else
-                            {
-                                _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
-                            }
-                            break;
+
+
+
+                        
+                        if (_staminaOver)
+                        {
+                            _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                        }
+                        else
+                        {
+                            _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                        }
+                        break;
+
+
                         case EnemyState.Attack:
                             //スタミナ周りの処理をする
                             if (_staminaOver)
@@ -179,23 +189,28 @@ namespace Scenes.Ingame.Enemy
                                     }
                                 }
                             }
-                            if (_staminaOver)
-                            {
-                                _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
-                            }
-                            else
-                            {
-                                _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
-                            }
-                            break;
-                        case EnemyState.FallBack:
 
-                            break;
-                        default:
-                            Debug.LogWarning("想定外のEnemyStatus");
-                            break;
 
-                    }
+
+
+                        
+                        if (_staminaOver)
+                        {
+                            _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                        }
+                        else
+                        {
+                            _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                        }
+                        break;
+                    case EnemyState.FallBack: 
+
+                        break;
+                    default:
+                        Debug.LogWarning("想定外のEnemyStatus");
+                        break;
+                    
+
                 }
             }
         }
@@ -214,6 +229,7 @@ namespace Scenes.Ingame.Enemy
             _myAgent.enabled = false;
             _enemyStatus.SetEnemyState(EnemyState.Patrolling);
             transform.position = _initialPosition;
+            _endMove = true;
             _myAgent.enabled = true;
 
         }
