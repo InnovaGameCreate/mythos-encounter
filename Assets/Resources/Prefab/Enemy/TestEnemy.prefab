@@ -114,17 +114,12 @@ MonoBehaviour:
   _visivilityRange: 25
   _blindChaseTime: 10
   _debugMode: 1
-  _attackTime: 5
-  canShot: 1
-  _shotTime: 10
-  _shotRange: 15
-  _ballet: {fileID: 2261882221392382239, guid: 39e56c2c101133e4ba9db45ecad211dd, type: 3}
   _enemyAttackBehaviours:
   - {fileID: 3881673920415878492}
   - {fileID: 3252102760658322517}
   _enemyStatus: {fileID: 7000828227398978958}
   _enemySearch: {fileID: 41553992271996288}
-  _myEnemyMove: {fileID: 0}
+  _myEnemyMove: {fileID: 7130656707961021328}
 --- !u!114 &7130656707961021328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,7 +174,6 @@ MonoBehaviour:
   _staminaBase: 5
   _actionCoolTimeBase: 20
   _enemyStateBase: 1
-  _atackPowerBase: 10
   _horrorBase: 10
   _uniqueItem: {fileID: 6146547148148849240, guid: 1460fd555e5df4f4ba1ca88617706b73, type: 3}
   _enemyMagics: 
@@ -350,9 +344,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stiffness: 5
-  _range: 0
-  _mass: 0
-  _damage: 0
+  _range: 5
+  _mass: 10
+  _damage: 5
 --- !u!114 &3252102760658322517
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,9 +360,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stiffness: 10
-  _range: 15
-  _mass: 0
-  _damage: 0
+  _range: 1000
+  _mass: 10
+  _damage: 5
 --- !u!1001 &1945881014760464139
 PrefabInstance:
   m_ObjectHideFlags: 0
