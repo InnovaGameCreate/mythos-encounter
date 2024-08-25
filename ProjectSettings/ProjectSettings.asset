@@ -741,7 +741,7 @@ PlayerSettings:
     PS5: DOTWEEN;HDRP_OUTLINE
     QNX: DOTWEEN;HDRP_OUTLINE
     Stadia: DOTWEEN;HDRP_OUTLINE
-    Standalone: DOTWEEN;HDRP_OUTLINE
+    Standalone: DOTWEEN;HDRP_OUTLINE;FUSION_WEAVER;FUSION2
     WebGL: DOTWEEN;HDRP_OUTLINE
     Windows Store Apps: DOTWEEN;HDRP_OUTLINE
     XboxOne: DOTWEEN;HDRP_OUTLINE
@@ -768,7 +768,7 @@ PlayerSettings:
     tvOS: 1
   incrementalIl2cppBuild: {}
   suppressCommonWarnings: 1
-  allowUnsafeCode: 0
+  allowUnsafeCode: 1
   useDeterministicCompilation: 1
   selectedPlatform: 0
   additionalIl2CppArgs: 
