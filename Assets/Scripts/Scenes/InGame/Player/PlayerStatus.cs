@@ -51,6 +51,10 @@ namespace Scenes.Ingame.Player
         [SerializeField] private PlayerItem _playerItem;
 
         private Subject<float> castEvent = new Subject<float>();//呪文の詠唱時間を発行
+        private Subject<Unit> cancelCastEvent = new Subject<Unit>();//呪文の詠唱をキャンセルされた際のイベント
+        public IObserver<float> OnCastEventCall { get { return castEvent; } }//別のスクリプトから呪文の詠唱時間イベントのOnNextを飛ばせるようにする
+        
+
 
         //その他のSubject
         private Subject<Unit> _enemyAttackedMe = new Subject<Unit>();//敵から攻撃を食らったときのイベント
@@ -72,8 +76,10 @@ namespace Scenes.Ingame.Player
         public IObservable<Unit> OnEnemyAttackedMe { get { return _enemyAttackedMe; } }//敵から攻撃を受けた際のイベントを登録させる
         public IObserver<Unit> OnEnemyAttackedMeEvent { get { return _enemyAttackedMe; } }//敵から攻撃を受けた際にイベントが発行
 
-        public IObservable<float> OnCastEvente { get { return castEvent; } }//敵から攻撃を受けた際にイベントが発行
-        
+        public IObservable<float> OnCastEvent { get { return castEvent; } }//呪文詠唱を始めた際に呼ばれるイベント
+        public IObservable<Unit> OnCancelCastEvent { get { return cancelCastEvent; } }//敵から攻撃を受けた際のイベントを登録させる
+        public IObserver<Unit> OnCancelCastEventCall { get { return cancelCastEvent; } }//敵から攻撃を受けた際にイベントが発行
+
         //一部情報の開示
         public int playerID { get { return _playerID; } }
         public int health_max { get { return _healthBase; } }
@@ -139,6 +145,10 @@ namespace Scenes.Ingame.Player
             _bleeding.
                 Where(x => x == true).
                 Subscribe(_ => StartCoroutine(Bleeding(bleedingDamage))).AddTo(this);//出血状態になったときに出血処理を開始
+
+            OnEnemyAttackedMe
+                .Where(_ => _isUseMagic)
+                .Subscribe(x => cancelCastEvent.OnNext(default)).AddTo(this);//攻撃を受けた際に呪文の詠唱時間UIを非表示にする
 
             _survive
                 .Skip(1)

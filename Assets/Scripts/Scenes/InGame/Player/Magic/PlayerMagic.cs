@@ -47,6 +47,9 @@ namespace Scenes.Ingame.Player
                         //魔法を使う処理をキャンセル
                         _myMagic.cancelMagic = true;
                         Debug.Log("操作による詠唱中止");
+
+                        //PlayerUIの方で呪文の詠唱時間を表示を終了
+                        myPlayerStatus.OnCancelCastEventCall.OnNext(default);
                     }
                     else//呪文をまだ詠唱していないとき
                     {
@@ -88,6 +91,9 @@ namespace Scenes.Ingame.Player
                             //魔法を使う処理
                             _myMagic.MagicEffect();
                             Debug.Log("呪文の詠唱開始");
+
+                            //PlayerUIの方で呪文の詠唱時間を表示させる
+                            myPlayerStatus.OnCastEventCall.OnNext(_myMagic.chantTime);
                         }
                     }
                 });
