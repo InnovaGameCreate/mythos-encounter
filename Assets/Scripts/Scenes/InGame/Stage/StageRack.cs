@@ -23,9 +23,9 @@ namespace Scenes.Ingame.Stage
         private Vector3 L_OPENVALUE = new Vector3(0, 110, 0);
         private Vector3 D_OPENVALUE = new Vector3(1, 0, 0);
         private BoxCollider _rackCollider;
-        public void Intract(PlayerStatus status)
+        public void Intract(PlayerStatus status, bool processWithConditionalBypass)
         {
-            if (Input.GetMouseButtonDown(1) && _isAnimation == false)
+            if ((Input.GetMouseButtonDown(1) && _isAnimation == false) || processWithConditionalBypass)
             {
                 _rackCollider.isTrigger = true;
                 _isAnimation = true;

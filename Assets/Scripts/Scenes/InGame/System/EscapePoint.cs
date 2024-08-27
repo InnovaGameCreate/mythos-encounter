@@ -41,7 +41,7 @@ namespace Scenes.Ingame.InGameSystem
             token.Dispose();
         }
 
-        public async void Intract(PlayerStatus status)
+        public async void Intract(PlayerStatus status, bool processWithConditionalBypass)
         {
             if (viewDebugLog) Debug.Log($"EscapeItem.Interact:Button = {Input.GetMouseButtonDown(1)},progress = {_escpaeItemCount >= _progress}, notAnimation = {!_isAnimation}, active = {_isActive},Current = {manager.GetEscapeItemCurrentCount}");
             if (Input.GetMouseButtonDown(1) &&

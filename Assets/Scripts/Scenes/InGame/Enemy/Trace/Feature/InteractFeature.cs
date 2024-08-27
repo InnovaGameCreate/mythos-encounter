@@ -14,7 +14,8 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         private GameObject[] _stageInteracts;
         private GameObject[] nearStageObject = null;
         private GameObject interactTarget = null;
-        private const float INTERACTRANGE = 5;
+        private const float RANGE = 5;
+        private const float INTERVAL = 10f;
         void Start()
         {
             _cancellationTokenSource = new CancellationTokenSource();
@@ -26,14 +27,14 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         {
             while(true)
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(10f), cancellationToken: token);
-                nearStageObject = _stageInteracts.Where(target => Vector3.Distance(target.transform.position, this.transform.position) < INTERACTRANGE).ToArray();
+                await UniTask.Delay(TimeSpan.FromSeconds(INTERVAL), cancellationToken: token);
+                nearStageObject = _stageInteracts.Where(target => Vector3.Distance(target.transform.position, this.transform.position) < RANGE).ToArray();
                 if(nearStageObject.Length > 0)
                 {
                     interactTarget = nearStageObject[UnityEngine.Random.Range(0, nearStageObject.Length)];
                     if(interactTarget.TryGetComponent(out IInteractable act))
                     {
-                        act.Intract(null);
+                        act.Intract(null,true);
                     }
                 }
             }

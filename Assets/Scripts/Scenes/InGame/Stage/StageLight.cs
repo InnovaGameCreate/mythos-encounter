@@ -37,9 +37,9 @@ namespace Scenes.Ingame.Stage
                 _isOn = true;
             }
         }
-        public void Intract(PlayerStatus status)
+        public void Intract(PlayerStatus status, bool processWithConditionalBypass)
         {
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonDown(1) || processWithConditionalBypass)
             {
                 _lightCollider.isTrigger = true;
                 if (_isAnimation != true)

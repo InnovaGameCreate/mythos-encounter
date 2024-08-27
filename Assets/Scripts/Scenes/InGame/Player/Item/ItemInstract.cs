@@ -7,7 +7,7 @@ namespace Scenes.Ingame.Player
 {
     public class ItemInstract : MonoBehaviour, IInteractable
     {
-        public void Intract(PlayerStatus status)
+        public void Intract(PlayerStatus status,bool processWithConditionalBypass)
         {
             var PlayerItem = status.gameObject.GetComponent<PlayerItem>();
             bool isPickedUp = false;
