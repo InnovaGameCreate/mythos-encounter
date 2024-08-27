@@ -15,44 +15,35 @@ using UnityEngine.AI;
 namespace Scenes.Ingame.Enemy
 {
     /// <summary>
-    /// “G‚ÌƒXƒyƒbƒN‚ÆŒ»İ‚Ìó‘Ô‚ğ‹L˜^‚·‚é
+    /// æ•µã®ã‚¹ãƒšãƒƒã‚¯ã¨ç¾åœ¨ã®çŠ¶æ…‹ã‚’è¨˜éŒ²ã™ã‚‹
     /// </summary>
     public class EnemyStatus : MonoBehaviour
     {
-        //Count‚Íƒ^ƒCƒ~ƒ“ƒO‚ğŒv‚é‚æ‚¤‚È•Ï”‚ğ•\‚·B—á‚¦‚Î..ƒN[ƒ‹ƒ_ƒEƒ“‚ª‚Ç‚ê‚¾‚¯I—¹‚µ‚Ä‚¢‚é‚©‚â‰½‚©‚¢UŒ‚‚ğ‚µ‚½‚©‚È‚Ç
-        [Header("“GƒLƒƒƒ‰‚ÌŠî–{ƒXƒyƒbƒN‚Ì‰Šú’l")]
-        [SerializeField][Tooltip("hp‚Ì‰Šú’l")] private int _hpBase;
-        [SerializeField][Tooltip("„‰ñ‚Ì‘¬“x‚Ì‰Šú’l")] private float _patrollingSpeedBase;
-        [SerializeField][Tooltip("õ“G‚Ì‘¬“x")] private float _searchSpeedBase;
-        [SerializeField][Tooltip("’ÇÕ‚Ì‘¬“x")] private float _chaseSpeedBase;
-        [SerializeField][Tooltip("’®—Í‚Ì‰Šú’lB0‚Í‘S‚­•·‚±‚¦‚¸100‚Í‚Ç‚ñ‚È¬‚³‚¢‰¹‚à•·‚«“¦‚³‚È‚¢")][Range(0, 100)] private float _audiometerPowerBase;
-        [SerializeField][Tooltip("Œõ‚É”½‰‚·‚é‚©‚Ç‚¤‚©‚Ì‰Šú’l")] private bool _reactToLightBase;
-        [SerializeField][Tooltip("”òs‚µ‚Ä‚¢‚é‚©‚Ç‚¤‚©‚Ì‰Šú’l")] private bool _flyingBase;
-        [SerializeField][Tooltip("ƒXƒ^ƒ~ƒi‚Ì‰Šú’l")] private int _staminaBase;
-        [SerializeField][Tooltip("“Áês“®‚ÌƒN[ƒ‹ƒ^ƒCƒ€")] private int _actionCoolTimeBase;
-        [SerializeField][Tooltip("‰Šú‚ÌState")] private EnemyState _enemyStateBase;
-        [SerializeField][Tooltip("‘«‰¹‚Ì‰Šú’l")][Range(0, 1.0f)] private float _footSoundBase;
+        //Countã¯ã‚¿ã‚¤ãƒŸãƒ³ã‚°ã‚’è¨ˆã‚‹ã‚ˆã†ãªå¤‰æ•°ã‚’è¡¨ã™ã€‚ä¾‹ãˆã°..ã‚¯ãƒ¼ãƒ«ãƒ€ã‚¦ãƒ³ãŒã©ã‚Œã ã‘çµ‚äº†ã—ã¦ã„ã‚‹ã‹ã‚„ä½•ã‹ã„æ”»æ’ƒã‚’ã—ãŸã‹ãªã©
+        [Header("æ•µã‚­ãƒ£ãƒ©ã®åŸºæœ¬ã‚¹ãƒšãƒƒã‚¯ã®åˆæœŸå€¤")]
+        [SerializeField][Tooltip("hpã®åˆæœŸå€¤")] private int _hpBase;
+        [SerializeField][Tooltip("å·¡å›æ™‚ã®é€Ÿåº¦ã®åˆæœŸå€¤")] private float _patrollingSpeedBase;
+        [SerializeField][Tooltip("ç´¢æ•µæ™‚ã®é€Ÿåº¦")] private float _searchSpeedBase;
+        [SerializeField][Tooltip("è¿½è·¡æ™‚ã®é€Ÿåº¦")] private float _chaseSpeedBase;
+        [SerializeField][Tooltip("è´åŠ›ã®åˆæœŸå€¤ã€‚0ã¯å…¨ãèã“ãˆãš100ã¯ã©ã‚“ãªå°ã•ã„éŸ³ã‚‚èãé€ƒã•ãªã„")][Range(0, 100)] private float _audiometerPowerBase;
+        [SerializeField][Tooltip("å…‰ã«åå¿œã™ã‚‹ã‹ã©ã†ã‹ã®åˆæœŸå€¤")] private bool _reactToLightBase;
+        [SerializeField][Tooltip("é£›è¡Œã—ã¦ã„ã‚‹ã‹ã©ã†ã‹ã®åˆæœŸå€¤")] private bool _flyingBase;
+        [SerializeField][Tooltip("ã‚¹ã‚¿ãƒŸãƒŠã®åˆæœŸå€¤")] private int _staminaBase;
+        [SerializeField][Tooltip("ç‰¹æ®Šè¡Œå‹•ã®ã‚¯ãƒ¼ãƒ«ã‚¿ã‚¤ãƒ ")] private int _actionCoolTimeBase;
+        [SerializeField][Tooltip("åˆæœŸã®State")] private EnemyState _enemyStateBase;
+        [SerializeField][Tooltip("è¶³éŸ³ã®åˆæœŸå€¤")][Range(0, 1.0f)] private float _footSoundBase;
 
-        [Header("“GƒLƒƒƒ‰‚ÌUŒ‚«”\‚Ì‰Šú’l")]
-        [SerializeField][Tooltip("UŒ‚—Í‚Ì‰Šú’l")] private int _atackPowerBase;
-        [SerializeField][Tooltip("San‚Ö‚ÌUŒ‚—Í")] private int _horrorBase;
-        /*g—p‘‚É‘‚¢‚Ä‚¢‚È‚¢‚¯‚Ç’Ç‰Á‚µ‚½•Ï”ŒR’cB¡‚ÍEnemyAtack‚É‚ ‚é‚¯‚ÇA‚±‚ê‚ ‚Á‚Ä‚¾‚¢‚¶‚å‚¤‚Ô‚»‚¤‚È‚ç‚±‚±‚É‚Ë‚¶‚±‚ñ‚ÅUniRx‚É‘Î‰‚³‚¹‚é
-         * 
-        [SerializeField][Tooltip("UŒ‚‚ÌƒŒ[ƒg‚Ì‰Šú’l")] private float _atackrateBase;
-        [SerializeField][Tooltip("‰“ŠuUŒ‚‰Â”\‚Å‚ ‚é‚©‚Ç‚¤‚©")] private bool _canShot;
-        [SerializeField][Tooltip("‰“ŠuUŒ‚‚Ì‰Šú’l")] private int _ShotPower;
-        [SerializeField][Tooltip("‰“ŠuUŒ‚‚ÌƒŒ[ƒg‚Ì‰Šú’l")]private float _shotRateBase;
-        [SerializeField][Tooltip("‰“ŠuUŒ‚‚ÌË’ö‚Ì‰Šú’l")] private float _shotRateBase;
-        */
+        [Header("æ•µã‚­ãƒ£ãƒ©ã®æ”»æ’ƒæ€§èƒ½ã®åˆæœŸå€¤")]
+        [SerializeField][Tooltip("Sanã¸ã®æ”»æ’ƒåŠ›")] private int _horrorBase;
 
-        [Header("‚»‚Ì‘¼")]
-        [SerializeField][Tooltip("“P‘Ş‚É—‚Æ‚·ƒ†ƒj[ƒNƒAƒCƒeƒ€")] private GameObject _uniqueItem;
-        [SerializeField][Tooltip("“G‚ÌŠo‚¦‚Ä‚¢‚é‰Â”\«‚Ì‚ ‚éô•¶")] private List<EnemyMagic> _enemyMagics;
-        [SerializeField][Tooltip("ˆêŒÂ‘Ì‚ÌŠo‚¦‚Ä‚¢‚éô•¶")] private int _hasMagicNum;
-        [SerializeField][Tooltip("‘ŞU‚©‚ç•œ‹A‚·‚é‚Ü‚Å‚Ìƒ~ƒŠ•b")] private int _fallBackTime;
-        [SerializeField][Tooltip("Œ©‚½–Ú‚ÌƒQ[ƒ€ƒIƒuƒWƒFƒNƒg")] private GameObject _visual;
+        [Header("ãã®ä»–")]
+        [SerializeField][Tooltip("æ’¤é€€æ™‚ã«è½ã¨ã™ãƒ¦ãƒ‹ãƒ¼ã‚¯ã‚¢ã‚¤ãƒ†ãƒ ")] private GameObject _uniqueItem;
+        [SerializeField][Tooltip("æ•µã®è¦šãˆã¦ã„ã‚‹å¯èƒ½æ€§ã®ã‚ã‚‹å‘ªæ–‡")] private List<EnemyMagic> _enemyMagics;
+        [SerializeField][Tooltip("ä¸€å€‹ä½“ã®è¦šãˆã¦ã„ã‚‹å‘ªæ–‡")] private int _hasMagicNum;
+        [SerializeField][Tooltip("é€€æ•£ã‹ã‚‰å¾©å¸°ã™ã‚‹ã¾ã§ã®ãƒŸãƒªç§’")] private int _fallBackTime;
+        [SerializeField][Tooltip("è¦‹ãŸç›®ã®ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ")] private GameObject _visual;
 
-        [Header("©g‚É‚Â‚¢‚Ä‚¢‚é‚Å‚ ‚ë‚¤ƒXƒNƒŠƒvƒg")]
+        [Header("è‡ªèº«ã«ã¤ã„ã¦ã„ã‚‹ã§ã‚ã‚ã†ã‚¹ã‚¯ãƒªãƒ—ãƒˆ")]
         [SerializeField] EnemySearch _enemySearch;
         [SerializeField] EnemyAttack _enemyAttack;
         [SerializeField] EnemyMove _enemyMove;
@@ -62,7 +53,7 @@ namespace Scenes.Ingame.Enemy
 
 
 
-        [Header("ƒfƒoƒbƒO‚·‚é‚©‚Ç‚¤‚©")]
+        [Header("ãƒ‡ãƒãƒƒã‚°ã™ã‚‹ã‹ã©ã†ã‹")]
         [SerializeField] private bool _debugMode;
 
 
@@ -80,11 +71,12 @@ namespace Scenes.Ingame.Enemy
         private IntReactiveProperty _horror = new IntReactiveProperty();
         private IntReactiveProperty _atackPower = new IntReactiveProperty();
 
-        private BoolReactiveProperty _isBind = new BoolReactiveProperty(false);//S‘©ó‘Ô‚Å‚ ‚é‚©”Û‚©
+        private BoolReactiveProperty _isBind = new BoolReactiveProperty(false);//æ‹˜æŸçŠ¶æ…‹ã§ã‚ã‚‹ã‹å¦ã‹
+        private FloatReactiveProperty _stiffnessTime = new FloatReactiveProperty(0);//ç¡¬ç›´æ™‚é–“
 
 
-        private bool _isCheckWaterEffect = false;//…‚Ì¶¬‚ª‚³‚ê‚Ä‚¢‚é‚©”Û‚©
-        private bool _isWaterEffectDebuff = false;//…‚Ì¶¬‚ª‚³‚ê‚Ä‚¢‚é‚©”Û‚©
+        private bool _isCheckWaterEffect = false;//æ°´ã®ç”ŸæˆãŒã•ã‚Œã¦ã„ã‚‹ã‹å¦ã‹
+        private bool _isWaterEffectDebuff = false;//æ°´ã®ç”ŸæˆãŒã•ã‚Œã¦ã„ã‚‹ã‹å¦ã‹
 
         public IObservable<int> OnHpChange { get { return _hp; } }
         public IObservable<float> OnPatrollingSpeedChange { get { return _patrollingSpeed; } }
@@ -97,12 +89,15 @@ namespace Scenes.Ingame.Enemy
         public IObservable<EnemyState> OnEnemyStateChange { get { return _enemyState; } }
 
         public IObservable<int> OnHorrorChange { get { return _horror; } }
-        public IObservable<int> OnAtackPowerChange { get { return _atackPower; } }
 
         public IObservable<bool> OnBindChange { get { return _isBind; } }
 
+        public IObservable<float> OnStiffnessTimeChange { get { return _stiffnessTime; } }
 
-        //##########Get‚Æ‚©Set‚Ì‚©‚½‚Ü‚è
+
+
+
+        //##########Getã¨ã‹Setã®ã‹ãŸã¾ã‚Š
         public float ReturnPatrollingSpeed { get { return _patrollingSpeed.Value; } }
         public float ReturnSearchSpeed { get { return _searcSpeed.Value; } }
         public float ReturnChaseSpeed { get { return _chaseSpeed.Value; } }
@@ -115,45 +110,46 @@ namespace Scenes.Ingame.Enemy
         public EnemyState ReturnEnemyState { get { return _enemyState.Value; } }
 
         public int ReturnHorror { get { return _horror.Value; } }
-        public int ReturnAtackPower { get { return _atackPower.Value; } }
         public bool ReturnBind { get { return _isBind.Value; } }
         public bool ReturnWaterEffectDebuff { get { return _isWaterEffectDebuff; } }
+
+        public float GetStiffnessTime { get { return _stiffnessTime.Value; } }
 
 
 
         private NavMeshAgent _myAgent;
 
 
-        //##########UniRx‚É‚©‚©‚í‚ç‚È‚¢•Ï”
+        //##########UniRxã«ã‹ã‹ã‚ã‚‰ãªã„å¤‰æ•°
         private EnemyVisibilityMap _myEnemyVisivilityMap;
 
         /// <summary>
-        /// ‰Šúİ’è‚ğ‚·‚éBŠO•”‚©‚çŒÄ‚Ño‚·‚±‚Æ‚Æ‚·‚é
+        /// åˆæœŸè¨­å®šã‚’ã™ã‚‹ã€‚å¤–éƒ¨ã‹ã‚‰å‘¼ã³å‡ºã™ã“ã¨ã¨ã™ã‚‹
         /// </summary>
-        /// <param name="visivilityMap">‚±‚ÌEnemy‚Ìˆµ‚¤EnemyVisivilityMap</param>
-        /// <returns>³í‚ÉƒZƒbƒgƒAƒbƒv‚Å‚«‚½‚©‚Ç‚¤‚©</returns>
+        /// <param name="visivilityMap">ã“ã®Enemyã®æ‰±ã†EnemyVisivilityMap</param>
+        /// <returns>æ­£å¸¸ã«ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ã§ããŸã‹ã©ã†ã‹</returns>
         public bool Init(EnemyVisibilityMap visivilityMap) {
-            //‰Šú’l‚ğİ’è‚µ‚Ä‚ä‚­
+            //åˆæœŸå€¤ã‚’è¨­å®šã—ã¦ã‚†ã
             ResetStatus();
             
 
-            //©g‚É‚Â‚¢‚Ä‚¢‚éƒƒ\ƒbƒh‚Ì‰Šú‰»
+            //è‡ªèº«ã«ã¤ã„ã¦ã„ã‚‹ãƒ¡ã‚½ãƒƒãƒ‰ã®åˆæœŸåŒ–
             _enemySearch.Init(visivilityMap);
-            _enemyAttack.Init(visivilityMap.DeepCopy());//Atack‚ÍƒT[ƒ`‚ÌŒã‚ÉInit
+            _enemyAttack.Init(visivilityMap.DeepCopy());//Atackã¯ã‚µãƒ¼ãƒã®å¾Œã«Init
             _enemyMove.Init();
             _enemyUniqueAction.Init(_actionCoolTime.Value);
 
-            //Œ‚”j‚³‚ê‚½‚±‚Æ‚ğŒŸo
+            //æ’ƒç ´ã•ã‚ŒãŸã“ã¨ã‚’æ¤œå‡º
             OnHpChange.Where(hp => hp <= 0).Subscribe(hp =>
             {
                 FallBack();
             }).AddTo(this);
 
 
-            //S‘©ó‘Ô‚É‚È‚Á‚½uŠÔE‰ğ‚¯‚½uŠÔ‚É‘¬“x‚ğ•ÏX
+            //æ‹˜æŸçŠ¶æ…‹ã«ãªã£ãŸç¬é–“ãƒ»è§£ã‘ãŸç¬é–“ã«é€Ÿåº¦ã‚’å¤‰æ›´
             _myAgent = GetComponent<NavMeshAgent>();
             OnBindChange
-                .Skip(1)//‰Šú‰»‚Ì‚Í–³‹
+                .Skip(1)//åˆæœŸåŒ–ã®æ™‚ã¯ç„¡è¦–
                 .Subscribe(x =>
                 {
                     if (x) { _searcSpeed.Value = _searchSpeedBase * 0.1f; _patrollingSpeed.Value = _patrollingSpeedBase * 0.1f; _chaseSpeed.Value = _chaseSpeedBase * 0.1f; }
@@ -174,9 +170,9 @@ namespace Scenes.Ingame.Enemy
         }
 
         /*
-         if (x)//S‘©ó‘Ô‚É‚È‚Á‚½uŠÔ
+         if (x)//æ‹˜æŸçŠ¶æ…‹ã«ãªã£ãŸç¬é–“
                         _myAgent.speed *= 0.1f;
-                    else//S‘©ó‘Ô‚ª‰ğ‚¯‚½uŠÔ
+                    else//æ‹˜æŸçŠ¶æ…‹ãŒè§£ã‘ãŸç¬é–“
                         _myAgent.speed *= 10;
          */
 
@@ -185,30 +181,41 @@ namespace Scenes.Ingame.Enemy
         {
             if (_debugMode && Input.GetKey(KeyCode.Z)) { FallBack(); }
 
-            //…‚Ì‰e‹¿‚Å©•ª‚Ì‘¬“x‚ª‰º‚ª‚é‚Ì‚©, ‘«‰¹‚ª‘å‚«‚­‚È‚é‚Ì‚©‚ğŠm”F
+            if (_stiffnessTime.Value > 0) { 
+                _stiffnessTime.Value -= Time.deltaTime;
+                if (_stiffnessTime.Value < 0)
+                {
+                    _stiffnessTime.Value = 0;
+                }
+            }
+
+
+
+            //æ°´ã®å½±éŸ¿ã§è‡ªåˆ†ã®é€Ÿåº¦ãŒä¸‹ãŒã‚‹ã®ã‹, è¶³éŸ³ãŒå¤§ãããªã‚‹ã®ã‹ã‚’ç¢ºèª
             if (_isCheckWaterEffect)
             {
-                if (_flying.Value)//”òãÄó‘Ô‚Ì‚Í‰e‹¿‚ğó‚¯‚È‚¢
+                if (_flying.Value)//é£›ç¿”çŠ¶æ…‹ã®æ™‚ã¯å½±éŸ¿ã‚’å—ã‘ãªã„
                 {
                     _isWaterEffectDebuff = false;
                 }
-                else //”òãÄó‘Ô‚Å‚È‚¢‚Í‰e‹¿‚ğó‚¯‚é
+                else //é£›ç¿”çŠ¶æ…‹ã§ãªã„æ™‚ã¯å½±éŸ¿ã‚’å—ã‘ã‚‹
                 {
                     _isWaterEffectDebuff = true;                   
                 }
 
-                //‘«‰¹‚Ì‘å‚«‚³‚ğ•ÏX
+                //è¶³éŸ³ã®å¤§ãã•ã‚’å¤‰æ›´
                 _audioSource.volume = _footSoundBase * (_isWaterEffectDebuff ? 1.5f : 1);
             }
+
         }
 
         public void SetEnemyState(EnemyState state) {
-            if (_debugMode) { Debug.Log("State•ÏX" + _enemyState.Value); }
+            if (_debugMode) { Debug.Log("Stateå¤‰æ›´" + _enemyState.Value); }
             _enemyState.Value = state;
         }
 
         /// <summary>
-        /// ƒXƒe[ƒ^ƒX‚Ì‚İ‰Šú‰»‚·‚é
+        /// ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã®ã¿åˆæœŸåŒ–ã™ã‚‹
         /// </summary>
         public void ResetStatus() {
             _hp.Value = _hpBase;
@@ -216,7 +223,6 @@ namespace Scenes.Ingame.Enemy
             _searcSpeed.Value = _searchSpeedBase;
             _searcSpeed.Value = _searchSpeedBase;
             _chaseSpeed.Value = _chaseSpeedBase;
-            _atackPower.Value = _atackPowerBase;
             _audiometerPower.Value = _audiometerPowerBase;
             _reactToLight.Value = _reactToLightBase;
             _flying.Value = _flyingBase;
@@ -228,32 +234,32 @@ namespace Scenes.Ingame.Enemy
         }
 
         /// <summary>
-        /// UŒ‚‚ğ‰Á‚¦‚é‚½‚ß‚Ég—p‚·‚é
+        /// æ”»æ’ƒã‚’åŠ ãˆã‚‹ãŸã‚ã«ä½¿ç”¨ã™ã‚‹
         /// </summary>
-        /// <param name="damage">—^‚¦‚éƒ_ƒ[ƒW</param>
+        /// <param name="damage">ä¸ãˆã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸</param>
         public void AddDamage(int damage) {
             _hp.Value -= damage;
         }
 
 
         /// <summary>
-        /// ‘ŞU‚³‚¹‚é‚½‚ß‚Ég—p‚·‚é
+        /// é€€æ•£ã•ã›ã‚‹ãŸã‚ã«ä½¿ç”¨ã™ã‚‹
         /// </summary>
         public void FallBack() { 
-            //‹@”\‚ğ’â~
+            //æ©Ÿèƒ½ã‚’åœæ­¢
             _enemyAttack.enabled = false;
             _enemyMove.enabled = false; 
             _enemySearch.enabled = false;
             _visual.active = false;
             GameObject.Instantiate(_uniqueItem,this.transform.position,Quaternion.identity);
-            Debug.Log(this.gameObject.name + "‘ŞU‚µ‚Ü‚µ‚½I");
+            Debug.Log(this.gameObject.name + "é€€æ•£ã—ã¾ã—ãŸï¼");
             ReMap(this.GetCancellationTokenOnDestroy()).Forget();
         }
 
         /// <summary>
-        /// ƒXƒ^ƒ~ƒi‚Ì’l‚ğ‘‚«Š·‚¦‚é‚Ì‚Ég—p‚·‚é
+        /// ã‚¹ã‚¿ãƒŸãƒŠã®å€¤ã‚’æ›¸ãæ›ãˆã‚‹ã®ã«ä½¿ç”¨ã™ã‚‹
         /// </summary>
-        /// <param name="changeStamina">‘‚«Š·‚¦‚éƒXƒ^ƒ~ƒi‚Ì’l</param>
+        /// <param name="changeStamina">æ›¸ãæ›ãˆã‚‹ã‚¹ã‚¿ãƒŸãƒŠã®å€¤</param>
         public void StaminaChange(int changeStamina) { 
             _stamina.Value = changeStamina;
         }
@@ -261,7 +267,7 @@ namespace Scenes.Ingame.Enemy
         private async Cysharp.Threading.Tasks.UniTaskVoid ReMap(CancellationToken ct)
         {
             await Task.Delay(_fallBackTime,ct);
-            //‹@”\‚ğ’â~
+            //æ©Ÿèƒ½ã‚’åœæ­¢
             _enemyAttack.enabled = true;
             _enemyMove.enabled = true;
             _enemySearch.enabled = true;
@@ -273,24 +279,29 @@ namespace Scenes.Ingame.Enemy
             _isBind.Value = value;
         }
 
+
+        public void ChangeStiffnessTime(float value) { 
+            _stiffnessTime.Value += value;
+            }
+
         /// <summary>
-        /// u…‚Ì¶¬vô•¶‚ÌŒø‰Ê‚ğó‚¯‚é‚©”Û‚©‚ğŒˆ’è‚·‚éŠÖ”
+        /// ã€Œæ°´ã®ç”Ÿæˆã€å‘ªæ–‡ã®åŠ¹æœã‚’å—ã‘ã‚‹ã‹å¦ã‹ã‚’æ±ºå®šã™ã‚‹é–¢æ•°
         /// </summary>
         public void ChangeCheckWaterEffectBool(bool value)
         { 
             _isCheckWaterEffect = value;
             if (_isCheckWaterEffect)
             {
-                if (_flying.Value)//”òãÄó‘Ô‚Ì‚Í‰e‹¿‚ğó‚¯‚È‚¢
+                if (_flying.Value)//é£›ç¿”çŠ¶æ…‹ã®æ™‚ã¯å½±éŸ¿ã‚’å—ã‘ãªã„
                 {
                     _isWaterEffectDebuff = false;
                 }
-                else //”òãÄó‘Ô‚Å‚È‚¢‚Í‰e‹¿‚ğó‚¯‚é
+                else //é£›ç¿”çŠ¶æ…‹ã§ãªã„æ™‚ã¯å½±éŸ¿ã‚’å—ã‘ã‚‹
                 {
                     _isWaterEffectDebuff = true;
                 }
             }
-            else //…‚Ì¶¬‚ªI‚í‚Á‚½‚Æ‚«‚ÉAŠe•Ï”‚ğ‰Šú’l‚É–ß‚·
+            else //æ°´ã®ç”ŸæˆãŒçµ‚ã‚ã£ãŸã¨ãã«ã€å„å¤‰æ•°ã‚’åˆæœŸå€¤ã«æˆ»ã™
             {
                 _isWaterEffectDebuff = false; 
                 _audioSource.volume = _footSoundBase;

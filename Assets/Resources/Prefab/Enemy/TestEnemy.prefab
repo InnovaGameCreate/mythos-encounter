@@ -72,6 +72,8 @@ GameObject:
   - component: {fileID: 5811591338526085470}
   - component: {fileID: -7704791025581564905}
   - component: {fileID: 4646188634127463172}
+  - component: {fileID: 3881673920415878492}
+  - component: {fileID: 3252102760658322517}
   m_Layer: 0
   m_Name: TestEnemy
   m_TagString: Enemy
@@ -109,18 +111,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _checkRate: 0.5
-  _visivilityRange: 25
+  _visivilityRange: 10000
   _blindChaseTime: 10
   _debugMode: 1
-  _attackTime: 5
-  _atackRange: 5
-  canShot: 1
-  _shotTime: 10
-  _shotRange: 15
-  _ballet: {fileID: 2261882221392382239, guid: 39e56c2c101133e4ba9db45ecad211dd, type: 3}
+  _enemyAttackBehaviours:
+  - {fileID: 3881673920415878492}
+  - {fileID: 3252102760658322517}
   _enemyStatus: {fileID: 7000828227398978958}
   _enemySearch: {fileID: 41553992271996288}
-  _myEnemyMove: {fileID: 0}
+  _myEnemyMove: {fileID: 7130656707961021328}
 --- !u!114 &7130656707961021328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,7 +150,7 @@ MonoBehaviour:
   _checkRate: 1
   _debugMode: 0
   _myEneyMove: {fileID: 7130656707961021328}
-  _visivilityRange: 25
+  _visivilityRange: 10000
   _enemyStatus: {fileID: 7000828227398978958}
 --- !u!114 &7000828227398978958
 MonoBehaviour:
@@ -175,7 +174,6 @@ MonoBehaviour:
   _staminaBase: 5
   _actionCoolTimeBase: 20
   _enemyStateBase: 1
-  _atackPowerBase: 10
   _horrorBase: 10
   _uniqueItem: {fileID: 6146547148148849240, guid: 1460fd555e5df4f4ba1ca88617706b73, type: 3}
   _enemyMagics: 
@@ -333,6 +331,40 @@ MonoBehaviour:
   _audioSource: {fileID: -7704791025581564905}
   _slowClips: {fileID: 8300000, guid: adad1fba77f72c246b6a4105da88f4e4, type: 3}
   _fastClips: {fileID: 8300000, guid: 3438abfd7ea396946ba28932cf24ffaa, type: 3}
+--- !u!114 &3881673920415878492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9201936745783884321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9992cc57cd386f4ba479ed49a47ac8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stiffness: 1
+  _range: 5
+  _mass: 1
+  _damage: 5
+  _breedDamage: 5
+--- !u!114 &3252102760658322517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9201936745783884321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fc6e73eff08184b92d3c792c331683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stiffness: 1
+  _range: 1000
+  _mass: 10
+  _bullet: {fileID: 2261882221392382239, guid: af41eff741c24b740a037720d7460db2, type: 3}
+  _hand: {fileID: 8470773532925398790}
 --- !u!1001 &1945881014760464139
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -443,3 +475,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c622677c7034f94b87e93c6e05829d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &8470773532925398790 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7966608104831176717, guid: d70b9fd8b26060c46aa112a5e424b4c1, type: 3}
+  m_PrefabInstance: {fileID: 1945881014760464139}
+  m_PrefabAsset: {fileID: 0}

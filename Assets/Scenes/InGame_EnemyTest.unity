@@ -230,6 +230,16 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!95 &235312118 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 3828261050524690517, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
+  m_PrefabInstance: {fileID: 5737438665223900935}
+  m_PrefabAsset: {fileID: 0}
+--- !u!82 &235312127 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 2478478512199155072, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
+  m_PrefabInstance: {fileID: 5737438665223900935}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &276261833
 GameObject:
   m_ObjectHideFlags: 0
@@ -2664,7 +2674,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1334290844
 Transform:
   m_ObjectHideFlags: 0
@@ -3406,15 +3416,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1614493044594472170, guid: bba2b43ed544a404ba6e0b9ccad16846, type: 3}
       propertyPath: _x
-      value: 8
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 1614493044594472170, guid: bba2b43ed544a404ba6e0b9ccad16846, type: 3}
       propertyPath: _y
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1614493044594472170, guid: bba2b43ed544a404ba6e0b9ccad16846, type: 3}
       propertyPath: _z
-      value: 3
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 1614493044594472170, guid: bba2b43ed544a404ba6e0b9ccad16846, type: 3}
       propertyPath: _range
@@ -3422,7 +3432,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1614493044594472170, guid: bba2b43ed544a404ba6e0b9ccad16846, type: 3}
       propertyPath: _debugMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1614493044594472170, guid: bba2b43ed544a404ba6e0b9ccad16846, type: 3}
       propertyPath: _enemyName
@@ -4468,7 +4478,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 848513832572176275, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 66
+      value: 43.01
       objectReference: {fileID: 0}
     - target: {fileID: 848513832572176275, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4476,7 +4486,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 848513832572176275, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 77.1
+      value: 10.36
       objectReference: {fileID: 0}
     - target: {fileID: 848513832572176275, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4510,6 +4520,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7111757753802298086, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
+      propertyPath: _audio
+      value: 
+      objectReference: {fileID: 235312127}
+    - target: {fileID: 7111757753802298086, guid: 8ee3d27dde194184daa2b5debf51c8db, type: 3}
+      propertyPath: _animator
+      value: 
+      objectReference: {fileID: 235312118}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

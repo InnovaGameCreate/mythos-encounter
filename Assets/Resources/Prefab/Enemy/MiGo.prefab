@@ -17,6 +17,8 @@ GameObject:
   - component: {fileID: 5870517707342100858}
   - component: {fileID: 7796613447862125023}
   - component: {fileID: 6318576627715813200}
+  - component: {fileID: 377333734689836576}
+  - component: {fileID: 4761551339375554962}
   m_Layer: 0
   m_Name: MiGo
   m_TagString: Enemy
@@ -57,15 +59,10 @@ MonoBehaviour:
   _visivilityRange: 40
   _blindChaseTime: 0
   _debugMode: 1
-  _attackTime: 5
-  _atackRange: 5
-  canShot: 1
-  _shotTime: 10
-  _shotRange: 15
-  _ballet: {fileID: 2261882221392382239, guid: 39e56c2c101133e4ba9db45ecad211dd, type: 3}
+  _enemyAttackBehaviours: []
   _enemyStatus: {fileID: 3570193099927935822}
   _enemySearch: {fileID: 5870517707342100858}
-  _myEnemyMove: {fileID: 0}
+  _myEnemyMove: {fileID: 816805753169648624}
 --- !u!114 &816805753169648624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -103,7 +100,6 @@ MonoBehaviour:
   _staminaBase: 5
   _actionCoolTimeBase: 300
   _enemyStateBase: 1
-  _atackPowerBase: 10
   _horrorBase: 10
   _uniqueItem: {fileID: 6146547148148849240, guid: 1460fd555e5df4f4ba1ca88617706b73, type: 3}
   _enemyMagics: 
@@ -279,6 +275,40 @@ MonoBehaviour:
   _audioSource: {fileID: 7796613447862125023}
   _slowClips: {fileID: 8300000, guid: 090a6c8a74424224c91700991ac05cce, type: 3}
   _fastClips: {fileID: 8300000, guid: e11cf42412d13be48a333bcd18c50eb8, type: 3}
+--- !u!114 &377333734689836576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083930819845757192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9992cc57cd386f4ba479ed49a47ac8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stiffness: 3
+  _range: 1
+  _mass: 100
+  _damage: 20
+  _breedDamage: 30
+--- !u!114 &4761551339375554962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2083930819845757192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89fc6e73eff08184b92d3c792c331683, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stiffness: 5
+  _range: 10
+  _mass: 100
+  _bullet: {fileID: 2261882221392382239, guid: af41eff741c24b740a037720d7460db2, type: 3}
+  _hand: {fileID: 4998852644197398608}
 --- !u!1 &2820872689797213259
 GameObject:
   m_ObjectHideFlags: 0
@@ -450,5 +480,10 @@ PrefabInstance:
 --- !u!4 &4995272101854936568 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000013947916488, guid: 606ed14e4b069de4995cd545f44d95b3, type: 3}
+  m_PrefabInstance: {fileID: 4998134116354174256}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &4998852644197398608 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1000013558011232, guid: 606ed14e4b069de4995cd545f44d95b3, type: 3}
   m_PrefabInstance: {fileID: 4998134116354174256}
   m_PrefabAsset: {fileID: 0}

@@ -5,6 +5,7 @@ using UnityEngine;
 using UniRx;
 using System;
 using UnityEngine.AI;
+using Unity.VisualScripting;
 
 namespace Scenes.Ingame.Enemy
 {
@@ -22,20 +23,15 @@ namespace Scenes.Ingame.Enemy
 
 
         private int _horror;
-        private int _attackPower;
-
-        [Header("Horror,AttackPowerを除く攻撃性能")]
-        [SerializeField][Tooltip("攻撃の間隔")] private float _attackTime;
-        [SerializeField][Tooltip("近接攻撃の射程")] private float _atackRange;
-        [SerializeField][Tooltip("遠隔攻撃が可能かどうか")] private bool canShot;
-        //[SerializeField][Tooltip("遠隔攻撃の攻撃力")] private int _shotPower;
-        [SerializeField][Tooltip("遠隔攻撃の間隔")] private float _shotTime;
-        [SerializeField][Tooltip("遠隔攻撃の射程")] private float _shotRange;
-        [SerializeField][Tooltip("弾丸")] private GameObject _ballet;
 
 
 
-
+        [Header("攻撃動作")]
+        [SerializeField][Tooltip("攻撃スクリプトたち、射程の短いものから長いものの順番で入れてください")] private List<EnemyAttackBehaviour> _enemyAttackBehaviours;
+        //private float _massSUM;
+        private float _atackRange;//最も射程の長い攻撃
+        private float _massSUM;//使用可能な攻撃の重み付け
+        
 
 
 
@@ -64,7 +60,6 @@ namespace Scenes.Ingame.Enemy
         public void Init(EnemyVisibilityMap setVisivilityMap) {
             _myVisivilityMap = setVisivilityMap;
             _horror = _enemyStatus.ReturnHorror;
-            _attackPower = _enemyStatus.ReturnAtackPower;
             _audiomaterPower = _enemyStatus.ReturnAudiomaterPower;
 
             _player = GameObject.FindWithTag("Player");
@@ -84,6 +79,13 @@ namespace Scenes.Ingame.Enemy
                 } 
             }).AddTo(this);
 
+
+            /*
+             #####################射程順に並び変える
+             */
+            _atackRange = _enemyAttackBehaviours[_enemyAttackBehaviours.Count -1].GetRange();
+
+
             if(_debugMode)_playerStatus.OnEnemyAttackedMe.Subscribe(_ => Debug.Log("攻撃された"));
 
         }
@@ -94,10 +96,6 @@ namespace Scenes.Ingame.Enemy
             float _playerDistance;
             if (_enemyStatus.ReturnEnemyState == EnemyState.Chase || _enemyStatus.ReturnEnemyState == EnemyState.Attack)
             { //追跡状態または攻撃状態の場合
-
-                //いろいろ数える
-                if (_attackTimeCount < _attackTime) { _attackTimeCount += Time.deltaTime; }
-                if (_shotTimeCount < _shotTime) { _shotTimeCount += Time.deltaTime; }
 
                 //定期的に状態を変更
                 _checkTimeCount += Time.deltaTime;
@@ -116,37 +114,40 @@ namespace Scenes.Ingame.Enemy
                             _blindChaseTimeCount = 0;//見えたのであきらめるまでのカウントはリセット
                                                      //移動目標をプレイヤーの座標にする
                             _myEnemyMove.SetMovePosition(_player.transform.position);
-                            if (_playerDistance < _atackRange)//近接攻撃の射程内か確認する
-                            { //近接攻撃をする
-                                _enemyStatus.SetEnemyState(EnemyState.Attack);
-                                if (_attackTimeCount > _attackTime)
-                                {
-                                    _attackTimeCount = 0;
-                                    _shotTimeCount = 0;//遠隔から近接の距離に入った瞬間2連続で攻撃が行われないために両方のカウントを0にしている。
-                                    if (_debugMode) Debug.Log("ここで近接攻撃！");
-                                    _playerStatus.ChangeHealth(_attackPower, "Damage");
-                                    _playerStatus.OnEnemyAttackedMeEvent.OnNext(Unit.Default);
 
+
+                            if (_atackRange > _playerDistance && _enemyStatus.GetStiffnessTime <= 0) 
+                            { //攻撃可能であれば
+                                _enemyStatus.SetEnemyState(EnemyState.Attack);
+
+                                _massSUM = 0;
+                                for (int i = 0;i < _enemyAttackBehaviours.Count;i++) {
+                                    if (_enemyAttackBehaviours[i].GetRange() > _playerDistance) 
+                                    {
+                                        _massSUM += _enemyAttackBehaviours[i].GetMass();
+                                    }
+                                }
+                                float _pickNum = UnityEngine.Random.RandomRange(0f, _massSUM);
+                                for (int i = 0; i < _enemyAttackBehaviours.Count; i++)
+                                {
+                                    _massSUM -= _enemyAttackBehaviours[i].GetMass();
+                                    if (_massSUM <= _pickNum)
+                                    {
+                                        _enemyAttackBehaviours[i].Behaviour(_playerStatus);
+                                        _enemyStatus.ChangeStiffnessTime(_enemyAttackBehaviours[i].GetStiffness());
+                                        break;
+                                    }
                                 }
 
 
-                            }
-                            else if (_playerDistance < _shotRange) //遠隔攻撃の射程内か確認する
-                            { //遠隔攻撃をする
-                                _enemyStatus.SetEnemyState(EnemyState.Attack);
-                                if (_shotTimeCount > _shotTime)
-                                {
-                                    _attackTimeCount = 0;
-                                    _shotTimeCount = 0;
-                                    if (_debugMode) Debug.Log("ここで遠隔攻撃！");
-                                    GameObject.Instantiate(_ballet, this.transform.position + new Vector3(0,2,0) + this.transform.forward, Quaternion.identity);
-                                }
 
 
                             }
                             else
                             {//攻撃できないなら追いかける
                                 _enemyStatus.SetEnemyState(EnemyState.Chase);
+                                _massSUM = 0;
+
                             }
                         }
                     }
