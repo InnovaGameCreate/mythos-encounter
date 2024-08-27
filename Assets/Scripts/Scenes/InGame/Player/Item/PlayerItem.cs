@@ -44,6 +44,7 @@ namespace Scenes.Ingame.Player
         private ReactiveCollection<ItemSlotStruct> _itemSlot = new ReactiveCollection<ItemSlotStruct>();//現在所持しているアイテムのリスト
 
         [SerializeField] private GameObject _spotLight;//Cameraに付属しているスポットライト
+        [SerializeField] private GameObject _compass;//Cameraに付属しているコンパス
 
         //アイテムデバッグ用
         [SerializeField] private GameObject _itemForDebug;
@@ -375,6 +376,12 @@ namespace Scenes.Ingame.Player
         public void ChangeSwitchHandLight(HandLightState state)
         {
             _switchHandLight[_nowIndex.Value] = state;
+        }
+
+        //コンパスを持つかどうか切り替える関数
+        public void ActiveCompass(bool value)
+        {
+            _compass.SetActive(value);
         }
     }
 }
