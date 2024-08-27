@@ -707,6 +707,8 @@ MonoBehaviour:
   _runVolumeBase: 25
   _health:
     value: 0
+  _bleedingHealth:
+    value: 0
   _stamina:
     value: 0
   _san:
@@ -1199,7 +1201,7 @@ MonoBehaviour:
   m_PivotOffset: {x: 0, y: 0, z: 0}
   m_AmplitudeGain: 1
   m_FrequencyGain: 0.8
-  mNoiseOffsets: {x: 0, y: 0, z: 0}
+  mNoiseOffsets: {x: -510.5193, y: -675.5669, z: 695.34515}
 --- !u!1 &4264882872331354849
 GameObject:
   m_ObjectHideFlags: 0
@@ -1622,7 +1624,7 @@ MonoBehaviour:
   m_PivotOffset: {x: 0, y: 0, z: 0}
   m_AmplitudeGain: 1
   m_FrequencyGain: 1
-  mNoiseOffsets: {x: 0, y: 0, z: 0}
+  mNoiseOffsets: {x: 241.07825, y: -791.76355, z: -832.06433}
 --- !u!1 &7845582878029475925
 GameObject:
   m_ObjectHideFlags: 0

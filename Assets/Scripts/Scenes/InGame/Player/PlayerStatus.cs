@@ -31,6 +31,7 @@ namespace Scenes.Ingame.Player
         //現在のステータスの変数（今後ネットワーク化予定）
         //初期化についても今後はデータベースを参照して行うようにする。
         [SerializeField] private IntReactiveProperty _health = new IntReactiveProperty();//HP.ゼロになると死亡
+        [SerializeField] private IntReactiveProperty _bleedingHealth = new IntReactiveProperty();//出血処理用HP
         [SerializeField] private IntReactiveProperty _stamina = new IntReactiveProperty();//スタミナ
         [SerializeField] private IntReactiveProperty _san = new IntReactiveProperty();//SAN値
         [SerializeField] private IntReactiveProperty _speed = new IntReactiveProperty();//移動速度の基準値
@@ -61,6 +62,7 @@ namespace Scenes.Ingame.Player
 
         //それぞれの購読側を公開する。他のClassでSubscribeできる。
         public IObservable<int> OnPlayerHealthChange { get { return _health; } }//_health(体力)が変化した際にイベントが発行
+        public IObservable<int> OnPlayerBleedingHealthChange { get { return _bleedingHealth; } }//_bleedinghealthが変化した際にイベントが発行
         public IObservable<int> OnPlayerStaminaChange { get { return _stamina; } }//_stamina(スタミナ)が変化した際にイベントが発行
         public IObservable<int> OnPlayerSanValueChange { get { return _san; } }//_san(SAN値)が変化した際にイベントが発行
         public IObservable<int> OnPlayerSpeedChange { get { return _speed; } }//_speed(移動速度の基準値)が変化した際にイベントが発行
@@ -104,7 +106,7 @@ namespace Scenes.Ingame.Player
 
         [HideInInspector] public int lastHP;//HPの変動前の数値を記録。比較に用いる
         [HideInInspector] public int lastSanValue;//SAN値の変動前の数値を記録。比較に用いる
-        [HideInInspector] public int bleedingDamage = 1;//出血時に受けるダメージ
+        [HideInInspector] public int bleedingDamage = 10;//出血時に受けるダメージ
 
         private bool _isUseItem = false;
         private bool _isUseMagic = false;
@@ -123,6 +125,7 @@ namespace Scenes.Ingame.Player
         private void Init()
         {
             _health.Value = _healthBase;
+            _bleedingHealth.Value = _healthBase;
             _stamina.Value = _staminaBase;
             _san.Value = _sanBase;
             _speed.Value = _speedBase;
@@ -133,6 +136,7 @@ namespace Scenes.Ingame.Player
 
             lastHP = 100;
             lastSanValue = 100;
+            bleedingDamage = 10;
         }
         // Start is called before the first frame update
         void Awake()
@@ -177,8 +181,6 @@ namespace Scenes.Ingame.Player
             {
                 _enemyAttackedMe.OnNext(default);
             }
-
-
 #endif           
 
             //死亡時に当たり判定を死体と同じ場所に動かす
@@ -214,13 +216,14 @@ namespace Scenes.Ingame.Player
         /// 体力を変更させるための関数
         /// </summary>
         /// <param name="value">変更量</param>
-        /// <param name="mode">Heal(回復), Damage(減少)の二つのみ</param>
+        /// <param name="mode">Heal(回復), Damage(減少),Bleeding(出血)の三つのみ</param>
         public void ChangeHealth(int value, string mode)
         {
             if (mode == "Heal")
             {
-                _health.Value = Mathf.Min(100, _health.Value + value);
                 lastHP = _health.Value;
+                _health.Value = Mathf.Min(100, _health.Value + value);
+                _bleedingHealth.Value = Mathf.Min(100, _bleedingHealth.Value + value);
             }
             else if (mode == "Damage")
             {
@@ -230,23 +233,29 @@ namespace Scenes.Ingame.Player
                     Debug.Log("呪文によりダメージが無効化されました。");
                     return;
                 }
-
-                _health.Value = Mathf.Max(0, _health.Value - value);
                 lastHP = _health.Value;
+                _health.Value = Mathf.Max(0, _health.Value - value);
+                _bleedingHealth.Value = Mathf.Max(0, _bleedingHealth.Value - value);
+            }
+            else if (mode == "Bleeding")
+            {
+                lastHP = _health.Value;
+                _health.Value = Mathf.Max(0, _health.Value - value);
             }
         }
 
         /// <summary>
         /// 体力を変更させるための関数(最大体力の比率を用いて計算する用)
         /// </summary>
-        /// <param name="value">変更量（比率）</param>
-        /// <param name="mode">Heal(回復), Damage(減少)の二つのみ</param>
+        /// <param name="value">変更量</param>
+        /// <param name="mode">Heal(回復), Damage(減少),Bleeding(出血)の三つのみ</param>
         public void ChangeHealth(float value, string mode)
         {
             if (mode == "Heal")
             {
-                _health.Value = Mathf.Min(100, _health.Value + (int)(_healthBase * value));
                 lastHP = _health.Value;
+                _health.Value = Mathf.Min(100, _health.Value + (int)(_healthBase * value));
+                _bleedingHealth.Value = Mathf.Min(100, _bleedingHealth.Value + (int)(_healthBase * value));
             }
             else if (mode == "Damage")
             {
@@ -256,10 +265,25 @@ namespace Scenes.Ingame.Player
                     Debug.Log("呪文によりダメージが無効化されました。");
                     return;
                 }
-
-                _health.Value = Mathf.Max(0, _health.Value - (int)(_healthBase * value));
                 lastHP = _health.Value;
+                _health.Value = Mathf.Max(0, _health.Value - (int)(_healthBase * value));
+                _bleedingHealth.Value = Mathf.Max(0, _bleedingHealth.Value - (int)(_healthBase * value));
             }
+            else if (mode == "Bleeding")
+            {
+                lastHP = _health.Value;
+                _health.Value = Mathf.Max(0, _health.Value - (int)(_healthBase * value));
+            }
+        }
+
+
+        /// <summary>
+        /// 出血処理用体力を変更させるための関数
+        /// </summary>
+        /// <param name="value">変更量</param>
+        public void ChangeBleedingHealth(int value)
+        {
+            _bleedingHealth.Value = Mathf.Max(0, _bleedingHealth.Value - value);
         }
 
         /// <summary>
@@ -388,17 +412,24 @@ namespace Scenes.Ingame.Player
         /// <returns></returns>
         private IEnumerator Bleeding(int damage)
         {
-            while (true)
+            ChangeBleedingHealth(damage *(_isPulsationBleeding ? 2 : 1));
+            for (int i = 0; i < damage; i++)
             {
-                yield return new WaitForSeconds(1.0f);
                 if (_bleeding.Value)
                 {
-                    ChangeHealth(damage * (_isPulsationBleeding ? 2 : 1), "Damage");
+                    ChangeHealth((_isPulsationBleeding ? 2 : 1), "Bleeding");
                     Debug.Log("出血ダメージが入りました。");
+
+                    if (i == damage - 1)//最後の出血処理の後、すぐに出血Boolをfalseを変更させるため
+                        break;
                 }
                 else
-                    yield break;
+                    break;
+
+                yield return new WaitForSeconds(1.0f);
             }
+                ChangeBleedingBool(false);
+                yield break;
         }
 
         /// <summary>
