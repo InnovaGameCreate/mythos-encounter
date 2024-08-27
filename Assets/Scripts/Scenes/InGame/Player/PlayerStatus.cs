@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using System;
+using UnityEngine.Rendering.HighDefinition;
+using Scenes.Ingame.InGameSystem.UI;
 
 /// <summary>
 /// プレイヤーのステータスを管理するクラス
@@ -42,7 +44,18 @@ namespace Scenes.Ingame.Player
         [SerializeField] private FloatReactiveProperty _walkVolume = new FloatReactiveProperty();//しゃがみ時の音量
         [SerializeField] private FloatReactiveProperty _runVolume = new FloatReactiveProperty();//しゃがみ時の音量
 
+        [Header("必要なコンポーネント")]
+        [SerializeField] private Animator _anim;
+        [SerializeField] private CharacterController _controller;
+        [SerializeField] private CapsuleCollider _cupsuleCollider;
+        [SerializeField] private PlayerMagic _playerMagic;
+        [SerializeField] private PlayerItem _playerItem;
+
         private Subject<float> castEvent = new Subject<float>();//呪文の詠唱時間を発行
+        private Subject<Unit> cancelCastEvent = new Subject<Unit>();//呪文の詠唱をキャンセルされた際のイベント
+        public IObserver<float> OnCastEventCall { get { return castEvent; } }//別のスクリプトから呪文の詠唱時間イベントのOnNextを飛ばせるようにする
+        
+
 
         //その他のSubject
         private Subject<Unit> _enemyAttackedMe = new Subject<Unit>();//敵から攻撃を食らったときのイベント
@@ -65,16 +78,22 @@ namespace Scenes.Ingame.Player
         public IObservable<Unit> OnEnemyAttackedMe { get { return _enemyAttackedMe; } }//敵から攻撃を受けた際のイベントを登録させる
         public IObserver<Unit> OnEnemyAttackedMeEvent { get { return _enemyAttackedMe; } }//敵から攻撃を受けた際にイベントが発行
 
-        public IObservable<float> OnCastEvente { get { return castEvent; } }//敵から攻撃を受けた際にイベントが発行
-        
+        public IObservable<float> OnCastEvent { get { return castEvent; } }//呪文詠唱を始めた際に呼ばれるイベント
+        public IObservable<Unit> OnCancelCastEvent { get { return cancelCastEvent; } }//敵から攻撃を受けた際のイベントを登録させる
+        public IObserver<Unit> OnCancelCastEventCall { get { return cancelCastEvent; } }//敵から攻撃を受けた際にイベントが発行
+
         //一部情報の開示
         public int playerID { get { return _playerID; } }
+        public int health_max { get { return _healthBase; } }
+        public int nowPlayerHealth { get { return _health.Value; } }
         public int stamina_max { get { return _staminaBase; } }
         public int nowStaminaValue { get { return _stamina.Value; } }
         public int nowPlayerSanValue { get { return _san.Value; } }
         public int nowPlayerSpeed { get { return _speed.Value; } }
 
         public bool nowBleedingValue { get { return _bleeding.Value; } }
+        public bool nowPlayerSurvive { get { return _survive.Value; } }
+
         public PlayerActionState nowPlayerActionState { get { return _playerActionState.Value; } }
         public float nowPlayerLightRange { get { return _lightrange.Value; } }
         public float nowPlayerSneakVolume { get { return _sneakVolume.Value; } }
@@ -82,15 +101,26 @@ namespace Scenes.Ingame.Player
         public float nowPlayerRunVolume { get { return _runVolume.Value; } }
 
         public bool nowPlayerUseMagic { get { return _isUseMagic; } }
+        public bool nowReviveAnimationDoing { get { return _startReviveAnimation; } }
 
-        public int lastHP;//HPの変動前の数値を記録。比較に用いる
-        public int lastSanValue;//SAN値の変動前の数値を記録。比較に用いる
+
+        [HideInInspector] public int lastHP;//HPの変動前の数値を記録。比較に用いる
+        [HideInInspector] public int lastSanValue;//SAN値の変動前の数値を記録。比較に用いる
         public int bleedingDamage = 10;//出血時に受けるダメージ
+
         private bool _isUseItem = false;
         private bool _isUseMagic = false;
         private bool _isHaveCharm = false;
+        private bool _isProtect = false;//バリア呪文でダメージを防ぐか否か
         private bool _isUseEscapePoint = false;
         private bool _isPulsationBleeding = false;
+
+        //アニメーション関連の変数
+        private int _deathEventCount = 0;//死亡アニメーションのイベント回数確認用
+        private bool _startReviveAnimation = false;//蘇生アニメーションが始まったか否か
+
+        private bool _startDeathAnimation = false;//死亡アニメーションが始まったか否か
+        private bool _isBuffedAdrenaline = false;
 
         private void Init()
         {
@@ -112,12 +142,20 @@ namespace Scenes.Ingame.Player
         {
             //初期化
             Init();
-            _health.Subscribe(x => CheckHealth(x, _playerID));//体力が変化したときにゲーム内で変更を加える
-            _stamina.Subscribe(x => CheckStamina(x, _playerID));//スタミナが変化したときにゲーム内で変更を加える
-            _san.Subscribe(x => CheckSanValue(x, _playerID));//SAN値が変化したときにゲーム内で変更を加える
+            _health.Subscribe(x => CheckHealth(x, _playerID)).AddTo(this);//体力が変化したときにゲーム内で変更を加える
+            _stamina.Subscribe(x => CheckStamina(x, _playerID)).AddTo(this);//スタミナが変化したときにゲーム内で変更を加える
+            _san.Subscribe(x => CheckSanValue(x, _playerID)).AddTo(this);//SAN値が変化したときにゲーム内で変更を加える
             _bleeding.
                 Where(x => x == true).
-                Subscribe(_ => StartCoroutine(Bleeding(bleedingDamage)));//出血状態になったときに出血処理を開始
+                Subscribe(_ => StartCoroutine(Bleeding(bleedingDamage))).AddTo(this);//出血状態になったときに出血処理を開始
+
+            OnEnemyAttackedMe
+                .Where(_ => _isUseMagic)
+                .Subscribe(x => cancelCastEvent.OnNext(default)).AddTo(this);//攻撃を受けた際に呪文の詠唱時間UIを非表示にする
+
+            _survive
+                .Skip(1)
+                .Subscribe(x => CheckSurvive(x)).AddTo(this);
         }
 
         // Update is called once per frame
@@ -142,7 +180,35 @@ namespace Scenes.Ingame.Player
             {
                 _enemyAttackedMe.OnNext(default);
             }
-#endif
+#endif           
+
+            //死亡時に当たり判定を死体と同じ場所に動かす
+            //Todo:蘇生時に当たり判定を体と同じ場所に動かす（今後実装）
+            if (_startDeathAnimation || _startReviveAnimation)
+            {               
+                _cupsuleCollider.height = _anim.GetFloat("ColliderHeight");//　コライダの高さの調整       
+                _cupsuleCollider.center = new Vector3(_cupsuleCollider.center.x, _anim.GetFloat("ColliderCenterY"), _cupsuleCollider.center.z);//　コライダの中心位置の調整
+
+                //　コライダの半径の調整
+                _cupsuleCollider.radius = _anim.GetFloat("ColliderRadius");
+
+                //CharacterControllerのコライダー半径の変更（死亡時のアバターの壁埋まり防止のため）
+                if(_startDeathAnimation && !_startReviveAnimation)//死亡時
+                    _controller.radius = 1.2f;
+                else if(!_startDeathAnimation && _startReviveAnimation)//蘇生時
+                    _controller.radius = 0.4f;
+
+
+                //　コライダの向きの調整
+                if (_anim.GetFloat("ColliderDirection") >= 1.0f)
+                {
+                    _cupsuleCollider.direction = 2;//Z軸方向の向きに変化
+                }
+                else
+                {
+                    _cupsuleCollider.direction = 1;//Y軸方向の向きに変化
+                }
+            }
         }
 
         /// <summary>
@@ -160,15 +226,23 @@ namespace Scenes.Ingame.Player
             }
             else if (mode == "Damage")
             {
+                if (_isProtect)
+                {
+                    _isProtect = false;
+                    Debug.Log("呪文によりダメージが無効化されました。");
+                    return;
+                }
                 lastHP = _health.Value;
                 _health.Value = Mathf.Max(0, _health.Value - value);
                 _bleedingHealth.Value = Mathf.Max(0, _bleedingHealth.Value - value);
             }
             else if (mode == "Bleeding")
             {
+                lastHP = _health.Value;
                 _health.Value = Mathf.Max(0, _health.Value - value);
             }
         }
+
 
         /// <summary>
         /// 出血処理用体力を変更させるための関数
@@ -189,7 +263,7 @@ namespace Scenes.Ingame.Player
             if (mode == "Heal")
                 _stamina.Value = Mathf.Min(100, _stamina.Value + value);
             else if (mode == "Damage")
-                _stamina.Value = Mathf.Max(0, _stamina.Value - value);
+                _stamina.Value = Mathf.Max(0, _stamina.Value - (int)(value * (_isBuffedAdrenaline ? 0.5f : 1)));
         }
 
         /// <summary>
@@ -246,6 +320,16 @@ namespace Scenes.Ingame.Player
         {
             _isHaveCharm = value;
         }
+
+        /// <summary>
+        /// バリア呪文を使ったときに_isProtectをtrueにさせる関数
+        /// </summary>
+        /// <param name="value"></param>
+        public void UseProtectMagic(bool value)
+        { 
+            _isProtect = value;
+        }
+
         /// <summary>
         /// 呪文を唱えているか管理するための関数
         /// </summary>
@@ -282,6 +366,13 @@ namespace Scenes.Ingame.Player
             _playerActionState.Value = state;
         }
 
+        public void ReviveCharacter()
+        {
+            Debug.Log("ReviveCharacter起動");
+            _survive.Value = true;
+            ChangeHealth(50, "Heal");
+        }
+
         /// <summary>
         /// 出血状態の処理を行う関数。
         /// </summary>
@@ -315,6 +406,13 @@ namespace Scenes.Ingame.Player
 
             if (health <= 0)
                 _survive.Value = false;
+
+            if(lastHP >= 0 && health < 0)
+            {
+                _survive.Value = true;
+            }
+
+
         }
 
         /// <summary>
@@ -338,6 +436,98 @@ namespace Scenes.Ingame.Player
             if (sanValue <= 0)
                 _survive.Value = false;
         }
+
+
+        /// <summary>
+        /// 生死状態の変更時に処理を行う
+        /// </summary>
+        /// <param name="isSurvive">生きているか否か</param>
+        private void CheckSurvive(bool isSurvive)
+        {
+            Debug.Log("CheckSurvive起動");
+            if (isSurvive)//生き返ったとき
+            {
+                //今後蘇生関連の仕様が上がったら処理を実行させる
+                _anim.SetBool("Survive", true);               
+                _playerItem.ChangeCanUseItem(true);
+                if (!_playerMagic.GetUsedMagicBool())
+                {
+                    _playerMagic.ChangeCanUseMagicBool(true);
+                }
+
+                _deathEventCount = 0;
+                _startReviveAnimation = true;
+            }
+            else //死んだとき
+            {
+                //死因に応じて死亡時アニメーションを変える
+                if (_health.Value <= 0)//体力が0で死んだとき
+                { 
+                
+                }
+                else if(_san.Value <= 0)//SAN値が0で死んだとき
+                {
+                     
+                }
+                _anim.SetBool("Survive", false);
+                _anim.SetBool("FinishRevive", false);
+                _playerMagic.ChangeCanUseMagicBool(false);
+                _playerItem.ChangeCanUseItem(false);
+                _deathEventCount = 0;
+            }
+        }
+
+        /// <summary>
+        /// アニメーションイベント。死亡時に実行
+        /// </summary>
+        private void DeathAnimationBoolChange()
+        {
+            _deathEventCount += 1;
+            _startDeathAnimation = true;
+
+            if (_deathEventCount == 2)//2回目のイベント時のみ実行
+            {
+                _startDeathAnimation = !_startDeathAnimation;
+                _playerItem.CheckHaveDoll();
+            }
+
+        }
+
+        /// <summary>
+        /// 蘇生アニメーションが終了したことを知らせる関数
+        /// </summary>
+        private void FinishReviveAnimation()
+        {
+            _anim.SetBool("FinishRevive", true);
+            _startReviveAnimation = false;
+        }
+
+        public void StartBuff()
+        {
+            StartCoroutine(BuffAdrenaline());
+        }
+        
+        /// <summary>
+        /// アドレナリン上昇状態を変化させるための関数
+        /// </summary>
+        public IEnumerator BuffAdrenaline()
+        {
+            _isBuffedAdrenaline = true;
+            yield return new WaitForSeconds(15.0f);
+            _isBuffedAdrenaline = false;
+            yield break;
+        }
+
+
+        /// <summary>
+        /// 光の距離を変化させる関数
+        /// </summary>
+        /// <param name="extendLightRange"></param>光の距離の伸ばすか否か判定する変数
+        public void ChangeLightRange(bool extendLightRange)
+        {
+            _lightrange.Value = (extendLightRange ? 80 : 20);
+        }
+
     }
 }
 

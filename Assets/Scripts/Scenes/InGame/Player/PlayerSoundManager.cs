@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 
 namespace Scenes.Ingame.Player
 {
@@ -11,6 +10,8 @@ namespace Scenes.Ingame.Player
     /// </summary>
     public class PlayerSoundManager : MonoBehaviour
     {
+        [SerializeField] private Animator _animator;
+
         [SerializeField] private AudioSource _audio;
         [SerializeField] private AudioClip[] _footClips;//足音のClip
         [SerializeField] private AudioClip[] _screamClips;//悲鳴のClip
@@ -21,7 +22,7 @@ namespace Scenes.Ingame.Player
         // Start is called before the first frame update
         void Start()
         {
-            _myPlayerStatus = GetComponent<PlayerStatus>();
+            TryGetComponent<PlayerStatus>(out _myPlayerStatus);
         }
 
         public void StopSound()
@@ -30,55 +31,6 @@ namespace Scenes.Ingame.Player
             _audio.Stop();
         }
 
-
-        /// <summary>
-        /// 現在設定しているClipの長さ（秒数）を取得する関数
-        /// </summary>
-        /// <returns></returns>
-        public float GetClipLength()
-        {
-            //足が動く速さが変化する状態の時
-            if (_myPlayerStatus.nowPlayerActionState == PlayerActionState.Walk || _myPlayerStatus.nowPlayerActionState == PlayerActionState.Dash ||
-                _myPlayerStatus.nowPlayerActionState == PlayerActionState.Sneak)
-            {
-                return _audio.clip.length;
-            }
-            else
-                return 0;
-        }
-        /// <summary>
-        /// 足音を鳴らすための関数
-        /// </summary>
-        /// <param name="state"></param>
-        public void FootSound(PlayerActionState state)
-        {
-            _audio.loop = true;
-            switch (state)
-            {
-                case PlayerActionState.Idle:
-                    _audio.loop = false;
-                    _audio.DOFade(endValue: 0f, duration: 0.2f);
-                    break;
-                case PlayerActionState.Walk:
-                    _audio.DOKill();
-                    _audio.volume = 0.5f;
-                    _audio.clip = _footClips[0];
-                    _audio.Play();
-                    break;
-                case PlayerActionState.Dash:
-                    _audio.DOKill();
-                    _audio.volume = 0.75f;
-                    _audio.clip = _footClips[1];
-                    _audio.Play();
-                    break;
-                case PlayerActionState.Sneak:
-                    _audio.DOKill();
-                    _audio.volume = 0.1f;
-                    _audio.clip = _footClips[2];
-                    _audio.Play();
-                    break;
-            }            
-        }
 
         /// <summary>
         /// Scream.Csにて、人が叫ぶ時の効果音を発生させる関数。
@@ -97,6 +49,75 @@ namespace Scenes.Ingame.Player
                 _audio.PlayOneShot(_screamClips[1]);
             }
         }
+
+        /*
+         プレイヤーの足音（アニメーションイベント）
+         */
+        private void SneakingFootSound()
+        {
+            if (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Sneak)
+                return;
+
+            _audio.volume = 0.1f;
+            _audio.PlayOneShot(_footClips[0]);
+
+        }
+
+        /// <summary>
+        /// 歩行時の足音を鳴らす関数
+        /// </summary>
+        /// <param name="footInfo">足の順番と音を鳴らす処理を無視するか否か（重複対策）</param>
+        private void WalkingFootSound(string footInfo)
+        {
+            if (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Walk)
+                return;
+
+
+            _audio.volume = 0.5f;
+            //アニメーション中のイベントの順番に応じて足音を変える
+            //左足→右足
+            if (footInfo == "LeftFoot")//左
+            {
+                _audio.PlayOneShot(_footClips[1]);
+            }
+            else if (footInfo == "LeftFootIgnore")
+            {
+                if(_animator.GetFloat("Direction") == 0 || _animator.GetFloat("Direction") == 0.25 || _animator.GetFloat("Direction") == 0.5 || _animator.GetFloat("Direction") == 0.75)
+                    _audio.PlayOneShot(_footClips[1]);
+                else
+                    return;
+            }
+            else if (footInfo == "RightFoot")//右
+            {
+                _audio.PlayOneShot(_footClips[2]);
+            }
+            else if (footInfo == "RightFootIgnore")
+            {
+                if (_animator.GetFloat("Direction") == 0 || _animator.GetFloat("Direction") == 0.25 || _animator.GetFloat("Direction") == 0.5 || _animator.GetFloat("Direction") == 0.75)
+                    _audio.PlayOneShot(_footClips[2]);
+                else
+                    return;
+            }
+        }
+
+        private void RunningFootSound(int order)
+        {
+            if (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Dash)
+                return;
+
+            _audio.volume = 0.75f;
+            //アニメーション中のイベントの順番に応じて足音を変える
+            //左足→右足
+            if (order == 0)//左
+            {
+                _audio.PlayOneShot(_footClips[3]);
+            }
+            else//右
+            {
+                _audio.PlayOneShot(_footClips[4]);
+            }
+        }
+
     }
 }
 

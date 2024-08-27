@@ -9,6 +9,7 @@ TagManager:
   - ItemSpawnPoint
   - EscapePoint
   - StageIntract
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - 
   - 
   - MapOnly
-  - 
+  - Forefront
   - 
   - 
   - 

@@ -68,3 +68,8 @@ Request Changeを貰ったら内容に沿って修正を行なってください
 - Monster Underwater 01
 - Monster Underwater 04（Animationは01と共用）
 - ModularCreepyAbandonedHospital
+- Giant Monster Model - Golem
+
+## 外部リソース
+### 効果音関連
+- 効果音ラボ

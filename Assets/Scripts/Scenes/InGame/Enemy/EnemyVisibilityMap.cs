@@ -1,12 +1,8 @@
 using Scenes.Ingame.Stage;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Burst.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEditor.Progress;
 using System.Runtime.InteropServices;
-using UnityEngine.UIElements;
 
 
 namespace Scenes.Ingame.Enemy
@@ -823,6 +819,49 @@ namespace Scenes.Ingame.Enemy
             gridPositionY = (byte)Mathf.FloorToInt((float)(position.y - centerPosition.y + 0.5 * gridRange) / gridRange);
             gridPositionZ = (byte)Mathf.FloorToInt((float)(position.z - centerPosition.z + 0.5 * gridRange) / gridRange);
             newVisivilityArea = ToVisivilityArea(num, visivilityAreaGrid[gridPositionX][gridPositionY][gridPositionZ].canVisivleAreaPosition);
+            visivilityAreaGrid[gridPositionX][gridPositionY][gridPositionZ] = newVisivilityArea;
+        }
+
+        public void ChangeGridWatchNum(Vector3 position, byte num,bool plus) {
+            VisivilityArea newVisivilityArea;
+            if (!(position.x < centerPosition.x + (visivilityAreaGrid.Count - 0.5) * gridRange) && (centerPosition.x - 0.5 * gridRange < position.x))
+            {
+                Debug.LogError("Position.xが範囲外です");
+            }
+            if (!(position.y < centerPosition.y + (visivilityAreaGrid[0].Count - 0.5) * gridRange) && (centerPosition.y - 0.5 * gridRange < position.x))
+            {
+                Debug.LogError("positionYが範囲外です");
+            }
+            if (!(position.z < centerPosition.z + (visivilityAreaGrid[0][0].Count - 0.5) * gridRange) && (centerPosition.z - 0.5 * gridRange < position.z))
+            {
+                Debug.LogError("Position.zが範囲外です");
+            }
+            byte gridPositionX, gridPositionY, gridPositionZ;
+            gridPositionX = (byte)Mathf.FloorToInt((float)(position.x - centerPosition.x + 0.5 * gridRange) / gridRange);
+            gridPositionY = (byte)Mathf.FloorToInt((float)(position.y - centerPosition.y + 0.5 * gridRange) / gridRange);
+            gridPositionZ = (byte)Mathf.FloorToInt((float)(position.z - centerPosition.z + 0.5 * gridRange) / gridRange);
+            if (plus)
+            {
+                if (visivilityAreaGrid[gridPositionX][gridPositionY][gridPositionZ].watchNum + num <= byte.MaxValue)
+                {
+                    newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[gridPositionX][gridPositionY][gridPositionZ].watchNum + num), visivilityAreaGrid[gridPositionX][gridPositionY][gridPositionZ].canVisivleAreaPosition);
+                }
+                else 
+                {
+                    newVisivilityArea = ToVisivilityArea(byte.MaxValue, visivilityAreaGrid[gridPositionX][gridPositionY][gridPositionZ].canVisivleAreaPosition);
+                }
+            }
+            else
+            {
+                if (visivilityAreaGrid[gridPositionX][gridPositionY][gridPositionZ].watchNum - num >= byte.MinValue)
+                {
+                    newVisivilityArea = ToVisivilityArea((byte)(visivilityAreaGrid[gridPositionX][gridPositionY][gridPositionZ].watchNum - num), visivilityAreaGrid[gridPositionX][gridPositionY][gridPositionZ].canVisivleAreaPosition);
+                }
+                else 
+                {
+                    newVisivilityArea = ToVisivilityArea(byte.MinValue, visivilityAreaGrid[gridPositionX][gridPositionY][gridPositionZ].canVisivleAreaPosition);
+                }
+            }
             visivilityAreaGrid[gridPositionX][gridPositionY][gridPositionZ] = newVisivilityArea;
         }
 

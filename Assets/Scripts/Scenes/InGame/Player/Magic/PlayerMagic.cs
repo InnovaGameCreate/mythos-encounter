@@ -13,6 +13,7 @@ namespace Scenes.Ingame.Player
     public class PlayerMagic : MonoBehaviour
     {
         private bool _isCanUseMagic = true;//現在魔法が使えるか否か
+        private bool _isUsedMagic = false;//魔法を1度使ったか否か
         [SerializeField] private Magic _myMagic;//使用可能な魔法
 
         private Subject<Unit> _FinishUseMagic = new Subject<Unit>();//魔法の詠唱が終わり、効果が発動したらイベントが発生.
@@ -46,13 +47,16 @@ namespace Scenes.Ingame.Player
                         //魔法を使う処理をキャンセル
                         _myMagic.cancelMagic = true;
                         Debug.Log("操作による詠唱中止");
+
+                        //PlayerUIの方で呪文の詠唱時間を表示を終了
+                        myPlayerStatus.OnCancelCastEventCall.OnNext(default);
                     }
                     else//呪文をまだ詠唱していないとき
                     {
                         //San値が10以下のときは詠唱できない
-                        if (myPlayerStatus.nowPlayerSanValue <= 10)
+                        if (myPlayerStatus.nowPlayerSanValue <= _myMagic.consumeSanValue)
                         {
-                            Debug.Log("SAN値が10以下なので詠唱できません");
+                            Debug.Log("SAN値が足りないので詠唱できません");
                             return;
                         }
 
@@ -64,7 +68,14 @@ namespace Scenes.Ingame.Player
                                 if (myPlayerStatus.nowPlayerSanValue > 50)
                                 {
                                     needMagic = false;
-                                    Debug.Log("呪文を使う必要がありません");
+                                    Debug.Log("発狂していないので呪文を使う必要がありません");
+                                }
+                                break;
+                            case RecoverMagic:
+                                if (myPlayerStatus.nowPlayerHealth == myPlayerStatus.health_max)
+                                {
+                                    needMagic = false;
+                                    Debug.Log("体力減っていないので呪文を使う必要がありません");
                                 }
                                 break;
                             default:
@@ -80,11 +91,14 @@ namespace Scenes.Ingame.Player
                             //魔法を使う処理
                             _myMagic.MagicEffect();
                             Debug.Log("呪文の詠唱開始");
+
+                            //PlayerUIの方で呪文の詠唱時間を表示させる
+                            myPlayerStatus.OnCastEventCall.OnNext(_myMagic.chantTime);
                         }
                     }
                 });
 
-            //攻撃くらったときを示すBoolがTrueになったときに呪文詠唱を中断
+            //攻撃くらったときのイベントが発行されたときに呪文詠唱を中断
             myPlayerStatus.OnEnemyAttackedMe
                 .Where(_ => _isCanUseMagic)
                 .Subscribe(_ =>
@@ -106,12 +120,22 @@ namespace Scenes.Ingame.Player
                     //詠唱中の移動速度50%Downを解除
                     myPlayerStatus.UseMagic(false);
                     myPlayerStatus.ChangeSpeed();
+                    _isUsedMagic = true;
                 }).AddTo(this);
         }
 
         public void ChangeCanUseMagicBool(bool value)
         {
             _isCanUseMagic = false;
+        }
+
+        /// <summary>
+        /// 既に１度呪文を使ったかを管理しているBoolの値を取得する関数
+        /// </summary>
+        /// <returns>_isUsedMagicの値</returns>
+        public bool GetUsedMagicBool()
+        { 
+            return _isUsedMagic;
         }
     }
 }

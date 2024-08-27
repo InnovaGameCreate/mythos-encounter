@@ -31,6 +31,7 @@ namespace Scenes.Ingame.Enemy
         [SerializeField][Tooltip("スタミナの初期値")] private int _staminaBase;
         [SerializeField][Tooltip("特殊行動のクールタイム")] private int _actionCoolTimeBase;
         [SerializeField][Tooltip("初期のState")] private EnemyState _enemyStateBase;
+        [SerializeField][Tooltip("足音の初期値")][Range(0, 1.0f)] private float _footSoundBase;
 
         [Header("敵キャラの攻撃性能の初期値")]
         [SerializeField][Tooltip("攻撃力の初期値")] private int _atackPowerBase;
@@ -57,6 +58,8 @@ namespace Scenes.Ingame.Enemy
         [SerializeField] EnemyMove _enemyMove;
         [SerializeField] EnemyUniqueAction _enemyUniqueAction;
 
+        private AudioSource _audioSource;
+
 
 
         [Header("デバッグするかどうか")]
@@ -78,6 +81,10 @@ namespace Scenes.Ingame.Enemy
         private IntReactiveProperty _atackPower = new IntReactiveProperty();
 
         private BoolReactiveProperty _isBind = new BoolReactiveProperty(false);//拘束状態であるか否か
+
+
+        private bool _isCheckWaterEffect = false;//水の生成がされているか否か
+        private bool _isWaterEffectDebuff = false;//水の生成がされているか否か
 
         public IObservable<int> OnHpChange { get { return _hp; } }
         public IObservable<float> OnPatrollingSpeedChange { get { return _patrollingSpeed; } }
@@ -110,6 +117,7 @@ namespace Scenes.Ingame.Enemy
         public int ReturnHorror { get { return _horror.Value; } }
         public int ReturnAtackPower { get { return _atackPower.Value; } }
         public bool ReturnBind { get { return _isBind.Value; } }
+        public bool ReturnWaterEffectDebuff { get { return _isWaterEffectDebuff; } }
 
 
 
@@ -159,6 +167,9 @@ namespace Scenes.Ingame.Enemy
                     }
                 }).AddTo(this);
 
+            this.gameObject.TryGetComponent<AudioSource>(out _audioSource);
+            _audioSource.volume = _footSoundBase;
+
             return true;
         }
 
@@ -173,6 +184,22 @@ namespace Scenes.Ingame.Enemy
         void Update()
         {
             if (_debugMode && Input.GetKey(KeyCode.Z)) { FallBack(); }
+
+            //水の影響で自分の速度が下がるのか, 足音が大きくなるのかを確認
+            if (_isCheckWaterEffect)
+            {
+                if (_flying.Value)//飛翔状態の時は影響を受けない
+                {
+                    _isWaterEffectDebuff = false;
+                }
+                else //飛翔状態でない時は影響を受ける
+                {
+                    _isWaterEffectDebuff = true;                   
+                }
+
+                //足音の大きさを変更
+                _audioSource.volume = _footSoundBase * (_isWaterEffectDebuff ? 1.5f : 1);
+            }
         }
 
         public void SetEnemyState(EnemyState state) {
@@ -244,6 +271,30 @@ namespace Scenes.Ingame.Enemy
         public void ChangeBindBool(bool value)
         {
             _isBind.Value = value;
+        }
+
+        /// <summary>
+        /// 「水の生成」呪文の効果を受けるか否かを決定する関数
+        /// </summary>
+        public void ChangeCheckWaterEffectBool(bool value)
+        { 
+            _isCheckWaterEffect = value;
+            if (_isCheckWaterEffect)
+            {
+                if (_flying.Value)//飛翔状態の時は影響を受けない
+                {
+                    _isWaterEffectDebuff = false;
+                }
+                else //飛翔状態でない時は影響を受ける
+                {
+                    _isWaterEffectDebuff = true;
+                }
+            }
+            else //水の生成が終わったときに、各変数を初期値に戻す
+            {
+                _isWaterEffectDebuff = false; 
+                _audioSource.volume = _footSoundBase;
+            }
         }
     }
 }

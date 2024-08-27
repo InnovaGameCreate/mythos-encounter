@@ -1,4 +1,5 @@
 using Scenes.Ingame.InGameSystem;
+using Scenes.Ingame.InGameSystem.UI;
 using Scenes.Ingame.Manager;
 using Scenes.Ingame.Stage;
 using UniRx;
@@ -48,7 +49,9 @@ namespace Scenes.Ingame.Player
             }
 
             //PlayerUIを１つだけ生成する。
-            Instantiate(_playerUI, Vector3.zero, Quaternion.identity);
+            var playerUI = Instantiate(_playerUI, Vector3.zero, Quaternion.identity);
+            playerUI.transform.Find("FadeOut_InCanvas").GetComponent<FadeBlackImage>().SubscribeFadePanelEvent();//プレイヤーの死亡・蘇生時のイベントを登録
+
 
             //プレイヤーの沸きが完了したことを知らせる
             IngameManager.Instance.SetReady(ReadyEnum.PlayerReady);
