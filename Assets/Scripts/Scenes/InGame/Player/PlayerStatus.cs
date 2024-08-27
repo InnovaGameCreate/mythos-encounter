@@ -106,7 +106,7 @@ namespace Scenes.Ingame.Player
 
         [HideInInspector] public int lastHP;//HPの変動前の数値を記録。比較に用いる
         [HideInInspector] public int lastSanValue;//SAN値の変動前の数値を記録。比較に用いる
-        public int bleedingDamage = 10;//出血時に受けるダメージ
+        [HideInInspector] public int bleedingDamage = 10;//出血時に受けるダメージ
 
         private bool _isUseItem = false;
         private bool _isUseMagic = false;
@@ -136,6 +136,7 @@ namespace Scenes.Ingame.Player
 
             lastHP = 100;
             lastSanValue = 100;
+            bleedingDamage = 10;
         }
         // Start is called before the first frame update
         void Awake()
@@ -240,6 +241,38 @@ namespace Scenes.Ingame.Player
             {
                 lastHP = _health.Value;
                 _health.Value = Mathf.Max(0, _health.Value - value);
+            }
+        }
+
+        /// <summary>
+        /// 体力を変更させるための関数(最大体力の比率を用いて計算する用)
+        /// </summary>
+        /// <param name="value">変更量</param>
+        /// <param name="mode">Heal(回復), Damage(減少),Bleeding(出血)の三つのみ</param>
+        public void ChangeHealth(float value, string mode)
+        {
+            if (mode == "Heal")
+            {
+                lastHP = _health.Value;
+                _health.Value = Mathf.Min(100, _health.Value + (int)(_healthBase * value));
+                _bleedingHealth.Value = Mathf.Min(100, _bleedingHealth.Value + (int)(_healthBase * value));
+            }
+            else if (mode == "Damage")
+            {
+                if (_isProtect)
+                {
+                    _isProtect = false;
+                    Debug.Log("呪文によりダメージが無効化されました。");
+                    return;
+                }
+                lastHP = _health.Value;
+                _health.Value = Mathf.Max(0, _health.Value - (int)(_healthBase * value));
+                _bleedingHealth.Value = Mathf.Max(0, _bleedingHealth.Value - (int)(_healthBase * value));
+            }
+            else if (mode == "Bleeding")
+            {
+                lastHP = _health.Value;
+                _health.Value = Mathf.Max(0, _health.Value - (int)(_healthBase * value));
             }
         }
 
@@ -381,14 +414,18 @@ namespace Scenes.Ingame.Player
         {
             ChangeBleedingHealth(damage *(_isPulsationBleeding ? 2 : 1));
             for (int i = 0; i < damage; i++)
+            {
+                if (_bleeding.Value)
                 {
-                    if (_bleeding.Value)
-                    {
-                        ChangeHealth((_isPulsationBleeding ? 2 : 1), "Bleeding");
-                        Debug.Log("出血ダメージが入りました。");
-                    }
-                    else
-                        yield break;
+                    ChangeHealth((_isPulsationBleeding ? 2 : 1), "Bleeding");
+                    Debug.Log("出血ダメージが入りました。");
+
+                    if (i == damage - 1)//最後の出血処理の後、すぐに出血Boolをfalseを変更させるため
+                        break;
+                }
+                else
+                    break;
+
                 yield return new WaitForSeconds(1.0f);
             }
                 ChangeBleedingBool(false);
