@@ -6,12 +6,15 @@ namespace Scenes.Ingame.Stage
 {
     public class StageTile : MonoBehaviour
     {
-        [SerializeField] private int _temperature;
-        [SerializeField] private int _keep;
+        [SerializeField] private float _temperature;
+        [SerializeField] private float _keep;
         [SerializeField] private int _msv;
-        private int _difference;
-        private int _max = 28;
-        private int _min = 12;
+        private float _time = 120;
+        [SerializeField] private float _count = 0;
+        [SerializeField] private bool _flag = false;
+        [SerializeField] private float _over;
+        private float _max = 28;
+        private float _min = 12;
 
 
         void Start()
@@ -26,20 +29,20 @@ namespace Scenes.Ingame.Stage
         //温度が設定温度を超えた際の処理
         private void OverTemperature()
         {
-            if (_temperature < _keep)
+            _count += 1;
+
+            if (_count < _time)
             {
-                _difference = _keep - _temperature;
-                _temperature += _difference / 120;
-                if (_keep < _temperature)
-                    _temperature = _keep;
+                _temperature = Mathf.Lerp(_over, _keep, _count / _time);
             }
             else
             {
-                _difference = _temperature - _keep;
-                _temperature -= _difference / 120;
-                if (_temperature < _keep)
-                    _temperature = _keep;
+                _temperature = _keep;
+                _count = 0;
+                _flag = false;
             }
+       
+           
         }
 
         //msvの変化の処理
@@ -62,7 +65,17 @@ namespace Scenes.Ingame.Stage
         {
             while (true)
             {
-                if (_keep == _temperature)
+                if (_keep != _temperature)
+                {
+                    if (!_flag)
+                    {
+                        _over = _temperature;
+                        _flag = true;
+                    }
+                    OverTemperature();
+                    yield return new WaitForSeconds(1f);
+                }
+                else
                 {
                     if (Random.Range(0, 2) == 0)
                     {
@@ -79,16 +92,11 @@ namespace Scenes.Ingame.Stage
                     _keep = _temperature;
                     yield return new WaitForSeconds(10f);
                 }
-                else
-                {
-                    OverTemperature();
-                    yield return new WaitForSeconds(1f);
-                }
             }
         }
 
         //外部からの変更
-        public void TemperatureChange(int value)
+        public void TemperatureChange(float value)
         {
             _temperature = value;
         }
@@ -99,7 +107,7 @@ namespace Scenes.Ingame.Stage
         }
 
         //外部からの参照
-        public int Temperature
+        public float Temperature
         {
             get { return _temperature; } 
         }
