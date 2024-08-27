@@ -10,9 +10,9 @@ namespace Scenes.Ingame.Stage
         [SerializeField] private float _keep;
         [SerializeField] private int _msv;
         private float _time = 120;
-        [SerializeField] private float _count = 0;
-        [SerializeField] private bool _flag = false;
-        [SerializeField] private float _over;
+        private float _count = 0;
+        private bool _flag = false;
+        private float _over;
         private float _max = 28;
         private float _min = 12;
 
