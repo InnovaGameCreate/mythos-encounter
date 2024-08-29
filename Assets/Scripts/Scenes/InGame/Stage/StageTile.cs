@@ -13,8 +13,8 @@ namespace Scenes.Ingame.Stage
         private float _count = 0;
         private bool _flag = false;
         private float _over;
-        private float _max = 28;
-        private float _min = 12;
+        private float _max;
+        private float _min;
 
 
         void Start()
@@ -22,6 +22,8 @@ namespace Scenes.Ingame.Stage
             GameObject obj = GameObject.Find("StageManager");
             _temperature = obj.GetComponent<StageManager>().StandardTemperature;
             _keep = _temperature;
+            _max = _temperature + 3;
+            _min = _temperature - 3;
             StartCoroutine(InMsvChange());
             StartCoroutine(InTemperatureChange());
         }
