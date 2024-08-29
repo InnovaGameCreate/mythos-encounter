@@ -18,7 +18,7 @@ namespace Scenes.Ingame.Stage
 
         public void Intract(PlayerStatus status,bool processWithConditionalBypass)
         {
-            if ((Input.GetMouseButtonDown(1) && _isAnimation == false) || processWithConditionalBypass)
+            if ((Input.GetMouseButtonDown(1) || processWithConditionalBypass) && _isAnimation == false)
             {
                 _doorCollider.isTrigger = true;
                 _isAnimation = true;

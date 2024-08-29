@@ -25,7 +25,7 @@ namespace Scenes.Ingame.Stage
         private BoxCollider _rackCollider;
         public void Intract(PlayerStatus status, bool processWithConditionalBypass)
         {
-            if ((Input.GetMouseButtonDown(1) && _isAnimation == false) || processWithConditionalBypass)
+            if ((Input.GetMouseButtonDown(1) || processWithConditionalBypass) && _isAnimation == false)
             {
                 _rackCollider.isTrigger = true;
                 _isAnimation = true;
