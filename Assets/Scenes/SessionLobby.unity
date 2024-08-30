@@ -664,6 +664,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58435d23fa143d041a82b4209b943f9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _backButton: {fileID: 1789719683}
+  _toCreateSessionButton: {fileID: 1916443894}
 --- !u!4 &1132551463
 Transform:
   m_ObjectHideFlags: 0

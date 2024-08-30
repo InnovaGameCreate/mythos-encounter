@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: NetworkSystemConfig
   m_EditorClassIdentifier: 
   sessionPlayerMax: 4
-  inGameScene: 4
+  inGameScene: 5

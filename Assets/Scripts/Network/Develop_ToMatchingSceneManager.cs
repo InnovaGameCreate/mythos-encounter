@@ -10,12 +10,13 @@ namespace Network
     public class Develop_ToMatchingSceneManager : MonoBehaviour
     {
         [SerializeField] private NetworkRunner _runnerPrefab; //NetworkRunnerのPrefab
+        [Header("Canvas Objects")]
+        [SerializeField] private Button _toSessionLobbyButton;
 
         public async void ToSessionLobbyButton()
         {
             //全てのButtonを触れない状態にする
-            var buttons = FindObjectsOfType<Button>();
-            foreach (var button in buttons) button.interactable = false;
+            AllInteractable(false);
 
             //NetworkRunnerを配置する
             var runner = Instantiate(_runnerPrefab);
@@ -32,8 +33,17 @@ namespace Network
             else
             {
                 Debug.LogError($"Error : {result.ShutdownReason}"); //接続の失敗
-                foreach (var button in buttons) button.interactable = true; //Interactableを解除
+                AllInteractable(true); //ロックを解除
             }
+        }
+
+        /// <summary>
+        /// 全てのUIオブジェクトのInteractableを操作する
+        /// </summary>
+        /// <param name="state"></param>
+        public void AllInteractable(bool state)
+        {
+            _toSessionLobbyButton.interactable = state;
         }
     }
 }

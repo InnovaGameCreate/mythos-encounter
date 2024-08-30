@@ -617,6 +617,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _runnerPrefab: {fileID: 6090151065939265331, guid: a76680326bf006e48bd81411eef2e267, type: 3}
+  _toSessionLobbyButton: {fileID: 1276820409}
 --- !u!4 &1484635996
 Transform:
   m_ObjectHideFlags: 0

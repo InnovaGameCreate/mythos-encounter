@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 using Fusion;
 using TMPro;
 using Network;
+using Prefabs;
 
 namespace Scenes.CreateSession
 {
@@ -16,9 +17,13 @@ namespace Scenes.CreateSession
         [Header("SessionNameLength")]
         [SerializeField] private float _sessionNameLengthMin = 1;
         [SerializeField] private float _sessionNameLengthMax = 12;
-        [Header("CanvasObjects")]
+        [Header("Canvas Objects")]
+        [SerializeField] private Transform _canvasTransform;
+        [SerializeField] private Button _backButton;
         [SerializeField] private TMP_InputField _sessionNameInputField;
         [SerializeField] private Toggle _isPrivateToggle;
+        [SerializeField] private Button _createSessionButton;
+        [SerializeField] private Dialog _dialogPrefab;
 
         public async void OnCreateSessionButton()
         {
@@ -26,6 +31,10 @@ namespace Scenes.CreateSession
             if (RunnerManager.Instance.sessionList.Exists(x => x.Name == _sessionNameInputField.text))
             {
                 //Debug.Log("Exist Session Name");
+
+                AllInteractable(false);
+                var dialog = Instantiate(_dialogPrefab, _canvasTransform); //ダイアログを出す
+                dialog.Init("Exist Session Name", () => { AllInteractable(true); }, null); //このダイアログの処理を定義する
 
                 return;
             }
@@ -36,12 +45,15 @@ namespace Scenes.CreateSession
             {
                 //Debug.Log("Session Name Length Error");
 
+                AllInteractable(false);
+                var dialog = Instantiate(_dialogPrefab, _canvasTransform);
+                dialog.Init("Session Name Length Error", () => { AllInteractable(true); }, null);
+
                 return;
             }
 
             //ボタンを触れられない状態にする
-            var buttons = FindObjectsOfType<Button>();
-            foreach (var button in buttons) button.interactable = false;
+            AllInteractable(false);
 
             //セッションのカスタムプロパティの作成
             var customProps = new Dictionary<string, SessionProperty>();
@@ -63,12 +75,24 @@ namespace Scenes.CreateSession
             var result = await RunnerManager.Instance.JoinSession(startGameArgs);
 
             //セッションの作成に失敗したのでボタンロックを解除
-            if (result == false) foreach (var button in buttons) button.interactable = true;
+            if (result == false) AllInteractable(true);
         }
 
         public void OnBackButton()
         {
             SceneManager.LoadScene("SessionLobby");
+        }
+
+        /// <summary>
+        /// 全てのUIオブジェクトのInteractableを操作する
+        /// </summary>
+        /// <param name="state"></param>
+        public void AllInteractable(bool state)
+        {
+            _backButton.interactable = state;
+            _sessionNameInputField.interactable = state;
+            _isPrivateToggle.interactable = state;
+            _createSessionButton.interactable = state;
         }
     }
 }

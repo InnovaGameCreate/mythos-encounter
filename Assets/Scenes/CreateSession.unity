@@ -2016,8 +2016,12 @@ MonoBehaviour:
   _networkSystemConfig: {fileID: 11400000, guid: 8f73163f5c50f294ca17eaf5e62fd275, type: 2}
   _sessionNameLengthMin: 1
   _sessionNameLengthMax: 12
+  _canvasTransform: {fileID: 49346422}
+  _backButton: {fileID: 1446636966}
   _sessionNameInputField: {fileID: 1029171724}
   _isPrivateToggle: {fileID: 714362549}
+  _createSessionButton: {fileID: 1352941715}
+  _dialogPrefab: {fileID: 1173994483610916638, guid: 03a3b6007737e5b47b9e2752aeb2979c, type: 3}
 --- !u!4 &2073261277
 Transform:
   m_ObjectHideFlags: 0
