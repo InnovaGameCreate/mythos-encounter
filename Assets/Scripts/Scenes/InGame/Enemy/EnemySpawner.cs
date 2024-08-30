@@ -204,7 +204,7 @@ namespace Scenes.Ingame.Enemy
 
 
 
-        public void EnemySpawn(EnemyName enemeyName, Vector3 spownPosition)//位置を指定してスポーンさせたい場合
+        public GameObject EnemySpawn(EnemyName enemeyName, Vector3 spownPosition)//位置を指定してスポーンさせたい場合
         {
             GameObject createEnemy;
             EnemyStatus createEnemyStatus;
@@ -230,15 +230,16 @@ namespace Scenes.Ingame.Enemy
                     break;
                 default:
                     Debug.LogError("このスクリプトに、すべての敵のプレハブが格納可能かを確認してください");
-                    return;
+                    return null;
             }
             if (createEnemy.TryGetComponent<EnemyStatus>(out createEnemyStatus))
             {
                 if (_debugMode) Debug.Log("作成した敵にはEnemyStatusクラスがあります");
                 createEnemyVisiviityMap.DontApproachPlayer();
-                createEnemyStatus.Init(createEnemyVisiviityMap);
+                createEnemyStatus.Init(createEnemyVisiviityMap.DeepCopy());
 
             }
+            return createEnemy;
 
         }
 
