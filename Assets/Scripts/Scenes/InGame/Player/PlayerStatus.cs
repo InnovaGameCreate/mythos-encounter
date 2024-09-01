@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using Fusion;
 using System;
-using UnityEngine.Rendering.HighDefinition;
-using Scenes.Ingame.InGameSystem.UI;
+using Common.Player;
 
 /// <summary>
 /// プレイヤーのステータスを管理するクラス
@@ -50,6 +50,7 @@ namespace Scenes.Ingame.Player
         [SerializeField] private CapsuleCollider _cupsuleCollider;
         [SerializeField] private PlayerMagic _playerMagic;
         [SerializeField] private PlayerItem _playerItem;
+        [SerializeField] private NetworkObject _networkObject;
 
         private Subject<float> castEvent = new Subject<float>();//呪文の詠唱時間を発行
         private Subject<Unit> cancelCastEvent = new Subject<Unit>();//呪文の詠唱をキャンセルされた際のイベント
@@ -157,6 +158,14 @@ namespace Scenes.Ingame.Player
             _survive
                 .Skip(1)
                 .Subscribe(x => CheckSurvive(x)).AddTo(this);
+
+            //呪文解放条件関連
+            _san
+                .Skip(1)
+                .First(x => x <= 50)
+                //.Where(_ => _networkObject.HasInputAuthority)//入力権限があったら（Fusion対応後にコメントアウト外せ）
+                .Subscribe(x => SpellUnlockSystem.Instance.SetSpellUnlockInfoData(3,true)).AddTo(this);//SAN値が初めて50%をきったら自己洗脳呪文の解放条件を満たす
+
         }
 
         // Update is called once per frame
@@ -174,6 +183,7 @@ namespace Scenes.Ingame.Player
             if (Input.GetKeyDown(KeyCode.K))
             {
                 ChangeBleedingBool(false);
+                ChangeHealth(10, "Heal");
                 ChangeSanValue(10, "Heal");
             }
 
@@ -224,6 +234,9 @@ namespace Scenes.Ingame.Player
                 lastHP = _health.Value;
                 _health.Value = Mathf.Min(100, _health.Value + value);
                 _bleedingHealth.Value = Mathf.Min(100, _bleedingHealth.Value + value);
+
+                //if (_networkObject.HasInputAuthority)
+                SpellUnlockSystem.Instance.IncreaseHealedHealth(_health.Value - lastHP);
             }
             else if (mode == "Damage")
             {
@@ -256,6 +269,9 @@ namespace Scenes.Ingame.Player
                 lastHP = _health.Value;
                 _health.Value = Mathf.Min(100, _health.Value + (int)(_healthBase * value));
                 _bleedingHealth.Value = Mathf.Min(100, _bleedingHealth.Value + (int)(_healthBase * value));
+
+                //if (_networkObject.HasInputAuthority)
+                SpellUnlockSystem.Instance.IncreaseHealedHealth(_health.Value - lastHP);
             }
             else if (mode == "Damage")
             {
@@ -392,6 +408,12 @@ namespace Scenes.Ingame.Player
         public void ChangeBleedingBool(bool value)
         {
             _bleeding.Value = value;
+            if (value == false)
+            {
+                //if (_networkObject.HasInputAuthority)
+                SpellUnlockSystem.Instance.IncreaseStopBleedingTimes();
+            }
+                
         }
 
         public void ChangePlayerActionState(PlayerActionState state)

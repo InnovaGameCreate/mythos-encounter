@@ -4,6 +4,8 @@ using UnityEngine;
 using Scenes.Ingame.Enemy;
 using UniRx;
 using System;
+using Fusion;
+using Common.Player;
 
 namespace Scenes.Ingame.Player
 {
@@ -45,7 +47,8 @@ namespace Scenes.Ingame.Player
                 }
             }
 
-
+            //if(status.gameObject.GetComponent<NetworkObject>().HasInputAuthority)
+            SpellUnlockSystem.Instance.IncreaseUseDollTimes();
         }
 
 
