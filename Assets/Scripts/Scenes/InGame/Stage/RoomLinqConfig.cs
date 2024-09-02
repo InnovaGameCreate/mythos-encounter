@@ -7,7 +7,6 @@ namespace Scenes.Ingame.Stage
     {
         public List<Vector2> GetLinqPath(string roomName)
         {
-            Debug.Log($"search data {roomName}");
             List<Vector2> linqPosition = new List<Vector2>();
             switch (roomName)
             {
@@ -62,7 +61,6 @@ namespace Scenes.Ingame.Stage
                     linqPosition.Add(SetPositionInts(1, 4));
                     break;
                 default:
-                    Debug.LogError($"Not set data {roomName}");
                     break;
             }
             return linqPosition;

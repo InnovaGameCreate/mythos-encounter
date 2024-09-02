@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using UnityEngine;
+
 namespace Scenes.Ingame.Stage
 {
-    public struct LinqRoomData
+    public class LinqRoomData
     {
-        private List<string> _linqData;//隣接してる部屋を格納する
+        private List<string> _linqData = new List<string>();//隣接してる部屋を格納する
         public List<string> linqData { get => _linqData; }
         private bool _linqed;//SpawnRoomと隣接している場合はtrue
         public bool linqed { get => _linqed; }
@@ -13,10 +15,6 @@ namespace Scenes.Ingame.Stage
         /// </summary>
         public void SetLinqRoomData(string room)
         {
-            if(_linqData == null)
-            {
-                _linqData = new List<string>();
-            }
             _linqData.Add(room);
         }
 

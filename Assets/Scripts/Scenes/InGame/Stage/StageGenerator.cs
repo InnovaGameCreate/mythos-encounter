@@ -21,6 +21,20 @@ namespace Scenes.Ingame.Stage
     /// </summary>
     ///
 
+
+    /// <summary>
+    /// 現状の進捗
+    /// 壁は一旦生成を停止、
+    /// ドアを通して隣接する部屋の情報を取得することができる様になった
+    /// ドアで隣接している場合お互いの情報に隣接していることを記入
+    /// ドアの隣接する方に黄色のきゅーぶを配置して分かりやすい様に変更
+    /// ＜ーーー今後ーーー＞
+    /// 壁とドア（ドアは全てfalse）が生成可能な場所を管理する関数の作成
+    /// 隣接する部屋が０〜１の場合、ドアを設置する。
+    /// 設置する場所は上記のドアの関数をtrueにし、壁の関数をfalseにする。
+    /// 最終的にはドアと壁の関数がtrueの場所にそれぞれ生成する。
+    /// </summary>
+
     /// <summary>
     /// RoomId の数だけLinqRoomDataを用意して、隣接する部屋を記録する
     /// 再帰呼び出しを使ってSpawnRoomから隣接する全ての部屋を取得する
@@ -55,6 +69,11 @@ namespace Scenes.Ingame.Stage
         private CancellationTokenSource source = new CancellationTokenSource();
         [SerializeField]
         LineRenderer line;//デバック用のライン表示
+
+        Dictionary<int, LinqRoomData> linqData = new Dictionary<int, LinqRoomData>();
+
+        [SerializeField]
+        private GameObject marker;//隣接する部屋を分かりやすくするためのマーカー
         [Header("Room Size Count")]
         [SerializeField]
         private int LARGEROOM = 20;
@@ -131,7 +150,8 @@ namespace Scenes.Ingame.Stage
                 //TODO:要調整：生成位置のずれ
                 await CorridorShaping(token, targetFloor, floor - 1);                         //通路の装飾
                 //await GenerateWall(token, targetFloor, floor - 1);                              //壁の生成
-                await LinqBaseGenerateWall(token, targetFloor);                                 //新しい隣接している壁の計算
+
+                await LinqBaseGenerateWall(token, targetFloor, floor - 1);                                 //新しい隣接している壁の計算
             }
             floorNavMeshSurface.BuildNavMesh();
             IngameManager.Instance.SetReady(ReadyEnum.StageReady);
@@ -332,10 +352,13 @@ namespace Scenes.Ingame.Stage
                                 instantiateRoom = Instantiate(_prefabPool.get4x4RoomPrefab[UnityEngine.Random.Range(0, _prefabPool.get4x4RoomPrefab.Length)], instantiatePosition, Quaternion.identity, roomObject.transform);
                                 break;
                             default:
+                                Debug.Log($"select not set roomtype {stage[x, y].RoomType}");
                                 break;
                         }
-
-                        stage[x, y].SetRoomName(instantiateRoom.name);  //生成した部屋の情報に部屋の名前を追加
+                        if(stage[x, y].RoomType != RoomType.none)
+                        {
+                            stage[x, y].SetRoomName(instantiateRoom.name);  //生成した部屋の情報に部屋の名前を追加
+                        }
                         instantiateRooms.Add(instantiateRoom);
                     }
                 }
@@ -888,42 +911,53 @@ namespace Scenes.Ingame.Stage
                 Instantiate(_prefabPool.get4x2CorridorPrefab, ToVector3(item.x * TILESIZE, floor * 5.8f, item.y * TILESIZE), Quaternion.identity, roomObject.transform);
             }
         }
-        private async UniTask LinqBaseGenerateWall(CancellationToken token, RoomData[,] stage)
+        /// <summary>
+        ///  隣接する部屋の計算
+        /// </summary>
+        private async UniTask LinqBaseGenerateWall(CancellationToken token, RoomData[,] stage,int floor)
         {
-            List<LinqRoomData> linqData = new List<LinqRoomData>();
-            LinqRoomData tempData = new LinqRoomData();
-            int count = 1;
-            while (count < roomId)
+            for (int i = 0; i < roomId - 1; i++)
             {
-                Debug.Log($"count start {count}");
+                linqData[i] = new LinqRoomData();
+            }
+            for (int i = 0; i < roomId - 1; i++)
+            {
                 for (int y = 0; y < _stageSize.y; y++)
                 {
                     for (int x = 0; x < _stageSize.x; x++)
                     {
-                        if (stage[x, y].RoomId == count)
+                        if (stage[x, y].RoomId == i)
                         {
                             var linqPosition = _roomLinqConfig.GetLinqPath(stage[x, y].roomName);
+                            List<string> roomName = new List<string>();
                             foreach (var item in linqPosition)
                             {
-                                if (_stageSize.x <= x + (int)item.x || _stageSize.y <= y + (int)item.y)
+                                if (_stageSize.x <= x + (int)item.x - 1 || _stageSize.y <= y + (int)item.y - 1)
                                 {
                                     continue;//予測さきがステージ外の場合は次のループに移動させる
                                 }
                                 if (stage[x, y].RoomId != stage[x + (int)item.x, y + (int)item.y].RoomId)
                                 {
+                                    var instantiatePosition = ToVector3((x + (int)item.x) * TILESIZE, floor * 5.84f, (y + (int)item.y) * TILESIZE);
+                                    Instantiate(marker, instantiatePosition, Quaternion.identity);
+
                                     //隣接している部屋の名前をIDと一緒に記憶させる
-                                    tempData.SetLinqRoomData(stage[x + (int)item.x, y + (int)item.y].roomName + stage[x + (int)item.x, y + (int)item.y].RoomId);
+                                    var targetRoomName = (stage[x + (int)item.x, y + (int)item.y].RoomId).ToString();
+                                    var thisRoomName = (stage[x, y].RoomId).ToString();
                                     //リストに追加
-                                    linqData.Add(tempData);
                                     //TODO：Linqに入れる機能を作る
+                                    roomName.Add(targetRoomName);
+                                    linqData[i].SetLinqRoomData(targetRoomName);
+                                    //linqData[stage[x + (int)item.x, y + (int)item.y].RoomId].SetLinqRoomData(thisRoomName);
                                 }
                             }
-                            tempData.ResetList();
-                            count++;
                         }
                     }
                 }
-                Debug.Log($"count end {count}");
+            }
+            foreach (var item in linqData)
+            {
+                Debug.Log($"room {item.Key} に隣接する部屋は {item.Value.linqData.Count}個");
             }
             Debug.Log("LinqBaseGenerateWall End");
         }
