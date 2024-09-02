@@ -121,9 +121,36 @@ namespace Data
                 case spellRequestType.NotOwned:
                     return playerInformation.Spell.Where(x => x.Value == false).ToDictionary(x => x.Key, x => WebDataRequest.GetSpellDataArrayList[x.Key]);
                 default:
-                    Debug.LogError("ˆø”‚ª³Šm‚Å‚Í‚ ‚è‚Ü‚¹‚ñ");
+                    Debug.LogError("?????????m??????????????");
                     return null;
             }
+        }
+
+        public void UnLockSpell(int spellId)
+        {
+            playerInformation.SpellUnlock(spellId);
+        }
+
+        public void GetItem(int itemId,int count)
+        {
+            playerInformation.GetItem(itemId, count);
+        }
+        public void LostItem(int itemId,int count)
+        {
+            int lostCount = 0;
+            if(playerInformation.Items[itemId] > count)
+            {
+                lostCount = count;
+            }
+            else
+            {
+                lostCount = playerInformation.Items[itemId];
+            }
+            playerInformation.GetItem(itemId, -lostCount);
+        }
+        public void MetEnemy(int enemyId)
+        {
+            playerInformation.MetEnemy(enemyId);
         }
     }
 }
