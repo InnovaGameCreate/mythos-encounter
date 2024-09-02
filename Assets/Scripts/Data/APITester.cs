@@ -120,26 +120,26 @@ public class APITester : MonoBehaviour
         var data = PlayerInformationFacade.Instance.GetEnemy(PlayerInformationFacade.EnemyRequestType.Met);
         foreach (var item in data)
         {
-            _textMeshPro.text += $"id {item.Key} ‚Ì“G‚Æ {item.Value} ‰ñ‘˜‹ö\n";
+            _textMeshPro.text += $"enemy id {item.Key} encountered {item.Value} times\n";
         }
         _textMeshPro.text += "not Owned\nid,name,explanation,catgory,price\n";
         data = PlayerInformationFacade.Instance.GetEnemy(PlayerInformationFacade.EnemyRequestType.NotMet);
         foreach (var item in data.Values)
         {
-            _textMeshPro.text += $"–¢‘˜‹ö‚Ì“G‚Ìid‚Í {item}\n";
+            _textMeshPro.text += $"not met enemy id is {item}\n";
         }
     }
     private void PutPlayerDebugData()
     {
-        if (_NameIput == null || _IdInput == null)
+        if (_NameIput.text == "" || _IdInput.text == "")
         {
-            Debug.LogError("Name‚©Id‚Ì“ü—Í‚ª‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+            Debug.LogError("Name or Id is null");
             return;
         }
         int id = int.Parse(_IdInput.text);
         if(id < 9000)
         {
-            Debug.LogError("ƒeƒXƒg‚Å‚Í9000ˆÈã‚Ì”Žš‚ð“ü—Í‚µ‚Ä‚­‚¾‚³‚¢");
+            Debug.LogError("Debug id need use over 9000");
             return;
         }
         PlayerDataStruct sendData = new PlayerDataStruct();

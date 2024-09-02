@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 262.33694, g: 325.04984, b: 430.2193, a: 1}
+  m_IndirectSpecularColor: {r: 262.28348, g: 324.9705, b: 430.11627, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4115,6 +4115,8 @@ MonoBehaviour:
   _SpellFacadeButton: {fileID: 1584864805}
   _EnemyFacadeButton: {fileID: 1535691085}
   _PutPlayerDataButton: {fileID: 261383250}
+  _IdInput: {fileID: 245266140}
+  _NameIput: {fileID: 1378136124}
 --- !u!4 &2019111275
 Transform:
   m_ObjectHideFlags: 0
