@@ -69,11 +69,15 @@ namespace Scenes.Ingame.Stage
         private CancellationTokenSource source = new CancellationTokenSource();
         [SerializeField]
         LineRenderer line;//デバック用のライン表示
+        private List<Vector2> _xSideWallPos = new List<Vector2>();
+        private List<Vector2> _ySideWallPos = new List<Vector2>();
 
         Dictionary<int, LinqRoomData> linqData = new Dictionary<int, LinqRoomData>();
 
         [SerializeField]
         private GameObject marker;//隣接する部屋を分かりやすくするためのマーカー
+        [SerializeField]
+        private GameObject markerRed;//後から設置したドアの位置をわかりやすくするもの
         [Header("Room Size Count")]
         [SerializeField]
         private int LARGEROOM = 20;
@@ -93,6 +97,7 @@ namespace Scenes.Ingame.Stage
         private GameObject inSideWallObject;
         [SerializeField]
         private GameObject roomObject;
+
         private StagePrefabPool _prefabPool;
         private List<Vector2> _stairPosition = new List<Vector2>();
         private NavMeshSurface floorNavMeshSurface = null;
@@ -142,6 +147,10 @@ namespace Scenes.Ingame.Stage
                 }
             }
             await StairRoomSelect(_firsrFloorData, _secondFloorData);                           //階段の位置の選択
+            for (int i = 0; i <= roomId; i++)
+            {
+                linqData[i] = new LinqRoomData();
+            }
             //ステージの生成
             for (int floor = 1; floor <= 2; floor++)
             {
@@ -149,9 +158,9 @@ namespace Scenes.Ingame.Stage
                 await GenerateStage(token, targetFloor, floor - 1);                             //部屋の生成
                 //TODO:要調整：生成位置のずれ
                 await CorridorShaping(token, targetFloor, floor - 1);                         //通路の装飾
-                //await GenerateWall(token, targetFloor, floor - 1);                              //壁の生成
 
                 await LinqBaseGenerateWall(token, targetFloor, floor - 1);                                 //新しい隣接している壁の計算
+                await GenerateWall(token, targetFloor, floor - 1);                              //壁の生成
             }
             floorNavMeshSurface.BuildNavMesh();
             IngameManager.Instance.SetReady(ReadyEnum.StageReady);
@@ -573,7 +582,7 @@ namespace Scenes.Ingame.Stage
         /// <summary>
         /// 次の場所は壁のタイルを検索するための関数
         /// </summary>
-        private List<Vector2> candidateNextWallPosition(RoomData[,] stage, int offsetX = 0, int offsetY = 0)
+        private List<Vector2> candidateNextWallPosition(RoomData[,] stage, int offsetX = 0, int offsetY = 0,int targetRoomId = 0)
         {
             if (offsetX != 0 && offsetY != 0) { Debug.LogError("無効な引数です。どちらかを0にしてください"); }
             List<Vector2> candidatePositions = new List<Vector2>();
@@ -608,8 +617,12 @@ namespace Scenes.Ingame.Stage
                                 if (stage[x, y + offsetY].RoomId == 0) continue;
                             }
                         }
-                        setPosition = ToVector2(x + offsetX, y);
-                        candidatePositions.Add(setPosition);
+                        if(targetRoomId == 0 || stage[x + offsetX, y + offsetY].RoomId == targetRoomId)//TODO:あとで上の条件式に入れたい
+                        {
+                            setPosition = ToVector2(x + offsetX, y);
+                            candidatePositions.Add(setPosition);
+                        }
+
                     }
                 }
             }
@@ -916,11 +929,14 @@ namespace Scenes.Ingame.Stage
         /// </summary>
         private async UniTask LinqBaseGenerateWall(CancellationToken token, RoomData[,] stage,int floor)
         {
-            for (int i = 0; i < roomId - 1; i++)
-            {
-                linqData[i] = new LinqRoomData();
-            }
-            for (int i = 0; i < roomId - 1; i++)
+            int roomIdMax = stage.Cast<RoomData>().Select(rt => rt.RoomId).Max();
+            int roomIdMin = stage.Cast<RoomData>()
+                                  .Select(rt => rt.RoomId)
+                                  .Where(id => id != 0)
+                                  .DefaultIfEmpty(int.MaxValue)  // すべての要素が0の場合に備える
+                                  .Min();
+            Debug.Log($"Min = {roomIdMin},Max = {roomIdMax}");
+            for (int i = roomIdMin; i <= roomIdMax; i++)
             {
                 for (int y = 0; y < _stageSize.y; y++)
                 {
@@ -948,17 +964,29 @@ namespace Scenes.Ingame.Stage
                                     //TODO：Linqに入れる機能を作る
                                     roomName.Add(targetRoomName);
                                     linqData[i].SetLinqRoomData(targetRoomName);
-                                    //linqData[stage[x + (int)item.x, y + (int)item.y].RoomId].SetLinqRoomData(thisRoomName);
+                                    linqData[stage[x + (int)item.x, y + (int)item.y].RoomId].SetLinqRoomData(thisRoomName);
                                 }
                             }
                         }
                     }
                 }
             }
+            
             foreach (var item in linqData)
             {
-                Debug.Log($"room {item.Key} に隣接する部屋は {item.Value.linqData.Count}個");
+                if (item.Value.linqData.Count > 0)
+                {
+                    foreach (var id in item.Value.linqData)
+                    {
+                        Debug.Log($"room {item.Key} に隣接する部屋のidは {id}");
+                    }
+                }
+                else
+                {
+                    Debug.Log($"room {item.Key} に隣接する部屋は {item.Value.linqData.Count}個");
+                }
             }
+            
             Debug.Log("LinqBaseGenerateWall End");
         }
         /// <summary>
@@ -967,13 +995,61 @@ namespace Scenes.Ingame.Stage
         private async UniTask GenerateWall(CancellationToken token, RoomData[,] stage, int floor,int xDoorParameter = 0,int yDoorParameter = 0)
         {
             Vector3 instantiatePosition = Vector3.zero;
-            var _xWallPos = candidateNextWallPosition(stage, offsetX: 1);
-            var _yWallPos = candidateNextWallPosition(stage, offsetY: 1);
-            foreach (var xWall in _xWallPos)
+            _xSideWallPos = candidateNextWallPosition(stage, offsetX: 1);
+            _ySideWallPos = candidateNextWallPosition(stage, offsetY: 1);
+
+            List<Vector2> _xSideDoorPos = new List<Vector2>();
+            List<Vector2> _ySideDoorPos = new List<Vector2>();
+
+            int roomIdMax = stage.Cast<RoomData>().Select(rt => rt.RoomId).Max();
+            int roomIdMin = stage.Cast<RoomData>()
+                                  .Select(rt => rt.RoomId)
+                                  .Where(id => id != 0)
+                                  .DefaultIfEmpty(int.MaxValue)  // すべての要素が0の場合に備える
+                                  .Min();
+
+            foreach (var item in linqData.Where(d => d.Value.linqData.Count < 2 && d.Key <= roomIdMax && d.Key >= roomIdMin).ToList())
+            {
+                var doorXsideInstallablePositions = candidateNextWallPosition(stage, offsetX: 1, targetRoomId: item.Key);
+                var doorYsideInstallablePositions = candidateNextWallPosition(stage, offsetY: 1, targetRoomId: item.Key);
+                if (doorXsideInstallablePositions.Count != 0)
+                {
+                    var doorXsideInstallablePosition = doorXsideInstallablePositions[UnityEngine.Random.Range(0, doorXsideInstallablePositions.Count)];
+                    _xSideDoorPos.Add(doorXsideInstallablePosition);
+                    _xSideWallPos.Remove(doorXsideInstallablePosition);
+                }
+                else if(doorYsideInstallablePositions.Count != 0)
+                {
+                    var doorYsideInstallablePosition = doorYsideInstallablePositions[UnityEngine.Random.Range(0, doorYsideInstallablePositions.Count)];
+                    _ySideDoorPos.Add(doorYsideInstallablePosition);
+                    _ySideWallPos.Remove(doorYsideInstallablePosition);
+                }
+                //Debug.Log($"doorInstallablePositions {doorInstallablePositions.Count}");
+                //Debug.Log($"隣接する部屋の数が２個以下の部屋は room {item.Key} 接続している個数は {item.Value.linqData.Count}");
+            }
+            Debug.Log($"X軸のドアを設置する数 {_xSideDoorPos.Count}");
+            Debug.Log($"Y軸のドアを設置する数 {_ySideDoorPos.Count}");
+            foreach (var xDoor in _xSideDoorPos)
+            {
+                instantiatePosition = ToVector3(xDoor.x * TILESIZE, floor * 5.8f, xDoor.y * TILESIZE);
+                Instantiate(_prefabPool.getWallXDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallObject.transform);
+                instantiatePosition = ToVector3(xDoor.x * TILESIZE, floor * 5.84f, xDoor.y * TILESIZE);
+                Instantiate(markerRed, instantiatePosition, Quaternion.identity);
+            }
+
+            foreach (var yDoor in _ySideDoorPos)
+            {
+                instantiatePosition = ToVector3(yDoor.x * TILESIZE, floor * 5.8f, yDoor.y * TILESIZE);
+                Instantiate(_prefabPool.getWallYDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallObject.transform);
+                instantiatePosition = ToVector3(yDoor.x * TILESIZE, floor * 5.84f,  (yDoor.y + 1) * TILESIZE);
+                Instantiate(markerRed, instantiatePosition, Quaternion.identity);
+            }
+            /*
+            foreach (var xWall in _xSideWallPos)
             {
                 instantiatePosition = ToVector3(xWall.x * TILESIZE, floor * 5.8f, xWall.y * TILESIZE);
                 Instantiate(_prefabPool.getInSideWallXPrefab, instantiatePosition, Quaternion.identity, inSideWallObject.transform);
-                /*　テストで壁しか沸かないようにしている
+                //テストで壁しか沸かないようにしている
                 if ((xWall.x + xWall.y + xDoorParameter) % 4 == 0)
                 {
                     Instantiate(_prefabPool.getWallXDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallObject.transform);
@@ -982,13 +1058,13 @@ namespace Scenes.Ingame.Stage
                 {
                     Instantiate(_prefabPool.getInSideWallXPrefab, instantiatePosition, Quaternion.identity, inSideWallObject.transform);
                 }
-                */
+                
             }
-            foreach (var yWall in _yWallPos)
+            foreach (var yWall in _ySideWallPos)
             {
                 instantiatePosition = ToVector3(yWall.x * TILESIZE, floor * 5.8f, yWall.y * TILESIZE);
                 Instantiate(_prefabPool.getInSideWallYPrefab, instantiatePosition, Quaternion.identity, inSideWallObject.transform);
-                /*　テストで壁しか沸かないようにしている
+                //テストで壁しか沸かないようにしている
                 if ((yWall.x + yWall.y + yDoorParameter) % 4 == 0)
                 {
                     Instantiate(_prefabPool.getWallYDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallObject.transform);
@@ -997,8 +1073,8 @@ namespace Scenes.Ingame.Stage
                 {
                     Instantiate(_prefabPool.getInSideWallYPrefab, instantiatePosition, Quaternion.identity, inSideWallObject.transform);
                 }
-                */
-            }
+                
+            }*/
         }
 
         private async UniTask StairRoomSelect(RoomData[,] floor1fData, RoomData[,] floor2fData)
