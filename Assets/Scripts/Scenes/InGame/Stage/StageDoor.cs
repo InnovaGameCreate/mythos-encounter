@@ -16,9 +16,9 @@ namespace Scenes.Ingame.Stage
         public bool ReturnIsOpen { get { return _isOpen; } }
         public bool ReturnIsAnimation { get { return _isAnimation; } }
 
-        public void Intract(PlayerStatus status)
+        public void Intract(PlayerStatus status,bool processWithConditionalBypass)
         {
-            if (Input.GetMouseButtonDown(1) && _isAnimation == false)
+            if ((Input.GetMouseButtonDown(1) || processWithConditionalBypass) && _isAnimation == false)
             {
                 _doorCollider.isTrigger = true;
                 _isAnimation = true;

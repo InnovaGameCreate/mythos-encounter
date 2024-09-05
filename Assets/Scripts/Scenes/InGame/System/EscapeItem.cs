@@ -12,7 +12,7 @@ namespace Scenes.Ingame.InGameSystem
             manager = IngameManager.Instance;
         }
 
-        public void Intract(PlayerStatus status)
+        public void Intract(PlayerStatus status, bool processWithConditionalBypass)
         {
             if (Input.GetMouseButtonDown(1) && !_get)
             {
