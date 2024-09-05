@@ -33,11 +33,11 @@ namespace Scenes.Ingame.Stage
         [SerializeField]
         private GameObject _3x3RoomPrefab;
         [SerializeField]
-        private GameObject _4x3RoomPrefab;
+        private GameObject[] _4x3RoomPrefab;
         [SerializeField]
-        private GameObject _3x4RoomPrefab;
+        private GameObject[] _3x4RoomPrefab;
         [SerializeField]
-        private GameObject _4x4RoomPrefab;
+        private GameObject[] _4x4RoomPrefab;
         [SerializeField]
         private GameObject _2x2RoomStair1fPrefab;
         [SerializeField]
@@ -64,9 +64,9 @@ namespace Scenes.Ingame.Stage
         public GameObject getPlayerSpawnRoomPrefab { get => playerSpawnRoomPrefab; }
         public GameObject getEscapeSpawnRoomPrefab { get => escapeSpawnRoomPrefab; }
         public GameObject get3x3RoomPrefab { get => _3x3RoomPrefab; }
-        public GameObject get4x3RoomPrefab { get => _4x3RoomPrefab; }
-        public GameObject get3x4RoomPrefab { get => _3x4RoomPrefab; }
-        public GameObject get4x4RoomPrefab { get => _4x4RoomPrefab; }
+        public GameObject[] get4x3RoomPrefab { get => _4x3RoomPrefab; }
+        public GameObject[] get3x4RoomPrefab { get => _3x4RoomPrefab; }
+        public GameObject[] get4x4RoomPrefab { get => _4x4RoomPrefab; }
         public GameObject get2x2RoomStair1fPrefab { get => _2x2RoomStair1fPrefab; }
         public GameObject get2x2RoomStair2fPrefab { get => _2x2RoomStair2fPrefab; }
         public GameObject get3x3RoomStair1fPrefab { get => _3x3RoomStair1fPrefab; }

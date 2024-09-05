@@ -303,13 +303,13 @@ namespace Scenes.Ingame.Stage
                                 }
                                 break;
                             case RoomType.room4x3:
-                                instantiateRoom = Instantiate(_prefabPool.get4x3RoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
+                                instantiateRoom = Instantiate(_prefabPool.get4x3RoomPrefab[UnityEngine.Random.Range(0, _prefabPool.get4x3RoomPrefab.Length)], instantiatePosition, Quaternion.identity, roomObject.transform);
                                 break;
                             case RoomType.room3x4:
-                                instantiateRoom = Instantiate(_prefabPool.get3x4RoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
+                                instantiateRoom = Instantiate(_prefabPool.get3x4RoomPrefab[UnityEngine.Random.Range(0, _prefabPool.get3x4RoomPrefab.Length)], instantiatePosition, Quaternion.identity, roomObject.transform);
                                 break;
                             case RoomType.room4x4:
-                                instantiateRoom = Instantiate(_prefabPool.get4x4RoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
+                                instantiateRoom = Instantiate(_prefabPool.get4x4RoomPrefab[UnityEngine.Random.Range(0, _prefabPool.get4x4RoomPrefab.Length)], instantiatePosition, Quaternion.identity, roomObject.transform);
                                 break;
                             default:
                                 break;
