@@ -34,18 +34,32 @@ namespace Data
         public int Escape { get => _escape; }
         public int DispersingEscape { get => _dispersingEscape; }
 
+        public void SpellUnlock(int i)
+        {
+            _spell[i] = true;
+        }
+
         async void Start()
         {
             Instance = this;
             DecodeData();
         }
+        public void MetEnemy(int enemyId)
+        {
+            _mythCreature[enemyId]++;
+        }
+
+        public void GetItem(int itemId, int count)
+        {
+            _items[itemId] += count;
+        }
         private async UniTaskVoid DecodeData()
         {
             await UniTask.WaitUntil(() => WebDataRequest.OnCompleteLoadData);
             await Task.Delay(100);
-            int itemSize = WebDataRequest.GetItemDataArrayList.Count;//ƒAƒCƒeƒ€‚Ì”
-            int spellSize = WebDataRequest.GetSpellDataArrayList.Count;//“G‚Ì”
-            int mythCreatureSize = WebDataRequest.GetEnemyDataArrayList.Count;//“G‚Ì”
+            int itemSize = WebDataRequest.GetItemDataArrayList.Count;//?A?C?e??????
+            int spellSize = WebDataRequest.GetSpellDataArrayList.Count;//?G????
+            int mythCreatureSize = WebDataRequest.GetEnemyDataArrayList.Count;//?G????
 
             for (int i = 0; i < itemSize; i++)
             {

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UniRx;
 using Data;
 using Unity.VisualScripting;
+using System;
 public class APITester : MonoBehaviour
 {
     [SerializeField]
@@ -24,6 +25,12 @@ public class APITester : MonoBehaviour
     private Button _SpellFacadeButton;
     [SerializeField]
     private Button _EnemyFacadeButton;
+    [SerializeField]
+    private Button _PutPlayerDataButton;
+    [SerializeField]
+    private TMP_InputField _IdInput;
+    [SerializeField]
+    private TMP_InputField _NameIput;
     void Start()
     {
         _itemTableButton.OnClickAsObservable().Subscribe(_ => ViewItemTable()).AddTo(this);
@@ -34,6 +41,7 @@ public class APITester : MonoBehaviour
         _itemFacadeButton.OnClickAsObservable().Subscribe(_ => ViewItemFacade()).AddTo(this);
         _SpellFacadeButton.OnClickAsObservable().Subscribe(_ => ViewSpellFacade()).AddTo(this);
         _EnemyFacadeButton.OnClickAsObservable().Subscribe(_ => ViewEnemyFacade()).AddTo(this);
+        _PutPlayerDataButton.OnClickAsObservable().Subscribe(_ => PutPlayerDebugData()).AddTo(this);
     }
 
     private void ViewItemTable()
@@ -112,13 +120,30 @@ public class APITester : MonoBehaviour
         var data = PlayerInformationFacade.Instance.GetEnemy(PlayerInformationFacade.EnemyRequestType.Met);
         foreach (var item in data)
         {
-            _textMeshPro.text += $"id {item.Key} ‚Ì“G‚Æ {item.Value} ‰ñ‘˜‹ö\n";
+            _textMeshPro.text += $"enemy id {item.Key} encountered {item.Value} times\n";
         }
         _textMeshPro.text += "not Owned\nid,name,explanation,catgory,price\n";
         data = PlayerInformationFacade.Instance.GetEnemy(PlayerInformationFacade.EnemyRequestType.NotMet);
         foreach (var item in data.Values)
         {
-            _textMeshPro.text += $"–¢‘˜‹ö‚Ì“G‚Ìid‚Í {item}\n";
+            _textMeshPro.text += $"not met enemy id is {item}\n";
         }
+    }
+    private void PutPlayerDebugData()
+    {
+        if (_NameIput.text == "" || _IdInput.text == "")
+        {
+            Debug.LogError("Name or Id is null");
+            return;
+        }
+        int id = int.Parse(_IdInput.text);
+        if(id < 9000)
+        {
+            Debug.LogError("Debug id need use over 9000");
+            return;
+        }
+        PlayerDataStruct sendData = new PlayerDataStruct();
+        sendData.PlayerDataSet(id, _NameIput.text, DateTime.Now, DateTime.UtcNow, 9900, new string[3] { "1=1", "2=1", "3=2" }, new string[3] { "1=1", "2=1", "3=2" }, new string[3] { "1", "2", "3" }, 10);
+        WebDataRequest.PutPlayerData(sendData).Forget();
     }
 }
