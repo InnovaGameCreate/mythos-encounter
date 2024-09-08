@@ -1080,7 +1080,7 @@ PrefabInstance:
       objectReference: {fileID: 586647452}
     - target: {fileID: 2817882825628233842, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
       propertyPath: viewDebugLog
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4382990553633188936, guid: 3062acad21caa694c9b66f8f6d543cb5, type: 3}
       propertyPath: m_IsActive
