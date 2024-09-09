@@ -5,6 +5,8 @@ using System.Threading;
 using Scenes.Ingame.Manager;
 using Scenes.Ingame.Player;
 using System;
+using Fusion;
+using Common.Player;
 
 namespace Scenes.Ingame.InGameSystem
 {
@@ -57,6 +59,9 @@ namespace Scenes.Ingame.InGameSystem
                 await Ritual(token.Token);
                 status.UseEscapePoint(false);
                 status.ChangeSpeed();
+
+                //if(status.gameObject.GetComponent<NetworkObject>().HasInputAuthority)
+                    SpellUnlockSystem.Instance.IncreaseEscapeTimes();
             }
         }
 
