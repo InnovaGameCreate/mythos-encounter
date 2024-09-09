@@ -132,7 +132,7 @@ namespace Scenes.Ingame.Stage
             {
                 RoomData[,] targetFloor = floor == 1 ? _firsrFloorData : _secondFloorData;
                 await GenerateStage(token, targetFloor, floor - 1);                             //部屋の生成
-                //TODO:要調整：生成位置のずれ
+                
                 await CorridorShaping(token, targetFloor, floor - 1);                         //通路の装飾
 
                 await LinqBaseGenerateWall(token, targetFloor, floor - 1);                                 //新しい隣接している壁の計算
@@ -917,8 +917,8 @@ namespace Scenes.Ingame.Stage
                                     //隣接している部屋の名前をIDと一緒に記憶させる
                                     var targetRoomName = (stage[x + (int)item.x, y + (int)item.y].RoomId);
                                     var thisRoomName = (stage[x, y].RoomId);
+
                                     //リストに追加
-                                    //TODO：Linqに入れる機能を作る
                                     roomName.Add(targetRoomName);
                                     linqData[i].SetLinqRoomData(targetRoomName);
                                     linqData[stage[x + (int)item.x, y + (int)item.y].RoomId].SetLinqRoomData(thisRoomName);
@@ -949,7 +949,9 @@ namespace Scenes.Ingame.Stage
                                   .DefaultIfEmpty(int.MaxValue)  // すべての要素が0の場合に備える
                                   .Min();
 
-            foreach (var item in linqData.Where(d => d.Value.linqData.Count < 2 && d.Key <= roomIdMax && d.Key >= roomIdMin).ToList())
+            foreach (var item in linqData.Where(d => (d.Value.linqData.Count < 2 || (d.Value.linqData.Count < 3 && largeRoom(stage.Cast<RoomData>().FirstOrDefault(s => s.RoomId ==d.Key).RoomType)))
+                                                    && d.Key <= roomIdMax
+                                                    && d.Key >= roomIdMin).ToList())
             {
                 var doorXsideInstallablePositions = candidateNextWallPosition(stage, offsetX: 1, targetRoomId: item.Key);
                 var doorYsideInstallablePositions = candidateNextWallPosition(stage, offsetY: 1, targetRoomId: item.Key);
@@ -1014,6 +1016,21 @@ namespace Scenes.Ingame.Stage
             }
         }
 
+        private bool largeRoom(RoomType type)
+        {
+            switch (type)
+            {
+                case RoomType.room3x3:
+                case RoomType.room3x3Stair:
+                case RoomType.room3x4:
+                case RoomType.room4x3:
+                case RoomType.room4x4:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         public bool AreAllRoomsConnected()
         {
             if (linqData.Count == 0)
@@ -1071,10 +1088,47 @@ namespace Scenes.Ingame.Stage
                     Debug.Log(excepts);
                 }
             }
+
+            // 入れない部屋にはアイテムがスポーンしないようにする
+            if (visited.Count != linqData.Count)
+            {
+                var except = linqData.Select(v => v.Key).Except(visited).ToHashSet();
+                var allData = _firsrFloorData.Cast<RoomData>().Distinct().Concat(_secondFloorData.Cast<RoomData>().Distinct()).ToArray();
+                foreach (var item in except)
+                {
+                    var roomObject = allData.FirstOrDefault(d => d.RoomId == item).gameObject;
+                    var itemSpawnPoints = FindChildrenByTag(roomObject.transform,"ItemSpawnPoint");
+                    for (int i = 0; i < itemSpawnPoints.Length; i++)
+                    {
+                        Destroy(itemSpawnPoints[i]);
+                    }
+                }
+            }
+
             return visited.Count == linqData.Count;
         }
-        
-        
+
+        GameObject[] FindChildrenByTag(Transform parent, string tag)
+        {
+            List<GameObject> result = new List<GameObject>();
+
+            // 親オブジェクトのすべての子オブジェクトを取得
+            foreach (Transform child in parent)
+            {
+                // 子オブジェクトが指定されたタグを持つか確認
+                if (child.CompareTag(tag))
+                {
+                    result.Add(child.gameObject);
+                }
+
+                // 子オブジェクトの子オブジェクトも再帰的に検索
+                result.AddRange(FindChildrenByTag(child, tag));
+            }
+
+            // 結果を配列として返す
+            return result.ToArray();
+        }
+
         private async UniTask StairRoomSelect(RoomData[,] floor1fData, RoomData[,] floor2fData)
         {
             for (int y = 0; y < floor1fData.GetLength(1); y++)
