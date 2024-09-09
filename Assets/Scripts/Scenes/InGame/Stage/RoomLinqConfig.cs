@@ -50,13 +50,23 @@ namespace Scenes.Ingame.Stage
                 case "3x3StairTop_HH(Clone)":
                     linqPosition.Add(SetPositionInts(3, 0));
                     break;
-                case "3x4Room_HH(Clone)":
+                case "3x4Room1_HH(Clone)":
                     linqPosition.Add(SetPositionInts(3, 1));
                     break;
-                case "4x3Room_HH(Clone)":
+                case "3x4Room2_HH(Clone)":
+                    linqPosition.Add(SetPositionInts(3, 1));
+                    break;
+                case "4x3Room1_HH(Clone)":
                     linqPosition.Add(SetPositionInts(4, 0));
                     break;
-                case "4x4Room_HH(Clone)":
+                case "4x3Room2_HH(Clone)":
+                    linqPosition.Add(SetPositionInts(4, 0));
+                    break;
+                case "4x4Room1_HH(Clone)":
+                    linqPosition.Add(SetPositionInts(4, 2));
+                    linqPosition.Add(SetPositionInts(1, 4));
+                    break;
+                case "4x4Room2_HH(Clone)":
                     linqPosition.Add(SetPositionInts(4, 2));
                     linqPosition.Add(SetPositionInts(1, 4));
                     break;

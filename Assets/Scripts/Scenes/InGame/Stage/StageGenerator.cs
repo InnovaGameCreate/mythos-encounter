@@ -29,7 +29,6 @@ namespace Scenes.Ingame.Stage
         private List<Vector2> candidatePosition = new List<Vector2>();
         private RoomData[,] _firsrFloorData;
         private RoomData[,] _secondFloorData;
-        private List<GameObject> instantiateRooms = new List<GameObject>();
         private GameObject spawnPositionRoom = null;
         private GameObject instantiateRoom;
         private int _roomId = 0;
@@ -308,8 +307,8 @@ namespace Scenes.Ingame.Stage
                         if(stage[x, y].RoomType != RoomType.none)
                         {
                             stage[x, y].SetRoomName(instantiateRoom.name);  //生成した部屋の情報に部屋の名前を追加
+                            stage[x, y].SetGameObject(instantiateRoom);
                         }
-                        instantiateRooms.Add(instantiateRoom);
                     }
                 }
             }
