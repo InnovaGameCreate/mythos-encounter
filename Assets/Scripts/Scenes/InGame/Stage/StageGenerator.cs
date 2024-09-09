@@ -909,7 +909,7 @@ namespace Scenes.Ingame.Stage
                                 if (stage[x, y].RoomId != stage[x + (int)item.x, y + (int)item.y].RoomId)
                                 {
                                     var instantiatePosition = ToVector3((x + (int)item.x) * TILESIZE, floor * 5.84f, (y + (int)item.y) * TILESIZE);
-                                    if(marker != null)
+                                    if(marker != null && viewDebugLog)
                                     {
                                         Instantiate(marker, instantiatePosition, Quaternion.identity);
                                     }
@@ -977,7 +977,7 @@ namespace Scenes.Ingame.Stage
                 // オブジェクトの生成
                 instantiatePosition = ToVector3(xDoor.x * TILESIZE, floor * 5.8f, xDoor.y * TILESIZE);
                 Instantiate(_prefabPool.getWallXDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallObject.transform);
-                if (markerRed != null)
+                if (markerRed != null && viewDebugLog)
                 {
                     instantiatePosition = ToVector3(xDoor.x * TILESIZE, floor * 5.84f, xDoor.y * TILESIZE);
                     Instantiate(markerRed, instantiatePosition, Quaternion.identity);
@@ -996,7 +996,7 @@ namespace Scenes.Ingame.Stage
                 // オブジェクトの生成
                 instantiatePosition = ToVector3(yDoor.x * TILESIZE, floor * 5.8f, yDoor.y * TILESIZE);
                 Instantiate(_prefabPool.getWallYDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallObject.transform);
-                if(markerRed != null)
+                if(markerRed != null && viewDebugLog)
                 {
                     instantiatePosition = ToVector3(yDoor.x * TILESIZE, floor * 5.84f, (yDoor.y + 1) * TILESIZE);
                     Instantiate(markerRed, instantiatePosition, Quaternion.identity);
