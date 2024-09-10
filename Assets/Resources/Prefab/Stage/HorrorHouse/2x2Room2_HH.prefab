@@ -3069,6 +3069,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 8114862274260198482, guid: f0cb08ad2a18d3a43bada7a8ad187255, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8447702575958562470, guid: f0cb08ad2a18d3a43bada7a8ad187255, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -3131,6 +3135,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8566940079797809669, guid: f0cb08ad2a18d3a43bada7a8ad187255, type: 3}
       propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8966973505970885194, guid: f0cb08ad2a18d3a43bada7a8ad187255, type: 3}
+      propertyPath: m_CastShadows
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9054542234562062527, guid: f0cb08ad2a18d3a43bada7a8ad187255, type: 3}
