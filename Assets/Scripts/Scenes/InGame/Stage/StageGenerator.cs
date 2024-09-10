@@ -82,7 +82,6 @@ namespace Scenes.Ingame.Stage
             _roomLinqConfig = GetComponent<RoomLinqConfig>();
             _firsrFloorData = new RoomData[(int)_stageSize.x, (int)_stageSize.y];
             _secondFloorData = new RoomData[(int)_stageSize.x, (int)_stageSize.y];
-            if (viewDebugLog) Debug.Log($"StageSize => x = {_firsrFloorData.GetLength(0)},y = {_firsrFloorData.GetLength(1)}, total = {_firsrFloorData.Length}");
             floorNavMeshSurface = floorObject.GetComponent<NavMeshSurface>();
             IngameManager.Instance.OnInitial
                 .Subscribe(_ =>
@@ -95,7 +94,6 @@ namespace Scenes.Ingame.Stage
 
         private async UniTaskVoid Generate(CancellationToken token)
         {
-            if (viewDebugLog) Debug.Log("Stage.Generate");
             //ステージデータの計算
             for (int floor = 1; floor <= 2; floor++)
             {
@@ -238,7 +236,7 @@ namespace Scenes.Ingame.Stage
                         switch (stage[x, y].RoomType)
                         {
                             case RoomType.room2x2:
-                                if (!playerSpawnRoom && x >= 3 && y >= 3)
+                                if (!playerSpawnRoom)
                                 {
                                     instantiateRoom = Instantiate(_prefabPool.getPlayerSpawnRoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
                                     spawnPositionRoom = instantiateRoom;
@@ -246,7 +244,7 @@ namespace Scenes.Ingame.Stage
                                     _spawnPosition = instantiatePosition;
                                     playerSpawnRoom = true;
                                 }
-                                else if (!escapeSpawnRoom && x >= 3 && y >= 3)
+                                else if (!escapeSpawnRoom)
                                 {
                                     instantiateRoom = Instantiate(_prefabPool.getEscapeSpawnRoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
                                     escapeSpawnRoom = true;
@@ -254,11 +252,6 @@ namespace Scenes.Ingame.Stage
                                 else
                                 {
                                     instantiateRoom = Instantiate(_prefabPool.get2x2RoomPrefab[UnityEngine.Random.Range(0, _prefabPool.get2x2RoomPrefab.Length)], instantiatePosition, Quaternion.identity, roomObject.transform);
-                                    if (spawnPositionRoom == null)
-                                    {
-                                        spawnPositionRoom = instantiateRoom;
-                                        _spawnPosition = instantiatePosition;
-                                    }
                                 }
                                 break;
                             case RoomType.room2x2Stair:
@@ -368,13 +361,9 @@ namespace Scenes.Ingame.Stage
             int inputRoomId = updateRoomId ? 1 + _roomId++ : stage[(int)plotPosition.x, (int)plotPosition.y].RoomId;
 
             Vector2 plotRoomSize = Vector2.one;
-            int plotX = (int)plotPosition.x;
-            int plotY = (int)plotPosition.y;
             switch (plotRoomType)
             {
                 case RoomType.room2x2:
-                    plotRoomSize = ToVector2(2, 2);
-                    break;
                 case RoomType.room2x2Stair:
                     plotRoomSize = ToVector2(2, 2);
                     break;
@@ -385,8 +374,6 @@ namespace Scenes.Ingame.Stage
                     plotRoomSize = ToVector2(3, 2);
                     break;
                 case RoomType.room3x3:
-                    plotRoomSize = ToVector2(3, 3);
-                    break;
                 case RoomType.room3x3Stair:
                     plotRoomSize = ToVector2(3, 3);
                     break;
@@ -406,7 +393,7 @@ namespace Scenes.Ingame.Stage
             {
                 for (int x = 0; x < plotRoomSize.x; x++)
                 {
-                    stage[plotX + x, plotY + y].RoomDataSet(plotRoomType, inputRoomId);
+                    stage[(int)plotPosition.x + x, (int)plotPosition.y + y].RoomDataSet(plotRoomType, inputRoomId);
                 }
             }
         }
@@ -417,7 +404,6 @@ namespace Scenes.Ingame.Stage
         private List<Vector2> candidatePositionSet(RoomData[,] stage, int offsetX = 1, int offsetY = 1)
         {
             List<Vector2> candidatePositions = new List<Vector2>();
-            Vector2 setPosition = Vector2.zero;
             for (int y = 0; y < _stageSize.y - offsetY; y++)
             {
                 for (int x = 0; x < _stageSize.x - offsetX; x++)
@@ -427,8 +413,7 @@ namespace Scenes.Ingame.Stage
                         RoomIdEqual(ToVector2(x, y), ToVector2(offsetX, 0), 0, stage) &&
                         RoomIdEqual(ToVector2(x, y), ToVector2(offsetX, offsetY), 0, stage))
                     {
-                        setPosition = ToVector2(x, y);
-                        candidatePositions.Add(setPosition);
+                        candidatePositions.Add(ToVector2(x, y));
                     }
                 }
             }
@@ -442,7 +427,6 @@ namespace Scenes.Ingame.Stage
         {
             if (offsetX == 0 && offsetY == 0) Debug.LogError("offsetの値が両方とも0です");
             List<Vector2> candidatePositions = new List<Vector2>();
-            Vector2 setPosition = Vector2.zero;
             for (int y = 0; y < _stageSize.y - offsetY; y++)
             {
                 for (int x = 0; x < _stageSize.x - offsetX; x++)
@@ -474,8 +458,7 @@ namespace Scenes.Ingame.Stage
                                 if (RoomIdEqual(ToVector2(x, y), ToVector2(1, 0), 0, stage)) continue;
                             }
                         }
-                        setPosition = ToVector2(x, y);
-                        candidatePositions.Add(setPosition);
+                        candidatePositions.Add(ToVector2(x, y));
                     }
                 }
             }
@@ -489,7 +472,6 @@ namespace Scenes.Ingame.Stage
         {
             if (offsetX == 0 && offsetY == 0) Debug.LogError("offsetの値が両方とも0です");
             List<Vector2> candidatePositions = new List<Vector2>();
-            Vector2 setPosition = Vector2.zero;
             for (int y = 0; y < _stageSize.y - offsetY; y++)
             {
                 for (int x = 0; x < _stageSize.x - offsetX; x++)
@@ -517,8 +499,7 @@ namespace Scenes.Ingame.Stage
                     }
                     if (existCorridor)
                     {
-                        setPosition = ToVector2(x, y);
-                        candidatePositions.Add(setPosition);
+                        candidatePositions.Add(ToVector2(x, y));
                     }
                 }
             }
@@ -532,7 +513,6 @@ namespace Scenes.Ingame.Stage
         {
             if (offsetX != 0 && offsetY != 0) { Debug.LogError("無効な引数です。どちらかを0にしてください"); }
             List<Vector2> candidatePositions = new List<Vector2>();
-            Vector2 setPosition = Vector2.zero;
             int xLength = stage.GetLength(0);
             int yLength = stage.GetLength(1);
             for (int y = 0; y < yLength - offsetY; y++)
@@ -541,34 +521,21 @@ namespace Scenes.Ingame.Stage
                 {
                     if (stage[x, y].RoomId == 0)
                     {
-                        if (offsetX != 0)
+                        try
                         {
-                            if (x < xLength - 1 && offsetX > 0)
+                            if (stage[x + offsetX, y + offsetY].RoomId == 0)
                             {
-                                if (stage[x + offsetX, y].RoomId == 0) continue;
+                                continue;
                             }
-                            else if (x + offsetX >= 0)
+                            if (targetRoomId == 0 || stage[x + offsetX, y + offsetY].RoomId == targetRoomId)//TODO:あとで上の条件式に入れたい
                             {
-                                if (stage[x + offsetX, y].RoomId == 0) continue;
+                                candidatePositions.Add(ToVector2(x + offsetX, y));
                             }
                         }
-                        if (offsetY != 0)
+                        catch (Exception ex)
                         {
-                            if (y < yLength - 1 && offsetY > 0)
-                            {
-                                if (stage[x, y + offsetY].RoomId == 0) continue;
-                            }
-                            else if (y - offsetY >= 0)
-                            {
-                                if (stage[x, y + offsetY].RoomId == 0) continue;
-                            }
+                            continue;
                         }
-                        if (targetRoomId == 0 || stage[x + offsetX, y + offsetY].RoomId == targetRoomId)//TODO:あとで上の条件式に入れたい
-                        {
-                            setPosition = ToVector2(x + offsetX, y);
-                            candidatePositions.Add(setPosition);
-                        }
-
                     }
                 }
             }
@@ -914,14 +881,10 @@ namespace Scenes.Ingame.Stage
                                         Instantiate(marker, instantiatePosition, Quaternion.identity);
                                     }
 
-                                    //隣接している部屋の名前をIDと一緒に記憶させる
-                                    var targetRoomName = (stage[x + (int)item.x, y + (int)item.y].RoomId);
-                                    var thisRoomName = (stage[x, y].RoomId);
-
                                     //リストに追加
-                                    roomName.Add(targetRoomName);
-                                    linqData[i].SetLinqRoomData(targetRoomName);
-                                    linqData[stage[x + (int)item.x, y + (int)item.y].RoomId].SetLinqRoomData(thisRoomName);
+                                    roomName.Add(stage[x + (int)item.x, y + (int)item.y].RoomId);
+                                    linqData[i].SetLinqRoomData(stage[x + (int)item.x, y + (int)item.y].RoomId);
+                                    linqData[stage[x + (int)item.x, y + (int)item.y].RoomId].SetLinqRoomData(stage[x, y].RoomId);
                                 }
                             }
                         }
@@ -971,10 +934,8 @@ namespace Scenes.Ingame.Stage
             foreach (var xDoor in _xSideDoorPos)
             {
                 // linqDataに登録
-                var targetRoomName = stage[(int)xDoor.x, (int)xDoor.y].RoomId;
-                var thisRoomName = stage[(int)xDoor.x - 1, (int)xDoor.y].RoomId;
-                linqData[stage[(int)xDoor.x, (int)xDoor.y].RoomId].SetLinqRoomData(thisRoomName);
-                linqData[stage[(int)xDoor.x - 1, (int)xDoor.y].RoomId].SetLinqRoomData(targetRoomName);
+                linqData[stage[(int)xDoor.x, (int)xDoor.y].RoomId].SetLinqRoomData(stage[(int)xDoor.x - 1, (int)xDoor.y].RoomId);
+                linqData[stage[(int)xDoor.x - 1, (int)xDoor.y].RoomId].SetLinqRoomData(stage[(int)xDoor.x, (int)xDoor.y].RoomId);
 
                 // オブジェクトの生成
                 instantiatePosition = ToVector3(xDoor.x * TILESIZE, floor * 5.8f, xDoor.y * TILESIZE);
@@ -989,10 +950,8 @@ namespace Scenes.Ingame.Stage
             foreach (var yDoor in _ySideDoorPos)
             {
                 // linqDataに登録
-                var targetRoomName = stage[(int)yDoor.x, (int)yDoor.y].RoomId;
-                var thisRoomName = stage[(int)yDoor.x, (int)yDoor.y + 1].RoomId;
-                linqData[stage[(int)yDoor.x, (int)yDoor.y].RoomId].SetLinqRoomData(thisRoomName);
-                linqData[stage[(int)yDoor.x, (int)yDoor.y + 1].RoomId].SetLinqRoomData(targetRoomName);
+                linqData[stage[(int)yDoor.x, (int)yDoor.y].RoomId].SetLinqRoomData(stage[(int)yDoor.x, (int)yDoor.y + 1].RoomId);
+                linqData[stage[(int)yDoor.x, (int)yDoor.y + 1].RoomId].SetLinqRoomData(stage[(int)yDoor.x, (int)yDoor.y].RoomId);
 
                 //Debug.Log($"追加のy壁生成次の隣接データ {stage[(int)yDoor.x, (int)yDoor.y].RoomId} : {stage[(int)yDoor.x, (int)yDoor.y + 1].RoomId}");
                 // オブジェクトの生成
@@ -1112,16 +1071,13 @@ namespace Scenes.Ingame.Stage
         {
             List<GameObject> result = new List<GameObject>();
 
-            // 親オブジェクトのすべての子オブジェクトを取得
             foreach (Transform child in parent)
             {
-                // 子オブジェクトが指定されたタグを持つか確認
                 if (child.CompareTag(tag))
                 {
                     result.Add(child.gameObject);
                 }
 
-                // 子オブジェクトの子オブジェクトも再帰的に検索
                 result.AddRange(FindChildrenByTag(child, tag));
             }
 
@@ -1141,19 +1097,14 @@ namespace Scenes.Ingame.Stage
                         continue;
                     }
                     if (floor1fData[x, y].RoomType == RoomType.room2x2 &&
-                        floor1fData[x, y].RoomId == floor1fData[x + 1, y].RoomId &&
-                        floor1fData[x, y].RoomId == floor1fData[x, y + 1].RoomId)
+                        floor2fData[x, y].RoomType == RoomType.room2x2 &&
+                        RoomIdEqual(ToVector2(x, y), ToVector2(1, 1), floor1fData[x, y].RoomId, floor1fData) &&
+                        RoomIdEqual(ToVector2(x, y), ToVector2(1, 1), floor1fData[x, y].RoomId, floor2fData))
                     {
-                        if (floor2fData[x, y].RoomType == RoomType.room2x2 &&
-                            floor2fData[x, y].RoomId == floor2fData[x + 1, y].RoomId &&
-                            floor2fData[x, y].RoomId == floor2fData[x, y + 1].RoomId)
-                        {
                             RoomPlotId(RoomType.room2x2Stair, new Vector2(x, y), floor1fData, updateRoomId: false);
                             RoomPlotId(RoomType.room2x2Stair, new Vector2(x, y), floor2fData, updateRoomId: false);
 
                             _stairPosition.Add(ToVector2(x + 1, y + 1));
-                            if (viewDebugLog) Debug.Log("2x2階段の部屋に適した場所あり");
-                        }
                     }
                     //3x3のstairRoomについて
                     if (y > floor1fData.GetLength(1) - 3 || x > floor1fData.GetLength(0) - 3)//ステージ端からOFFSET分しか計算しないようにするチェック
@@ -1161,19 +1112,14 @@ namespace Scenes.Ingame.Stage
                         continue;
                     }
                     if (floor1fData[x, y].RoomType == RoomType.room3x3 &&
-                        floor1fData[x, y].RoomId == floor1fData[x + 2, y].RoomId &&
-                        floor1fData[x, y].RoomId == floor1fData[x, y + 2].RoomId)
+                        floor2fData[x, y].RoomType == RoomType.room3x3 &&
+                        RoomIdEqual(ToVector2(x, y), ToVector2(2, 2), floor1fData[x, y].RoomId, floor1fData) &&
+                        RoomIdEqual(ToVector2(x, y), ToVector2(2, 2), floor1fData[x, y].RoomId, floor2fData))
                     {
-                        if (floor2fData[x, y].RoomType == RoomType.room3x3 &&
-                            floor2fData[x, y].RoomId == floor2fData[x + 2, y].RoomId &&
-                            floor2fData[x, y].RoomId == floor2fData[x, y + 2].RoomId)
-                        {
                             RoomPlotId(RoomType.room3x3Stair, new Vector2(x, y), floor1fData, updateRoomId: false);
                             RoomPlotId(RoomType.room3x3Stair, new Vector2(x, y), floor2fData, updateRoomId: false);
 
                             _stairPosition.Add(ToVector2(x + 2, y + 2));
-                            if (viewDebugLog) Debug.Log("3x3階段の部屋に適した場所あり");
-                        }
                     }
                 }
             }
@@ -1188,10 +1134,8 @@ namespace Scenes.Ingame.Stage
                     if ((floor1fData[x, y].RoomType == RoomType.room2x2Stair && floor2fData[x, y].RoomType == RoomType.room2x2Stair)
                         || (floor1fData[x, y].RoomType == RoomType.room3x3Stair && floor2fData[x, y].RoomType == RoomType.room3x3Stair))
                     {
-                        var targetRoomName = floor2fData[x, y].RoomId;
-                        var thisRoomName = floor1fData[x, y].RoomId;
-                        linqData[floor2fData[x, y].RoomId].SetLinqRoomData(thisRoomName);
-                        linqData[floor1fData[x, y].RoomId].SetLinqRoomData(targetRoomName);
+                        linqData[floor2fData[x, y].RoomId].SetLinqRoomData(floor1fData[x, y].RoomId);
+                        linqData[floor1fData[x, y].RoomId].SetLinqRoomData(floor2fData[x, y].RoomId);
                     }
 
                 }
@@ -1199,7 +1143,6 @@ namespace Scenes.Ingame.Stage
         }
 
         Vector2 translation2 = Vector2.zero;
-        Vector3 translation3 = Vector3.zero;
         private Vector2 ToVector2(float x, float y)
         {
             translation2.x = x;
@@ -1207,6 +1150,7 @@ namespace Scenes.Ingame.Stage
             return translation2;
         }
 
+        Vector3 translation3 = Vector3.zero;
         private Vector3 ToVector3(float x, float y, float z)
         {
             translation3.x = x;
@@ -1215,9 +1159,9 @@ namespace Scenes.Ingame.Stage
             return translation3;
         }
 
-        private bool RoomIdEqual(Vector2 basePosition, Vector2 position1, int roomId, RoomData[,] stage)
+        private bool RoomIdEqual(Vector2 basePosition, Vector2 addPosition, int roomId, RoomData[,] stage)
         {
-            if (stage[(int)(basePosition.x + position1.x), (int)(basePosition.y + position1.y)].RoomId == roomId)
+            if (stage[(int)(basePosition.x + addPosition.x), (int)(basePosition.y + addPosition.y)].RoomId == roomId)
             {
                 return true;
             }

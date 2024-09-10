@@ -330,6 +330,7 @@ GameObject:
   - component: {fileID: 7712768426329541612}
   - component: {fileID: 2817882825628233842}
   - component: {fileID: 3700284104005568679}
+  - component: {fileID: 2263348169807701979}
   m_Layer: 0
   m_Name: Stage
   m_TagString: Untagged
@@ -374,8 +375,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stageSize: {x: 12, y: 12}
+  viewDebugLog: 0
   line: {fileID: 3625524245052678187}
-  LARGEROOM: 9
+  marker: {fileID: 0}
+  markerRed: {fileID: 0}
+  LARGEROOM: 8
   MEDIUMROOM: 5
   SMALLROOM: 4
   floorObject: {fileID: 1938581473151959162}
@@ -430,6 +434,18 @@ MonoBehaviour:
   _2x4CorridorPrefab: {fileID: 7104717311803946632, guid: f38c06f79a308e740b622eea7ba9fd9e, type: 3}
   _4x2CorridorPrefab: {fileID: 7104717311803946632, guid: eea40fcafa20b384e929f8454bcf05ae, type: 3}
   _2x2CorridorPrefab: {fileID: 8786186942910803785, guid: 248bd6a9ba5451f41a5e22e3995f2c3d, type: 3}
+--- !u!114 &2263348169807701979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6624500817061936141}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b04419c4c8a04cac9286f56e740d94f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7456130407012831217
 GameObject:
   m_ObjectHideFlags: 0
