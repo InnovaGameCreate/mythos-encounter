@@ -19,7 +19,11 @@ namespace Scenes.Ingame.Enemy
 
         [SerializeField] private bool _staminaOver = false;
         /// <summary> 硬直しているか否か</summary>
-        private bool _stiffness;
+        private bool _stiffness = false;
+        /// <summary> 拘束の呪文を受けているかどうか</summary>
+        private bool _bind = false;
+        /// <summary>水の生成によるデバフを受けているかどうか </summary>
+        private bool _waterDebuff = false;
 
         private float _staminaChangeCount = 0;//スタミナを毎秒減らすのに使用
         private Vector3 _movePosition;
@@ -51,9 +55,23 @@ namespace Scenes.Ingame.Enemy
                 else {
                     _stiffness = false;
                 }
+                SpeedChange();
             }
             ).AddTo(this);
 
+           _enemyStatus.OnBindChange
+                .Skip(1)//初期化の時は無視
+                .Subscribe(x =>
+                {
+                    _bind = x;
+                    SpeedChange();
+                }).AddTo(this);
+            _enemyStatus.OnEnemyStateChange.Subscribe(x =>{ SpeedChange();}).AddTo(this);
+            _enemyStatus.OnIsWaterEffectDebuffChange.Skip(1).Subscribe(x =>
+            { 
+                _waterDebuff = x;
+                SpeedChange(); 
+            }).AddTo(this);
         }
 
         // Update is called once per frame
@@ -66,7 +84,9 @@ namespace Scenes.Ingame.Enemy
             {
                 _endMove = false;
             }
+        }
 
+        private void SpeedChange() {
             _staminaChangeCount += Time.deltaTime;
             if (_staminaChangeCount > 1)
             {//毎秒処理
@@ -78,24 +98,21 @@ namespace Scenes.Ingame.Enemy
                 }
                 else
                 {
-
                     switch (_enemyStatus.ReturnEnemyState)
                     {
                         case EnemyState.Patrolling:
-                            _myAgent.speed = _enemyStatus.ReturnPatrollingSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                            _myAgent.speed = _enemyStatus.ReturnPatrollingSpeed * (_bind ? 0.1f : 1) * (_waterDebuff ? 0.8f : 1);
                             if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
                             { //スタミナが削れていたら
                                 _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
                             }
                             else if (_enemyStatus.ReturnStaminaBase < _enemyStatus.Stamina)
                             {
-
-
                                 _staminaOver = false;
                             }
                             break;
                         case EnemyState.Searching:
-                            _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
+                            _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_bind ? 0.1f : 1) * (_waterDebuff ? 0.8f : 1);
                             if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
                             { //スタミナが削れていたら
                                 _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
@@ -146,11 +163,11 @@ namespace Scenes.Ingame.Enemy
 
                             if (_staminaOver)
                             {
-                                _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                                _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_bind ? 0.1f : 1) * (_waterDebuff ? 0.8f : 1);
                             }
                             else
                             {
-                                _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                                _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_bind ? 0.1f : 1) * (_waterDebuff ? 0.8f : 1);
                             }
                             break;
 
@@ -196,11 +213,11 @@ namespace Scenes.Ingame.Enemy
 
                             if (_staminaOver)
                             {
-                                _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                                _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_bind ? 0.1f : 1) * (_waterDebuff ? 0.8f : 1);
                             }
                             else
                             {
-                                _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                                _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_bind ? 0.1f : 1) * (_waterDebuff ? 0.8f : 1);
                             }
                             break;
                         case EnemyState.FallBack:
@@ -214,9 +231,10 @@ namespace Scenes.Ingame.Enemy
                     }
                 }
             }
-
-           
         }
+
+
+
 
         public void SetMovePosition(Vector3 targetPosition)
         {
