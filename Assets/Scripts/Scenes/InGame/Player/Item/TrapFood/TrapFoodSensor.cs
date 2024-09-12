@@ -15,9 +15,8 @@ public class TrapFoodSensor : MonoBehaviour
 
             if (!Physics.Raycast(this.transform.position, vector, vector.magnitude, layerMask) && _isActiveSensor)
             {
-                Debug.Log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaƒKƒ`ƒƒŠJn");
                 float random = Random.value * 100f;
-                if (random > 30f)
+                if (random <= 30f)
                 {
                     MoveEnemy();
                     transform.parent.gameObject.layer = 0;
@@ -29,9 +28,12 @@ public class TrapFoodSensor : MonoBehaviour
         }
     }
 
+    /// <summary>
+    ///“GƒLƒƒƒ‰‚ğ—U“±‚·‚é‚½‚ß‚ÌŠÖ”
+    /// </summary>
     private void MoveEnemy()
     {
-        Debug.Log("tttttttttttttttttttttttttttttttttttt“G‚Ì—U“±ŠJn");
+
     }
 
     private void ActiveSensor()

@@ -19,15 +19,14 @@ namespace Scenes.Ingame.Player
         public override void OnPickUp()
         {
             _isCanLoopCoroutine = true;
-            StartCoroutine(CreateTrapBite());
+            StartCoroutine(CreateTrapFood());
 
             //選択アイテムを別のものにしたとき、自動でプレビューを削除する
             ownerPlayerItem.OnNowIndexChange
                 .Skip(1)
-                //.Where(x => ownerPlayerItem.ItemSlots[ownerPlayerItem.nowIndex].myItemData == null || ownerPlayerItem.ItemSlots[ownerPlayerItem.nowIndex].myItemData.itemID != 21)
                 .Subscribe(_ =>
                 {
-                    StopCoroutine(CreateTrapBite());
+                    StopCoroutine(CreateTrapFood());
                     if (_createdTrapFood != null)
                     {
                         Destroy(_createdTrapFood);
@@ -47,12 +46,16 @@ namespace Scenes.Ingame.Player
             {
                 _createdTrapFood.transform.Find("EnemySensor").gameObject.SetActive(true);
                 _createdTrapFood.layer = 10;
-                StopCoroutine(CreateTrapBite());
+                StopCoroutine(CreateTrapFood());
                 ownerPlayerItem.ConsumeItem(ownerPlayerItem.nowIndex);
+            }
+            else
+            {
+                Debug.Log("アイテム設置不可");
             }
         }
 
-        private IEnumerator CreateTrapBite()
+        private IEnumerator CreateTrapFood()
         {
             _mainCamera = GameObject.FindWithTag("MainCamera");
             _trapFoodPrefab = (GameObject)Resources.Load("Prefab/Item/TrapFood/UsingTrapFood");
