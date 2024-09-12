@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-// using static UnityEditor.Progress;
 
 namespace Scenes.Ingame.Player
 {
-    public class ItemInstract : MonoBehaviour, IInteractable
+    public class TrapFoodInstract : ItemInstract
     {
-        public virtual void Intract(PlayerStatus status,bool processWithConditionalBypass)
+        [SerializeField] private GameObject _trapFood;
+        public override void Intract(PlayerStatus status, bool processWithConditionalBypass)
         {
             var PlayerItem = status.gameObject.GetComponent<PlayerItem>();
             bool isPickedUp = false;
@@ -15,7 +15,7 @@ namespace Scenes.Ingame.Player
             if (Input.GetMouseButtonDown(1))
             {
                 ItemSlotStruct item = new ItemSlotStruct();
-                item.ChangeInfo(this.GetComponent<ItemEffect>().GetItemData(), ItemSlotStatus.available);
+                item.ChangeInfo(_trapFood.GetComponent<ItemEffect>().GetItemData(), ItemSlotStatus.available);
 
                 for (int i = 0; i < 7; i++)
                 {
@@ -39,48 +39,25 @@ namespace Scenes.Ingame.Player
 
                 if (PlayerItem.nowBringItem == null)
                 {
-                    PlayerItem.nowBringItem = this.gameObject;
+                    PlayerItem.nowBringItem = Instantiate(_trapFood, PlayerItem.myRightHand.transform.position, _trapFood.transform.rotation);
+                    PlayerItem.nowBringItem.transform.parent = PlayerItem.myRightHand.transform;
 
-
-                    //取得したアイテムを手の近くに移動
-                    this.gameObject.transform.position = PlayerItem.myRightHand.transform.position;
-                    this.gameObject.transform.parent = PlayerItem.myRightHand.transform;
 
                     //アイテムにアタッチされているEffect系のスクリプトに取得者の情報を流す。
-                    var effect = this.gameObject.GetComponent<ItemEffect>();
+                    var effect = PlayerItem.nowBringItem.gameObject.GetComponent<ItemEffect>();
                     effect.ownerPlayerStatus = status;
                     effect.ownerPlayerItem = PlayerItem;
-                    effect.OnPickUp();//各アイテムの拾った時の処理を実行させる
+                    effect.OnPickUp();
                     var rigid = PlayerItem.nowBringItem.GetComponent<Rigidbody>();
                     rigid.useGravity = false;//アイテムを持った時に重力の影響を受けないようにする
                     rigid.isKinematic = true;
+                    Destroy(this.gameObject);
                 }
                 else
-                { 
+                {
                     Destroy(this.gameObject);
                 }
             }
-        }
-
-        /// <summary>
-        /// アイテムを切り替えた際に情報を流すための関数
-        /// </summary>
-        /// <param name="status">持ち主のPlayerStatus</param>
-        public void InstantIntract(PlayerStatus status)
-        {
-            var PlayerItem = status.gameObject.GetComponent<PlayerItem>();
-            //アイテムにアタッチされているEffect系のスクリプトに取得者の情報を流す。
-            var effect = this.gameObject.GetComponent<ItemEffect>();
-            effect.ownerPlayerStatus = status;
-            effect.ownerPlayerItem = PlayerItem;
-            effect.OnPickUp();//各アイテムの拾った時の処理を実行させる
-            PlayerItem.nowBringItem.GetComponent<Rigidbody>().useGravity = false;//アイテムを持った時に重力の影響を受けないようにする
-        }
-
-        public string ReturnPopString()
-        {
-            //このスクリプトでは使わない
-            return null;
         }
     }
 }
