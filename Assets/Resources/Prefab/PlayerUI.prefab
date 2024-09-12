@@ -51,10 +51,10 @@ MonoBehaviour:
   _isCurcleSetting: 1
   _healthSliders:
   - {fileID: 3936163631560959760}
-  _bleedingHealthSliders:
-  - {fileID: 7650733569381713164}
   _sanValueSliders:
   - {fileID: 7505159131462693980}
+  _bleedingHealthSliders:
+  - {fileID: 7650733569381713164}
   _healthText: []
   _sanValueText: []
   _itemEmptySprite: {fileID: 21300000, guid: ce64e3088d200b445a7faa6e41cf58fd, type: 3}

@@ -12,6 +12,24 @@ using Common.Player;
 /// </summary>
 namespace Scenes.Ingame.Player
 {
+    /// <summary>
+    /// 体力, スタミナ,SAN値を変更するときのモードを指定する列挙型 
+    /// </summary>
+    public enum ChangeValueMode
+    { 
+        /// <summary>
+        /// 回復する
+        /// </summary>
+        Heal,
+        /// <summary>
+        /// ダメージを受ける
+        /// </summary>
+        Damage,
+        /// <summary>
+        /// ダメージを受ける（体力専用）
+        /// </summary>
+        Bleeding
+    }
 
     public class PlayerStatus : MonoBehaviour
     {
@@ -175,16 +193,16 @@ namespace Scenes.Ingame.Player
             //デバッグ用.(必要無くなれば消す)
             if (Input.GetKeyDown(KeyCode.L))
             {
-                ChangeHealth(10, "Damage");
-                ChangeSanValue(10, "Damage");
+                ChangeHealth(10, ChangeValueMode.Damage);
+                ChangeSanValue(10, ChangeValueMode.Damage);
                 ChangeBleedingBool(true);
             }
 
             if (Input.GetKeyDown(KeyCode.K))
             {
                 ChangeBleedingBool(false);
-                ChangeHealth(10, "Heal");
-                ChangeSanValue(10, "Heal");
+                ChangeHealth(10, ChangeValueMode.Heal);
+                ChangeSanValue(10, ChangeValueMode.Heal);
             }
 
             if (Input.GetKeyDown(KeyCode.P))
@@ -226,10 +244,10 @@ namespace Scenes.Ingame.Player
         /// 体力を変更させるための関数
         /// </summary>
         /// <param name="value">変更量</param>
-        /// <param name="mode">Heal(回復), Damage(減少),Bleeding(出血)の三つのみ</param>
-        public void ChangeHealth(int value, string mode)
+        /// <param name="mode">値変更のモードを指定</param>
+        public void ChangeHealth(int value, ChangeValueMode mode)
         {
-            if (mode == "Heal")
+            if (mode == ChangeValueMode.Heal)
             {
                 lastHP = _health.Value;
                 _health.Value = Mathf.Min(100, _health.Value + value);
@@ -238,7 +256,7 @@ namespace Scenes.Ingame.Player
                 //if (_networkObject.HasInputAuthority)
                 SpellUnlockSystem.Instance.IncreaseHealedHealth(_health.Value - lastHP);
             }
-            else if (mode == "Damage")
+            else if (mode == ChangeValueMode.Damage)
             {
                 if (_isProtect)
                 {
@@ -250,7 +268,7 @@ namespace Scenes.Ingame.Player
                 _health.Value = Mathf.Max(0, _health.Value - value);
                 _bleedingHealth.Value = Mathf.Max(0, _bleedingHealth.Value - value);
             }
-            else if (mode == "Bleeding")
+            else if (mode == ChangeValueMode.Bleeding)
             {
                 lastHP = _health.Value;
                 _health.Value = Mathf.Max(0, _health.Value - value);
@@ -261,10 +279,10 @@ namespace Scenes.Ingame.Player
         /// 体力を変更させるための関数(最大体力の比率を用いて計算する用)
         /// </summary>
         /// <param name="value">変更量</param>
-        /// <param name="mode">Heal(回復), Damage(減少),Bleeding(出血)の三つのみ</param>
-        public void ChangeHealth(float value, string mode)
+        /// <param name="mode">値変更のモードを指定</param>
+        public void ChangeHealth(float value, ChangeValueMode mode)
         {
-            if (mode == "Heal")
+            if (mode == ChangeValueMode.Heal)
             {
                 lastHP = _health.Value;
                 _health.Value = Mathf.Min(100, _health.Value + (int)(_healthBase * value));
@@ -273,7 +291,7 @@ namespace Scenes.Ingame.Player
                 //if (_networkObject.HasInputAuthority)
                 SpellUnlockSystem.Instance.IncreaseHealedHealth(_health.Value - lastHP);
             }
-            else if (mode == "Damage")
+            else if (mode == ChangeValueMode.Damage)
             {
                 if (_isProtect)
                 {
@@ -285,7 +303,7 @@ namespace Scenes.Ingame.Player
                 _health.Value = Mathf.Max(0, _health.Value - (int)(_healthBase * value));
                 _bleedingHealth.Value = Mathf.Max(0, _bleedingHealth.Value - (int)(_healthBase * value));
             }
-            else if (mode == "Bleeding")
+            else if (mode == ChangeValueMode.Bleeding)
             {
                 lastHP = _health.Value;
                 _health.Value = Mathf.Max(0, _health.Value - (int)(_healthBase * value));
@@ -306,12 +324,12 @@ namespace Scenes.Ingame.Player
         /// スタミナを変更させるための関数
         /// </summary>
         /// <param name="value">変更量</param>
-        /// <param name="mode">Heal(回復), Damage(減少)の二つのみ</param>
-        public void ChangeStamina(int value, string mode)
+        /// <param name="mode">値変更のモードを指定</param>
+        public void ChangeStamina(int value, ChangeValueMode mode)
         {
-            if (mode == "Heal")
+            if (mode == ChangeValueMode.Heal)
                 _stamina.Value = Mathf.Min(100, _stamina.Value + value);
-            else if (mode == "Damage")
+            else if (mode == ChangeValueMode.Damage)
                 _stamina.Value = Mathf.Max(0, _stamina.Value - (int)(value * (_isBuffedAdrenaline ? 0.5f : 1)));
         }
 
@@ -319,16 +337,16 @@ namespace Scenes.Ingame.Player
         /// SAN値を変更させるための関数
         /// </summary>
         /// <param name="value">変更量</param>
-        /// <param name="mode">Heal(回復), Damage(減少)の二つのみ</param>
-        public void ChangeSanValue(int value, string mode)
+        /// <param name="mode">値変更のモードを指定</param>
+        public void ChangeSanValue(int value, ChangeValueMode mode)
         {
-            if (mode == "Heal")
+            if (mode == ChangeValueMode.Heal)
             {
                 lastSanValue = _san.Value;
                 _san.Value = Mathf.Min(100, _san.Value + value);
             }
 
-            else if (mode == "Damage")
+            else if (mode == ChangeValueMode.Damage)
             {
                 lastSanValue = _san.Value;
                 _san.Value = Mathf.Max(0, _san.Value - value / (_isHaveCharm ? 2 : 1));
@@ -425,7 +443,7 @@ namespace Scenes.Ingame.Player
         {
             Debug.Log("ReviveCharacter起動");
             _survive.Value = true;
-            ChangeHealth(50, "Heal");
+            ChangeHealth(50, ChangeValueMode.Heal);
         }
 
         /// <summary>
@@ -439,7 +457,7 @@ namespace Scenes.Ingame.Player
             {
                 if (_bleeding.Value)
                 {
-                    ChangeHealth((_isPulsationBleeding ? 2 : 1), "Bleeding");
+                    ChangeHealth((_isPulsationBleeding ? 2 : 1), ChangeValueMode.Bleeding);
                     Debug.Log("出血ダメージが入りました。");
 
                     if (i == damage - 1)//最後の出血処理の後、すぐに出血Boolをfalseを変更させるため
