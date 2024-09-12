@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df37c1a4203536a48aab439667ddbbbc, type: 3}
+  m_Name: Config
+  m_EditorClassIdentifier: 
+  runner: {fileID: 8100573062894458466, guid: 2a41f4789c4ac8b43bc560b1f56513b7, type: 3}
+  hostMigrationHandler: {fileID: 5857260253041718432, guid: a5f59efb5ef06ab4182d022bf21c4bbf, type: 3}
+  sceneManagerTables:
+    _items:
+    - Key: 1
+      Value: {fileID: 8055098361863681660, guid: ca3f60359e99f504e88ca032f390d1d5, type: 3}
+  useHostMigration: 1
