@@ -26,10 +26,10 @@ namespace Scenes.Ingame.Enemy
         [SerializeField][Tooltip("索敵時の速度")] private float _searchSpeed;
         [SerializeField][Tooltip("追跡時の速度")] private float _chaseSpeed;
         [SerializeField][Tooltip("聴力の初期値。0は全く聞こえず100はどんな小さい音も聞き逃さない")][Range(0, 100)] private float _audiometerPowerBase;
-        [SerializeField][Tooltip("光に反応するかどうかの初期値")] private bool _reactToLightBase;
-        [SerializeField][Tooltip("飛行しているかどうかの初期値")] private bool _flyingBase;
+        [SerializeField][Tooltip("光に反応するかどうかの初期値")] private bool _reactToLight;
+        [SerializeField][Tooltip("飛行しているかどうかの初期値")] private bool _flying;
         [SerializeField][Tooltip("スタミナの初期値")] private int _staminaBase;
-        [SerializeField][Tooltip("特殊行動のクールタイム")] private int _actionCoolTimeBase;
+        [SerializeField][Tooltip("特殊行動のクールタイム")] private int _actionCoolTime;
         [SerializeField][Tooltip("初期のState")] private EnemyState _enemyStateBase;
         [SerializeField][Tooltip("足音の初期値")][Range(0, 1.0f)] private float _footSoundBase;
 
@@ -58,10 +58,7 @@ namespace Scenes.Ingame.Enemy
         [Tooltip("現在の敵の速度です")]private FloatReactiveProperty _speed = new FloatReactiveProperty();
         private IntReactiveProperty _hp = new IntReactiveProperty();
         private FloatReactiveProperty _audiometerPower = new FloatReactiveProperty();
-        private BoolReactiveProperty _reactToLight = new BoolReactiveProperty();//
-        private BoolReactiveProperty _flying = new BoolReactiveProperty();//
         private IntReactiveProperty _stamina = new IntReactiveProperty();
-        private IntReactiveProperty _actionCoolTime = new IntReactiveProperty();//
         private ReactiveProperty<EnemyState> _enemyState = new ReactiveProperty<EnemyState>(EnemyState.Patrolling);
 
         private BoolReactiveProperty _isBind = new BoolReactiveProperty(false);//拘束状態であるか否か
@@ -76,8 +73,7 @@ namespace Scenes.Ingame.Enemy
         public IObservable<int> OnHpChange { get { return _hp; } }
 
         public IObservable<float> OnAudiometerPowerChange { get { return _audiometerPower; } }
-        public IObservable<bool> OnReactToLightChange { get { return _reactToLight; } }
-        public IObservable<bool> OnFlyingChange { get { return _flying; } }
+
         public IObservable<int> OnStaminaChange { get { return _stamina; } }
         public IObservable<EnemyState> OnEnemyStateChange { get { return _enemyState; } }
 
@@ -99,7 +95,7 @@ namespace Scenes.Ingame.Enemy
         public int Stamina { get { return _stamina.Value; } }
 
         public float ReturnAudiomaterPower { get { return _audiometerPower.Value; } }
-        public bool ReturnReactToLight { get { return _reactToLight.Value; } }
+        public bool ReturnReactToLight { get { return _reactToLight; } }
         public EnemyState ReturnEnemyState { get { return _enemyState.Value; } }
 
         public int ReturnHorror { get { return _horror; } }
@@ -129,7 +125,7 @@ namespace Scenes.Ingame.Enemy
             _enemySearch.Init(visivilityMap);
             _enemyAttack.Init(visivilityMap.DeepCopy());//Atackはサーチの後にInit
             _enemyMove.Init();
-            _enemyUniqueAction.Init(_actionCoolTime.Value);
+            _enemyUniqueAction.Init(_actionCoolTime);
 
             //撃破されたことを検出
             OnHpChange.Where(hp => hp <= 0).Subscribe(hp =>
@@ -171,7 +167,7 @@ namespace Scenes.Ingame.Enemy
             //水の影響で自分の速度が下がるのか, 足音が大きくなるのかを確認
             if (_isCheckWaterEffect)
             {
-                if (_flying.Value)//飛翔状態の時は影響を受けない
+                if (_flying)//飛翔状態の時は影響を受けない
                 {
                     _isWaterEffectDebuff.Value = false;
                 }
@@ -197,10 +193,7 @@ namespace Scenes.Ingame.Enemy
         public void ResetStatus() {
             _hp.Value = _hpBase;
             _audiometerPower.Value = _audiometerPowerBase;
-            _reactToLight.Value = _reactToLightBase;
-            _flying.Value = _flyingBase;
             _stamina.Value = _staminaBase;
-            _actionCoolTime.Value = _actionCoolTimeBase;
             _enemyState.Value = _enemyStateBase;
         }
 
@@ -263,7 +256,7 @@ namespace Scenes.Ingame.Enemy
             _isCheckWaterEffect = value;
             if (_isCheckWaterEffect)
             {
-                if (_flying.Value)//飛翔状態の時は影響を受けない
+                if (_flying)//飛翔状態の時は影響を受けない
                 {
                     _isWaterEffectDebuff.Value = false;
                 }

@@ -66,7 +66,9 @@ namespace Scenes.Ingame.Enemy
                     _bind = x;
                     SpeedChange();
                 }).AddTo(this);
-            _enemyStatus.OnEnemyStateChange.Subscribe(x =>{ SpeedChange();}).AddTo(this);
+            _enemyStatus.OnEnemyStateChange.Subscribe(x =>{
+                SpeedChange();
+            }).AddTo(this);
             _enemyStatus.OnIsWaterEffectDebuffChange.Skip(1).Subscribe(x =>
             { 
                 _waterDebuff = x;
