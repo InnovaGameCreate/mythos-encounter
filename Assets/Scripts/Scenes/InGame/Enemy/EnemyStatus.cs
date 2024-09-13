@@ -110,6 +110,10 @@ namespace Scenes.Ingame.Enemy
 
         public bool GetStaminaOver { get { return _stuminaOver.Value; } }
 
+        public bool GetIsBind { get { return _isBind.Value; } }
+
+        public bool GetWaterEffectDebuff { get { return _isWaterEffectDebuff.Value; } }
+
 
 
 
