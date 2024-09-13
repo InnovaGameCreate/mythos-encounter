@@ -17,7 +17,7 @@ namespace Scenes.Ingame.Enemy
                     Debug.LogError("ƒ}ƒbƒvî•ñ‚ª‚ ‚è‚Ü‚¹‚ñA_myVisivilityMap‚ğì¬‚µ‚Ä‚­‚¾‚³‚¢");
                     return;
                 }
-                if (_enemyStatus.GetEnemyState == EnemyState.Patrolling || _enemyStatus.GetEnemyState == EnemyState.Searching)
+                if (_enemyStatus.EnemyState == EnemyState.Patrolling || _enemyStatus.EnemyState == EnemyState.Searching)
                 { //„‰ñó‘Ô‚Ü‚½‚Í‘{õó‘Ô‚Ìê‡
                     //’èŠú“I‚É‹ŠEî•ñ‚ğ’²‚×‚é
                     _checkTimeCount += Time.deltaTime;
@@ -49,7 +49,7 @@ namespace Scenes.Ingame.Enemy
                         }
                         else
                         {
-                            if (_enemyStatus.GetReactToLight && _myVisivilityMap.RightCheck(this.transform.position, _player.transform.position, _visivilityRange, _playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&‚Í¶‚©‚ç•]‰¿‚³‚ê‚é–‚É’ˆÓ
+                            if (_enemyStatus.ReactToLight && _myVisivilityMap.RightCheck(this.transform.position, _player.transform.position, _visivilityRange, _playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&‚Í¶‚©‚ç•]‰¿‚³‚ê‚é–‚É’ˆÓ
                             { //Œõ‚ªŒ©‚¦‚é‚©’²‚×‚é
                                 if (_debugMode) Debug.Log("Œõ‚ªŒ©‚¦‚½");
                                 _enemyStatus.SetEnemyState(EnemyState.Searching);

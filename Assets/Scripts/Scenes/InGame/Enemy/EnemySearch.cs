@@ -51,7 +51,7 @@ namespace Scenes.Ingame.Enemy
             _myAgent = GetComponent<NavMeshAgent>();
 
             //スペックの初期設定
-            _audiomaterPower = _enemyStatus.GetAudiomaterPower;
+            _audiomaterPower = _enemyStatus.AudiomaterPower;
 
 
 
@@ -64,7 +64,7 @@ namespace Scenes.Ingame.Enemy
                 .Subscribe(state =>
                 {
                     //プレイヤーの騒音を聞く
-                    if (_enemyStatus.GetEnemyState == EnemyState.Patrolling || _enemyStatus.GetEnemyState == EnemyState.Searching)
+                    if (_enemyStatus.EnemyState == EnemyState.Patrolling || _enemyStatus.EnemyState == EnemyState.Searching)
                     {
                         float valume = 0;
 
@@ -100,7 +100,7 @@ namespace Scenes.Ingame.Enemy
                 return;
             }
 
-            if (_enemyStatus.GetEnemyState == EnemyState.Patrolling || _enemyStatus.GetEnemyState == EnemyState.Searching)
+            if (_enemyStatus.EnemyState == EnemyState.Patrolling || _enemyStatus.EnemyState == EnemyState.Searching)
             { //巡回状態または捜索状態の場合
 
 
@@ -132,7 +132,7 @@ namespace Scenes.Ingame.Enemy
                       _enemyStatus.SetEnemyState(EnemyState.Chase);
                     }
                     
-                    else if (_enemyStatus.GetReactToLight&& _myVisivilityMap.RightCheck(this.transform.position,_player.transform.position,_visivilityRange,_playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
+                    else if (_enemyStatus.ReactToLight&& _myVisivilityMap.RightCheck(this.transform.position,_player.transform.position,_visivilityRange,_playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
                     { //光が見えるか調べる
                         if (_debugMode) Debug.Log("光が見えた");
                         _enemyStatus.SetEnemyState(EnemyState.Searching);

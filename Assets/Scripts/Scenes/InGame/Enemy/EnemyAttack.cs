@@ -69,9 +69,9 @@ namespace Scenes.Ingame.Enemy
         /// </summary>
         public void Init(EnemyVisibilityMap setVisivilityMap) {
             _myVisivilityMap = setVisivilityMap;
-            _horror = _enemyStatus.GetHorror;
-            _audiomaterPower = _enemyStatus.GetAudiomaterPower;
-            _blindChaseTime = _enemyStatus.GetBrindCheseTime;
+            _horror = _enemyStatus.Horror;
+            _audiomaterPower = _enemyStatus.AudiomaterPower;
+            _blindChaseTime = _enemyStatus.BrindCheseTime;
 
             _player = GameObject.FindWithTag("Player");
             if (_player == null) { Debug.LogWarning("プレイヤーが認識できません"); }
@@ -104,7 +104,7 @@ namespace Scenes.Ingame.Enemy
         protected virtual void FixedUpdate()
         {
             float _playerDistance;
-            if (_enemyStatus.GetEnemyState == EnemyState.Chase || _enemyStatus.GetEnemyState == EnemyState.Attack)
+            if (_enemyStatus.EnemyState == EnemyState.Chase || _enemyStatus.EnemyState == EnemyState.Attack)
             { //追跡状態または攻撃状態の場合
 
                 //定期的に状態を変更
@@ -126,7 +126,7 @@ namespace Scenes.Ingame.Enemy
                             _myEnemyMove.SetMovePosition(_player.transform.position);
 
 
-                            if (_atackRange > _playerDistance && _enemyStatus.GetStiffnessTime <= 0) 
+                            if (_atackRange > _playerDistance && _enemyStatus.StiffnessTime <= 0) 
                             { //攻撃可能であれば
                                 _enemyStatus.SetEnemyState(EnemyState.Attack);
 
@@ -172,7 +172,7 @@ namespace Scenes.Ingame.Enemy
                         { //まだあきらめない場合、近距離に特化したのSearchを行う
                             _enemyStatus.SetEnemyState(EnemyState.Chase);
 
-                            if (_enemyStatus.GetReactToLight && _myVisivilityMap.RightCheck(this.transform.position, _player.transform.position, _visivilityRange, _playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
+                            if (_enemyStatus.ReactToLight && _myVisivilityMap.RightCheck(this.transform.position, _player.transform.position, _visivilityRange, _playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
                             { //光が見えるか調べる
                                 if (_debugMode) Debug.Log("追跡中光が見えた");
                                 _myEnemyMove.SetMovePosition(nextPositionCandidate);

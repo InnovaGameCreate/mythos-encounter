@@ -89,30 +89,30 @@ namespace Scenes.Ingame.Enemy
         public IObservable<bool> OnStaminaOverChange { get { return _staminaOver; } }
 
         //##########GetとかSetのかたまり
-        public float GetPatrollingSpeed { get { return _patrollingSpeed; } }
-        public float GetSearchSpeed { get { return _searchSpeed; } }
-        public float GetChaseSpeed { get { return _chaseSpeed; } }
+        public float PatrollingSpeed { get { return _patrollingSpeed; } }
+        public float SearchSpeed { get { return _searchSpeed; } }
+        public float ChaseSpeed { get { return _chaseSpeed; } }
 
-        public int GetStaminaBase { get { return _staminaBase; } }
-        public int GetStamina { get { return _stamina.Value; } }
+        public int StaminaBase { get { return _staminaBase; } }
+        public int Stamina { get { return _stamina.Value; } }
 
-        public float GetAudiomaterPower { get { return _audiometerPower.Value; } }
-        public bool GetReactToLight { get { return _reactToLight; } }
-        public EnemyState GetEnemyState { get { return _enemyState.Value; } }
+        public float AudiomaterPower { get { return _audiometerPower.Value; } }
+        public bool ReactToLight { get { return _reactToLight; } }
+        public EnemyState EnemyState { get { return _enemyState.Value; } }
 
-        public int GetHorror { get { return _horror; } }
+        public int Horror { get { return _horror; } }
 
-        public float GetStiffnessTime { get { return _stiffnessTime.Value; } }
+        public float StiffnessTime { get { return _stiffnessTime.Value; } }
 
-        public float GetSpeed { get { return _speed.Value; }}
+        public float Speed { get { return _speed.Value; }}
 
-        public float GetBrindCheseTime { get { return _blindCheseTime; } }
+        public float BrindCheseTime { get { return _blindCheseTime; } }
 
-        public bool GetStaminaOver { get { return _staminaOver.Value; } }
+        public bool StaminaOver { get { return _staminaOver.Value; } }
 
-        public bool GetIsBind { get { return _isBind.Value; } }
+        public bool IsBind { get { return _isBind.Value; } }
 
-        public bool GetWaterEffectDebuff { get { return _isWaterEffectDebuff.Value; } }
+        public bool WaterEffectDebuff { get { return _isWaterEffectDebuff.Value; } }
 
 
 
