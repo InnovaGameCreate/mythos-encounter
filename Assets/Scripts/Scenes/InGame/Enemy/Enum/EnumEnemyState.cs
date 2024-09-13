@@ -33,7 +33,11 @@ namespace Scenes.Ingame.Enemy
         /// <summary>
         /// ì¡éÍçsìÆ
         /// </summary>
-        Special
+        Special,
+        /// <summary>
+        /// î≠å©
+        /// </summary>
+        Discover
     }
 
 

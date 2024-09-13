@@ -43,6 +43,8 @@ namespace Scenes.Ingame.Enemy
         [SerializeField][Tooltip("一個体の覚えている呪文")] private int _hasMagicNum;
         [SerializeField][Tooltip("退散から復帰するまでのミリ秒")] private int _fallBackTime;
         [SerializeField][Tooltip("見た目のゲームオブジェクト")] private GameObject _visual;
+        [SerializeField][Tooltip("発見動作は何ミリ秒間続くのかどうか")] private int _discoverTime;
+
 
         [Header("自身についているであろうスクリプト")]
         [SerializeField] EnemySearch _enemySearch;
@@ -113,6 +115,8 @@ namespace Scenes.Ingame.Enemy
         public bool IsBind { get { return _isBind.Value; } }
 
         public bool WaterEffectDebuff { get { return _isWaterEffectDebuff.Value; } }
+
+        public int DiscoverTime { get { return _discoverTime; } }
 
 
 

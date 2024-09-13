@@ -129,9 +129,8 @@ namespace Scenes.Ingame.Enemy
                     if (CheckCanSeeThePlayer())
                     { //ƒvƒŒƒCƒ„[‚Ìp‚ªŒ©‚¦‚é‚©’²‚×‚é
                       _myEneyMove.SetMovePosition(_player.transform.position);
-                      _enemyStatus.SetEnemyState(EnemyState.Chase);
+                      _enemyStatus.SetEnemyState(EnemyState.Discover);
                     }
-                    
                     else if (_enemyStatus.ReactToLight&& _myVisivilityMap.RightCheck(this.transform.position,_player.transform.position,_visivilityRange,_playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&‚Í¶‚©‚ç•]‰¿‚³‚ê‚é–‚É’ˆÓ
                     { //Œõ‚ªŒ©‚¦‚é‚©’²‚×‚é
                         if (_debugMode) Debug.Log("Œõ‚ªŒ©‚¦‚½");
