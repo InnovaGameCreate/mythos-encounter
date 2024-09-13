@@ -51,7 +51,7 @@ namespace Scenes.Ingame.Enemy
             _myAgent = GetComponent<NavMeshAgent>();
 
             //スペックの初期設定
-            _audiomaterPower = _enemyStatus.ReturnAudiomaterPower;
+            _audiomaterPower = _enemyStatus.GetAudiomaterPower;
 
 
 
@@ -64,7 +64,7 @@ namespace Scenes.Ingame.Enemy
                 .Subscribe(state =>
                 {
                     //プレイヤーの騒音を聞く
-                    if (_enemyStatus.ReturnEnemyState == EnemyState.Patrolling || _enemyStatus.ReturnEnemyState == EnemyState.Searching)
+                    if (_enemyStatus.GetEnemyState == EnemyState.Patrolling || _enemyStatus.GetEnemyState == EnemyState.Searching)
                     {
                         float valume = 0;
 
@@ -100,7 +100,7 @@ namespace Scenes.Ingame.Enemy
                 return;
             }
 
-            if (_enemyStatus.ReturnEnemyState == EnemyState.Patrolling || _enemyStatus.ReturnEnemyState == EnemyState.Searching)
+            if (_enemyStatus.GetEnemyState == EnemyState.Patrolling || _enemyStatus.GetEnemyState == EnemyState.Searching)
             { //巡回状態または捜索状態の場合
 
 
@@ -126,13 +126,13 @@ namespace Scenes.Ingame.Enemy
                     }
                     _checkTimeCount = 0;
                     //いろんなものを調べる。これは決定的なものほど優先して認識する
-                    if (CheckCanPlayerVisivlleCheck())
+                    if (CheckCanSeeThePlayer())
                     { //プレイヤーの姿が見えるか調べる
                       _myEneyMove.SetMovePosition(_player.transform.position);
                       _enemyStatus.SetEnemyState(EnemyState.Chase);
                     }
                     
-                    else if (_enemyStatus.ReturnReactToLight&& _myVisivilityMap.RightCheck(this.transform.position,_player.transform.position,_visivilityRange,_playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
+                    else if (_enemyStatus.GetReactToLight&& _myVisivilityMap.RightCheck(this.transform.position,_player.transform.position,_visivilityRange,_playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
                     { //光が見えるか調べる
                         if (_debugMode) Debug.Log("光が見えた");
                         _enemyStatus.SetEnemyState(EnemyState.Searching);
@@ -171,7 +171,7 @@ namespace Scenes.Ingame.Enemy
             }
         }
 
-        protected bool CheckCanPlayerVisivlleCheck() {
+        protected bool CheckCanSeeThePlayer() {
             float range = Vector3.Magnitude(this.transform.position - _player.transform.position);//平方根を求めるのはすごくコストが重いらしいので確実に計算が必要になってからしてます
                                              //視界が通るか＝Rayが通るか
             bool hit;

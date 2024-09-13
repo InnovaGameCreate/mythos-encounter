@@ -69,8 +69,8 @@ namespace Scenes.Ingame.Enemy
         /// </summary>
         public void Init(EnemyVisibilityMap setVisivilityMap) {
             _myVisivilityMap = setVisivilityMap;
-            _horror = _enemyStatus.ReturnHorror;
-            _audiomaterPower = _enemyStatus.ReturnAudiomaterPower;
+            _horror = _enemyStatus.GetHorror;
+            _audiomaterPower = _enemyStatus.GetAudiomaterPower;
             _blindChaseTime = _enemyStatus.GetBrindCheseTime;
 
             _player = GameObject.FindWithTag("Player");
@@ -104,7 +104,7 @@ namespace Scenes.Ingame.Enemy
         protected virtual void FixedUpdate()
         {
             float _playerDistance;
-            if (_enemyStatus.ReturnEnemyState == EnemyState.Chase || _enemyStatus.ReturnEnemyState == EnemyState.Attack)
+            if (_enemyStatus.GetEnemyState == EnemyState.Chase || _enemyStatus.GetEnemyState == EnemyState.Attack)
             { //追跡状態または攻撃状態の場合
 
                 //定期的に状態を変更
@@ -113,7 +113,7 @@ namespace Scenes.Ingame.Enemy
                 {
                     _playerDistance = Vector3.Magnitude(this.transform.position - _player.transform.position);
                     _checkTimeCount = 0;
-                    if (CheckCanPlayerVisivlleCheck()) //敵が見えるルートがあるかかどうかを確認する
+                    if (CheckCanSeeThePlayer()) //敵が見えるルートがあるかかどうかを確認する
                     {
                         //こちらが深淵を除くときry
                         SanCheck();
@@ -172,7 +172,7 @@ namespace Scenes.Ingame.Enemy
                         { //まだあきらめない場合、近距離に特化したのSearchを行う
                             _enemyStatus.SetEnemyState(EnemyState.Chase);
 
-                            if (_enemyStatus.ReturnReactToLight && _myVisivilityMap.RightCheck(this.transform.position, _player.transform.position, _visivilityRange, _playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
+                            if (_enemyStatus.GetReactToLight && _myVisivilityMap.RightCheck(this.transform.position, _player.transform.position, _visivilityRange, _playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
                             { //光が見えるか調べる
                                 if (_debugMode) Debug.Log("追跡中光が見えた");
                                 _myEnemyMove.SetMovePosition(nextPositionCandidate);
@@ -229,7 +229,7 @@ namespace Scenes.Ingame.Enemy
             }
         }
 
-        protected virtual bool CheckCanPlayerVisivlleCheck()
+        protected virtual bool CheckCanSeeThePlayer()
         {//キャラクターによって視界の角度判定つける？ミゴは360°、深き者どもは270°、一般的な人間の狂信者とかなら180°とか...
             float range = Vector3.Magnitude(this.transform.position - _player.transform.position) - 0.2f;//プレイヤー本体のコライダーに当たるため減らしてる
                                                                                                   //視界が通るか＝Rayが通るか

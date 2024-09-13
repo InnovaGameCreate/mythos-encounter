@@ -94,16 +94,16 @@ namespace Scenes.Ingame.Enemy
                  {//毎秒処理
                     _staminaChangeCount -= 1;
 
-                switch (_enemyStatus.ReturnEnemyState)
+                switch (_enemyStatus.GetEnemyState)
                 {
                     case EnemyState.Patrolling:
                     case EnemyState.Searching:
                         //通常の場合
-                        if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
+                        if (_enemyStatus.GetStaminaBase > _enemyStatus.GetStamina)
                         { //スタミナが削れていたら
-                            _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
+                            _enemyStatus.StaminaChange(_enemyStatus.GetStamina + 1);
                         }
-                        else if (_enemyStatus.ReturnStaminaBase < _enemyStatus.Stamina)
+                        else if (_enemyStatus.GetStaminaBase < _enemyStatus.GetStamina)
                         {
                             _enemyStatus.SetStuminaOver(false);
                         }
@@ -113,33 +113,33 @@ namespace Scenes.Ingame.Enemy
                         //走る場合
                         if (_enemyStatus.GetStaminaOver)
                         { //スタミナが切れ切ったかどうか
-                            if (_enemyStatus.ReturnStaminaBase <= _enemyStatus.Stamina && !(_enemyStatus.ReturnStaminaBase == 0))
+                            if (_enemyStatus.GetStaminaBase <= _enemyStatus.GetStamina && !(_enemyStatus.GetStaminaBase == 0))
                             { //回復した状態にあるかどうか
                                 _enemyStatus.SetStuminaOver(false);
                             }
                             else
                             {//回復しきっていないなら回復する
-                                if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
+                                if (_enemyStatus.GetStaminaBase > _enemyStatus.GetStamina)
                                 { //スタミナが削れていたら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
-                                    _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
+                                    _enemyStatus.StaminaChange(_enemyStatus.GetStamina + 1);
                                 }
                             }
                         }
                         else
                         { //まだスタミナが切れ切って無い場合
-                            if (0 >= _enemyStatus.Stamina)
+                            if (0 >= _enemyStatus.GetStamina)
                             { //たった今切れ切ったかどうか
                                 _enemyStatus.SetStuminaOver(true);
-                                if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
+                                if (_enemyStatus.GetStaminaBase > _enemyStatus.GetStamina)
                                 { //スタミナが削れていたら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
-                                    _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
+                                    _enemyStatus.StaminaChange(_enemyStatus.GetStamina + 1);
                                 }
                             }
                             else
                             {
-                                if (0 < _enemyStatus.Stamina)
+                                if (0 < _enemyStatus.GetStamina)
                                 { //スタミナを削れるなら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
-                                    _enemyStatus.StaminaChange(_enemyStatus.Stamina - 1);
+                                    _enemyStatus.StaminaChange(_enemyStatus.GetStamina - 1);
                                 }
                             }
                         }
@@ -168,24 +168,24 @@ namespace Scenes.Ingame.Enemy
                 }
                 else
                 {
-                    switch (_enemyStatus.ReturnEnemyState)
+                    switch (_enemyStatus.GetEnemyState)
                     {
                         case EnemyState.Patrolling:
-                            _enemyStatus.SetSpeed(_enemyStatus.ReturnPatrollingSpeed * (_enemyStatus.GetIsBind ? 0.1f : 1) * (_enemyStatus.GetWaterEffectDebuff ? 0.8f : 1));
+                            _enemyStatus.SetSpeed(_enemyStatus.GetPatrollingSpeed * (_enemyStatus.GetIsBind ? 0.1f : 1) * (_enemyStatus.GetWaterEffectDebuff ? 0.8f : 1));
 
                             break;
                         case EnemyState.Searching:
-                            _enemyStatus.SetSpeed(_enemyStatus.ReturnSearchSpeed * (_enemyStatus.GetIsBind ? 0.1f : 1) * (_enemyStatus.GetWaterEffectDebuff ? 0.8f : 1));
+                            _enemyStatus.SetSpeed(_enemyStatus.GetSearchSpeed * (_enemyStatus.GetIsBind ? 0.1f : 1) * (_enemyStatus.GetWaterEffectDebuff ? 0.8f : 1));
 
                             break;
                         case EnemyState.Chase:
                             if (_enemyStatus.GetStaminaOver)
                             {
-                                _enemyStatus.SetSpeed(_enemyStatus.ReturnSearchSpeed * (_enemyStatus.GetIsBind ? 0.1f : 1) * (_enemyStatus.GetWaterEffectDebuff ? 0.8f : 1));
+                                _enemyStatus.SetSpeed(_enemyStatus.GetSearchSpeed * (_enemyStatus.GetIsBind ? 0.1f : 1) * (_enemyStatus.GetWaterEffectDebuff ? 0.8f : 1));
                             }
                             else
                             {
-                                _enemyStatus.SetSpeed(_enemyStatus.ReturnChaseSpeed * (_enemyStatus.GetIsBind ? 0.1f : 1) * (_enemyStatus.GetWaterEffectDebuff ? 0.8f : 1));
+                                _enemyStatus.SetSpeed(_enemyStatus.GetChaseSpeed * (_enemyStatus.GetIsBind ? 0.1f : 1) * (_enemyStatus.GetWaterEffectDebuff ? 0.8f : 1));
                             }
                             break;
 
@@ -194,11 +194,11 @@ namespace Scenes.Ingame.Enemy
                             
                             if (_enemyStatus.GetStaminaOver)
                             {
-                                _enemyStatus.SetSpeed(_enemyStatus.ReturnSearchSpeed * (_enemyStatus.GetIsBind ? 0.1f : 1) * (_enemyStatus.GetWaterEffectDebuff ? 0.8f : 1));
+                                _enemyStatus.SetSpeed(_enemyStatus.GetSearchSpeed * (_enemyStatus.GetIsBind ? 0.1f : 1) * (_enemyStatus.GetWaterEffectDebuff ? 0.8f : 1));
                             }
                             else
                             {
-                                _enemyStatus.SetSpeed(_enemyStatus.ReturnChaseSpeed * (_enemyStatus.GetIsBind ? 0.1f : 1) * (_enemyStatus.GetWaterEffectDebuff ? 0.8f : 1));
+                                _enemyStatus.SetSpeed(_enemyStatus.GetChaseSpeed * (_enemyStatus.GetIsBind ? 0.1f : 1) * (_enemyStatus.GetWaterEffectDebuff ? 0.8f : 1));
                             }
                             break;
                         case EnemyState.FallBack:
@@ -236,13 +236,5 @@ namespace Scenes.Ingame.Enemy
 
         }
 
-        /// <summary>
-        /// 硬直状態を変更します
-        /// </summary>
-        /// <param name="value">変更する値</param>
-        public void ChangeStiffness(bool value)
-        {
-            _stiffness = value;
-        }
     } 
 }

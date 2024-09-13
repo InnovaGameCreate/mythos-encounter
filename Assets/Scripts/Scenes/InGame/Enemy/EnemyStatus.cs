@@ -89,18 +89,18 @@ namespace Scenes.Ingame.Enemy
         public IObservable<bool> OnStaminaOverChange { get { return _staminaOver; } }
 
         //##########GetとかSetのかたまり
-        public float ReturnPatrollingSpeed { get { return _patrollingSpeed; } }
-        public float ReturnSearchSpeed { get { return _searchSpeed; } }
-        public float ReturnChaseSpeed { get { return _chaseSpeed; } }
+        public float GetPatrollingSpeed { get { return _patrollingSpeed; } }
+        public float GetSearchSpeed { get { return _searchSpeed; } }
+        public float GetChaseSpeed { get { return _chaseSpeed; } }
 
-        public int ReturnStaminaBase { get { return _staminaBase; } }
-        public int Stamina { get { return _stamina.Value; } }
+        public int GetStaminaBase { get { return _staminaBase; } }
+        public int GetStamina { get { return _stamina.Value; } }
 
-        public float ReturnAudiomaterPower { get { return _audiometerPower.Value; } }
-        public bool ReturnReactToLight { get { return _reactToLight; } }
-        public EnemyState ReturnEnemyState { get { return _enemyState.Value; } }
+        public float GetAudiomaterPower { get { return _audiometerPower.Value; } }
+        public bool GetReactToLight { get { return _reactToLight; } }
+        public EnemyState GetEnemyState { get { return _enemyState.Value; } }
 
-        public int ReturnHorror { get { return _horror; } }
+        public int GetHorror { get { return _horror; } }
 
         public float GetStiffnessTime { get { return _stiffnessTime.Value; } }
 
@@ -254,7 +254,7 @@ namespace Scenes.Ingame.Enemy
             _visual.active = true;
         }
 
-        public void ChangeBindBool(bool value)
+        public void SetBind(bool value)
         {
             _isBind.Value = value;
         }
@@ -262,15 +262,19 @@ namespace Scenes.Ingame.Enemy
         public void SetStuminaOver(bool setValue) { 
             _staminaOver.Value = setValue;
         }
-
+        /// <summary>
+        /// 硬直時間を変化さえる
+        /// </summary>
+        /// <param name="value">変化する値</param>
         public void ChangeStiffnessTime(float value) { 
             _stiffnessTime.Value += value;
         }
 
         /// <summary>
-        /// 「水の生成」呪文の効果を受けるか否かを決定する関数
+        /// 水の影響を変更する
         /// </summary>
-        public void ChangeCheckWaterEffectBool(bool value)
+        /// <param name="value">水の影響があるときはtrue無いときはfalse</param>
+        public void SetCheckWaterEffect(bool value)
         { 
             _isCheckWaterEffect = value;
             if (_isCheckWaterEffect)

@@ -17,7 +17,7 @@ namespace Scenes.Ingame.Enemy
                     Debug.LogError("マップ情報がありません、_myVisivilityMapを作成してください");
                     return;
                 }
-                if (_enemyStatus.ReturnEnemyState == EnemyState.Patrolling || _enemyStatus.ReturnEnemyState == EnemyState.Searching)
+                if (_enemyStatus.GetEnemyState == EnemyState.Patrolling || _enemyStatus.GetEnemyState == EnemyState.Searching)
                 { //巡回状態または捜索状態の場合
                     //定期的に視界情報を調べる
                     _checkTimeCount += Time.deltaTime;
@@ -42,14 +42,14 @@ namespace Scenes.Ingame.Enemy
                         }
                         _checkTimeCount = 0;
                         //いろんなものを調べる。これは決定的なものほど優先して認識する
-                        if (CheckCanPlayerVisivlleCheck())
+                        if (CheckCanSeeThePlayer())
                         { //プレイヤーの姿が見えるか調べる
                             _myEneyMove.SetMovePosition(_player.transform.position);
                             _enemyStatus.SetEnemyState(EnemyState.Chase);
                         }
                         else
                         {
-                            if (_enemyStatus.ReturnReactToLight && _myVisivilityMap.RightCheck(this.transform.position, _player.transform.position, _visivilityRange, _playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
+                            if (_enemyStatus.GetReactToLight && _myVisivilityMap.RightCheck(this.transform.position, _player.transform.position, _visivilityRange, _playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
                             { //光が見えるか調べる
                                 if (_debugMode) Debug.Log("光が見えた");
                                 _enemyStatus.SetEnemyState(EnemyState.Searching);
