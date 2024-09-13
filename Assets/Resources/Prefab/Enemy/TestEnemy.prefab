@@ -145,7 +145,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _checkRate: 1
-  _debugMode: 0
+  _debugMode: 1
   _myEneyMove: {fileID: 7130656707961021328}
   _enemyStatus: {fileID: 7000828227398978958}
 --- !u!114 &7000828227398978958
@@ -182,7 +182,7 @@ MonoBehaviour:
   _enemyAttack: {fileID: 1690901522004022849}
   _enemyMove: {fileID: 7130656707961021328}
   _enemyUniqueAction: {fileID: 5811591338526085470}
-  _debugMode: 0
+  _debugMode: 1
 --- !u!195 &-8031655832550655550
 NavMeshAgent:
   m_ObjectHideFlags: 0
