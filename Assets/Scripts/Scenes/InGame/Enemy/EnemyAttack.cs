@@ -17,7 +17,7 @@ namespace Scenes.Ingame.Enemy
         [Header("このスクリプトを制御する変数")]
         [SerializeField][Tooltip("何秒ごとに視界の状態、攻撃可能性、SANをチェックするか")] private float _checkRate;
         [Tooltip("戦闘時の視界の広さ、マップ端から端まで見える値で固定中")] private float _visivilityRange = 500;
-        [SerializeField] [Tooltip("見失ったとしてもどれだけの時間頑張って探そうとするかどうか")]private float _blindChaseTime;
+       
         [SerializeField][Tooltip("デバッグするかどうか")] private bool _debugMode;
 
 
@@ -53,6 +53,7 @@ namespace Scenes.Ingame.Enemy
         private EnemyState _lastEnemyState = EnemyState.None;
         Vector3 nextPositionCandidate = new Vector3(0, 0, 0);
         private Camera _camera;
+        private float _blindChaseTime;
 
         public List<EnemyAttackBehaviour> GetEnemyAtackBehaviours (){
             return _enemyAttackBehaviours;
@@ -71,6 +72,7 @@ namespace Scenes.Ingame.Enemy
             _myVisivilityMap = setVisivilityMap;
             _horror = _enemyStatus.ReturnHorror;
             _audiomaterPower = _enemyStatus.ReturnAudiomaterPower;
+            _blindChaseTime = _enemyStatus.GetBrindCheseTime;
 
             _player = GameObject.FindWithTag("Player");
             if (_player == null) { Debug.LogWarning("プレイヤーが認識できません"); }

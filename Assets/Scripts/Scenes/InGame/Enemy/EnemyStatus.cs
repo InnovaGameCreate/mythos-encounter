@@ -32,6 +32,7 @@ namespace Scenes.Ingame.Enemy
         [SerializeField][Tooltip("特殊行動のクールタイム")] private int _actionCoolTime;
         [SerializeField][Tooltip("初期のState")] private EnemyState _enemyStateBase;
         [SerializeField][Tooltip("足音の初期値")][Range(0, 1.0f)] private float _footSoundBase;
+        [SerializeField][Tooltip("プレイヤーを見失った後何秒間はあきらめないか")] private float _briendCheseTime;
 
         [Header("敵キャラの攻撃性能の初期値")]
         [SerializeField][Tooltip("Sanへの攻撃力")] private int _horror;
@@ -67,7 +68,7 @@ namespace Scenes.Ingame.Enemy
 
         private bool _isCheckWaterEffect = false;//水の生成がされているか否か
         private BoolReactiveProperty _isWaterEffectDebuff = new BoolReactiveProperty(false);//水の生成によるデバフがされているか否か
-
+        [Tooltip("スタミナが切れて走れない状態か否か")]private BoolReactiveProperty _stuminaOver = new BoolReactiveProperty(false);
 
 
         public IObservable<int> OnHpChange { get { return _hp; } }
@@ -85,6 +86,7 @@ namespace Scenes.Ingame.Enemy
 
         public IObservable<float> OnSpeedChange { get { return _speed; } }
 
+        public IObservable<bool> OnStaminaOverChange { get { return _stuminaOver; } }
 
         //##########GetとかSetのかたまり
         public float ReturnPatrollingSpeed { get { return _patrollingSpeed; } }
@@ -103,6 +105,10 @@ namespace Scenes.Ingame.Enemy
         public float GetStiffnessTime { get { return _stiffnessTime.Value; } }
 
         public float GetSpeed { get { return _speed.Value; }}
+
+        public float GetBrindCheseTime { get { return _briendCheseTime; } }
+
+        public bool GetStaminaOver { get { return _stuminaOver.Value; } }
 
 
 
@@ -249,6 +255,9 @@ namespace Scenes.Ingame.Enemy
             _isBind.Value = value;
         }
 
+        public void SetStuminaOver(bool setValue) { 
+            _stuminaOver.Value = setValue;
+        }
 
         public void ChangeStiffnessTime(float value) { 
             _stiffnessTime.Value += value;
