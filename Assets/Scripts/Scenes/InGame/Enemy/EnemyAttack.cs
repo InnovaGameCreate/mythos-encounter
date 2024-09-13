@@ -16,7 +16,7 @@ namespace Scenes.Ingame.Enemy
     {
         [Header("このスクリプトを制御する変数")]
         [SerializeField][Tooltip("何秒ごとに視界の状態、攻撃可能性、SANをチェックするか")] private float _checkRate;
-        [SerializeField][Tooltip("戦闘時の視界の広さ")] private float _visivilityRange;//仕様上視界範囲は全て同一？じゃなかったらこれはEnemyStatusに送り込むよ
+        [Tooltip("戦闘時の視界の広さ、マップ端から端まで見える値で固定中")] private float _visivilityRange = 500;
         [SerializeField] [Tooltip("見失ったとしてもどれだけの時間頑張って探そうとするかどうか")]private float _blindChaseTime;
         [SerializeField][Tooltip("デバッグするかどうか")] private bool _debugMode;
 

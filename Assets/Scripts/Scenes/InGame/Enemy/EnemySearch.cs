@@ -22,8 +22,8 @@ namespace Scenes.Ingame.Enemy
         protected EnemyMove _myEneyMove;
         protected NavMeshAgent _myAgent;
 
-        [SerializeField]
-        protected float _visivilityRange;//仕様上視界範囲は全て同一？じゃなかったらこれはEnemyStatusに送り込むよ
+
+        [Tooltip("視界の長さ、今はマップ端から端まで見えるようにしています。小さくすると軽量化可能")]protected float _visivilityRange = 500;
         [SerializeField]
         protected EnemyStatus _enemyStatus;
 
