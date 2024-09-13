@@ -24,13 +24,16 @@ namespace Scenes.Ingame.Enemy
     {
         public static EnemySpawner Instance;
 
-        [Header("デバッグするかどうか")]
+        [Header("デバッグ関連")]
         [SerializeField] private bool _debugMode;
         [SerializeField][Tooltip("InGameManager無しで機能させるかどうか")] private bool _nonInGameManagerMode;
-        [SerializeField][Tooltip("デバッグ時に作成する敵")] private EnemyName _enemyName;
+        [SerializeField][Tooltip("最初に敵の抽選をするかどうか")] private bool _raffle = true;//デフォルトではオン
+       
+        [Header("各種設定")]
+        [SerializeField][Tooltip("作成する敵")] private EnemyName _enemyName;
+        [SerializeField][Tooltip("ゲームの進行度合い、0の場合設定なしとして全ての敵を抽選させる")] private byte _gamePhase;
 
         [Header("マップの設定")]
-        [Header("スキャンするマップに関して")]
         [SerializeField]
         [Tooltip("自動で生成されるので挿入しない事")]
         private EnemyVisibilityMap _enemyVisibilityMap;
@@ -187,6 +190,51 @@ namespace Scenes.Ingame.Enemy
                 _doors[i].ChangeDoorInitial();
             }
 
+            if (_raffle)
+            { //InGameManagerが存在する場合
+                switch (_gamePhase)
+                {
+                    case 0:
+                        switch (Random.Range(0, 3))
+                        {
+                            case 0:
+                                _enemyName = EnemyName.DeepOnes;
+                                break;
+                            case 1:
+                                _enemyName = EnemyName.MiGo;
+                                break;
+                            case 2:
+                                _enemyName = EnemyName.SpawnOfCthulhu;
+                                break;
+                        }
+                        if (_debugMode) Debug.Log("TestEnemyを除く全ての敵を抽選します抽選結果は" + _enemyName);
+                        break;
+                    case 1:
+                        switch (Random.Range(0, 3))
+                        {
+                            case 0:
+                                _enemyName = EnemyName.DeepOnes;
+                                break;
+                            case 1:
+                                _enemyName = EnemyName.MiGo;
+                                break;
+                            case 2:
+                                _enemyName = EnemyName.SpawnOfCthulhu;
+                                break;
+                        }
+                        if (_debugMode) Debug.Log("深き者ども、ミゴ、落とし子から抽選します抽選結果は" + _enemyName);
+                        break;
+                    case 2:
+                        Debug.LogWarning("このフェーズは作業中");
+                        break;
+                    case 3:
+                        Debug.LogWarning("このフェーズは作業中");
+                        break;
+                    default:
+                        Debug.LogError("想定外のゲームフェーズです");
+                        break;
+                }
+            }
             if (_nonInGameManagerMode)
             {
 
@@ -241,6 +289,14 @@ namespace Scenes.Ingame.Enemy
             }
             return createEnemy;
 
+        }
+
+        /// <summary>
+        /// ゲームの進行度合いをセットする
+        /// </summary>
+        /// <param name="value">ゲームの進行度合い</param>
+        private void SetGamePhase(byte value) { 
+            _gamePhase = value;
         }
 
         private void OnDestroy()
