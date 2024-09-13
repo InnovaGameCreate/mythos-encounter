@@ -39,7 +39,6 @@ namespace Scenes.Ingame.Enemy
         [SerializeField] private EnemyStatus _enemyStatus;
         [SerializeField] private EnemySearch _enemySearch;
         [SerializeField] private EnemyMove _myEnemyMove;
-        private NavMeshAgent _myAgent;
 
         //##########内部で使う変数##########
         private GameObject _player;
