@@ -308,6 +308,16 @@ namespace Scenes.Ingame.Enemy
 
         }
 
+        /// <summary>
+        /// 自信のシャローコピーを返す
+        /// </summary>
+        /// <returns>自身のシャローコピー</returns>
+        public EnemyVisibilityMap SharrowCopy() { 
+        return (EnemyVisibilityMap)this.MemberwiseClone();
+        }
+
+
+
 
         /// <summary>
         /// 次に確認すべき最も見ておらず最も近い位置を取得。

@@ -7,6 +7,7 @@ namespace Scenes.Ingame.Enemy
     public class SpawnOfCthulhuAction : EnemyUniqueAction
     {
         private EnemySpawner _enemySpawner;
+        [SerializeField]private bool _canSpawn;
 
         protected override void Start()
         {
@@ -15,7 +16,37 @@ namespace Scenes.Ingame.Enemy
 
         protected override void Action()
         {
-            _enemySpawner.EnemySpawn(EnemyName.DeepOnes, this.transform.position);
+            if (_canSpawn) {
+                GameObject createObject;
+                createObject = _enemySpawner.EnemySpawn(EnemyName.DeepOnes, this.transform.position);
+                if (createObject.TryGetComponent<DeepOnesAction>(out DeepOnesAction deepOnesActionScript))
+                {
+                    deepOnesActionScript.SetCanSpawn(false);
+                }
+                if (createObject.TryGetComponent<EnemyAttack>(out EnemyAttack enemyAttackScript))
+                {
+                    List<EnemyAttackBehaviour> setEnemyAttackBehaviours = new List<EnemyAttackBehaviour>();//新しく作るList
+                    foreach (EnemyAttackBehaviour enemyAttackBehaviourScript in enemyAttackScript.GetEnemyAtackBehaviours())
+                    {
+                        if (enemyAttackBehaviourScript.GetType() != typeof(EnemyShootingAtackBehaviour))
+                        {
+                            setEnemyAttackBehaviours.Add(enemyAttackBehaviourScript);
+                        }
+                    }
+                    enemyAttackScript.SetEnemyAtackBehaviours(setEnemyAttackBehaviours);
+                }
+
+            }
+
+
+        }
+
+        /// <summary>
+        /// スポーンさせる能力を与えるかどうか
+        /// </summary>
+        /// <param name="set">trueならスポーン能力あり、falseならスポーン能力なし</param>
+        public void SetCanSpawn(bool set) { 
+        _canSpawn = set;
         }
     }
 }

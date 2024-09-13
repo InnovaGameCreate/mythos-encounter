@@ -54,6 +54,16 @@ namespace Scenes.Ingame.Enemy
         Vector3 nextPositionCandidate = new Vector3(0, 0, 0);
         private Camera _camera;
 
+        public List<EnemyAttackBehaviour> GetEnemyAtackBehaviours (){
+            return _enemyAttackBehaviours;
+        }
+
+        public void SetEnemyAtackBehaviours(List<EnemyAttackBehaviour> setList) { 
+            _enemyAttackBehaviours = setList;
+        }
+
+
+
         /// <summary>
         /// 初期化処理、外部からアクセスする
         /// </summary>
