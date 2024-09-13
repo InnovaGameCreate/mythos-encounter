@@ -57,7 +57,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _checkRate: 0.5
   _debugMode: 1
-  _enemyAttackBehaviours: []
+  _enemyAttackBehaviours:
+  - {fileID: 377333734689836576}
+  - {fileID: 4761551339375554962}
   _enemyStatus: {fileID: 3570193099927935822}
   _enemySearch: {fileID: 5870517707342100858}
   _myEnemyMove: {fileID: 816805753169648624}
