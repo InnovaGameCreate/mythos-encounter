@@ -60,8 +60,9 @@ namespace Network
             //過去セッションのネットワークオブジェクトを復元
             foreach (var resumeObj in runner.GetResumeSnapshotNetworkObjects())
             {
+                if (!resumeObj.TryGetComponent<ObjectToken>(out var objectTokenCs)) continue;
+
                 //ObjectTokenCsからトークンやTransformの情報を抜き出す
-                var objectTokenCs = resumeObj.GetComponent<ObjectToken>();
                 string objectToken = objectTokenCs.token;
                 Vector3 position = objectTokenCs.position;
                 Quaternion rotation = objectTokenCs.rotation;

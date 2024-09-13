@@ -149,9 +149,14 @@ namespace Network
                     isResumePlayer.Object.AssignInputAuthority(player);
 
                     //ホストのプレイヤーオブジェクトにはHOSTフラグを付与
-                    var playerObj = isResumePlayer.GetComponent<NetworkObject>();
-                    if (playerObj.InputAuthority.PlayerId == runner.LocalPlayer.PlayerId)
-                        playerObj.GetComponent<ObjectToken>().token = "HOST";
+                    if (isResumePlayer.TryGetComponent<NetworkObject>(out var playerObj))
+                    {
+                        if (playerObj.InputAuthority.PlayerId == runner.LocalPlayer.PlayerId
+                            && playerObj.TryGetComponent<ObjectToken>(out var objectToken))
+                        {
+                            objectToken.token = "HOST";
+                        }
+                    }
 
                     //プレイヤーリストに追加
                     PlayerList.Add(player, playerObj);
