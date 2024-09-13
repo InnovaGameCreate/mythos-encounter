@@ -102,6 +102,7 @@ namespace Scenes.Ingame.Enemy
 
         public float GetStiffnessTime { get { return _stiffnessTime.Value; } }
 
+        public float GetSpeed { get { return _speed.Value; }}
 
 
 
@@ -205,6 +206,11 @@ namespace Scenes.Ingame.Enemy
             _hp.Value -= damage;
         }
 
+        /// <summary>
+        /// 移動速度を指定した値に設定する
+        /// </summary>
+        /// <param name="value">設定する速度</param>
+        public void SetSpeed(float value) { { _speed.Value = value; } }
 
         /// <summary>
         /// 退散させるために使用する
