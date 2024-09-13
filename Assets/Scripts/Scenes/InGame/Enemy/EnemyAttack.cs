@@ -79,7 +79,6 @@ namespace Scenes.Ingame.Enemy
             if (_playerStatus == null) { Debug.LogWarning("プレイヤーステータスが認識できません"); }
 
             _camera = GameObject.Find("Main Camera").GetComponent<Camera>();
-            _myAgent = GetComponent<NavMeshAgent>();
 
             _enemyStatus.OnEnemyStateChange.Subscribe(state => 
             {
