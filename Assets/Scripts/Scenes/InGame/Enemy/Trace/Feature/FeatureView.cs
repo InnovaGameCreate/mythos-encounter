@@ -13,9 +13,9 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         private GameObject interactTarget = null;
         AudioSource _audioSource;
 
-        public void Init(AudioSource audioSource)
+        public void Init()
         {
-            _audioSource = audioSource;
+            _audioSource = GetComponent<AudioSource>();
             _enemy = GameObject.FindWithTag("Enemy");
             _stageInteracts = GameObject.FindGameObjectsWithTag("StageIntract");
         }
