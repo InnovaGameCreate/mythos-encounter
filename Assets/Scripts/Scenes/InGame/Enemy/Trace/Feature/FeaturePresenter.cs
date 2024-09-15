@@ -1,4 +1,5 @@
 using UnityEngine;
+using UniRx;
 
 namespace Scenes.Ingame.Enemy.Trace.Feature
 {
@@ -7,12 +8,14 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         FeatureView _view;
         FeatureModel _model;
 
-        public void AddFeature(TraceType[] features)
+        public void Init(TraceType[] features)
         {
             _view = GetComponent<FeatureView>();
             _view.Init();
             _model = new FeatureModel();
             _model.Init(features, _view);
+            _view.onDestroy
+                .Subscribe(_ => _model.FaturesCancel()).AddTo(this);
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Scenes.Ingame.Enemy.Trace
 
         private void AddTrace(TraceType[] _deugType)
         {
-            _featurePresenter.AddFeature(_deugType);
+            _featurePresenter.Init(_deugType);
         }
     }
 }

@@ -1,6 +1,8 @@
 using UnityEngine;
 using System.Linq;
 using Scenes.Ingame.Player;
+using UniRx;
+using System;
 
 namespace Scenes.Ingame.Enemy.Trace.Feature
 {
@@ -12,6 +14,8 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         private GameObject[] nearStageObject = null;
         private GameObject interactTarget = null;
         AudioSource _audioSource;
+        private Subject<Unit> _onDestroy = new Subject<Unit>();
+        public IObservable<Unit> onDestroy { get => _onDestroy; }
 
         public void Init()
         {
@@ -37,6 +41,11 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
                     act.Intract(null, true);
                 }
             }
+        }
+
+        private void OnDestroy()
+        {
+            _onDestroy.OnNext(default);
         }
     }
 }
