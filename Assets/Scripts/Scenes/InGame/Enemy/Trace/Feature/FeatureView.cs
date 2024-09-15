@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Scenes.Ingame.Player;
@@ -14,12 +12,14 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         private GameObject[] nearStageObject = null;
         private GameObject interactTarget = null;
         AudioSource _audioSource;
+
         public void Init(AudioSource audioSource)
         {
             _audioSource = audioSource;
             _enemy = GameObject.FindWithTag("Enemy");
             _stageInteracts = GameObject.FindGameObjectsWithTag("StageIntract");
         }
+        
         public void Breath()
         {
             _audioSource.transform.position = _enemy.transform.position;
@@ -34,7 +34,6 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
                 interactTarget = nearStageObject[UnityEngine.Random.Range(0, nearStageObject.Length)];
                 if (interactTarget.TryGetComponent(out IInteractable act))
                 {
-                    Debug.Log("Interact!");
                     act.Intract(null, true);
                 }
             }

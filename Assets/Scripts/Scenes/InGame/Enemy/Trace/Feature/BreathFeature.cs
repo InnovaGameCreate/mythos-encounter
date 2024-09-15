@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
 namespace Scenes.Ingame.Enemy.Trace.Feature
 {
@@ -9,8 +8,8 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
     {
         CancellationTokenSource _cancellationTokenSource;
         FeatureView _view;
-        private const float MINTIME = 15;
-        private const float MAXTIME = 20;
+        private const int MINTIME = 15;
+        private const int MAXTIME = 20;
 
         public override void Init(FeatureView view)
         {
