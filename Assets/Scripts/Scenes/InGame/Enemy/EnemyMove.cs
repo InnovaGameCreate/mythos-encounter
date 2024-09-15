@@ -137,10 +137,9 @@ namespace Scenes.Ingame.Enemy
                             }
                             else
                             {
-                                if (0 < _enemyStatus.Stamina)
-                                { //スタミナを削れるなら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
+                                 //スタミナを削れるなら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
                                     _enemyStatus.StaminaChange(_enemyStatus.Stamina - 1);
-                                }
+                                
                             }
                         }
                         break;
