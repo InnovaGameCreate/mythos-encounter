@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6340259632114647526
 Transform:
@@ -50,7 +50,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1246637710353047847
 Transform:
@@ -90,7 +90,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4084286178183488056
 Transform:
@@ -123,7 +123,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3635183164946039017
 Transform:
@@ -161,7 +161,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &5097063141202045873
 Transform:
@@ -194,7 +194,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &4046028796031614750
 Transform:
@@ -225,7 +225,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &2866383079237432336
 Transform:
@@ -286,7 +286,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &1929833463496731989
 Transform:
@@ -373,6 +373,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Photo_Frames_04 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3010432956662022656, guid: 2c37a9ac6ac385a4c89f26f4e260f7fb, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5318823163889582780, guid: 2c37a9ac6ac385a4c89f26f4e260f7fb, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8632101409083607452, guid: 2c37a9ac6ac385a4c89f26f4e260f7fb, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -438,6 +450,10 @@ PrefabInstance:
     - target: {fileID: 8848057363768969700, guid: d3cff7a856d53b6428f2f8cfa24052a9, type: 3}
       propertyPath: m_Name
       value: Blood_Decals_09 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8848057363768969700, guid: d3cff7a856d53b6428f2f8cfa24052a9, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -505,6 +521,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blood_Decals_09 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 8848057363768969700, guid: d3cff7a856d53b6428f2f8cfa24052a9, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -525,7 +545,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 315836491876461428, guid: 18313bb932cbe4746b819992c595d925, type: 3}
       propertyPath: m_Intensity
-      value: 0.9947184
+      value: 7.957747
+      objectReference: {fileID: 0}
+    - target: {fileID: 766402350036822316, guid: 18313bb932cbe4746b819992c595d925, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4381832845365926967, guid: 18313bb932cbe4746b819992c595d925, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5156548232790354234, guid: 18313bb932cbe4746b819992c595d925, type: 3}
       propertyPath: m_RootOrder
@@ -587,6 +615,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Candle_06 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5531667053440889728, guid: 18313bb932cbe4746b819992c595d925, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8700864168182444606, guid: 18313bb932cbe4746b819992c595d925, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -605,9 +641,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2866383079237432336}
     m_Modifications:
+    - target: {fileID: 3744172183724654912, guid: 060aa2a84c077b84786134e0d9947547, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3894309727334481820, guid: 060aa2a84c077b84786134e0d9947547, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5510787311887396204, guid: 060aa2a84c077b84786134e0d9947547, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 5790583904096582054, guid: 060aa2a84c077b84786134e0d9947547, type: 3}
       propertyPath: m_Name
       value: Armchair_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 5790583904096582054, guid: 060aa2a84c077b84786134e0d9947547, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6563884088190903068, guid: 060aa2a84c077b84786134e0d9947547, type: 3}
       propertyPath: m_RootOrder
@@ -691,6 +743,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: WallYDoor_HH
       objectReference: {fileID: 0}
+    - target: {fileID: 109861664846363845, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 653719244981298818, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 1333296885298462719, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -746,6 +806,58 @@ PrefabInstance:
     - target: {fileID: 1333296885298462719, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1877843400292284064, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 2750772303971396898, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 2751401345722880976, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 2874401135888347798, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4650615525640907855, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4668709961553768920, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5250225172276715224, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5467730827176678788, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5976628622673026179, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 7143384828786919061, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 7878189846640906273, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8041323651063651266, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8703524277303923095, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -816,6 +928,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blood_Decals_09
       objectReference: {fileID: 0}
+    - target: {fileID: 8848057363768969700, guid: d3cff7a856d53b6428f2f8cfa24052a9, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -837,6 +953,10 @@ PrefabInstance:
     - target: {fileID: 1949379199197260525, guid: 02ddc4f83880d3542a002273afb3e7f6, type: 3}
       propertyPath: m_Name
       value: escapeItemMarker (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1949379199197260525, guid: 02ddc4f83880d3542a002273afb3e7f6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4272621261632839918, guid: 02ddc4f83880d3542a002273afb3e7f6, type: 3}
       propertyPath: m_RootOrder
@@ -960,6 +1080,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blood_Decals_13 (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 763343968003307264, guid: b272b1767c354ca488dc144b264ea94c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -981,6 +1105,10 @@ PrefabInstance:
     - target: {fileID: 1718755631009839648, guid: 71466f571a7ce4147940eccb072fd781, type: 3}
       propertyPath: m_Name
       value: Fireplace_Set
+      objectReference: {fileID: 0}
+    - target: {fileID: 1718755631009839648, guid: 71466f571a7ce4147940eccb072fd781, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 2058689903230410906, guid: 71466f571a7ce4147940eccb072fd781, type: 3}
       propertyPath: m_RootOrder
@@ -1037,6 +1165,18 @@ PrefabInstance:
     - target: {fileID: 2058689903230410906, guid: 71466f571a7ce4147940eccb072fd781, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6152771751698987478, guid: 71466f571a7ce4147940eccb072fd781, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 6879276081564283333, guid: 71466f571a7ce4147940eccb072fd781, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 7510122875826949458, guid: 71466f571a7ce4147940eccb072fd781, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1104,6 +1244,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blood_Decals_11
       objectReference: {fileID: 0}
+    - target: {fileID: 8698089201452172834, guid: e7e6b4ddc1814f2429f24f565e96ebe7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1125,6 +1269,10 @@ PrefabInstance:
     - target: {fileID: 6016116178592064158, guid: cb8a82afea52a14499d735258d2d3019, type: 3}
       propertyPath: m_Name
       value: Book_04 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6016116178592064158, guid: cb8a82afea52a14499d735258d2d3019, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6356366221700872228, guid: cb8a82afea52a14499d735258d2d3019, type: 3}
       propertyPath: m_RootOrder
@@ -1253,6 +1401,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blood_Decals_04
       objectReference: {fileID: 0}
+    - target: {fileID: 7816413067000685993, guid: 3c4a2ed0c077c6d44ae0a165112b5bf8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1318,6 +1470,10 @@ PrefabInstance:
     - target: {fileID: 8848057363768969700, guid: d3cff7a856d53b6428f2f8cfa24052a9, type: 3}
       propertyPath: m_Name
       value: Blood_Decals_09 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8848057363768969700, guid: d3cff7a856d53b6428f2f8cfa24052a9, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1385,6 +1541,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blood_Decals_12
       objectReference: {fileID: 0}
+    - target: {fileID: 3029031917424425390, guid: 2b434f74bc468184bb15d7850b78e550, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1451,6 +1611,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blood_Decals_15 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 4338321239006350603, guid: da09c5c2e743edb4f8c4c2ec86e91f57, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1472,6 +1636,10 @@ PrefabInstance:
     - target: {fileID: 8170156477972077749, guid: 68a4fd07cfb0eaf4cb217b355e386733, type: 3}
       propertyPath: m_Name
       value: Blood_Decals_03
+      objectReference: {fileID: 0}
+    - target: {fileID: 8170156477972077749, guid: 68a4fd07cfb0eaf4cb217b355e386733, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8802824967341311503, guid: 68a4fd07cfb0eaf4cb217b355e386733, type: 3}
       propertyPath: m_RootOrder
@@ -1535,9 +1703,17 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2866383079237432336}
     m_Modifications:
+    - target: {fileID: 4731115394426532695, guid: d2a7f54d184a9ef499877ad36f67ca2d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 5821322868026615547, guid: d2a7f54d184a9ef499877ad36f67ca2d, type: 3}
       propertyPath: m_Name
       value: Book_Occultism_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 5821322868026615547, guid: d2a7f54d184a9ef499877ad36f67ca2d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 6594025093819923521, guid: d2a7f54d184a9ef499877ad36f67ca2d, type: 3}
       propertyPath: m_RootOrder
@@ -1599,6 +1775,10 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8731531363268874904, guid: d2a7f54d184a9ef499877ad36f67ca2d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1617,6 +1797,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3635183164946039017}
     m_Modifications:
+    - target: {fileID: 2032182698731423566, guid: 64281ccdcd07dc84497914717359b762, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 3584380580119448589, guid: 64281ccdcd07dc84497914717359b762, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -1677,6 +1861,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Skull
       objectReference: {fileID: 0}
+    - target: {fileID: 4248468438351369911, guid: 64281ccdcd07dc84497914717359b762, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5681156846806684068, guid: 64281ccdcd07dc84497914717359b762, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 7531811383644243569, guid: 64281ccdcd07dc84497914717359b762, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1698,6 +1894,10 @@ PrefabInstance:
     - target: {fileID: 2453986872374925640, guid: 0612e00c8a1c68c44a2e3bb092f8af7a, type: 3}
       propertyPath: m_Name
       value: Book_01 (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2453986872374925640, guid: 0612e00c8a1c68c44a2e3bb092f8af7a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 2973924569096733682, guid: 0612e00c8a1c68c44a2e3bb092f8af7a, type: 3}
       propertyPath: m_RootOrder
@@ -1778,6 +1978,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2866383079237432336}
     m_Modifications:
+    - target: {fileID: 942201625366290503, guid: ecc9b837c5dec634d9bc0626420807d8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4262820479606273113, guid: ecc9b837c5dec634d9bc0626420807d8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 4611925621321670215, guid: ecc9b837c5dec634d9bc0626420807d8, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -1841,6 +2049,10 @@ PrefabInstance:
     - target: {fileID: 5425440374495036669, guid: ecc9b837c5dec634d9bc0626420807d8, type: 3}
       propertyPath: m_Name
       value: Bone_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5425440374495036669, guid: ecc9b837c5dec634d9bc0626420807d8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1908,6 +2120,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blood_Decals_15
       objectReference: {fileID: 0}
+    - target: {fileID: 4338321239006350603, guid: da09c5c2e743edb4f8c4c2ec86e91f57, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1973,6 +2189,10 @@ PrefabInstance:
     - target: {fileID: 7517961011173192614, guid: f61a6f11385509941b4872692b8632af, type: 3}
       propertyPath: m_Name
       value: Blood_Decals_07
+      objectReference: {fileID: 0}
+    - target: {fileID: 7517961011173192614, guid: f61a6f11385509941b4872692b8632af, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2056,6 +2276,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Book_08 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 4566636016106914192, guid: d37e84de42feaf143aaeb7bd9ce31354, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7657875499590863327, guid: d37e84de42feaf143aaeb7bd9ce31354, type: 3}
     m_RemovedGameObjects: []
@@ -2123,6 +2347,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blood_Decals_08
       objectReference: {fileID: 0}
+    - target: {fileID: 3367210814980306379, guid: cafd953687d53854797499458cd5658d, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2144,6 +2372,10 @@ PrefabInstance:
     - target: {fileID: 2453986872374925640, guid: 0612e00c8a1c68c44a2e3bb092f8af7a, type: 3}
       propertyPath: m_Name
       value: Book_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 2453986872374925640, guid: 0612e00c8a1c68c44a2e3bb092f8af7a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 2973924569096733682, guid: 0612e00c8a1c68c44a2e3bb092f8af7a, type: 3}
       propertyPath: m_RootOrder
@@ -2228,6 +2460,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: escapeItemMarker
       objectReference: {fileID: 0}
+    - target: {fileID: 1949379199197260525, guid: 02ddc4f83880d3542a002273afb3e7f6, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4272621261632839918, guid: 02ddc4f83880d3542a002273afb3e7f6, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -2302,6 +2538,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2866383079237432336}
     m_Modifications:
+    - target: {fileID: 942201625366290503, guid: ecc9b837c5dec634d9bc0626420807d8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4262820479606273113, guid: ecc9b837c5dec634d9bc0626420807d8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 4611925621321670215, guid: ecc9b837c5dec634d9bc0626420807d8, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -2365,6 +2609,10 @@ PrefabInstance:
     - target: {fileID: 5425440374495036669, guid: ecc9b837c5dec634d9bc0626420807d8, type: 3}
       propertyPath: m_Name
       value: Bone_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5425440374495036669, guid: ecc9b837c5dec634d9bc0626420807d8, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2432,6 +2680,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blood_Decals_09 (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 8848057363768969700, guid: d3cff7a856d53b6428f2f8cfa24052a9, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2453,6 +2705,10 @@ PrefabInstance:
     - target: {fileID: 2453986872374925640, guid: 0612e00c8a1c68c44a2e3bb092f8af7a, type: 3}
       propertyPath: m_Name
       value: Book_01 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2453986872374925640, guid: 0612e00c8a1c68c44a2e3bb092f8af7a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 2973924569096733682, guid: 0612e00c8a1c68c44a2e3bb092f8af7a, type: 3}
       propertyPath: m_RootOrder
@@ -2597,6 +2853,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Book_08 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4566636016106914192, guid: d37e84de42feaf143aaeb7bd9ce31354, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7657875499590863327, guid: d37e84de42feaf143aaeb7bd9ce31354, type: 3}
     m_RemovedGameObjects: []
@@ -2619,6 +2879,10 @@ PrefabInstance:
     - target: {fileID: 7253314008848316221, guid: d28aee3f0237e4c44bf45ffae0d64026, type: 3}
       propertyPath: m_Name
       value: Column_01 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7253314008848316221, guid: d28aee3f0237e4c44bf45ffae0d64026, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8062325166408265095, guid: d28aee3f0237e4c44bf45ffae0d64026, type: 3}
       propertyPath: m_RootOrder
@@ -2694,9 +2958,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6340259632114647526}
     m_Modifications:
+    - target: {fileID: 999343794153880299, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 3064727835192536343, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
       propertyPath: m_Name
       value: InSideWallX_HH
+      objectReference: {fileID: 0}
+    - target: {fileID: 3064727835192536343, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4978728510700914257, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5063271611663107877, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5130737245826548319, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5722618519955684605, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7038028934820508515, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
       propertyPath: m_RootOrder
@@ -2772,6 +3060,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2866383079237432336}
     m_Modifications:
+    - target: {fileID: 1046222650681630450, guid: 7146dfdc871229e4eb98ca6106ab6689, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3448462437773425407, guid: 7146dfdc871229e4eb98ca6106ab6689, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3772924106736080061, guid: 7146dfdc871229e4eb98ca6106ab6689, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 6138522298033857068, guid: 7146dfdc871229e4eb98ca6106ab6689, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -2836,6 +3136,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hammer_01
       objectReference: {fileID: 0}
+    - target: {fileID: 6808238865274321046, guid: 7146dfdc871229e4eb98ca6106ab6689, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2854,9 +3158,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6340259632114647526}
     m_Modifications:
+    - target: {fileID: 999343794153880299, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 3064727835192536343, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
       propertyPath: m_Name
       value: InSideWallX_HH (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3064727835192536343, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4978728510700914257, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5063271611663107877, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5130737245826548319, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5722618519955684605, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7038028934820508515, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
       propertyPath: m_RootOrder
@@ -2932,6 +3260,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2866383079237432336}
     m_Modifications:
+    - target: {fileID: 3352749393867110196, guid: eed86d8e463b90645b024c04780c04c0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 3806544241386253923, guid: eed86d8e463b90645b024c04780c04c0, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -2996,6 +3328,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Wardrobe_02
       objectReference: {fileID: 0}
+    - target: {fileID: 4582517612584547545, guid: eed86d8e463b90645b024c04780c04c0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5850985584107998015, guid: eed86d8e463b90645b024c04780c04c0, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3014,9 +3354,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6340259632114647526}
     m_Modifications:
+    - target: {fileID: 999343794153880299, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 3064727835192536343, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
       propertyPath: m_Name
       value: InSideWallX_HH (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3064727835192536343, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4978728510700914257, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5063271611663107877, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5130737245826548319, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5722618519955684605, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7038028934820508515, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
       propertyPath: m_RootOrder
@@ -3095,6 +3459,10 @@ PrefabInstance:
     - target: {fileID: 2453986872374925640, guid: 0612e00c8a1c68c44a2e3bb092f8af7a, type: 3}
       propertyPath: m_Name
       value: Book_01 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2453986872374925640, guid: 0612e00c8a1c68c44a2e3bb092f8af7a, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 2973924569096733682, guid: 0612e00c8a1c68c44a2e3bb092f8af7a, type: 3}
       propertyPath: m_RootOrder
@@ -3179,6 +3547,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Book_09
       objectReference: {fileID: 0}
+    - target: {fileID: 5963316215637595175, guid: f9c8596566508314bac0fb9c5148daf2, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 6452009189015785117, guid: f9c8596566508314bac0fb9c5148daf2, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -3261,6 +3633,10 @@ PrefabInstance:
     - target: {fileID: 8420846332798289999, guid: 9a3872902c5da6b4abf39ab49214dc86, type: 3}
       propertyPath: m_Name
       value: Picture_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 8420846332798289999, guid: 9a3872902c5da6b4abf39ab49214dc86, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 9193830029273305845, guid: 9a3872902c5da6b4abf39ab49214dc86, type: 3}
       propertyPath: m_RootOrder
@@ -3384,6 +3760,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blood_Decals_13 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 763343968003307264, guid: b272b1767c354ca488dc144b264ea94c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3454,6 +3834,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blood_Decals_15 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 4338321239006350603, guid: da09c5c2e743edb4f8c4c2ec86e91f57, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3472,9 +3856,25 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3635183164946039017}
     m_Modifications:
+    - target: {fileID: 224331996355822930, guid: b3763e189baabbf4d9f68e83a214918e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 3030824230181337768, guid: b3763e189baabbf4d9f68e83a214918e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 6270175623282958831, guid: b3763e189baabbf4d9f68e83a214918e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 7228873954310997396, guid: b3763e189baabbf4d9f68e83a214918e, type: 3}
       propertyPath: m_Name
       value: Piano_Chair
+      objectReference: {fileID: 0}
+    - target: {fileID: 7228873954310997396, guid: b3763e189baabbf4d9f68e83a214918e, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 8005656463260753710, guid: b3763e189baabbf4d9f68e83a214918e, type: 3}
       propertyPath: m_RootOrder
@@ -3598,6 +3998,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blood_Decals_13
       objectReference: {fileID: 0}
+    - target: {fileID: 763343968003307264, guid: b272b1767c354ca488dc144b264ea94c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3616,9 +4020,33 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6340259632114647526}
     m_Modifications:
+    - target: {fileID: 999343794153880299, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 3064727835192536343, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
       propertyPath: m_Name
       value: InSideWallX_HH (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3064727835192536343, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4978728510700914257, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5063271611663107877, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5130737245826548319, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 5722618519955684605, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 7038028934820508515, guid: bce98d8ede7957048b74af36d95dfaee, type: 3}
       propertyPath: m_RootOrder
@@ -3696,7 +4124,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 315836491876461428, guid: 18313bb932cbe4746b819992c595d925, type: 3}
       propertyPath: m_Intensity
-      value: 0.9947184
+      value: 7.957747
+      objectReference: {fileID: 0}
+    - target: {fileID: 766402350036822316, guid: 18313bb932cbe4746b819992c595d925, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 4381832845365926967, guid: 18313bb932cbe4746b819992c595d925, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: 5156548232790354234, guid: 18313bb932cbe4746b819992c595d925, type: 3}
       propertyPath: m_RootOrder
@@ -3757,6 +4193,14 @@ PrefabInstance:
     - target: {fileID: 5531667053440889728, guid: 18313bb932cbe4746b819992c595d925, type: 3}
       propertyPath: m_Name
       value: Candle_06
+      objectReference: {fileID: 0}
+    - target: {fileID: 5531667053440889728, guid: 18313bb932cbe4746b819992c595d925, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8700864168182444606, guid: 18313bb932cbe4746b819992c595d925, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3823,6 +4267,10 @@ PrefabInstance:
     - target: {fileID: 763343968003307264, guid: b272b1767c354ca488dc144b264ea94c, type: 3}
       propertyPath: m_Name
       value: Blood_Decals_13 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 763343968003307264, guid: b272b1767c354ca488dc144b264ea94c, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3906,6 +4354,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Book_08
       objectReference: {fileID: 0}
+    - target: {fileID: 4566636016106914192, guid: d37e84de42feaf143aaeb7bd9ce31354, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 7657875499590863327, guid: d37e84de42feaf143aaeb7bd9ce31354, type: 3}
     m_RemovedGameObjects: []
@@ -3973,6 +4425,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Blood_Decals_14
       objectReference: {fileID: 0}
+    - target: {fileID: 8776241176811745471, guid: cce2ba19eea63e64c8f15bd00ddb29d7, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3991,6 +4447,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2866383079237432336}
     m_Modifications:
+    - target: {fileID: 140728054231720992, guid: dd43d0a7f3705754ebf89ec9d5f6ffef, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 304515924810088671, guid: dd43d0a7f3705754ebf89ec9d5f6ffef, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
     - target: {fileID: 3804410468124099725, guid: dd43d0a7f3705754ebf89ec9d5f6ffef, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -4054,6 +4518,14 @@ PrefabInstance:
     - target: {fileID: 4575705078599573047, guid: dd43d0a7f3705754ebf89ec9d5f6ffef, type: 3}
       propertyPath: m_Name
       value: Suitcase_02
+      objectReference: {fileID: 0}
+    - target: {fileID: 4575705078599573047, guid: dd43d0a7f3705754ebf89ec9d5f6ffef, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8397911577369890098, guid: dd43d0a7f3705754ebf89ec9d5f6ffef, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4120,6 +4592,10 @@ PrefabInstance:
     - target: {fileID: 3029031917424425390, guid: 2b434f74bc468184bb15d7850b78e550, type: 3}
       propertyPath: m_Name
       value: Blood_Decals_12 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3029031917424425390, guid: 2b434f74bc468184bb15d7850b78e550, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 2147483647
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
