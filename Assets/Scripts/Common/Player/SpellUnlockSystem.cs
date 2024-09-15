@@ -67,7 +67,7 @@ namespace Common.Player
         /// </summary>
         /// <param name="spellID">•ÏX‚³‚¹‚½‚¢ô•¶‚ÌID</param>
         /// <param name="value">true: ô•¶‰ğ•ú, false: ô•¶–¢‰ğ•ú</param>
-        public void SetSpellUnlockInfoData(int spellID, bool value)
+        public void SetSpellUnlockInfoData(int spellID, bool value = true)
         {
             _spellUnlockInfo[spellID] = value;
             Debug.Log("Spell No." + spellID + " is unlocked.");

@@ -1,6 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.HighDefinition;
 
 namespace Scenes.Ingame.Player
 {
@@ -13,9 +13,15 @@ namespace Scenes.Ingame.Player
     {
         private bool _isFirst = true;//初めて呼び出されたか
 
+        private Volume _volume;
+        private Vignette _vignette;
         public void Setup()
-        { 
-        
+        {
+            _volume = FindObjectOfType<Volume>();
+            if (!_volume.profile.TryGet<Vignette>(out _vignette))
+            {
+                _vignette = _volume.profile.Add<Vignette>(false);
+            }
         }
 
         public void Active()
@@ -25,11 +31,16 @@ namespace Scenes.Ingame.Player
                 Setup();
                 _isFirst = false;
             }
+
+            //視野狭める
+            _vignette.active = true;//Vignetteの有効化
+
+            //Mapにノイズを走らせる
         }
 
         public void Hide()
         {
-            
+            _vignette.active = false;//Vignetteの無効化
         }
     }
 }
