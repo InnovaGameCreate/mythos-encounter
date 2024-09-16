@@ -8,7 +8,7 @@ namespace Scenes.Ingame.InGameSystem.UI
 
     public class EscapeItemPresenter : MonoBehaviour
     {
-        [SerializeField, Tooltip("脱出アイテム数を表示")]
+        [SerializeField, Tooltip("?E?o?A?C?e?????????")]
         TextMeshProUGUI _socreText;
 
         void Start()
@@ -16,7 +16,7 @@ namespace Scenes.Ingame.InGameSystem.UI
             IngameManager ingamemanager = IngameManager.Instance;
             ingamemanager.OnEscapeCount.Subscribe(x =>
             {
-                _socreText.text = "脱出アイテム数: " + x;
+                _socreText.text = "?E?o?A?C?e????: " + x;
             }).AddTo(this);
         }
     }

@@ -1,34 +1,37 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using UnityEngine;
 
-public class BreathFeature : MonoBehaviour
+namespace Scenes.Ingame.Enemy.Trace.Feature
 {
-    CancellationTokenSource _cancellationTokenSource;
-    AudioSource _audioSource;
-    private const float MINTIME = 15;
-    private const float MAXTIME = 20;
-    void Start()
+    public class BreathFeature : FeatureBase
     {
-        _cancellationTokenSource = new CancellationTokenSource();
-        _audioSource = GetComponent<AudioSource>();
-        BreathLoop(_cancellationTokenSource.Token).Forget();
-    }
+        CancellationTokenSource _cancellationTokenSource;
+        FeatureView _view;
+        private const int MINTIME = 15;
+        private const int MAXTIME = 20;
 
-    private async UniTaskVoid BreathLoop(CancellationToken token)
-    {
-        while (true)
+        public override void Init(FeatureView view)
         {
-            var interval = UnityEngine.Random.Range(MINTIME, MAXTIME);
-            await UniTask.Delay(TimeSpan.FromSeconds(interval), cancellationToken: token);
-            _audioSource.Play();
+            _view = view;
+            _cancellationTokenSource = new CancellationTokenSource();
+            BreathLoop(_cancellationTokenSource.Token).Forget();
         }
-    }
 
-    private void OnDestroy()
-    {
-        _cancellationTokenSource.Cancel();
-        _cancellationTokenSource.Dispose();
+        private async UniTaskVoid BreathLoop(CancellationToken token)
+        {
+            while (true)
+            {
+                var interval = UnityEngine.Random.Range(MINTIME, MAXTIME);
+                await UniTask.Delay(TimeSpan.FromSeconds(interval), cancellationToken: token);
+                _view.Breath();
+            }
+        }
+
+        public override void Cancel()
+        {
+            _cancellationTokenSource.Cancel();
+            _cancellationTokenSource.Dispose();
+        }
     }
 }
