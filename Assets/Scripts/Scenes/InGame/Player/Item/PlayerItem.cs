@@ -45,6 +45,7 @@ namespace Scenes.Ingame.Player
 
         [SerializeField] private GameObject _spotLight;//Cameraに付属しているスポットライト
         [SerializeField] private GameObject _compass;//Cameraに付属しているコンパス
+        [SerializeField] private GameObject _thermometer;//Cameraに付属している温度計
 
         //アイテムデバッグ用
         [SerializeField] private GameObject _itemForDebug;
@@ -329,10 +330,6 @@ namespace Scenes.Ingame.Player
             _isCanChangeBringItem = value;
         }
 
-
-
-
-
         public void CheckHaveDoll()
         {
             for (int i = 0; i < 7; i++)
@@ -356,11 +353,8 @@ namespace Scenes.Ingame.Player
 
                         break;
                     }
-
                 }
-
             }
-
         }
 
         //懐中電灯を起動・停止するための関数
@@ -382,6 +376,18 @@ namespace Scenes.Ingame.Player
         public void ActiveCompass(bool value)
         {
             _compass.SetActive(value);
+        }
+
+        //気温計を持つかどうか切り替える関数
+        public void ActiveThermometer(bool value)
+        {
+            _thermometer.SetActive(value);
+        }
+
+        //気温計を使い測定を開始させる関数
+        public void UseThermometer()
+        {
+            _thermometer.GetComponent<ThermometerMove>().StartCoroutine("MeasureTemperature");
         }
     }
 }
