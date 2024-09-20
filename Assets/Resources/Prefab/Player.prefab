@@ -734,6 +734,7 @@ MonoBehaviour:
   _cupsuleCollider: {fileID: 4602485249755492097}
   _playerMagic: {fileID: 5250157038054447586}
   _playerItem: {fileID: 6449360652433016383}
+  _networkObject: {fileID: 0}
   lastHP: 0
   lastSanValue: 0
   bleedingDamage: 1
@@ -1869,9 +1870,85 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Intensity
+      value: 81.359535
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Lightmapping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_LightShadowCasterMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_UseBoundingSphereOverride
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_UseViewFrustumForShadowCasterCull
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Shadows.m_UseCullingMatrixOverride
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Shadows.m_CullingMatrixOverride.e00
+      value: 0.7673269
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Shadows.m_CullingMatrixOverride.e11
+      value: 0.7673269
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Shadows.m_CullingMatrixOverride.e22
+      value: 1.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Shadows.m_CullingMatrixOverride.e23
+      value: -0.202
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Shadows.m_CullingMatrixOverride.e32
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Shadows.m_CullingMatrixOverride.e33
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5969752699225861055, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
       propertyPath: m_Name
       value: VisionLight
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066125228625679635, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_ShadowUpdateMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066125228625679635, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_NonLightmappedOnly
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066125228625679635, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066125228625679635, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_UseContactShadow.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066125228625679635, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_UpdateShadowOnLightMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066125228625679635, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_UseContactShadow.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
