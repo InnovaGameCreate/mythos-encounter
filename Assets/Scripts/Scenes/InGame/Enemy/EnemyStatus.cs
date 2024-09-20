@@ -22,19 +22,20 @@ namespace Scenes.Ingame.Enemy
         //Countはタイミングを計るような変数を表す。例えば..クールダウンがどれだけ終了しているかや何かい攻撃をしたかなど
         [Header("敵キャラの基本スペックの初期値")]
         [SerializeField][Tooltip("hpの初期値")] private int _hpBase;
-        [SerializeField][Tooltip("巡回時の速度の初期値")] private float _patrollingSpeedBase;
-        [SerializeField][Tooltip("索敵時の速度")] private float _searchSpeedBase;
-        [SerializeField][Tooltip("追跡時の速度")] private float _chaseSpeedBase;
+        [SerializeField][Tooltip("巡回時の速度の初期値")] private float _patrollingSpeed;
+        [SerializeField][Tooltip("索敵時の速度")] private float _searchSpeed;
+        [SerializeField][Tooltip("追跡時の速度")] private float _chaseSpeed;
         [SerializeField][Tooltip("聴力の初期値。0は全く聞こえず100はどんな小さい音も聞き逃さない")][Range(0, 100)] private float _audiometerPowerBase;
-        [SerializeField][Tooltip("光に反応するかどうかの初期値")] private bool _reactToLightBase;
-        [SerializeField][Tooltip("飛行しているかどうかの初期値")] private bool _flyingBase;
+        [SerializeField][Tooltip("光に反応するかどうかの初期値")] private bool _reactToLight;
+        [SerializeField][Tooltip("飛行しているかどうかの初期値")] private bool _flying;
         [SerializeField][Tooltip("スタミナの初期値")] private int _staminaBase;
-        [SerializeField][Tooltip("特殊行動のクールタイム")] private int _actionCoolTimeBase;
+        [SerializeField][Tooltip("特殊行動のクールタイム")] private int _actionCoolTime;
         [SerializeField][Tooltip("初期のState")] private EnemyState _enemyStateBase;
         [SerializeField][Tooltip("足音の初期値")][Range(0, 1.0f)] private float _footSoundBase;
+        [SerializeField][Tooltip("プレイヤーを見失った後何秒間はあきらめないか")] private float _blindCheseTime;
 
         [Header("敵キャラの攻撃性能の初期値")]
-        [SerializeField][Tooltip("Sanへの攻撃力")] private int _horrorBase;
+        [SerializeField][Tooltip("Sanへの攻撃力")] private int _horror;
 
         [Header("その他")]
         [SerializeField][Tooltip("撤退時に落とすユニークアイテム")] private GameObject _uniqueItem;
@@ -49,79 +50,77 @@ namespace Scenes.Ingame.Enemy
         [SerializeField] EnemyMove _enemyMove;
         [SerializeField] EnemyUniqueAction _enemyUniqueAction;
 
-        private AudioSource _audioSource;
 
 
 
         [Header("デバッグするかどうか")]
         [SerializeField] private bool _debugMode;
 
-
+        [Tooltip("現在の敵の速度です")]private FloatReactiveProperty _speed = new FloatReactiveProperty();
         private IntReactiveProperty _hp = new IntReactiveProperty();
-        private FloatReactiveProperty _patrollingSpeed = new FloatReactiveProperty();
-        private FloatReactiveProperty _searcSpeed = new FloatReactiveProperty();
-        private FloatReactiveProperty _chaseSpeed = new FloatReactiveProperty();
         private FloatReactiveProperty _audiometerPower = new FloatReactiveProperty();
-        private BoolReactiveProperty _reactToLight = new BoolReactiveProperty();
-        private BoolReactiveProperty _flying = new BoolReactiveProperty();
         private IntReactiveProperty _stamina = new IntReactiveProperty();
-        private IntReactiveProperty _actionCoolTime = new IntReactiveProperty();
         private ReactiveProperty<EnemyState> _enemyState = new ReactiveProperty<EnemyState>(EnemyState.Patrolling);
-
-        private IntReactiveProperty _horror = new IntReactiveProperty();
-        private IntReactiveProperty _atackPower = new IntReactiveProperty();
 
         private BoolReactiveProperty _isBind = new BoolReactiveProperty(false);//拘束状態であるか否か
         private FloatReactiveProperty _stiffnessTime = new FloatReactiveProperty(0);//硬直時間
 
 
         private bool _isCheckWaterEffect = false;//水の生成がされているか否か
-        private bool _isWaterEffectDebuff = false;//水の生成がされているか否か
+        private BoolReactiveProperty _isWaterEffectDebuff = new BoolReactiveProperty(false);//水の生成によるデバフがされているか否か
+        [Tooltip("スタミナが切れて走れない状態か否か")]private BoolReactiveProperty _staminaOver = new BoolReactiveProperty(false);
+
 
         public IObservable<int> OnHpChange { get { return _hp; } }
-        public IObservable<float> OnPatrollingSpeedChange { get { return _patrollingSpeed; } }
-        public IObservable<float> OnSearchSpeedChange { get { return _searcSpeed; } }
-        public IObservable<float> OnChaseSpeedChange { get { return _chaseSpeed; } }
+
         public IObservable<float> OnAudiometerPowerChange { get { return _audiometerPower; } }
-        public IObservable<bool> OnReactToLightChange { get { return _reactToLight; } }
-        public IObservable<bool> OnFlyingChange { get { return _flying; } }
+
         public IObservable<int> OnStaminaChange { get { return _stamina; } }
         public IObservable<EnemyState> OnEnemyStateChange { get { return _enemyState; } }
-
-        public IObservable<int> OnHorrorChange { get { return _horror; } }
 
         public IObservable<bool> OnBindChange { get { return _isBind; } }
 
         public IObservable<float> OnStiffnessTimeChange { get { return _stiffnessTime; } }
 
+        public IObservable<bool> OnIsWaterEffectDebuffChange { get { return _isWaterEffectDebuff; } }
 
+        public IObservable<float> OnSpeedChange { get { return _speed; } }
 
+        public IObservable<bool> OnStaminaOverChange { get { return _staminaOver; } }
 
         //##########GetとかSetのかたまり
-        public float ReturnPatrollingSpeed { get { return _patrollingSpeed.Value; } }
-        public float ReturnSearchSpeed { get { return _searcSpeed.Value; } }
-        public float ReturnChaseSpeed { get { return _chaseSpeed.Value; } }
+        public float PatrollingSpeed { get { return _patrollingSpeed; } }
+        public float SearchSpeed { get { return _searchSpeed; } }
+        public float ChaseSpeed { get { return _chaseSpeed; } }
 
-        public int ReturnStaminaBase { get { return _staminaBase; } }
+        public int StaminaBase { get { return _staminaBase; } }
         public int Stamina { get { return _stamina.Value; } }
 
-        public float ReturnAudiomaterPower { get { return _audiometerPower.Value; } }
-        public bool ReturnReactToLight { get { return _reactToLight.Value; } }
-        public EnemyState ReturnEnemyState { get { return _enemyState.Value; } }
+        public float AudiomaterPower { get { return _audiometerPower.Value; } }
+        public bool ReactToLight { get { return _reactToLight; } }
+        public EnemyState EnemyState { get { return _enemyState.Value; } }
 
-        public int ReturnHorror { get { return _horror.Value; } }
-        public bool ReturnBind { get { return _isBind.Value; } }
-        public bool ReturnWaterEffectDebuff { get { return _isWaterEffectDebuff; } }
+        public int Horror { get { return _horror; } }
 
-        public float GetStiffnessTime { get { return _stiffnessTime.Value; } }
+        public float StiffnessTime { get { return _stiffnessTime.Value; } }
+
+        public float Speed { get { return _speed.Value; }}
+
+        public float BrindCheseTime { get { return _blindCheseTime; } }
+
+        public bool StaminaOver { get { return _staminaOver.Value; } }
+
+        public bool IsBind { get { return _isBind.Value; } }
+
+        public bool WaterEffectDebuff { get { return _isWaterEffectDebuff.Value; } }
 
 
 
-        private NavMeshAgent _myAgent;
 
 
         //##########UniRxにかかわらない変数
         private EnemyVisibilityMap _myEnemyVisivilityMap;
+        private AudioSource _audioSource;
 
         /// <summary>
         /// 初期設定をする。外部から呼び出すこととする
@@ -137,7 +136,7 @@ namespace Scenes.Ingame.Enemy
             _enemySearch.Init(visivilityMap);
             _enemyAttack.Init(visivilityMap.DeepCopy());//Atackはサーチの後にInit
             _enemyMove.Init();
-            _enemyUniqueAction.Init(_actionCoolTime.Value);
+            _enemyUniqueAction.Init(_actionCoolTime);
 
             //撃破されたことを検出
             OnHpChange.Where(hp => hp <= 0).Subscribe(hp =>
@@ -145,23 +144,8 @@ namespace Scenes.Ingame.Enemy
                 FallBack();
             }).AddTo(this);
 
+            ////////////
 
-            //拘束状態になった瞬間・解けた瞬間に速度を変更
-            _myAgent = GetComponent<NavMeshAgent>();
-            OnBindChange
-                .Skip(1)//初期化の時は無視
-                .Subscribe(x =>
-                {
-                    if (x) { _searcSpeed.Value = _searchSpeedBase * 0.1f; _patrollingSpeed.Value = _patrollingSpeedBase * 0.1f; _chaseSpeed.Value = _chaseSpeedBase * 0.1f; }
-                    else { _searcSpeed.Value = _searchSpeedBase * 1f; _patrollingSpeed.Value = _patrollingSpeedBase * 1f; _chaseSpeed.Value = _chaseSpeedBase * 1f; }
-                    switch (ReturnEnemyState)
-                    {
-                        case EnemyState.Patrolling: _myAgent.speed = ReturnPatrollingSpeed; break;
-                        case EnemyState.Searching: _myAgent.speed = ReturnSearchSpeed; break;
-                        case EnemyState.Chase: _myAgent.speed = ReturnChaseSpeed; break;
-                        case EnemyState.Attack: _myAgent.speed = ReturnChaseSpeed; break;
-                    }
-                }).AddTo(this);
 
             this.gameObject.TryGetComponent<AudioSource>(out _audioSource);
             _audioSource.volume = _footSoundBase;
@@ -194,17 +178,17 @@ namespace Scenes.Ingame.Enemy
             //水の影響で自分の速度が下がるのか, 足音が大きくなるのかを確認
             if (_isCheckWaterEffect)
             {
-                if (_flying.Value)//飛翔状態の時は影響を受けない
+                if (_flying)//飛翔状態の時は影響を受けない
                 {
-                    _isWaterEffectDebuff = false;
+                    _isWaterEffectDebuff.Value = false;
                 }
                 else //飛翔状態でない時は影響を受ける
                 {
-                    _isWaterEffectDebuff = true;                   
+                    _isWaterEffectDebuff.Value = true;                   
                 }
 
                 //足音の大きさを変更
-                _audioSource.volume = _footSoundBase * (_isWaterEffectDebuff ? 1.5f : 1);
+                _audioSource.volume = _footSoundBase * (_isWaterEffectDebuff.Value ? 1.5f : 1);
             }
 
         }
@@ -219,18 +203,9 @@ namespace Scenes.Ingame.Enemy
         /// </summary>
         public void ResetStatus() {
             _hp.Value = _hpBase;
-            _patrollingSpeed.Value = _patrollingSpeedBase;
-            _searcSpeed.Value = _searchSpeedBase;
-            _searcSpeed.Value = _searchSpeedBase;
-            _chaseSpeed.Value = _chaseSpeedBase;
             _audiometerPower.Value = _audiometerPowerBase;
-            _reactToLight.Value = _reactToLightBase;
-            _flying.Value = _flyingBase;
             _stamina.Value = _staminaBase;
-            _actionCoolTime.Value = _actionCoolTimeBase;
             _enemyState.Value = _enemyStateBase;
-
-            _horror.Value = _horrorBase;
         }
 
         /// <summary>
@@ -241,6 +216,11 @@ namespace Scenes.Ingame.Enemy
             _hp.Value -= damage;
         }
 
+        /// <summary>
+        /// 移動速度を指定した値に設定する
+        /// </summary>
+        /// <param name="value">設定する速度</param>
+        public void SetSpeed(float value) { { _speed.Value = value; } }
 
         /// <summary>
         /// 退散させるために使用する
@@ -274,36 +254,43 @@ namespace Scenes.Ingame.Enemy
             _visual.active = true;
         }
 
-        public void ChangeBindBool(bool value)
+        public void SetBind(bool value)
         {
             _isBind.Value = value;
         }
 
-
+        public void SetStuminaOver(bool setValue) { 
+            _staminaOver.Value = setValue;
+        }
+        /// <summary>
+        /// 硬直時間を変化さえる
+        /// </summary>
+        /// <param name="value">変化する値</param>
         public void ChangeStiffnessTime(float value) { 
             _stiffnessTime.Value += value;
-            }
+        }
 
         /// <summary>
-        /// 「水の生成」呪文の効果を受けるか否かを決定する関数
+        /// 水の影響を変更する
         /// </summary>
-        public void ChangeCheckWaterEffectBool(bool value)
+        /// <param name="value">水の影響があるときはtrue無いときはfalse</param>
+        public void SetCheckWaterEffect(bool value)
         { 
             _isCheckWaterEffect = value;
             if (_isCheckWaterEffect)
             {
-                if (_flying.Value)//飛翔状態の時は影響を受けない
+                if (_flying)//飛翔状態の時は影響を受けない
                 {
-                    _isWaterEffectDebuff = false;
+                    _isWaterEffectDebuff.Value = false;
                 }
                 else //飛翔状態でない時は影響を受ける
                 {
-                    _isWaterEffectDebuff = true;
+                    _isWaterEffectDebuff.Value = true;
                 }
             }
             else //水の生成が終わったときに、各変数を初期値に戻す
             {
-                _isWaterEffectDebuff = false; 
+                _isWaterEffectDebuff.Value = false; 
                 _audioSource.volume = _footSoundBase;
             }
         }
