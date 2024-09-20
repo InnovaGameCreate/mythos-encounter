@@ -146,6 +146,8 @@ namespace Scenes.Ingame.Enemy
                     case EnemyState.FallBack:
 
                         break;
+                        case EnemyState.Discover: 
+                        break;
                     default:
                         Debug.LogWarning("想定外のEnemyStatus");
                         break;
@@ -203,6 +205,9 @@ namespace Scenes.Ingame.Enemy
                         case EnemyState.FallBack:
 
                             break;
+                    case EnemyState.Discover:
+                        _enemyStatus.SetSpeed(0);
+                        break;
                         default:
                             Debug.LogWarning("想定外のEnemyStatus");
                             break;

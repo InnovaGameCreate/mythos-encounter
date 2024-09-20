@@ -178,6 +178,7 @@ MonoBehaviour:
   _hasMagicNum: 0
   _fallBackTime: 3000
   _visual: {fileID: 1019585848636112783}
+  _discoverTime: 3000
   _enemySearch: {fileID: 41553992271996288}
   _enemyAttack: {fileID: 1690901522004022849}
   _enemyMove: {fileID: 7130656707961021328}

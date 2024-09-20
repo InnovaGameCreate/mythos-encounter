@@ -33,6 +33,8 @@ namespace Scenes.Ingame.Enemy.Animation
                     break;
                 case EnemyState.Special:
                     break;
+                case EnemyState.Discover:
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
