@@ -45,7 +45,7 @@ namespace Scenes.Ingame.Player
                     enemyStatuses = FindObjectsOfType<EnemyStatus>();
                     for (int i = 0; i < enemyStatuses.Length; i++)
                     {
-                        enemyStatuses[i].ChangeBindBool(true);
+                        enemyStatuses[i].SetBind(true);
                     }
 
                     //S‘©ó‘Ô‚ð‰ðœ‚·‚é‚½‚ß‚ÌƒRƒ‹[ƒ`ƒ“‚ð”­“®
@@ -66,7 +66,7 @@ namespace Scenes.Ingame.Player
             yield return new WaitForSeconds(15f);
             for (int i = 0; i < enemyStatuses.Length; i++)
             {
-                enemyStatuses[i].ChangeBindBool(false);
+                enemyStatuses[i].SetBind(false);
             }
         }
     }

@@ -1,25 +1,19 @@
 using Cysharp.Threading.Tasks;
-using UnityEngine;
-using UniRx;
 using System;
-using System.Linq;
 using System.Threading;
-using Scenes.Ingame.Player;
 
 namespace Scenes.Ingame.Enemy.Trace.Feature
 {
-    public class InteractFeature : MonoBehaviour
+    public class InteractFeature : FeatureBase
     {
         CancellationTokenSource _cancellationTokenSource;
-        private GameObject[] _stageInteracts;
-        private GameObject[] nearStageObject = null;
-        private GameObject interactTarget = null;
-        private const float RANGE = 5;
-        private const float INTERVAL = 10f;
-        void Start()
+        FeatureView _view;
+        private const int INTERVAL = 1;
+
+        public override void Init(FeatureView view)
         {
             _cancellationTokenSource = new CancellationTokenSource();
-            _stageInteracts = GameObject.FindGameObjectsWithTag("StageIntract");
+            _view = view;
             InteractLoop(_cancellationTokenSource.Token).Forget();
         }
 
@@ -28,18 +22,11 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
             while(true)
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(INTERVAL), cancellationToken: token);
-                nearStageObject = _stageInteracts.Where(target => Vector3.Distance(target.transform.position, this.transform.position) < RANGE).ToArray();
-                if(nearStageObject.Length > 0)
-                {
-                    interactTarget = nearStageObject[UnityEngine.Random.Range(0, nearStageObject.Length)];
-                    if(interactTarget.TryGetComponent(out IInteractable act))
-                    {
-                        act.Intract(null,true);
-                    }
-                }
+                _view.TryInteract();
             }
         }
-        private void OnDestroy()
+
+        public override void Cancel()
         {
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource.Dispose();

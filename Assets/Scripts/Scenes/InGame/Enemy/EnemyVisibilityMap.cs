@@ -308,6 +308,16 @@ namespace Scenes.Ingame.Enemy
 
         }
 
+        /// <summary>
+        /// 自信のシャローコピーを返す
+        /// </summary>
+        /// <returns>自身のシャローコピー</returns>
+        public EnemyVisibilityMap SharrowCopy() { 
+        return (EnemyVisibilityMap)this.MemberwiseClone();
+        }
+
+
+
 
         /// <summary>
         /// 次に確認すべき最も見ておらず最も近い位置を取得。
@@ -676,8 +686,8 @@ namespace Scenes.Ingame.Enemy
             {
                 for (int r = 0; r < rightingGridPosition.Count; r++)
                 {
-                    if (rightingGridPosition[r].range < lightRange) { }
-                    Debug.DrawLine((ToVector3(rightGridPositionX, rightGridPositionY, rightGridPositionZ) * gridRange) + centerPosition, (ToVector3(rightingGridPosition[r].x, rightingGridPosition[r].y, rightingGridPosition[r].z) * gridRange) + centerPosition, Color.yellow, 1f);
+                    if (rightingGridPosition[r].range < lightRange) { Debug.DrawLine((ToVector3(rightGridPositionX, rightGridPositionY, rightGridPositionZ) * gridRange) + centerPosition, (ToVector3(rightingGridPosition[r].x, rightingGridPosition[r].y, rightingGridPosition[r].z) * gridRange) + centerPosition, Color.yellow, 1f); }
+                    
                 }
             }
 
