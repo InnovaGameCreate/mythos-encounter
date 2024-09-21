@@ -2,17 +2,30 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TrapFoodCheckCollider : MonoBehaviour
+
+namespace Scenes.Ingame.Player
 {
-    private bool _isTriggered = false;
-    public bool IsTriggered { get { return _isTriggered; } }
-    private void OnTriggerEnter(Collider other)
+    public class TrapFoodCheckCollider : MonoBehaviour
     {
-        _isTriggered = true;
+        private bool _isTriggered = false;
+        public bool IsTriggered { get { return _isTriggered; } }
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.tag != "TrapFoodSensor")
+            {
+                _isTriggered = true;
+            }
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            _isTriggered = false;
+        }
+
+        public void ChangeTrigger(bool value)
+        {
+            _isTriggered = value;
+        }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        _isTriggered = false;
-    }
 }

@@ -120,12 +120,13 @@ namespace Scenes.Ingame.Stage
             {
                 Debug.Log("ComplateGenerate");
                 ErrorCheck();
-                IngameManager.Instance.SetReady(ReadyEnum.StageReady);                              //ステージ生成完了を通知
+                //IngameManager.Instance.SetReady(ReadyEnum.StageReady);                              //ステージ生成完了を通知
             }
             else
             {
-                ReGenerateWall(token).Forget();
+                //ReGenerateWall(token).Forget();
             }
+            IngameManager.Instance.SetReady(ReadyEnum.StageReady);                              //ステージ生成完了を通知
         }
         private void ErrorCheck()
         {

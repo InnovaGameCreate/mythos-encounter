@@ -3,107 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using UnityEngine.UIElements;
+using System;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace Scenes.Ingame.Player
 {
     public class TrapFoodEffect : ItemEffect
     {
-        private readonly float _tileLength = 5.85f;//１タイルの長さ
-        private GameObject _mainCamera;
-        private GameObject _trapFoodPrefab;
-        private bool _isCanCreate = false;
-        private bool _isCanLoopCoroutine;
-        [SerializeField] private GameObject _createdTrapFood;
-
 
         public override void OnPickUp()
         {
-            _isCanLoopCoroutine = true;
-            StartCoroutine(CreateTrapFood());
+            ownerPlayerItem.StartCoroutine("CreateTrapFood");
 
             //選択アイテムを別のものにしたとき、自動でプレビューを削除する
             ownerPlayerItem.OnNowIndexChange
                 .Skip(1)
+                .Where(_ => ownerPlayerItem.ItemSlots[ownerPlayerItem.nowIndex].myItemData == null || ownerPlayerItem.ItemSlots[ownerPlayerItem.nowIndex].myItemData.itemID != 20)
                 .Subscribe(_ =>
                 {
-                    StopCoroutine(CreateTrapFood());
-                    if (_createdTrapFood != null)
+                    ownerPlayerItem. StopCoroutine("CreateTrapFood");
+                    if (ownerPlayerItem.CreatedTrapFood != null)
                     {
-                        Destroy(_createdTrapFood);
+                        ownerPlayerItem.ChangeActiveTrapFood(false);
                     }
-
                 }).AddTo(this);
-        }
+    }
 
-        public override void OnThrow()
+    public override void OnThrow()
         {
-            _isCanLoopCoroutine = false;
+            ownerPlayerItem.StopCoroutine("CreateTrapFood");
+            if (ownerPlayerItem.CreatedTrapFood != null)
+            {
+                ownerPlayerItem.DestroyTrapFood();
+            }
         }
 
         public override void Effect()
         {
-            if (_isCanCreate && _createdTrapFood != null)
+            if (ownerPlayerItem.IsCanCreateTrapFood && ownerPlayerItem.CreatedTrapFood != null)
             {
-                _createdTrapFood.transform.Find("EnemySensor").gameObject.SetActive(true);
-                _createdTrapFood.layer = 10;
-                StopCoroutine(CreateTrapFood());
-                ownerPlayerItem.ConsumeItem(ownerPlayerItem.nowIndex);
+                Debug.Log("アイテム設置");
+                ownerPlayerItem.StopCoroutine("CreateTrapFood");
+                ownerPlayerItem.PutTrapFood();
             }
             else
             {
                 Debug.Log("アイテム設置不可");
             }
+        
         }
-
-        private IEnumerator CreateTrapFood()
-        {
-            _mainCamera = GameObject.FindWithTag("MainCamera");
-            _trapFoodPrefab = (GameObject)Resources.Load("Prefab/Item/TrapFood/UsingTrapFood");
-            RaycastHit hit;
-            int floorlayerMask = LayerMask.GetMask("Floor");
-
-            while (true)
-            {
-                yield return null;
-
-                Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, _tileLength, floorlayerMask);
-                Debug.DrawRay(_mainCamera.transform.position, _mainCamera.transform.forward * _tileLength, Color.black);
-
-                if (hit.collider != null)
-                {
-                    //プレビューの作成・移動
-                    if (_createdTrapFood == null)//プレビューがないときは作成
-                    {
-                        _createdTrapFood = Instantiate(_trapFoodPrefab, hit.point, _trapFoodPrefab.transform.rotation);
-                    }
-                    else
-                    {
-                        _createdTrapFood.transform.position = hit.point;
-                    }
-
-                    if (_createdTrapFood.GetComponent<TrapFoodCheckCollider>().IsTriggered && _isCanCreate)
-                    {
-                        _isCanCreate = false;
-                    }
-                    else if (!_createdTrapFood.GetComponent<TrapFoodCheckCollider>().IsTriggered && !_isCanCreate)
-                    {
-                        _isCanCreate = true;
-                    }
-                }
-                else
-                {
-                    _isCanCreate = false;
-                    if (_createdTrapFood != null)//プレビューが作成されていたら破壊
-                    {
-                        Destroy(_createdTrapFood);
-                    }
-                }
-
-            }
-
-        }
-
-
-
     }
 }

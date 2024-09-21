@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 8919040554911869566}
   - component: {fileID: 6802884841788611018}
   m_Layer: 0
-  m_Name: EnemySensor
-  m_TagString: Untagged
+  m_Name: TrapFoodSensor
+  m_TagString: TrapFoodSensor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

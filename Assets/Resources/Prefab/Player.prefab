@@ -734,6 +734,7 @@ MonoBehaviour:
   _cupsuleCollider: {fileID: 4602485249755492097}
   _playerMagic: {fileID: 5250157038054447586}
   _playerItem: {fileID: 6449360652433016383}
+  _networkObject: {fileID: 0}
   lastHP: 0
   lastSanValue: 0
   bleedingDamage: 1
@@ -781,6 +782,7 @@ MonoBehaviour:
   scrollSense: 10
   _spotLight: {fileID: 7048472162965643324}
   _compass: {fileID: 5114750115500058622}
+  _trapFood: {fileID: 9151395518792493824, guid: 7c9ce898541f3794796dd55ee44f7800, type: 3}
   _itemForDebug: {fileID: 0}
 --- !u!114 &3297469623762709221
 MonoBehaviour:

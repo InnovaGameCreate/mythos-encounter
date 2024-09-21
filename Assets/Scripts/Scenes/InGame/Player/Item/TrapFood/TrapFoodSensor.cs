@@ -4,28 +4,32 @@ using UnityEngine;
 
 public class TrapFoodSensor : MonoBehaviour
 {
-    private bool _isActiveSensor = true;
+    private bool _isActiveSensor = true;//連続でセンサーを作動させないための変数
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.CompareTag("Enemy"))
+        if (collider.CompareTag("EnemyCollider"))
         {
+            Debug.Log("検知");
+            Vector3 startingPoint = this.transform.position + transform.up * 2f;//レイの発射点を少し高くするため
+            Vector3 direction = (collider.transform.position + transform.up * 2f ) - startingPoint;
+            int layerMask = LayerMask.GetMask("Floor") | LayerMask.GetMask("Wall")　| LayerMask.GetMask("StageIntract");
 
-            Vector3 vector = collider.transform.position - this.transform.position;
-            int layerMask = ~(1 << LayerMask.NameToLayer("Enemy"));
-
-            if (!Physics.Raycast(this.transform.position, vector, vector.magnitude, layerMask) && _isActiveSensor)
+            if (!Physics.Raycast(startingPoint, direction, direction.magnitude, layerMask)　&& _isActiveSensor )// 敵との間に壁や本棚などが無ければ処理開始
             {
+                Debug.Log("障害物なし");
                 float random = Random.value * 100f;
                 if (random <= 30f)
                 {
+                    Destroy(collider.gameObject);
                     MoveEnemy();
-                    transform.parent.gameObject.layer = 0;
+                    transform.parent.gameObject.layer = 0;//レイヤーをdefaultに戻して拾えなくする
                     Destroy(this.gameObject);
                 }
                 _isActiveSensor = false;
                 Invoke("ActiveSensor", 1f);
             }
         }
+
     }
 
     /// <summary>
