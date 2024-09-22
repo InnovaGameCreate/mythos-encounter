@@ -18,7 +18,7 @@ namespace Scenes.Ingame.Player
             //選択アイテムを別のものにしたとき、自動でプレビューを削除する
             ownerPlayerItem.OnNowIndexChange
                 .Skip(1)
-                .Where(_ => ownerPlayerItem.ItemSlots[ownerPlayerItem.nowIndex].myItemData == null || ownerPlayerItem.ItemSlots[ownerPlayerItem.nowIndex].myItemData.itemID != 20)
+                .Where(_ => ownerPlayerItem.ItemSlots[ownerPlayerItem.nowIndex].myItemData == null || ownerPlayerItem.ItemSlots[ownerPlayerItem.nowIndex].myItemData.itemID != 21)
                 .Subscribe(_ =>
                 {
                     ownerPlayerItem. StopCoroutine("CreateTrapFood");
