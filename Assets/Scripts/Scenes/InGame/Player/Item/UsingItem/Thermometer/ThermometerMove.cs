@@ -27,8 +27,8 @@ namespace Scenes.Ingame.Player
             _textMeshPro.text = string.Empty;
 
             yield return new WaitForSeconds(3f);
-            Physics.Raycast(_playerTransform.position, -transform.up, out hit, 10f, floorlayerMask);
-            Debug.DrawRay(_playerTransform.position,  -transform.up * 10f, Color.black);
+            Physics.Raycast(_playerTransform.position, -transform.up, out hit, 20f, floorlayerMask);
+            Debug.DrawRay(_playerTransform.position,  -transform.up * 20f, Color.black);
             
             if(hit.collider != null)
             {

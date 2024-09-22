@@ -8,8 +8,6 @@ namespace Scenes.Ingame.Player
 {
     public class ThermoeterEffect : ItemEffect
     {
-        private bool _canUseThermometer = true;
-        private GameObject _usingThermometer;
         public override void OnPickUp()
         {
             //‰æ–Êã‚É‰·“xŒv‚ð•\Ž¦‚·‚é
@@ -22,7 +20,7 @@ namespace Scenes.Ingame.Player
             .Subscribe(_ =>
             {
                 ownerPlayerItem.ActiveThermometer(false);
-            });
+            }).AddTo(this);
         }
 
         public override void OnThrow()

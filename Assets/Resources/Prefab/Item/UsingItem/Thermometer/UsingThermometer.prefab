@@ -119,7 +119,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 73ca5fe2e2053634a84043d3ba7fe0ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _thermometerEffect: {fileID: 5128305451906877553, guid: 3407a59925522614baac081df3ac9efc, type: 3}
+  _playerTransform: {fileID: 0}
+  _playerItem: {fileID: 0}
   _textMeshPro: {fileID: 2706590591933593646}
 --- !u!1 &3434006502852242564
 GameObject:
@@ -132,7 +133,6 @@ GameObject:
   - component: {fileID: 5658650879490077163}
   - component: {fileID: 1246483608992521124}
   - component: {fileID: 2706590591933593646}
-  - component: {fileID: 1754450410611722694}
   m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -294,17 +294,3 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 1246483608992521124}
   m_maskType: 0
---- !u!114 &1754450410611722694
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3434006502852242564}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 73ca5fe2e2053634a84043d3ba7fe0ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _thermometerEffect: {fileID: 0}
-  _textMeshPro: {fileID: 0}
