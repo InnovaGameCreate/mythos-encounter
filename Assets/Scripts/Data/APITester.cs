@@ -149,7 +149,7 @@ public class APITester : MonoBehaviour
             return;
         }
         int id = int.Parse(_IdInput.text);
-        if(id < 9000)
+        if (id < 9000)
         {
             Debug.LogError("Debug id need use over 9000");
             return;

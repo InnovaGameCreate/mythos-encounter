@@ -342,7 +342,7 @@ public class WebDataRequest : MonoBehaviour
                 );
             SpellDataArrayList.Add(inputTempData);
         }
-        if (debugMode) Debug.Log($"SpellDataLoadEnd : {SpellDataArrayList.Count}"); 
+        if (debugMode) Debug.Log($"SpellDataLoadEnd : {SpellDataArrayList.Count}");
     }
     /// <summary>
     /// ?z?????f?[?^??PlayerDataStruct???^?????X??????
