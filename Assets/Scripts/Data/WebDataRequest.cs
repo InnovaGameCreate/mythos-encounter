@@ -14,7 +14,8 @@ public enum DataType
     ItemTable = 0,
     SpellTable = 1,
     CharacterTable = 2,
-    EnemyTable = 3
+    EnemyTable = 3,
+    EnemyAttackTable = 4
 }
 
 public enum ItemFormat
@@ -61,6 +62,18 @@ public enum EnemyFormat
     san = 12,
     feature = 13
 }
+public enum EnemyAttackFormat
+{
+    id = 0,
+    name = 1,
+    directDamage = 2,
+    bleedingDamage = 3,
+    stanTime = 4,
+    range = 5,
+    attackProbability = 6,
+    accuracy = 7,
+    speed = 8,
+}
 
 public class WebDataRequest : MonoBehaviour
 {
@@ -69,12 +82,14 @@ public class WebDataRequest : MonoBehaviour
         { "https://igc.deca.jp/mythos-encounter/item-get.php",
           "https://igc.deca.jp/mythos-encounter/spell-get.php",
           "https://igc.deca.jp/mythos-encounter/player-get.php",
-          "https://igc.deca.jp/mythos-encounter/enemy-get.php"};
+          "https://igc.deca.jp/mythos-encounter/enemy-get.php",
+          "https://igc.deca.jp/mythos-encounter/enemy-attack-get.php"};
     private const String PLAYERPUTPHP = "https://igc.deca.jp/mythos-encounter/player-put.php";
     private static List<EnemyDataStruct> EnemyDataArrayList = new List<EnemyDataStruct>();
     private static List<ItemDataStruct> ItemDataArrayList = new List<ItemDataStruct>();
     private static List<SpellStruct> SpellDataArrayList = new List<SpellStruct>();
     private static List<PlayerDataStruct> PlayerDataArrayList = new List<PlayerDataStruct>();
+    private static List<EnemyAttackStruct> EnemyAttacArrayList = new List<EnemyAttackStruct>();
     private CancellationTokenSource _timeOutToken;
     private CancellationTokenSource _loadSuccessToken;
     private const int TIMEOUTMILISECOND = 10000;//?^?C???A?E?g????10?b(?~???P??)
@@ -84,6 +99,7 @@ public class WebDataRequest : MonoBehaviour
     public static List<SpellStruct> GetSpellDataArrayList { get => SpellDataArrayList; }
     public static List<PlayerDataStruct> GetPlayerDataArrayList { get => PlayerDataArrayList; }
     public static List<EnemyDataStruct> GetEnemyDataArrayList { get => EnemyDataArrayList; }
+    public static List<EnemyAttackStruct> GetEnemyAttacArrayList { get => EnemyAttacArrayList; }
     public static bool OnCompleteLoadData = false;
     void Awake()
     {
@@ -132,6 +148,7 @@ public class WebDataRequest : MonoBehaviour
         ConvertStringToSpellData(DataArrayList[(int)DataType.SpellTable]);
         ConvertStringToPlayerData(DataArrayList[(int)DataType.CharacterTable]);
         ConvertStringToEnemyData(DataArrayList[(int)DataType.EnemyTable]);
+        ConvertStringToEnemyAttackData(DataArrayList[(int)DataType.EnemyAttackTable]);
         OnCompleteLoadData = true;
         _loadSuccessToken.Cancel();
     }
@@ -249,6 +266,30 @@ public class WebDataRequest : MonoBehaviour
         }
         if (debugMode) Debug.Log($"EnemyDataLoadEnd : {EnemyDataArrayList.Count}");
     }
+
+
+    private void ConvertStringToEnemyAttackData(List<string[]> _dataArray)
+    {
+        EnemyAttacArrayList.Clear();
+        EnemyAttackStruct inputTempData;
+        foreach (var dataRecord in _dataArray)
+        {
+            inputTempData = new EnemyAttackStruct(
+                int.Parse(dataRecord[(int)EnemyAttackFormat.id]),
+                dataRecord[(int)EnemyAttackFormat.name],
+                int.Parse(dataRecord[(int)EnemyAttackFormat.directDamage]),
+                int.Parse(dataRecord[(int)EnemyAttackFormat.bleedingDamage]),
+                float.Parse(dataRecord[(int)EnemyAttackFormat.stanTime]),
+                float.Parse(dataRecord[(int)EnemyAttackFormat.range]),
+                int.Parse(dataRecord[(int)EnemyAttackFormat.attackProbability]),
+                int.Parse(dataRecord[(int)EnemyAttackFormat.accuracy]),
+                float.Parse(dataRecord[(int)EnemyAttackFormat.speed]));
+            EnemyAttacArrayList.Add(inputTempData);
+        }
+        if (debugMode) Debug.Log($"EnemyAttackLoadEnd : {EnemyDataArrayList.Count}");
+    }
+
+
     /// <summary>
     /// ?z?????f?[?^??ItemDataStruct???^?????X??????
     /// </summary>

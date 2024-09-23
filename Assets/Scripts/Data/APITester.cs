@@ -25,6 +25,8 @@ public class APITester : MonoBehaviour
     [SerializeField]
     private Button _EnemyFacadeButton;
     [SerializeField]
+    private Button _EnemyAttackButton;
+    [SerializeField]
     private Button _PutPlayerDataButton;
     [SerializeField]
     private TMP_InputField _IdInput;
@@ -36,6 +38,7 @@ public class APITester : MonoBehaviour
         _SpellTableButton.OnClickAsObservable().Subscribe(_ => ViewSpellTable()).AddTo(this);
         _PlayerTableButton.OnClickAsObservable().Subscribe(_ => ViewPlayerTable()).AddTo(this);
         _EnemyTableButton.OnClickAsObservable().Subscribe(_ => ViewEnemyTable()).AddTo(this);
+        _EnemyAttackButton.OnClickAsObservable().Subscribe(_ => ViewEnemyAttackTable()).AddTo(this);
 
         _itemFacadeButton.OnClickAsObservable().Subscribe(_ => ViewItemFacade()).AddTo(this);
         _SpellFacadeButton.OnClickAsObservable().Subscribe(_ => ViewSpellFacade()).AddTo(this);
@@ -126,6 +129,16 @@ public class APITester : MonoBehaviour
         foreach (var item in data.Values)
         {
             _textMeshPro.text += $"not met enemy id is {item}\n";
+        }
+    }
+    private void ViewEnemyAttackTable()
+    {
+        var data = WebDataRequest.GetEnemyAttacArrayList;
+        Debug.Log($"ViewEnemyAttackTable : {data.Count}");
+        _textMeshPro.text = "id,name,d_damage,b_damage,stanTime,probability,accuracy,speed\n";
+        foreach (var item in data)
+        {
+            _textMeshPro.text += $"{item.attackId},{item.name},{item.directDamage},{item.bleedingDamage},{item.stanTime},{item.attackProbability},{item.accuracy},{item.speed}\n";
         }
     }
     private void PutPlayerDebugData()
