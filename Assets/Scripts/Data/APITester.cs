@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine.UI;
 using UniRx;
 using Data;
-using Unity.VisualScripting;
 using System;
 public class APITester : MonoBehaviour
 {
@@ -78,10 +77,10 @@ public class APITester : MonoBehaviour
     {
         var data = WebDataRequest.GetEnemyDataArrayList;
         Debug.Log($"ViewPlayerTable : {data.Count}");
-        _textMeshPro.text = "id,name,hp,stamia,armor,walkSpeed,dashSpeed,attack,actionCoolTime,sapell,san\n";
+        _textMeshPro.text = "id,name,hp,stamia,armor,walkSpeed,dashSpeed,attack,actionCoolTime,sapell,san,feature\n";
         foreach (var item in data)
         {
-            _textMeshPro.text += $"{item.EnemyId},{item.Name},{item.Stamina},{item.Armor},{item.WalkSpeed},{item.DashSpeed},{item.AttackPower},{item.ActionCooltime},{item.Spell.Length},{item.San}\n";
+            _textMeshPro.text += $"{item.EnemyId},{item.Name},{item.Stamina},{item.Armor},{item.WalkSpeed},{item.DashSpeed},{item.AttackPower},{item.ActionCooltime},{item.Spell.Length},{item.San},{item.Feature.Length}\n";
         }
     }
     private void ViewItemFacade()
@@ -90,13 +89,13 @@ public class APITester : MonoBehaviour
         var data = PlayerInformationFacade.Instance.GetItem(PlayerInformationFacade.ItemRequestType.Owned);
         foreach (var item in data)
         {
-            _textMeshPro.text += $"id {item.Key} のアイテムを {item.Value} 個\n";
+            _textMeshPro.text += $"id {item.Key} ???A?C?e???? {item.Value} ??\n";
         }
         _textMeshPro.text += "not Owned\nid,name,explanation,catgory,price\n";
         data = PlayerInformationFacade.Instance.GetItem(PlayerInformationFacade.ItemRequestType.NotOwned);
         foreach (var item in data)
         {
-            _textMeshPro.text += $"id {item.Key} のアイテムを {item.Value} 個\n";
+            _textMeshPro.text += $"id {item.Key} ???A?C?e???? {item.Value} ??\n";
         }
     }
     private void ViewSpellFacade()

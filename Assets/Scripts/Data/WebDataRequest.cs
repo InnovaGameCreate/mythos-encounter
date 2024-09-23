@@ -2,13 +2,12 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Networking;
 using LitJson;
-using Unity.VisualScripting.Antlr3.Runtime;
+using Scenes.Ingame.Enemy.Trace;
 
 public enum DataType
 {
@@ -59,12 +58,13 @@ public enum EnemyFormat
     hearing = 9,
     visoin = 10,
     spell = 11,
-    san = 12
+    san = 12,
+    feature = 13
 }
 
 public class WebDataRequest : MonoBehaviour
 {
-    // データベースの情報を取得するためのURL
+    // ?f?[?^?x?[?X??????????????????????URL
     private string[] databaseUrl =
         { "https://igc.deca.jp/mythos-encounter/item-get.php",
           "https://igc.deca.jp/mythos-encounter/spell-get.php",
@@ -77,7 +77,7 @@ public class WebDataRequest : MonoBehaviour
     private static List<PlayerDataStruct> PlayerDataArrayList = new List<PlayerDataStruct>();
     private CancellationTokenSource _timeOutToken;
     private CancellationTokenSource _loadSuccessToken;
-    private const int TIMEOUTMILISECOND = 10000;//タイムアウトする10秒(ミリ単位)
+    private const int TIMEOUTMILISECOND = 10000;//?^?C???A?E?g????10?b(?~???P??)
     private List<string[]>[] DataArrayList;
     private bool debugMode = true;
     public static List<ItemDataStruct> GetItemDataArrayList { get => ItemDataArrayList; }
@@ -100,27 +100,27 @@ public class WebDataRequest : MonoBehaviour
         DataArrayList = new List<string[]>[databaseUrl.Length];
 
         UnityWebRequest[] request = new UnityWebRequest[databaseUrl.Length];
-        //WebRequestの作成
+        //WebRequest??????
         for (int i = 0; i < databaseUrl.Length; i++)
         {
             request[i] = UnityWebRequest.Get(databaseUrl[i]);
         }
-        //データ取得まで待機
+        //?f?[?^???????????@
         for (int i = 0; i < databaseUrl.Length; i++)
         {
             await request[i].SendWebRequest();
         }
 
-        //error処理
+        //error????
         foreach (var requestResult in request)
         {
             if (requestResult.result == UnityWebRequest.Result.ConnectionError)
             {
-                throw new ApplicationException("サーバーとの接続に失敗しました");
+                throw new ApplicationException("?T?[?o?[?????????????s????????");
             }
             else if (requestResult.result == UnityWebRequest.Result.ProtocolError)
             {
-                throw new ApplicationException("Status 500 ,サーバーからのデータ取得に失敗しました");
+                throw new ApplicationException("Status 500 ,?T?[?o?[???????f?[?^?????????s????????");
             }
         }
 
@@ -154,7 +154,7 @@ public class WebDataRequest : MonoBehaviour
                     www.Abort();
                     throw new OperationCanceledException();
                 }
-                await UniTask.Yield(); // 一時的に処理を中断
+                await UniTask.Yield(); // ?????I???????????f
             }
 
             if (www.result != UnityWebRequest.Result.Success)
@@ -170,7 +170,7 @@ public class WebDataRequest : MonoBehaviour
         }
     }
     /// <summary>
-    /// 読み込みが終わらなかったらタイムアウトさせて処理を中断する
+    /// ???????????I???????????????^?C???A?E?g???????????????f????
     /// </summary>
     private async UniTaskVoid TimeOutTimer(CancellationToken token)
     {
@@ -179,7 +179,7 @@ public class WebDataRequest : MonoBehaviour
         throw new TimeoutException();
     }
     /// <summary>
-    /// 読み込んだスプレットシートの各要素を配列にする
+    /// ???????????X?v???b?g?V?[?g???e?v?f???z????????
     /// </summary>
     static List<string[]> ConvertToArrayListFrom(string text)
     {
@@ -208,18 +208,30 @@ public class WebDataRequest : MonoBehaviour
         return cardDataStringsList;
     }
     /// <summary>
-    /// 配列のデータをEnemyDataStructの型に変更させる
+    /// ?z?????f?[?^??EnemyDataStruct???^?????X??????
     /// </summary>
     private void ConvertStringToEnemyData(List<string[]> _dataArray)
     {
         EnemyDataArrayList.Clear();
         EnemyDataStruct inputTempData = new EnemyDataStruct();
+        List<TraceType> trace = new List<TraceType>();
         foreach (var dataRecord in _dataArray)
         {
             string[] spell = dataRecord[(int)EnemyFormat.spell].Split(',');
+
+            trace.Clear();
+            var traceCode = dataRecord[(int)EnemyFormat.feature];
+            for (int i = 0; i < traceCode.Length; i++)
+            {
+                if (traceCode[i].ToString() == "1")
+                {
+                    trace.Add((TraceType)Enum.ToObject(typeof(TraceType), i));
+                }
+            }
+
             inputTempData.EnemyDataSet(
                 int.Parse(dataRecord[(int)EnemyFormat.id]),//ID
-                dataRecord[(int)EnemyFormat.name],//名前
+                dataRecord[(int)EnemyFormat.name],//???O
                 int.Parse(dataRecord[(int)EnemyFormat.hp]),//hp
                 int.Parse(dataRecord[(int)EnemyFormat.stamina]),//stamina
                 int.Parse(dataRecord[(int)EnemyFormat.armor]),//armor
@@ -230,14 +242,15 @@ public class WebDataRequest : MonoBehaviour
                 int.Parse(dataRecord[(int)EnemyFormat.visoin]),//vision
                 int.Parse(dataRecord[(int)EnemyFormat.actionCooltime]),//actionCooltime
                 spell,//spell
-                float.Parse(dataRecord[(int)EnemyFormat.san])//san
+                float.Parse(dataRecord[(int)EnemyFormat.san]),//san
+                trace.ToArray()
                 );
             EnemyDataArrayList.Add(inputTempData);
         }
         if (debugMode) Debug.Log($"EnemyDataLoadEnd : {EnemyDataArrayList.Count}");
     }
     /// <summary>
-    /// 配列のデータをItemDataStructの型に変更させる
+    /// ?z?????f?[?^??ItemDataStruct???^?????X??????
     /// </summary>
     private void ConvertStringToItemData(List<string[]> _dataArray)
     {
@@ -262,8 +275,8 @@ public class WebDataRequest : MonoBehaviour
             }
             inputTempData.ItemDataSet(
                 int.Parse(dataRecord[(int)ItemFormat.id]),//ID
-                dataRecord[(int)ItemFormat.name],//名前
-                dataRecord[(int)ItemFormat.explaranation],//説明
+                dataRecord[(int)ItemFormat.name],//???O
+                dataRecord[(int)ItemFormat.explaranation],//????
                 _itemCategory,//category
                 int.Parse(dataRecord[(int)ItemFormat.price])//price
                 );
@@ -279,16 +292,16 @@ public class WebDataRequest : MonoBehaviour
         {
             inputTempData.SpellDataSet(
                 int.Parse(dataRecord[(int)SpellFormat.id]),//ID
-                dataRecord[(int)SpellFormat.name],//名前
-                dataRecord[(int)SpellFormat.explaranation],//説明
-                dataRecord[(int)SpellFormat.unlockExplaranation]//説明
+                dataRecord[(int)SpellFormat.name],//???O
+                dataRecord[(int)SpellFormat.explaranation],//????
+                dataRecord[(int)SpellFormat.unlockExplaranation]//????
                 );
             SpellDataArrayList.Add(inputTempData);
         }
         if (debugMode) Debug.Log($"SpellDataLoadEnd : {SpellDataArrayList.Count}"); 
     }
     /// <summary>
-    /// 配列のデータをPlayerDataStructの型に変更させる
+    /// ?z?????f?[?^??PlayerDataStruct???^?????X??????
     /// </summary>
     private void ConvertStringToPlayerData(List<string[]> _dataArray)
     {
@@ -302,7 +315,7 @@ public class WebDataRequest : MonoBehaviour
 
             inputTempData.PlayerDataSet(
                 int.Parse(dataRecord[(int)PlayerFormat.id]),//ID
-                dataRecord[(int)PlayerFormat.name],//名前
+                dataRecord[(int)PlayerFormat.name],//???O
                 DateTime.Parse(dataRecord[(int)PlayerFormat.careate_date]),//createdDate
                 DateTime.Parse(dataRecord[(int)PlayerFormat.end_date]),//endDate
                 int.Parse(dataRecord[(int)PlayerFormat.money]),//money
