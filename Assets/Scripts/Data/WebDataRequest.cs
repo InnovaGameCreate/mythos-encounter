@@ -60,7 +60,8 @@ public enum EnemyFormat
     visoin = 10,
     spell = 11,
     san = 12,
-    feature = 13
+    feature = 13,
+    attackMethod = 14
 }
 public enum EnemyAttackFormat
 {
@@ -235,6 +236,7 @@ public class WebDataRequest : MonoBehaviour
         foreach (var dataRecord in _dataArray)
         {
             string[] spell = dataRecord[(int)EnemyFormat.spell].Split(',');
+            string[] attachMethod = dataRecord[(int)EnemyFormat.attackMethod].Split(',');
 
             trace.Clear();
             var traceCode = dataRecord[(int)EnemyFormat.feature];
@@ -260,7 +262,8 @@ public class WebDataRequest : MonoBehaviour
                 int.Parse(dataRecord[(int)EnemyFormat.actionCooltime]),//actionCooltime
                 spell,//spell
                 float.Parse(dataRecord[(int)EnemyFormat.san]),//san
-                trace.ToArray()
+                trace.ToArray(),
+                attachMethod
                 );
             EnemyDataArrayList.Add(inputTempData);
         }

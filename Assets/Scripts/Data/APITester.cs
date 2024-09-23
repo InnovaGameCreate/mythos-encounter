@@ -80,10 +80,10 @@ public class APITester : MonoBehaviour
     {
         var data = WebDataRequest.GetEnemyDataArrayList;
         Debug.Log($"ViewPlayerTable : {data.Count}");
-        _textMeshPro.text = "id,name,hp,stamia,armor,walkSpeed,dashSpeed,attack,actionCoolTime,sapell,san,feature\n";
+        _textMeshPro.text = "id,name,hp,stamia,armor,walkSpeed,dashSpeed,attack,actionCoolTime,sapell,san,feature,attackMethod\n";
         foreach (var item in data)
         {
-            _textMeshPro.text += $"{item.EnemyId},{item.Name},{item.Stamina},{item.Armor},{item.WalkSpeed},{item.DashSpeed},{item.AttackPower},{item.ActionCooltime},{item.Spell.Length},{item.San},{item.Feature.Length}\n";
+            _textMeshPro.text += $"{item.EnemyId},{item.Name},{item.Stamina},{item.Armor},{item.WalkSpeed},{item.DashSpeed},{item.AttackPower},{item.ActionCooltime},{item.Spell.Length},{item.San},{item.Feature.Length},{item.AttackMethod.Length}\n";
         }
     }
     private void ViewItemFacade()

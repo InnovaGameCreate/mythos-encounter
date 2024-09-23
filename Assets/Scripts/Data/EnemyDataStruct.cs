@@ -16,6 +16,7 @@ public struct EnemyDataStruct
     private string[] _spell;
     private float _san;
     private TraceType[] _fetaure;
+    private string[] _attackMethod;
 
     public int EnemyId { get => _enemyId; }//?L?????N?^?[ID
     public string Name { get => _name; }//?_?b??????
@@ -31,8 +32,9 @@ public struct EnemyDataStruct
     public string[] Spell { get => _spell; }//????
     public float San { get => _san; }//???F??????SAN?l
     public TraceType[] Feature { get => _fetaure; }//
+    public string[] AttackMethod { get => _attackMethod; }//????
 
-    public void EnemyDataSet(int enemyId, string name, int hp, int stamina, int armor, float walkSpeed, float dashSpeed, int attackPower, int actionCooltime, int hearing, int vision, string[] spell, float san, TraceType[] feature)
+    public void EnemyDataSet(int enemyId, string name, int hp, int stamina, int armor, float walkSpeed, float dashSpeed, int attackPower, int actionCooltime, int hearing, int vision, string[] spell, float san, TraceType[] feature, string[] attackMethod)
     {
         _enemyId = enemyId;
         _name = name;
@@ -48,5 +50,6 @@ public struct EnemyDataStruct
         _spell = spell;
         _san = san;
         _fetaure = feature;
+        _attackMethod = attackMethod;
     }
 }
