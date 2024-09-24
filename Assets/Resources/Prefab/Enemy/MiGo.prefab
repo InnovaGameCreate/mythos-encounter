@@ -107,6 +107,8 @@ MonoBehaviour:
   _hasMagicNum: 0
   _fallBackTime: 3000
   _visual: {fileID: 2820872689797213259}
+  _discoverTime: 0
+  _enemyId: 3
   _enemySearch: {fileID: 5870517707342100858}
   _enemyAttack: {fileID: 3795316866408166989}
   _enemyMove: {fileID: 816805753169648624}
