@@ -46,16 +46,18 @@ namespace Scenes.Ingame.Player
         [SerializeField] private GameObject _spotLight;//Cameraに付属しているスポットライト
         [SerializeField] private GameObject _compass;//Cameraに付属しているコンパス
         [SerializeField] private GameObject _thermometer;//Cameraに付属している温度計
+        [SerializeField] private GameObject _geigerCounter;//Cameraに付属している放射線測定器
 
         //アイテムデバッグ用
         [SerializeField] private GameObject _itemForDebug;
-
-        //懐中電灯のon/off状態保存用
-        private List<HandLightState> _switchHandLight = new List<HandLightState>();
+       
+        private List<HandLightState> _switchHandLight = new List<HandLightState>();//懐中電灯のon/off状態保存用
+        private List<bool>_switchGeigerCounter = new List<bool>();//放射線測定器のon/off状態保存用  
 
         public List<ItemSlotStruct> ItemSlots { get { return _itemSlot.ToList(); } }//外部に_itemSlotの内容を公開する
         public int nowIndex { get => _nowIndex.Value; }
         public List<HandLightState> SwitchHandLights { get {  return _switchHandLight.ToList(); } }
+        public List<bool> SwitchGeigerCounter { get { return _switchGeigerCounter.ToList(); } }
 
         public IObservable<int> OnNowIndexChange { get { return _nowIndex; } }//外部で_nowIndexの値が変更されたときに行う処理を登録できるようにする
         public IObservable<String> OnPopActive { get { return _popActive; } }
@@ -388,6 +390,28 @@ namespace Scenes.Ingame.Player
         public void UseThermometer()
         {
             _thermometer.GetComponent<ThermometerMove>().StartCoroutine("MeasureTemperature");
+        }
+
+        //放射線測定器を持つかどうか切り替える関数
+        public void ActiveGeigerCounter(bool value)
+        {
+            _geigerCounter.SetActive(value);
+        }
+
+        //放射線測定器の電源のon/offを変更する関数
+        public void ChangeSwitchGeigerCounter()
+        {
+            if (_switchGeigerCounter[_nowIndex.Value])//電源がonになっている場合
+            {
+                _geigerCounter.GetComponent<GeigerCounterMove>().StopCoroutine(" MeasureGeigerCounter");
+                _geigerCounter.GetComponent<GeigerCounterMove>().TurnOffGeigerCounter();
+                _switchGeigerCounter[_nowIndex.Value] = false;
+            }
+            else//電源がoffになっている場合
+            {
+                _geigerCounter.GetComponent<GeigerCounterMove>().StartCoroutine(" MeasureGeigerCounter");
+                _switchGeigerCounter[_nowIndex.Value] = true;
+            }
         }
     }
 }
