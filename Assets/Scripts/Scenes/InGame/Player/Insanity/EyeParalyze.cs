@@ -15,6 +15,7 @@ namespace Scenes.Ingame.Player
 
         private Volume _volume;
         private Vignette _vignette;
+        private PlayerGUIPresenter _playerGUIPresenter;
         public void Setup()
         {
             _volume = FindObjectOfType<Volume>();
@@ -22,6 +23,8 @@ namespace Scenes.Ingame.Player
             {
                 _vignette = _volume.profile.Add<Vignette>(false);
             }
+
+            _playerGUIPresenter = FindObjectOfType<PlayerGUIPresenter>();
         }
 
         public void Active()
@@ -35,12 +38,16 @@ namespace Scenes.Ingame.Player
             //視野狭める
             _vignette.active = true;//Vignetteの有効化
 
-            //Mapにノイズを走らせる
+            //Mapにノイズを走らせる(MiniMapは非表示)
+            _playerGUIPresenter.MiniMapSetting(false);
+            _playerGUIPresenter.NoiseFilterSetting(true);
         }
 
         public void Hide()
         {
             _vignette.active = false;//Vignetteの無効化
+            _playerGUIPresenter.MiniMapSetting(true);
+            _playerGUIPresenter.NoiseFilterSetting(false);
         }
     }
 }

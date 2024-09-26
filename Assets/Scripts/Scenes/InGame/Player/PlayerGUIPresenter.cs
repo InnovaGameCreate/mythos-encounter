@@ -60,6 +60,10 @@ namespace Scenes.Ingame.Player
         private Sequence castSequence;
         private bool _isCasting = false;//呪文の詠唱 or 脱出の詠唱を行っているか否か
 
+        [Header("マップ関係")]
+        [SerializeField] private GameObject _miniMap;
+        [SerializeField] private GameObject _noiseFilter;
+
         //スタミナゲージ関連のフィールド
         private float _defaultStaminaGaugeWidth;
 
@@ -379,6 +383,16 @@ namespace Scenes.Ingame.Player
                 _castTimeText.text = "Cast：" + timer.ToString("F1");
             }
             yield break;
+        }
+
+        public void MiniMapSetting(bool value)
+        {
+            _miniMap.SetActive(value);
+        }
+
+        public void NoiseFilterSetting(bool value)
+        { 
+            _noiseFilter.SetActive(value);
         }
     }
 }
