@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4520086501038734862}
   m_Layer: 0
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: EnemyCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc95ec0190fb5284ab90d5223bef8c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  endMove: 0
+  _endMove: 0
   _enemyStatus: {fileID: 227141341248401291}
   _staminaOver: 0
 --- !u!114 &651126892439209470
@@ -272,6 +272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97b261c6a4bab3540931ed2ad3b02b1f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canSpawn: 1
 --- !u!114 &6785901014579326764
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,6 +401,7 @@ MonoBehaviour:
   _range: 2
   _mass: 100
   _damage: 50
+  _breedDamage: 0
 --- !u!114 &-1417630428139418448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -415,7 +417,6 @@ MonoBehaviour:
   _stiffness: 3
   _range: 15
   _mass: 10
-  _damage: 30
   _bullet: {fileID: 2261882221392382239, guid: 39e56c2c101133e4ba9db45ecad211dd, type: 3}
   _hand: {fileID: 5088418229967577375}
 --- !u!1001 &9117532595097646355

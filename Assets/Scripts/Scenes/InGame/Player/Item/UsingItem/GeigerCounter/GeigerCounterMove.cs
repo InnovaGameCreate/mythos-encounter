@@ -12,11 +12,13 @@ namespace Scenes.Ingame.Player
         [SerializeField] PlayerItem _playerItem;
         [SerializeField] TextMeshPro _textMeshProUnit;
         [SerializeField] TextMeshPro _textMeshProNumber;
+
         public IEnumerator MeasureGeigerCounter()
         {
             RaycastHit hit;
             int floorlayerMask = LayerMask.GetMask("Floor");//è∞Ç…ÇæÇØîΩâûÇ∑ÇÈÇÊÇ§Ç…Ç∑ÇÈ
             _textMeshProUnit.text = "mSv";
+            _textMeshProNumber.text = string.Empty;
 
             while (true)
             {

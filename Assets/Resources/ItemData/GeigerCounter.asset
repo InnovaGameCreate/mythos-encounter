@@ -19,4 +19,4 @@ MonoBehaviour:
   itemInfo: "\u6E2C\u5B9A\u3057\u305F\u5834\u6240\u306E\u653E\u5C04\u7DDA\u6FC3\u5EA6\u304C\u308F\u304B\u308B"
   type: 1
   isSingleUse: 1
-  prefab: {fileID: 4570247510132778309, guid: 3407a59925522614baac081df3ac9efc, type: 3}
+  prefab: {fileID: 4570247510132778309, guid: df7d0d203c95c9a4b9efa2b426e565e8, type: 3}

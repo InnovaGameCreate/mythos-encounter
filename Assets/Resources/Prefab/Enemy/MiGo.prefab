@@ -75,7 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc95ec0190fb5284ab90d5223bef8c76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  endMove: 0
+  _endMove: 0
   _enemyStatus: {fileID: 3570193099927935822}
   _staminaOver: 0
 --- !u!114 &3570193099927935822
@@ -100,6 +100,7 @@ MonoBehaviour:
   _staminaBase: 5
   _actionCoolTimeBase: 300
   _enemyStateBase: 1
+  _footSoundBase: 0
   _horrorBase: 10
   _uniqueItem: {fileID: 6146547148148849240, guid: 1460fd555e5df4f4ba1ca88617706b73, type: 3}
   _enemyMagics: 
@@ -323,7 +324,7 @@ GameObject:
   - component: {fileID: 5731158719785142745}
   m_Layer: 0
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: EnemyCollider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

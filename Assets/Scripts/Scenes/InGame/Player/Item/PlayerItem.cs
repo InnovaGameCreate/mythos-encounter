@@ -83,6 +83,7 @@ namespace Scenes.Ingame.Player
             for(int i = 0; i < 7; i++)
             {
                 _switchHandLight.Add(LightSwitch);
+                _switchGeigerCounter.Add(false);
             }
 
             //色々な変数の初期化
@@ -399,18 +400,22 @@ namespace Scenes.Ingame.Player
         }
 
         //放射線測定器の電源のon/offを変更する関数
-        public void ChangeSwitchGeigerCounter()
+        public void ChangeSwitchGeigerCounter(bool value)
         {
-            if (_switchGeigerCounter[_nowIndex.Value])//電源がonになっている場合
+            _switchGeigerCounter[_nowIndex.Value] = value;
+        }
+
+        //放射線測定器の動作状態を変更する関数
+        public void UseGeigerCounter(bool value)
+        {
+            if (value)//測定を開始させる場合
             {
-                _geigerCounter.GetComponent<GeigerCounterMove>().StopCoroutine(" MeasureGeigerCounter");
-                _geigerCounter.GetComponent<GeigerCounterMove>().TurnOffGeigerCounter();
-                _switchGeigerCounter[_nowIndex.Value] = false;
+                _geigerCounter.GetComponent<GeigerCounterMove>().StartCoroutine("MeasureGeigerCounter"); 
             }
-            else//電源がoffになっている場合
+            else//測定を止める場合
             {
-                _geigerCounter.GetComponent<GeigerCounterMove>().StartCoroutine(" MeasureGeigerCounter");
-                _switchGeigerCounter[_nowIndex.Value] = true;
+                _geigerCounter.GetComponent<GeigerCounterMove>().StopCoroutine("MeasureGeigerCounter");
+                _geigerCounter.GetComponent<GeigerCounterMove>().TurnOffGeigerCounter();
             }
         }
     }
