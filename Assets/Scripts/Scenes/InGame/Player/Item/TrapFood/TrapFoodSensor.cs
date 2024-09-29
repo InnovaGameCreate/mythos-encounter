@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Scenes.Ingame.Enemy;
 
 public class TrapFoodSensor : MonoBehaviour
 {
     private bool _isActiveSensor = true;//連続でセンサーを作動させないための変数
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.CompareTag("EnemyCollider"))
+        if (collider.transform.root.gameObject.TryGetComponent<EnemyStatus>(out EnemyStatus enemyStatus))
         {
             Debug.Log("検知");
             Vector3 startingPoint = this.transform.position + transform.up * 2f;//レイの発射点を少し高くするため

@@ -107,6 +107,7 @@ MonoBehaviour:
   _hasMagicNum: 0
   _fallBackTime: 3000
   _visual: {fileID: 2820872689797213259}
+  _discoverTime: 0
   _enemySearch: {fileID: 5870517707342100858}
   _enemyAttack: {fileID: 3795316866408166989}
   _enemyMove: {fileID: 816805753169648624}
@@ -323,7 +324,7 @@ GameObject:
   - component: {fileID: 5731158719785142745}
   m_Layer: 0
   m_Name: Collider
-  m_TagString: EnemyCollider
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
