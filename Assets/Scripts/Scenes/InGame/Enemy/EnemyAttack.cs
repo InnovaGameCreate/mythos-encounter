@@ -260,7 +260,7 @@ namespace Scenes.Ingame.Enemy
                 if (ScreenPosition.y > 0 && ScreenPosition.y < 1080) {
                     if (ScreenPosition.z > 0)
                     {
-                        _playerStatus.ChangeSanValue(_horror, "Damage");
+                        _playerStatus.ChangeSanValue(_horror, ChangeValueMode.Damage);
 
 
 

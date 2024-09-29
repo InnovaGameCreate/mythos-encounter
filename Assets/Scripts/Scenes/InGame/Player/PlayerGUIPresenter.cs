@@ -6,6 +6,8 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using Scenes.Ingame.Manager;
+using Fusion;
 
 namespace Scenes.Ingame.Player
 {
@@ -19,20 +21,18 @@ namespace Scenes.Ingame.Player
         public static PlayerGUIPresenter Instance;
 
         //model
-        [SerializeField] private PlayerStatus[] _playerStatuses;
+        [SerializeField] private PlayerStatus _playerStatus;
         [SerializeField] private PlayerItem _playerItem;//マルチの時はスクリプト内でinputAuthority持ってるplayerのを代入させる
         [SerializeField] private PlayerInsanityManager _playerInsanityManager;//マルチの時はスクリプト内でinputAuthority持ってるplayerのを代入させる
-        //View
-        [SerializeField] private DisplayPlayerStatusManager _displayPlayerStatusManager;
 
         [Header("カーソル設定")][SerializeField] private bool _isCurcleSetting = false;
 
         [Header("ゲーム内UI(オンライン)")]
-        [SerializeField] private Slider[] _healthSliders;//各プレイヤーのHPバー
-        [SerializeField] private Slider[] _sanValueSliders;//各プレイヤーのSAN値バー
-        [SerializeField] private Slider[] _bleedingHealthSliders;//各プレイヤーの出血処理用HPバー
-        [SerializeField] private TMP_Text[] _healthText;//各プレイヤーのHP残量表示テキスト
-        [SerializeField] private TMP_Text[] _sanValueText;//各プレイヤーのSAN値残量表示テキスト
+        [SerializeField] private Slider _healthSlider;//プレイヤーのHPバー
+        [SerializeField] private Slider _sanValueSlider;//プレイヤーのSAN値バー
+        [SerializeField] private Slider _bleedingHealthSlider;//プレイヤーの出血処理用HPバー
+        [SerializeField] private TMP_Text _healthText;//プレイヤーのHP残量表示テキスト
+        [SerializeField] private TMP_Text _sanValueText;//プレイヤーのSAN値残量表示テキスト
         [SerializeField] private Sprite _itemEmptySprite;//アイテムスロットが空のときにいれる画像
 
         [Header("ゲーム内UI(オフライン)")]
@@ -60,7 +60,9 @@ namespace Scenes.Ingame.Player
         private Sequence castSequence;
         private bool _isCasting = false;//呪文の詠唱 or 脱出の詠唱を行っているか否か
 
-        private int _myPlayerID = 0;
+        [Header("マップ関係")]
+        [SerializeField] private GameObject _miniMap;
+        [SerializeField] private GameObject _noiseFilter;
 
         //スタミナゲージ関連のフィールド
         private float _defaultStaminaGaugeWidth;
@@ -75,43 +77,48 @@ namespace Scenes.Ingame.Player
                 CursorSetting(true);
 
             //プレイヤーの作成が終わり、配列のソートが終了したら叩かれる
-            _displayPlayerStatusManager.OnCompleteSort
-                .FirstOrDefault()
-                .Subscribe(_ => 
+            IngameManager.Instance.OnPlayerSpawnEvent
+                .Subscribe(_ =>
                 {
-                    //DisplayPlayerStatusManagerにあるソート済みの配列を取得
-                    _playerStatuses = _displayPlayerStatusManager.PlayerStatuses;
-
-                    //各プレイヤーのHPやSAN値が変更されたときの処理を追加する。
-                    foreach (var playerStatus in _playerStatuses)
+                    //自身が操作するPlayerのPlayerStatusを取得
+                    //ここのコメントはFusion対応時に外せ
+                    /*
+                    PlayerStatus[] playerStatuses = FindObjectsOfType<PlayerStatus>();
+                    foreach (PlayerStatus playerStatus in playerStatuses)
                     {
-                        playerStatus.OnPlayerHealthChange
-                            .Subscribe(x =>
-                            {
-                                //viewに反映
-                                ChangeSliderValue(x, playerStatus.playerID, "Health");
-                            }).AddTo(this);
-
-                        playerStatus.OnPlayerBleedingHealthChange
-                            .Subscribe(x =>
-                            {
-                                //view�ɔ��f
-                                ChangeSliderValue(x, playerStatus.playerID, "Bleeding");
-                            }).AddTo(this);
-
-
-
-                        playerStatus.OnPlayerSanValueChange
-                            .Subscribe(x =>
-                            {
-                                //viewに反映
-                                ChangeSliderValue(x, playerStatus.playerID, "SanValue");
-                            }).AddTo(this);
+                        if (playerStatus.gameObject.GetComponent<NetworkObject>().HasInputAuthority)
+                            _playerStatus = playerStatus;
+                        else
+                            continue;
                     }
+                    */
+                    _playerStatus = FindObjectOfType<PlayerStatus>();
+
+                    //プレイヤーのHPやSAN値が変更されたときの処理を追加する。
+                    _playerStatus.OnPlayerHealthChange
+                        .Subscribe(x =>
+                        {
+                            //viewに反映
+                            ChangeSliderValue(x, "Health");
+                        }).AddTo(this);
+
+                    _playerStatus.OnPlayerBleedingHealthChange
+                        .Subscribe(x =>
+                        {
+                            //viewに反映
+                            ChangeSliderValue(x, "Bleeding");
+                        }).AddTo(this);
+
+                    _playerStatus.OnPlayerSanValueChange
+                        .Subscribe(x =>
+                        {
+                            //viewに反映
+                            ChangeSliderValue(x, "SanValue");
+                        }).AddTo(this);
+
 
                     //操作するキャラクターのスタミナゲージにだけ、スタミナゲージを変更させる処理を追加する。
-                    //PhotonFusionだったら、inputAuthorityを持つキャラクターのみに指定
-                    _playerStatuses[0].OnPlayerStaminaChange
+                    _playerStatus.OnPlayerStaminaChange
                          .Subscribe(x =>
                          {
                              ChangeStaminaGauge(x);
@@ -130,7 +137,7 @@ namespace Scenes.Ingame.Player
                          }).AddTo(this);
 
                     //呪文の詠唱・脱出地点の詠唱開始時にゲージを表示
-                    _playerStatuses[0].OnCastEvent
+                    _playerStatus.OnCastEvent
                     .Subscribe(time =>
                     {
                         _castGauge.enabled = true;
@@ -160,7 +167,7 @@ namespace Scenes.Ingame.Player
 
                     }).AddTo(this);
 
-                    _playerStatuses[0].OnCancelCastEvent
+                    _playerStatus.OnCancelCastEvent
                     .Subscribe(_ =>
                     {
                         castSequence.Kill();                       
@@ -168,7 +175,7 @@ namespace Scenes.Ingame.Player
 
                     //アイテム関係の処理の追加
                     //PlayerItemスクリプトの取得.マルチ実装のときはinputAuthorityを持つキャラクターのみに指定
-                    _playerItem = GameObject.FindWithTag("Player").GetComponent<PlayerItem>();
+                    _playerItem = _playerStatus.gameObject.GetComponent<PlayerItem>();
 
                     //現在選択されているスロットを強調表示
                     _playerItem.OnNowIndexChange
@@ -233,14 +240,13 @@ namespace Scenes.Ingame.Player
                         }).AddTo(this);
 
                     //PlayerInsanityManagerスクリプトの取得.マルチ実装のときはinputAuthorityを持つキャラクターのみに指定
-                    _playerInsanityManager = GameObject.FindWithTag("Player").GetComponent<PlayerInsanityManager>();
+                    _playerInsanityManager = _playerStatus.gameObject.GetComponent<PlayerInsanityManager>();
 
                     //発狂のスクリプトを管理するListに要素が追加されたときに、アイコンを変化させる。
                     _playerInsanityManager.OnInsanitiesAdd
                         .Subscribe(addEvent =>
                         {
                             _insanityIcons[addEvent.Index].color += new Color(0, 0, 0, 1.0f);
-
                             switch (_playerInsanityManager.Insanities[addEvent.Index])
                             {
                                 case EyeParalyze:
@@ -288,7 +294,6 @@ namespace Scenes.Ingame.Player
                             }
                         }).AddTo(this);
                         
-
                 }).AddTo(this);
 
             //インスタンスの設定
@@ -313,38 +318,31 @@ namespace Scenes.Ingame.Player
             {
                 Cursor.visible = true;
                 Cursor.lockState = CursorLockMode.None;
-            }
-            
+            }           
         }
 
         /// <summary>
         /// Sliderの値を変える為の関数.Slider,Textに直接参照している
         /// </summary>
         /// <param name="value">Slinder.Valueに代入する値</param>
-        /// <param name="ID">プレイヤーID</param>
         /// <param name="mode">Health(体力), SanValue(SAN値)どちらを変更するのかを決定</param>
-        public void ChangeSliderValue(int value, int ID, string mode)
+        public void ChangeSliderValue(int value, string mode)
         {
             if (mode == "Health")
             {
-                _healthSliders[ID].value = value;
-                // _healthText[ID].text = value.ToString();
+                _healthSlider.value = value;
             }
 
             if (mode == "Bleeding")
             {
-                _bleedingHealthSliders[ID].value = value;
-                // _healthText[ID].text = value.ToString();
+                _bleedingHealthSlider.value = value;
             }
-
 
             else if (mode == "SanValue")
             {
-                _sanValueSliders[ID].value = value;
-                // _sanValueText[ID].text = value.ToString();
+                _sanValueSlider.value = value;
             }
         }
-
         public void ChangeStaminaGauge(int value)
         {
             //  DoTweenの動作を破棄
@@ -352,7 +350,7 @@ namespace Scenes.Ingame.Player
             _staminaGaugeBackGround.DOKill();
             
             //スタミナの値を0～1の値に補正
-            float fillAmount = (float)value / _playerStatuses[_myPlayerID].stamina_max;
+            float fillAmount = (float)value / _playerStatus.stamina_max;
             _staminaGaugeFrontImage.fillAmount = fillAmount;
 
             //float maskValue = _defaultStaminaGaugeWidth * (1 - fillAmount) / 2;
@@ -385,6 +383,16 @@ namespace Scenes.Ingame.Player
                 _castTimeText.text = "Cast：" + timer.ToString("F1");
             }
             yield break;
+        }
+
+        public void MiniMapSetting(bool value)
+        {
+            _miniMap.SetActive(value);
+        }
+
+        public void NoiseFilterSetting(bool value)
+        { 
+            _noiseFilter.SetActive(value);
         }
     }
 }

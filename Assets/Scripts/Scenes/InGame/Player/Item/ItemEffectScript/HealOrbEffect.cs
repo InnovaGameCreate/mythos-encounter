@@ -19,7 +19,7 @@ namespace Scenes.Ingame.Player
 
         public override void Effect()
         {
-            ownerPlayerStatus.ChangeHealth(100, "Heal");
+            ownerPlayerStatus.ChangeHealth(100, ChangeValueMode.Heal);
             ownerPlayerItem.ConsumeItem(ownerPlayerItem.nowIndex);
         }
 
