@@ -45,6 +45,11 @@ namespace Scenes.Ingame.Player
             yield break;
         }
 
+        // 温度計を非アクティブにしたときにアイテムを使用できるようにする処理
+        private void OnDisable()
+        {
+            _playerItem.ChangeCanUseItem(true);
+        }
     }
 }
 
