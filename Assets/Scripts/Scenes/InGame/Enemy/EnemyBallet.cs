@@ -83,7 +83,7 @@ public class EnemyBallet : MonoBehaviour
                         _stop = true;
 
                         //ƒ_ƒ[ƒW‚Ìˆ—
-                        _targetStatus.ChangeHealth(_damage, "Damage");
+                        _targetStatus.ChangeHealth(_damage, ChangeValueMode.Damage);
                         _targetStatus.OnEnemyAttackedMeEvent.OnNext(Unit.Default);
                     }
                 }

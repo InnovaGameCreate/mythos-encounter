@@ -54,7 +54,7 @@ namespace Scenes.Ingame.Player
                     StartCoroutine(CancelWaterEffect());
 
                     //SANílå∏è≠
-                    myPlayerStatus.ChangeSanValue(consumeSanValue, "Damage");
+                    myPlayerStatus.ChangeSanValue(consumeSanValue, ChangeValueMode.Damage);
 
                     //éÙï∂ÇégÇ¶Ç»Ç¢ÇÊÇ§Ç…Ç∑ÇÈ
                     myPlayerMagic.ChangeCanUseMagicBool(false);

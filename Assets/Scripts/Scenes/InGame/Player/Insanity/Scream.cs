@@ -12,7 +12,7 @@ namespace Scenes.Ingame.Player
     public class Scream : MonoBehaviour, IInsanity
     {
         private PlayerSoundManager _myPlayerSoundManager;
-        private TempPlayerMove _myPlayerMove;
+        private PlayerMove _myPlayerMove;
         private PlayerItem _myPlayerItem;
 
         private bool _isSafetyBool = false;//もし叫んでいるときに手違いでSAN値が回復し、このスクリプトが破壊されたときに詰まない為のBool
@@ -21,7 +21,7 @@ namespace Scenes.Ingame.Player
         public void Setup()
         {
             _myPlayerSoundManager = GetComponent<PlayerSoundManager>();
-            _myPlayerMove = GetComponent<TempPlayerMove>();
+            _myPlayerMove = GetComponent<PlayerMove>();
             _myPlayerItem = GetComponent<PlayerItem>();
         }
 
