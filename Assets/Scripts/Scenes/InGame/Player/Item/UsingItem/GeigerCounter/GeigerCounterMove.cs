@@ -39,6 +39,7 @@ namespace Scenes.Ingame.Player
             }
         }
 
+        //電源オフ時に実行
         public void TurnOffGeigerCounter()
         {
             _textMeshProUnit.text = string.Empty;
