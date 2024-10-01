@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Scenes.Ingame.Player;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,6 +15,8 @@ namespace Scenes.Lobby.RoomSettingPanel
         private int _isOpened = 0; //ディスプレイUIの表示状態
         private Vector3 _displayPosition; //PrefabのディスプレイのTransformを記録する
         private Quaternion _displayRotation;
+
+        private PlayerMove _playerMove;
 
         private void Start()
         {
@@ -65,6 +68,14 @@ namespace Scenes.Lobby.RoomSettingPanel
             //ディスプレイUIの表示
             _uiPanel.SetActive(true);
 
+            //Playerの移動を禁ずる
+            if (_playerMove == null)
+                _playerMove = FindObjectOfType<PlayerMove>();
+
+            _playerMove.MoveControl(false);
+            _playerMove.RotationControl(false);
+
+
             //ディスプレイに切り替え（制御）
             _isOpened = 2;
         }
@@ -99,6 +110,10 @@ namespace Scenes.Lobby.RoomSettingPanel
 
             //メインカメラに戻す
             _displayCamera.enabled = false;
+
+            //Playerの移動を許す
+            _playerMove.MoveControl(true);
+            _playerMove.RotationControl(true);
 
             //ディスプレイUIから戻る（制御）
             _isOpened = 0;

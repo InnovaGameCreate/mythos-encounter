@@ -34,6 +34,7 @@ namespace Scenes.Ingame.Player
 
         private bool _isTiredPenalty = false;
         private bool _isCanMove = true;
+        private bool _isCanRotate = true;
         private bool _isCannotMoveByParalyze = false;
         private PlayerActionState _lastPlayerAction = PlayerActionState.Idle;
 
@@ -135,7 +136,7 @@ namespace Scenes.Ingame.Player
         void Update()
         {
             //生きている間かつ蘇生アニメーション中でないときはカメラを操作できる
-            if (_myPlayerStatus.nowPlayerSurvive && !_myPlayerStatus.nowReviveAnimationDoing)
+            if (_myPlayerStatus.nowPlayerSurvive && !_myPlayerStatus.nowReviveAnimationDoing && _isCanRotate)
             {
                 float moveMouseX = Input.GetAxis("Mouse X");
                 if (Mathf.Abs(moveMouseX) > 0.001f)
@@ -371,6 +372,10 @@ namespace Scenes.Ingame.Player
             _isCanMove = value;
         }
 
+        public void RotationControl(bool value)
+        {
+            _isCanRotate = value;
+        }
 
     }
 }
