@@ -11,20 +11,30 @@ using Data;
 namespace Scenes.Ingame.Manager
 {
     /// <summary>
-    /// プレイヤーの実績や呪文の解放条件の達成の有無、報酬に関することなどを管理する
+    /// ?v???C???[?????????????????????????B?????L???A???V??????????????????????????
     /// </summary>
     public class EventManager : MonoBehaviour
     {
-        private int _gameTime;//プレイ時間
-        private bool _getUniqueItem = false;//ユニークアイテム取得の有無
-        private float _playerMoveDistance = 0;
+        private int _gameTime;//?v???C????
+        private bool _getUniqueItem = false;//???j?[?N?A?C?e?????????L??
         private int _chaseCount = 0;
         CancellationTokenSource _source = new CancellationTokenSource();
-
+        private EnemyStatus _enemyStatus;
         public int GetGameTime { get => _gameTime; }
-        public bool GetContact { get => PlayerInformationFacade.Instance.IsFarstContactEnemy(0); }//TODO後から敵キャラクターのIDを取得する
+        public bool GetContact { get
+            {
+                if(_enemyStatus != null)
+                {
+                    return PlayerInformationFacade.Instance.IsFarstContactEnemy(_enemyStatus.EnemyId);
+                }
+                else
+                {
+                    return false;
+                }
+            } }
         public bool GetUniqueItem { get => _getUniqueItem; }
         public static EventManager Instance;
+
         private void Awake()
         {
             Instance = this;
@@ -32,28 +42,33 @@ namespace Scenes.Ingame.Manager
 
         void Start()
         {
+            IngameManager.Instance.OnIngame
+                .Subscribe(_ => Init());
+        }
+
+        private void Init()
+        {
             CancellationToken token = _source.Token;
             IngameManager.Instance.OnIngame
                 .Subscribe(_ =>
                 {
                     GameTime(token).Forget();
                 }).AddTo(this);
-        }
 
-        private void Init()
-        {
-            EnemyStatus enemyStatus = FindObjectOfType<EnemyStatus>();
-            enemyStatus.OnEnemyStateChange
+            _enemyStatus = FindObjectOfType<EnemyStatus>();
+            _enemyStatus.OnEnemyStateChange
                 .Where(state => state == EnemyState.Chase)
                 .Subscribe(_ =>
                 {
                     _chaseCount++;
                 }).AddTo(this);
         }
-        void Update()
-        {
 
+        public int EnemyLevel()
+        {
+            return 1 + (_enemyStatus.EnemyId / 3);
         }
+
         async UniTaskVoid GameTime(CancellationToken token)
         {
             while (true)
@@ -62,10 +77,12 @@ namespace Scenes.Ingame.Manager
                 _gameTime++;
             }
         }
+
         public void UniqueItemGet()
         {
             _getUniqueItem = true;
         }
+
         private void OnDestroy()
         {
             _source.Cancel();

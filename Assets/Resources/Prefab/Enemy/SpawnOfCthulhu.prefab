@@ -55,8 +55,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _checkRate: 0.5
-  _visivilityRange: 10
-  _blindChaseTime: 10
   _debugMode: 1
   _enemyAttackBehaviours:
   - {fileID: 5634362069311426784}
@@ -77,7 +75,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _endMove: 0
   _enemyStatus: {fileID: 3554846491491567640}
-  _staminaOver: 0
 --- !u!114 &7631687704071867374
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,7 +90,6 @@ MonoBehaviour:
   _checkRate: 1
   _debugMode: 0
   _myEneyMove: {fileID: 6372555738571843037}
-  _visivilityRange: 10
   _enemyStatus: {fileID: 3554846491491567640}
 --- !u!114 &3554846491491567640
 MonoBehaviour:
@@ -108,22 +104,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _hpBase: 10
-  _patrollingSpeedBase: 3
-  _searchSpeedBase: 4
-  _chaseSpeedBase: 5
+  _patrollingSpeed: 3
+  _searchSpeed: 4
+  _chaseSpeed: 5
   _audiometerPowerBase: 100
-  _reactToLightBase: 1
-  _flyingBase: 0
+  _reactToLight: 1
+  _flying: 0
   _staminaBase: 5
-  _actionCoolTimeBase: 480
+  _actionCoolTime: 480
   _enemyStateBase: 1
   _footSoundBase: 0
-  _horrorBase: 1
+  _blindCheseTime: 60
+  _horror: 1
   _uniqueItem: {fileID: 6146547148148849240, guid: 1460fd555e5df4f4ba1ca88617706b73, type: 3}
   _enemyMagics: 
   _hasMagicNum: 0
   _fallBackTime: 3000
   _visual: {fileID: 5563363999148163310}
+  _discoverTime: 0
+  _enemyId: 2
   _enemySearch: {fileID: 7631687704071867374}
   _enemyAttack: {fileID: 8515988114254047942}
   _enemyMove: {fileID: 6372555738571843037}

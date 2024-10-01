@@ -25,7 +25,7 @@ namespace Scenes.Ingame.Enemy
         public override void Behaviour(PlayerStatus targetStatus)
         {
             Debug.Log("‹ßÚUŒ‚I");
-            targetStatus.ChangeHealth(_damage, "Damage");
+            targetStatus.ChangeHealth(_damage, ChangeValueMode.Damage);
             targetStatus.OnEnemyAttackedMeEvent.OnNext(Unit.Default);
         }
     }
