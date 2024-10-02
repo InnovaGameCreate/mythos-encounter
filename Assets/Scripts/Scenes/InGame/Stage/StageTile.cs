@@ -28,7 +28,7 @@ namespace Scenes.Ingame.Stage
             StartCoroutine(InTemperatureChange());
         }
 
-        //温度が設定温度を超えた際の処理
+        //温度が設定温度の範囲外になった際の処理
         private void OverTemperature()
         {
             _count += 1;
@@ -119,6 +119,10 @@ namespace Scenes.Ingame.Stage
             get { return _msv; } 
         }
 
+        public bool Flag
+        {
+            get { return _flag; }
+        }
     }
 }
 
