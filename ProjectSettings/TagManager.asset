@@ -11,6 +11,8 @@ TagManager:
   - StageIntract
   - Enemy
   - Loadout
+  - EnemyCollider
+  - TrapFoodSensor
   layers:
   - Default
   - TransparentFX
