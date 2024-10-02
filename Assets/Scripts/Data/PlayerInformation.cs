@@ -39,9 +39,13 @@ namespace Data
             _spell[i] = true;
         }
 
-        async void Start()
+        void Awake()
         {
             Instance = this;
+        }
+
+        async void Start()
+        {
             DecodeData();
         }
         public void MetEnemy(int enemyId)

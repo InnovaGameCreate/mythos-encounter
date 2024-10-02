@@ -44,6 +44,7 @@ namespace Scenes.Ingame.Enemy
         [SerializeField][Tooltip("退散から復帰するまでのミリ秒")] private int _fallBackTime;
         [SerializeField][Tooltip("見た目のゲームオブジェクト")] private GameObject _visual;
         [SerializeField][Tooltip("発見動作は何ミリ秒間続くのかどうか")] private int _discoverTime;
+        [SerializeField][Tooltip("敵キャラクターのID")] private int _enemyId;
 
 
         [Header("自身についているであろうスクリプト")]
@@ -117,6 +118,7 @@ namespace Scenes.Ingame.Enemy
         public bool WaterEffectDebuff { get { return _isWaterEffectDebuff.Value; } }
 
         public int DiscoverTime { get { return _discoverTime; } }
+        public int EnemyId { get { return _enemyId; } }
 
 
 

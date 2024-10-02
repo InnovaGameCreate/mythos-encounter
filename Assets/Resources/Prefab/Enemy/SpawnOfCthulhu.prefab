@@ -122,6 +122,7 @@ MonoBehaviour:
   _fallBackTime: 3000
   _visual: {fileID: 5563363999148163310}
   _discoverTime: 0
+  _enemyId: 2
   _enemySearch: {fileID: 7631687704071867374}
   _enemyAttack: {fileID: 8515988114254047942}
   _enemyMove: {fileID: 6372555738571843037}

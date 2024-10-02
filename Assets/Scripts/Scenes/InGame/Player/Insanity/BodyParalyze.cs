@@ -13,7 +13,7 @@ namespace Scenes.Ingame.Player
     {
         private int[] _randoms = new int[2];
         private PlayerItem _myPlayerItem;
-        private TempPlayerMove _myPlayerMove;
+        private PlayerMove _myPlayerMove;
         private PlayerStatus _myPlayerStatus;
 
         private ItemSlotStruct _unavailableSlot;
@@ -23,7 +23,7 @@ namespace Scenes.Ingame.Player
         public void Setup()
         {
             _myPlayerItem = GetComponent<PlayerItem>();
-            _myPlayerMove = GetComponent<TempPlayerMove>();
+            _myPlayerMove = GetComponent<PlayerMove>();
             _unavailableSlot = new ItemSlotStruct(null, ItemSlotStatus.unavailable);
 
 
