@@ -10,6 +10,8 @@ TagManager:
   - EscapePoint
   - StageIntract
   - Enemy
+  - EnemyCollider
+  - TrapFoodSensor
   layers:
   - Default
   - TransparentFX
