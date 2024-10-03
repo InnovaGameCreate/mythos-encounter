@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7736650679182576676}
   - component: {fileID: 1614493044594472170}
+  - component: {fileID: 6647799633242644205}
   m_Layer: 0
   m_Name: EnemySpowner
   m_TagString: Untagged
@@ -46,7 +47,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _debugMode: 0
   _nonInGameManagerMode: 0
+  _raffle: 1
   _enemyName: 1
+  _gamePhase: 0
   _enemyVisibilityMap: {fileID: 0}
   _x: 13
   _y: 2
@@ -59,3 +62,21 @@ MonoBehaviour:
   _spawnOfCthulhu: {fileID: 1502827998043956805, guid: 12d632861ee534348b7a8114133b23d5, type: 3}
   _MiGo: {fileID: 2083930819845757192, guid: 1934123d9afe937408275cbfb70cb0bf, type: 3}
   _enemySpawnPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &6647799633242644205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2356478341575929910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2481771831
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 1614493044594472170}

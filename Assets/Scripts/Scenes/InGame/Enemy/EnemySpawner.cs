@@ -11,6 +11,7 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using Scenes.Ingame.Stage;
+using Fusion;
 
 
 
@@ -20,7 +21,7 @@ namespace Scenes.Ingame.Enemy
     /// <summary>
     /// 敵キャラを作成する
     /// </summary>
-    public class EnemySpawner : MonoBehaviour
+    public class EnemySpawner : NetworkBehaviour
     {
         public static EnemySpawner Instance;
 
@@ -61,6 +62,10 @@ namespace Scenes.Ingame.Enemy
         [Header("生成する際の設定")]
         [SerializeField] private Vector3 _enemySpawnPosition;
 
+        /*
+        [Header("プレイヤー一覧")]
+        [SerializeField] private List<GameObject> _players;
+        */
 
         private List<StageDoor> _doors = new List<StageDoor>();
 
@@ -237,7 +242,11 @@ namespace Scenes.Ingame.Enemy
             }
             if (_nonInGameManagerMode)
             {
-
+                Debug.Log("必要な数のプレイヤーが沸いた場合、Xキーを押してください");
+                while (true) {
+                    await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.X), cancellationToken: token);
+                    break;
+                }
                 EnemySpawn(_enemyName, _enemySpawnPosition);
 
             }
@@ -261,19 +270,19 @@ namespace Scenes.Ingame.Enemy
             {
 
                 case EnemyName.TestEnemy:
-                    createEnemy = GameObject.Instantiate(_testEnemy, spownPosition, Quaternion.identity);
+                    createEnemy = Runner.Spawn(_testEnemy, spownPosition, Quaternion.identity).gameObject;
                     if (_debugMode) Debug.Log("エネミーは制作されました");
                     break;
                 case EnemyName.DeepOnes:
-                    createEnemy = GameObject.Instantiate(_deepOnes, spownPosition, Quaternion.identity);
+                    createEnemy = Runner.Spawn(_deepOnes, spownPosition, Quaternion.identity).gameObject;
                     if (_debugMode) Debug.Log("エネミーは制作されました");
                     break;
                 case EnemyName.SpawnOfCthulhu:
-                    createEnemy = GameObject.Instantiate(_spawnOfCthulhu, spownPosition, Quaternion.identity);
+                    createEnemy = Runner.Spawn(_spawnOfCthulhu, spownPosition, Quaternion.identity).gameObject;
                     if (_debugMode) Debug.Log("エネミーは制作されました");
                     break;
                 case EnemyName.MiGo:
-                    createEnemy = GameObject.Instantiate(_MiGo, spownPosition, Quaternion.identity);
+                    createEnemy = Runner.Spawn(_MiGo, spownPosition, Quaternion.identity).gameObject;
                     if (_debugMode) Debug.Log("エネミーは制作されました");
                     break;
                 default:
@@ -304,6 +313,9 @@ namespace Scenes.Ingame.Enemy
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource.Dispose();
         }
+
+
+
 
     }
 }
