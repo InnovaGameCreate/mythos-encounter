@@ -12,7 +12,6 @@ TagManager:
   - Enemy
   - Loadout
   - TrapFoodSensor
-
   layers:
   - Default
   - TransparentFX
