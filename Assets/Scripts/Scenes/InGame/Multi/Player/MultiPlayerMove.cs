@@ -203,7 +203,7 @@ namespace Scenes.Ingame.Player
             {
                 yield return new WaitForSeconds(0.1f);
                 Debug.Log("スタミナ減少");
-                _myPlayerStatus.ChangeStamina(_expandStamina / 10 * (_isPulsation ? 2 : 1), "Damage");
+                _myPlayerStatus.ChangeStamina(_expandStamina / 10 * (_isPulsation ? 2 : 1), ChangeValueMode.Damage);
             }
         }
 
@@ -217,7 +217,7 @@ namespace Scenes.Ingame.Player
                 while (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Dash)
                 {
                     yield return new WaitForSeconds(0.1f);
-                    _myPlayerStatus.ChangeStamina(_recoverStaminaOnlyTired / 10, "Heal");
+                    _myPlayerStatus.ChangeStamina(_recoverStaminaOnlyTired / 10, ChangeValueMode.Heal);
                 }
             }
             else//通常時
@@ -225,7 +225,7 @@ namespace Scenes.Ingame.Player
                 while (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Dash)
                 {
                     yield return new WaitForSeconds(0.1f);
-                    _myPlayerStatus.ChangeStamina(_recoverStamina / 10, "Heal");
+                    _myPlayerStatus.ChangeStamina(_recoverStamina / 10, ChangeValueMode.Heal);
                 }
             }
 
