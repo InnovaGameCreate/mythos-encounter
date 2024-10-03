@@ -407,7 +407,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myPlayerPrefab:
-  - {fileID: 2481875681873542124, guid: a3ab431d993585e4889566cc89ea8189, type: 3}
+  - {fileID: 2481875681873542124, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
   _playerUI: {fileID: 762444050915149644, guid: 50bdab7d98cd7e74a8fbc46f11327523, type: 3}
 --- !u!4 &311709895
 Transform:
