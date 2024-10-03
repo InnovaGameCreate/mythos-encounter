@@ -17,8 +17,8 @@ namespace Scenes.Ingame.Player
         {
             var moveVelocity = GetAnimationMoveVelocity();
 
-            //Debug.Log("MoveX:" + moveVelocity.x);
-            //Debug.Log("MoveZ:" + moveVelocity.z);
+            Debug.Log("MoveX:" + moveVelocity.x);
+            Debug.Log("MoveZ:" + moveVelocity.z);
 
             //_animator.SetFloat("MovementSpeed", moveVelocity);
             _animator.SetFloat("MoveZ", moveVelocity.z, 0.05f, Time.deltaTime);
