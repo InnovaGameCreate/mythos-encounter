@@ -10,7 +10,6 @@ TagManager:
   - EscapePoint
   - StageIntract
   - Enemy
-  - UsingThermometer
   layers:
   - Default
   - TransparentFX
