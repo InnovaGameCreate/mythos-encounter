@@ -32,7 +32,7 @@ namespace Scenes.Ingame.Player
                 return default;
 
             var velocity = _simpleKCC.RealVelocity;
-            Debug.Log(velocity);
+            //Debug.Log(velocity);
             velocity.y = 0f;
 
             //1Ç…ê≥ãKâª
