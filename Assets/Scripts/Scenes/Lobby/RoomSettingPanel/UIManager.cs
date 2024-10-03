@@ -7,31 +7,30 @@ namespace Scenes.Lobby.RoomSettingPanel
     public class UIManager : MonoBehaviour
     {
         [SerializeField] private List<GameObject> _roomSettingPanels = new List<GameObject>();
+        [SerializeField] private LookDisplayObject _lookDisplayObjectCs;
 
         private int _panelNo = 0;
 
         private void OnEnable()
         {
-            _roomSettingPanels[0].SetActive(true);
-            _panelNo = 0;
+            ChangePanel(0);
         }
 
-        private void OnDisable()
+        public void OnCloseButton()
         {
-            _roomSettingPanels[_panelNo].SetActive(false);
-            _panelNo = 0;
+            _lookDisplayObjectCs.OnDisableDisplay();
         }
 
         /// <summary>
         /// パネルの表示を切り替える
         /// </summary>
         /// <param name="no"></param>
-        /// <param name="state"></param>
-        public void SetActive(int no, bool state)
+        public void ChangePanel(int no)
         {
-            if (no < _roomSettingPanels.Count) //インデックスの存在判定
+            if (no < _roomSettingPanels.Count)
             {
-                _roomSettingPanels[no].SetActive(state);
+                _roomSettingPanels[_panelNo].SetActive(false);
+                _roomSettingPanels[no].SetActive(true);
                 _panelNo = no;
             }
         }
