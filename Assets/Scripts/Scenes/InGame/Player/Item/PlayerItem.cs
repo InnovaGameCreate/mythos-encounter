@@ -45,12 +45,8 @@ namespace Scenes.Ingame.Player
         private Subject<String> _popActive = new Subject<String>();
         private ReactiveCollection<ItemSlotStruct> _itemSlot = new ReactiveCollection<ItemSlotStruct>();//現在所持しているアイテムのリスト
 
-        //アイテム表示切り替え用
-        [SerializeField] private GameObject _compass;//Cameraに付属しているコンパス
-        [SerializeField] private GameObject _thermometer;//Cameraに付属している温度計
-        [SerializeField] private GameObject _geigerCounter;//Cameraに付属している放射線測定器
-
         //アイテムクラス関連
+        [SerializeField] private GameObject _compass;
         [SerializeField] private Light _spotLight;
         [SerializeField] private ThermometerMove _thermometerMove;
         [SerializeField] private GeigerCounterMove _geigerCounterMove;
@@ -400,7 +396,7 @@ namespace Scenes.Ingame.Player
         //気温計を持つかどうか切り替える関数
         public void ActiveThermometer(bool value)
         {
-            _thermometer.SetActive(value);
+            _thermometerMove.gameObject.SetActive(value);
         }
 
         //気温計を使い測定を開始させる関数
@@ -412,7 +408,7 @@ namespace Scenes.Ingame.Player
         //放射線測定器を持つかどうか切り替える関数
         public void ActiveGeigerCounter(bool value)
         {
-            _geigerCounter.SetActive(value);
+            _geigerCounterMove.gameObject.SetActive(value);
         }
 
         //放射線測定器の電源のon/offを変更する関数
