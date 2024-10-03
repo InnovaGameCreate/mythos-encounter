@@ -10,7 +10,9 @@ TagManager:
   - EscapePoint
   - StageIntract
   - Enemy
-  - UsingThermometer
+  - Loadout
+  - TrapFoodSensor
+
   layers:
   - Default
   - TransparentFX

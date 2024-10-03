@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine.UI;
 using UniRx;
 using Data;
-using Unity.VisualScripting;
 using System;
 public class APITester : MonoBehaviour
 {
@@ -26,6 +25,8 @@ public class APITester : MonoBehaviour
     [SerializeField]
     private Button _EnemyFacadeButton;
     [SerializeField]
+    private Button _EnemyAttackButton;
+    [SerializeField]
     private Button _PutPlayerDataButton;
     [SerializeField]
     private TMP_InputField _IdInput;
@@ -37,6 +38,7 @@ public class APITester : MonoBehaviour
         _SpellTableButton.OnClickAsObservable().Subscribe(_ => ViewSpellTable()).AddTo(this);
         _PlayerTableButton.OnClickAsObservable().Subscribe(_ => ViewPlayerTable()).AddTo(this);
         _EnemyTableButton.OnClickAsObservable().Subscribe(_ => ViewEnemyTable()).AddTo(this);
+        _EnemyAttackButton.OnClickAsObservable().Subscribe(_ => ViewEnemyAttackTable()).AddTo(this);
 
         _itemFacadeButton.OnClickAsObservable().Subscribe(_ => ViewItemFacade()).AddTo(this);
         _SpellFacadeButton.OnClickAsObservable().Subscribe(_ => ViewSpellFacade()).AddTo(this);
@@ -78,10 +80,10 @@ public class APITester : MonoBehaviour
     {
         var data = WebDataRequest.GetEnemyDataArrayList;
         Debug.Log($"ViewPlayerTable : {data.Count}");
-        _textMeshPro.text = "id,name,hp,stamia,armor,walkSpeed,dashSpeed,attack,actionCoolTime,sapell,san\n";
+        _textMeshPro.text = "id,name,hp,stamia,armor,walkSpeed,dashSpeed,attack,actionCoolTime,sapell,san,feature,attackMethod\n";
         foreach (var item in data)
         {
-            _textMeshPro.text += $"{item.EnemyId},{item.Name},{item.Stamina},{item.Armor},{item.WalkSpeed},{item.DashSpeed},{item.AttackPower},{item.ActionCooltime},{item.Spell.Length},{item.San}\n";
+            _textMeshPro.text += $"{item.EnemyId},{item.Name},{item.Stamina},{item.Armor},{item.WalkSpeed},{item.DashSpeed},{item.AttackPower},{item.ActionCooltime},{item.Spell.Length},{item.San},{item.Feature.Length},{item.AttackMethod.Length}\n";
         }
     }
     private void ViewItemFacade()
@@ -90,13 +92,13 @@ public class APITester : MonoBehaviour
         var data = PlayerInformationFacade.Instance.GetItem(PlayerInformationFacade.ItemRequestType.Owned);
         foreach (var item in data)
         {
-            _textMeshPro.text += $"id {item.Key} のアイテムを {item.Value} 個\n";
+            _textMeshPro.text += $"id {item.Key} ???A?C?e???? {item.Value} ??\n";
         }
         _textMeshPro.text += "not Owned\nid,name,explanation,catgory,price\n";
         data = PlayerInformationFacade.Instance.GetItem(PlayerInformationFacade.ItemRequestType.NotOwned);
         foreach (var item in data)
         {
-            _textMeshPro.text += $"id {item.Key} のアイテムを {item.Value} 個\n";
+            _textMeshPro.text += $"id {item.Key} ???A?C?e???? {item.Value} ??\n";
         }
     }
     private void ViewSpellFacade()
@@ -129,6 +131,16 @@ public class APITester : MonoBehaviour
             _textMeshPro.text += $"not met enemy id is {item}\n";
         }
     }
+    private void ViewEnemyAttackTable()
+    {
+        var data = WebDataRequest.GetEnemyAttacArrayList;
+        Debug.Log($"ViewEnemyAttackTable : {data.Count}");
+        _textMeshPro.text = "id,name,d_damage,b_damage,stanTime,probability,accuracy,speed\n";
+        foreach (var item in data)
+        {
+            _textMeshPro.text += $"{item.attackId},{item.name},{item.directDamage},{item.bleedingDamage},{item.stanTime},{item.attackProbability},{item.accuracy},{item.speed}\n";
+        }
+    }
     private void PutPlayerDebugData()
     {
         if (_NameIput.text == "" || _IdInput.text == "")
@@ -137,7 +149,7 @@ public class APITester : MonoBehaviour
             return;
         }
         int id = int.Parse(_IdInput.text);
-        if(id < 9000)
+        if (id < 9000)
         {
             Debug.LogError("Debug id need use over 9000");
             return;

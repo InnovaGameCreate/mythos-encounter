@@ -191,6 +191,7 @@ namespace Scenes.Ingame.Player
         {
 #if UNITY_EDITOR
             //デバッグ用.(必要無くなれば消す)
+            //デバッグ用.(必要無くなれば消す)
             if (Input.GetKeyDown(KeyCode.L))
             {
                 ChangeHealth(10, ChangeValueMode.Damage);

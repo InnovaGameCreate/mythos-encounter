@@ -9,73 +9,83 @@ using EPOOutline;
 using Scenes.Ingame.InGameSystem;
 using System.Diagnostics.Contracts;
 using Unity.VisualScripting;
+using UnityEngine.UIElements;
+using Unity.Burst.CompilerServices;
 
 namespace Scenes.Ingame.Player
 {
     /// <summary>
-    /// ƒAƒCƒeƒ€‚ÉŠÖ‚·‚éˆ—‚ğ‚Ü‚Æ‚ß‚½ƒNƒ‰ƒX
-    /// 1.ƒAƒCƒeƒ€ƒXƒƒbƒg‚É‚ ‚éƒAƒCƒeƒ€‚ğg—p‚·‚é
-    /// 2.ŠƒAƒCƒeƒ€‚ÌŠÇ—
-    /// 3.ƒAƒCƒeƒ€ƒXƒƒbƒg‚ÌˆÊ’u‚ÌŠÇ—
+    /// ã‚¢ã‚¤ãƒ†ãƒ ã«é–¢ã™ã‚‹å‡¦ç†ã‚’ã¾ã¨ã‚ãŸã‚¯ãƒ©ã‚¹
+    /// 1.ã‚¢ã‚¤ãƒ†ãƒ ã‚¹ãƒ­ãƒƒãƒˆã«ã‚ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã‚’ä½¿ç”¨ã™ã‚‹
+    /// 2.æ‰€æŒã‚¢ã‚¤ãƒ†ãƒ ã®ç®¡ç†
+    /// 3.ã‚¢ã‚¤ãƒ†ãƒ ã‚¹ãƒ­ãƒƒãƒˆã®ä½ç½®ã®ç®¡ç†
     /// </summary>
     public class PlayerItem : MonoBehaviour
     {
         private PlayerStatus _myPlayerStatus;
 
-        //ƒAƒCƒeƒ€ŠÖŒW
-        private ReactiveProperty<int> _nowIndex = new ReactiveProperty<int>();//‘I‘ğ’†‚ÌƒAƒCƒeƒ€ƒXƒƒbƒg”Ô†
-        public GameObject myRightHand;//è‚Ì‚±‚Æ
-        public GameObject nowBringItem;//Œ»İè‚É‚Á‚Ä‚¢‚éƒAƒCƒeƒ€
-        private bool _isCanChangeBringItem = true;//è‚É‚ÂƒAƒCƒeƒ€‚Ì•ÏX‚ğ‹–‰Â‚·‚é‚©”Û‚©
+        //ã‚¢ã‚¤ãƒ†ãƒ é–¢ä¿‚
+        private ReactiveProperty<int> _nowIndex = new ReactiveProperty<int>();//é¸æŠä¸­ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚¹ãƒ­ãƒƒãƒˆç•ªå·
+        public GameObject myRightHand;//æ‰‹ã®ã“ã¨
+        public GameObject nowBringItem;//ç¾åœ¨æ‰‹ã«æŒã£ã¦ã„ã‚‹ã‚¢ã‚¤ãƒ†ãƒ 
+        private bool _isCanChangeBringItem = true;//æ‰‹ã«æŒã¤ã‚¢ã‚¤ãƒ†ãƒ ã®å¤‰æ›´ã‚’è¨±å¯ã™ã‚‹ã‹å¦ã‹
 
-        //RayŠÖ˜A
-        [SerializeField] Camera _mainCamera;//player‚Ì–Úü‚ğ’S‚¤ƒJƒƒ‰
-        [SerializeField] private float _getItemRange;//ƒAƒCƒeƒ€‚ğ“üè‚Å‚«‚é‹——£
+        //Rayé–¢é€£
+        [SerializeField] Camera _mainCamera;//playerã®ç›®ç·šã‚’æ‹…ã†ã‚«ãƒ¡ãƒ©
+        [SerializeField] private float _getItemRange;//ã‚¢ã‚¤ãƒ†ãƒ ã‚’å…¥æ‰‹ã§ãã‚‹è·é›¢
         private bool _debugMode = false;
 
-        //ƒAƒCƒeƒ€ƒXƒƒbƒgiUIj‚Ì‘€ìŠÖ˜A
+        //ã‚¢ã‚¤ãƒ†ãƒ ã‚¹ãƒ­ãƒƒãƒˆï¼ˆUIï¼‰ã®æ“ä½œé–¢é€£
         private float scrollValue;
-        [SerializeField] private float scrollSense = 10;//ƒ}ƒEƒXƒzƒC[ƒ‹‚ÌŠ´“x
+        [SerializeField] private float scrollSense = 10;//ãƒã‚¦ã‚¹ãƒ›ã‚¤ãƒ¼ãƒ«ã®æ„Ÿåº¦
 
         private bool _isCanUseItem = true;
 
-        //UniRxŠÖŒW
+        //UniRxé–¢ä¿‚
         private Subject<String> _popActive = new Subject<String>();
-        private ReactiveCollection<ItemSlotStruct> _itemSlot = new ReactiveCollection<ItemSlotStruct>();//Œ»İŠ‚µ‚Ä‚¢‚éƒAƒCƒeƒ€‚ÌƒŠƒXƒg
+        private ReactiveCollection<ItemSlotStruct> _itemSlot = new ReactiveCollection<ItemSlotStruct>();//ç¾åœ¨æ‰€æŒã—ã¦ã„ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã®ãƒªã‚¹ãƒˆ
 
-        //ƒAƒCƒeƒ€•\¦Ø‚è‘Ö‚¦—p
-        [SerializeField] private GameObject _compass;//Camera‚É•t‘®‚µ‚Ä‚¢‚éƒRƒ“ƒpƒX
-        [SerializeField] private GameObject _thermometer;//Camera‚É•t‘®‚µ‚Ä‚¢‚é‰·“xŒv
-        [SerializeField] private GameObject _geigerCounter;//Camera‚É•t‘®‚µ‚Ä‚¢‚é•úËü‘ª’èŠí
+        //ã‚¢ã‚¤ãƒ†ãƒ è¡¨ç¤ºåˆ‡ã‚Šæ›¿ãˆç”¨
+        [SerializeField] private GameObject _compass;//Cameraã«ä»˜å±ã—ã¦ã„ã‚‹ã‚³ãƒ³ãƒ‘ã‚¹
+        [SerializeField] private GameObject _thermometer;//Cameraã«ä»˜å±ã—ã¦ã„ã‚‹æ¸©åº¦è¨ˆ
+        [SerializeField] private GameObject _geigerCounter;//Cameraã«ä»˜å±ã—ã¦ã„ã‚‹æ”¾å°„ç·šæ¸¬å®šå™¨
 
-        //ƒAƒCƒeƒ€ƒNƒ‰ƒXŠÖ˜A
+        //ã‚¢ã‚¤ãƒ†ãƒ ã‚¯ãƒ©ã‚¹é–¢é€£
         [SerializeField] private Light _spotLight;
         [SerializeField] private ThermometerMove _thermometerMove;
         [SerializeField] private GeigerCounterMove _geigerCounterMove;
+        
+        //TrapFoodé–¢é€£
+        [SerializeField] private GameObject _trapFood;
+        private const float TILELENGTH = 5.85f;
+        private GameObject _createdTrapFood;
+        private bool _isCanCreateTrapFood;
+        public bool IsCanCreateTrapFood { get => _isCanCreateTrapFood; }
+        public GameObject CreatedTrapFood { get => _createdTrapFood; }
 
-        //ƒAƒCƒeƒ€ƒfƒoƒbƒO—p
+        //ã‚¢ã‚¤ãƒ†ãƒ ãƒ‡ãƒãƒƒã‚°ç”¨
         [SerializeField] private GameObject _itemForDebug;
        
-        private List<HandLightState> _switchHandLight = new List<HandLightState>();//‰ù’†“d“”‚Ìon/offó‘Ô•Û‘¶—p
-        private List<bool>_switchGeigerCounter = new List<bool>();//•úËü‘ª’èŠí‚Ìon/offó‘Ô•Û‘¶—p  
+        private List<HandLightState> _switchHandLight = new List<HandLightState>();//æ‡ä¸­é›»ç¯ã®on/offçŠ¶æ…‹ä¿å­˜ç”¨
+        private List<bool>_switchGeigerCounter = new List<bool>();//æ”¾å°„ç·šæ¸¬å®šå™¨ã®on/offçŠ¶æ…‹ä¿å­˜ç”¨  
 
-        public List<ItemSlotStruct> ItemSlots { get { return _itemSlot.ToList(); } }//ŠO•”‚É_itemSlot‚Ì“à—e‚ğŒöŠJ‚·‚é
+        public List<ItemSlotStruct> ItemSlots { get { return _itemSlot.ToList(); } }//å¤–éƒ¨ã«_itemSlotã®å†…å®¹ã‚’å…¬é–‹ã™ã‚‹
         public int nowIndex { get => _nowIndex.Value; }
         public List<HandLightState> SwitchHandLights { get {  return _switchHandLight.ToList(); } }
         public List<bool> SwitchGeigerCounter { get { return _switchGeigerCounter.ToList(); } }
 
-        public IObservable<int> OnNowIndexChange { get { return _nowIndex; } }//ŠO•”‚Å_nowIndex‚Ì’l‚ª•ÏX‚³‚ê‚½‚Æ‚«‚És‚¤ˆ—‚ğ“o˜^‚Å‚«‚é‚æ‚¤‚É‚·‚é
+        public IObservable<int> OnNowIndexChange { get { return _nowIndex; } }//å¤–éƒ¨ã§_nowIndexã®å€¤ãŒå¤‰æ›´ã•ã‚ŒãŸã¨ãã«è¡Œã†å‡¦ç†ã‚’ç™»éŒ²ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹
         public IObservable<String> OnPopActive { get { return _popActive; } }
-        public IObservable<CollectionReplaceEvent<ItemSlotStruct>> OnItemSlotReplace => _itemSlot.ObserveReplace();//ŠO•”‚É_itemSlot‚Ì—v‘f‚ª•ÏX‚³‚ê‚½‚Æ‚«‚És‚¤ˆ—‚ğ“o˜^‚Å‚«‚é‚æ‚¤‚É‚·‚é
+        public IObservable<CollectionReplaceEvent<ItemSlotStruct>> OnItemSlotReplace => _itemSlot.ObserveReplace();//å¤–éƒ¨ã«_itemSlotã®è¦ç´ ãŒå¤‰æ›´ã•ã‚ŒãŸã¨ãã«è¡Œã†å‡¦ç†ã‚’ç™»éŒ²ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹
         private Outlinable _lastOutlinable = null;
         private GameObject _lastGameobject = null;
         // Start is called before the first frame update
         void Start()
         {
-            int layerMask = LayerMask.GetMask("Item") | LayerMask.GetMask("StageIntract") | LayerMask.GetMask("Wall");//Item, StageIntract,Wall‚Æ‚¢‚¤ƒŒƒCƒ„[‚É‚ ‚éGameObject‚É‚µ‚©ray‚ª“–‚½‚ç‚È‚¢‚æ‚¤‚É‚·‚é
+            int layerMask = LayerMask.GetMask("Item") | LayerMask.GetMask("StageIntract") | LayerMask.GetMask("Wall");//Item, StageIntract,Wallã¨ã„ã†ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ã‚ã‚‹GameObjectã«ã—ã‹rayãŒå½“ãŸã‚‰ãªã„ã‚ˆã†ã«ã™ã‚‹
             _myPlayerStatus = GetComponent<PlayerStatus>();
 
-            //¡Œã‚Íingame‘O‚ÌƒAƒCƒeƒ€‚ÌŠó‹µ‚ğ‘ã“ü‚³‚¹‚éBƒ¿”Å‚Í‰Šú‰»
+            //ä»Šå¾Œã¯ingameå‰ã®ã‚¢ã‚¤ãƒ†ãƒ ã®æ‰€æŒçŠ¶æ³ã‚’ä»£å…¥ã•ã›ã‚‹ã€‚Î±ç‰ˆã¯åˆæœŸåŒ–
             ItemSlotStruct init = new ItemSlotStruct();
             for (int i = 0; i < 7; i++)
             {
@@ -83,7 +93,7 @@ namespace Scenes.Ingame.Player
                 _itemSlot.Add(init);
             }
 
-            //‰ù’†“d“”‚Ìó‘Ô‚ğNotActive‚ÅƒXƒƒbƒg•ªì‚Á‚Ä‚¨‚­
+            //æ‡ä¸­é›»ç¯ã®çŠ¶æ…‹ã‚’NotActiveã§ã‚¹ãƒ­ãƒƒãƒˆåˆ†ä½œã£ã¦ãŠã
             HandLightState LightSwitch = HandLightState.NotActive;
             for(int i = 0; i < 7; i++)
             {
@@ -91,23 +101,23 @@ namespace Scenes.Ingame.Player
                 _switchGeigerCounter.Add(false);
             }
 
-            //FX‚È•Ï”‚Ì‰Šú‰»
+            //è‰²ã€…ãªå¤‰æ•°ã®åˆæœŸåŒ–
             scrollValue = 0;
 
             RaycastHit hit = new RaycastHit();
-            //‹ü‚Ìæ‚ÉƒAƒCƒeƒ€‚ª‚ ‚é‚©Šm”FB‚ ‚ê‚Î‰EƒNƒŠƒbƒN‚ÅE“¾‚Å‚«‚é‚æ‚¤‚É‚·‚é
+            //è¦–ç·šã®å…ˆã«ã‚¢ã‚¤ãƒ†ãƒ ãŒã‚ã‚‹ã‹ç¢ºèªã€‚ã‚ã‚Œã°å³ã‚¯ãƒªãƒƒã‚¯ã§æ‹¾å¾—ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹
             this.UpdateAsObservable()
                             .Where(_ => _myPlayerStatus.nowPlayerSurvive)
                             .Subscribe(_ =>
                             {
-                                if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, _getItemRange, layerMask))//İ’è‚µ‚½‹——£‚É‚ ‚éƒAƒCƒeƒ€‚ğ”F’m
+                                if (Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, _getItemRange, layerMask))//è¨­å®šã—ãŸè·é›¢ã«ã‚ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã‚’èªçŸ¥
                                 {
 
                                     if (_debugMode)
                                     {
                                         Debug.DrawRay(_mainCamera.transform.position, _mainCamera.transform.forward, Color.black);
                                     }
-                                    //raycastæ‚ÌƒIƒuƒWƒFƒNƒg‚ª•Ï‰»‚µ‚½Û‚ÉOutline‚ğ”ñ•\¦‚É‚·‚é
+                                    //raycastå…ˆã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãŒå¤‰åŒ–ã—ãŸéš›ã«Outlineã‚’éè¡¨ç¤ºã«ã™ã‚‹
 
                                     if (_lastGameobject != null &&
                                     _lastOutlinable != null &&
@@ -123,54 +133,54 @@ namespace Scenes.Ingame.Player
 
                                         if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out EscapeItem escapeItem))
                                         {
-                                            //’EoƒAƒCƒeƒ€‚¾‚Á‚½
+                                            //è„±å‡ºã‚¢ã‚¤ãƒ†ãƒ ã ã£ãŸæ™‚
                                             _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
-                                            IntractEvent(true, "’EoƒAƒCƒeƒ€");//ƒAƒEƒgƒ‰ƒCƒ“•\¦
+                                            IntractEvent(true, "è„±å‡ºã‚¢ã‚¤ãƒ†ãƒ ");//ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³è¡¨ç¤º
                                         }
                                         else if (hit.collider.gameObject.CompareTag("Item") && hit.collider.gameObject.TryGetComponent(out ItemEffect item))
                                         {
-                                            //’EoƒAƒCƒeƒ€ˆÈŠO‚ÌƒAƒCƒeƒ€‚Ì
+                                            //è„±å‡ºã‚¢ã‚¤ãƒ†ãƒ ä»¥å¤–ã®ã‚¢ã‚¤ãƒ†ãƒ ã®æ™‚
                                             string name = item.GetItemData().itemName;
                                             _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
-                                            IntractEvent(true, name);//ƒAƒEƒgƒ‰ƒCƒ“•\¦
+                                            IntractEvent(true, name);//ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³è¡¨ç¤º
                                         }
                                         else if (hit.collider.gameObject.CompareTag("StageIntract"))
                                         {
-                                            //StageIntractiƒhƒA‚È‚Çj‚Ì‚Æ‚«
+                                            //StageIntractï¼ˆãƒ‰ã‚¢ãªã©ï¼‰ã®ã¨ã
                                             _lastOutlinable = hit.collider.gameObject.GetComponent<Outlinable>();
-                                            IntractEvent(true, interactable.ReturnPopString());//ƒAƒEƒgƒ‰ƒCƒ“•\¦
+                                            IntractEvent(true, interactable.ReturnPopString());//ã‚¢ã‚¦ãƒˆãƒ©ã‚¤ãƒ³è¡¨ç¤º
                                         }
                                     }
                                 }
                                 else
                                 {
-                                    //Ray‚É‰½‚à“–‚½‚ç‚È‚©‚Á‚½‚Ìˆ—
+                                    //Rayã«ä½•ã‚‚å½“ãŸã‚‰ãªã‹ã£ãŸæ™‚ã®å‡¦ç†
                                     IntractEvent(false, "");
                                 }
                             });
 
 
-            //¶ƒNƒŠƒbƒN‚µ‚½‚Æ‚«‚ÉƒAƒCƒeƒ€‚ğg—p
+            //å·¦ã‚¯ãƒªãƒƒã‚¯ã—ãŸã¨ãã«ã‚¢ã‚¤ãƒ†ãƒ ã‚’ä½¿ç”¨
             this.UpdateAsObservable()
                     .Where(_ => _itemSlot[_nowIndex.Value].myItemData != null && Input.GetMouseButtonDown(0) && _isCanUseItem)
                     .Subscribe(_ =>
                     {
 
-                        Debug.Log("ƒAƒCƒeƒ€g‚¤");
+                        Debug.Log("ã‚¢ã‚¤ãƒ†ãƒ ä½¿ã†");
 
-                        //ƒAƒCƒeƒ€‚ğg—p
+                        //ã‚¢ã‚¤ãƒ†ãƒ ã‚’ä½¿ç”¨
                         nowBringItem.GetComponent<ItemEffect>().Effect();
                     });
 
-            //HƒL[‚ğ“ü—Í‚µ‚½‚Æ‚«‚ÉƒAƒCƒeƒ€‚ğ”jŠü            
+            //Hã‚­ãƒ¼ã‚’å…¥åŠ›ã—ãŸã¨ãã«ã‚¢ã‚¤ãƒ†ãƒ ã‚’ç ´æ£„            
             this.UpdateAsObservable()
                     .Where(_ => _itemSlot[_nowIndex.Value].myItemData != null && Input.GetKeyDown(KeyCode.H) && _isCanUseItem)
                     .Subscribe(_ =>
                     {
-                        //ƒAƒCƒeƒ€Ì‚Ä‚é‚Æ‚«‚Ìˆ—
+                        //ã‚¢ã‚¤ãƒ†ãƒ æ¨ã¦ã‚‹ã¨ãã®å‡¦ç†
                         nowBringItem.GetComponent<ItemEffect>().OnThrow();
 
-                        //ƒAƒCƒeƒ€‚ğ‹ß‚­‚É“Š‚°Ì‚Ä‚é
+                        //ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¿‘ãã«æŠ•ã’æ¨ã¦ã‚‹
                         var rb = nowBringItem.GetComponent<Rigidbody>();
                         nowBringItem.GetComponent<Collider>().enabled = true;
                         nowBringItem.transform.parent = null;
@@ -178,41 +188,41 @@ namespace Scenes.Ingame.Player
                         rb.isKinematic = false;
                         rb.AddForce(_mainCamera.transform.forward * 300);
 
-                        //ƒAƒCƒeƒ€ƒXƒƒbƒg‚ÌList‚ğXV
+                        //ã‚¢ã‚¤ãƒ†ãƒ ã‚¹ãƒ­ãƒƒãƒˆã®Listã‚’æ›´æ–°
                         nowBringItem = null;
                         ItemSlotStruct temp = new ItemSlotStruct();
                         _itemSlot[_nowIndex.Value] = temp;
                     });
 
-            //ƒAƒCƒeƒ€ƒXƒƒbƒg‚Ì‘I‘ğó‘Ô‚ª•Ï‚í‚Á‚½‚Æ‚«‚ÉAèŒ³‚É“KØ‚ÈƒAƒCƒeƒ€‚ğoŒ»‚³‚¹‚é
+            //ã‚¢ã‚¤ãƒ†ãƒ ã‚¹ãƒ­ãƒƒãƒˆã®é¸æŠçŠ¶æ…‹ãŒå¤‰ã‚ã£ãŸã¨ãã«ã€æ‰‹å…ƒã«é©åˆ‡ãªã‚¢ã‚¤ãƒ†ãƒ ã‚’å‡ºç¾ã•ã›ã‚‹
             _nowIndex
                 .Subscribe(_ =>
                 {
-                    //‘¼‚ÉƒAƒCƒeƒ€‚ğè‚É‚Á‚Ä‚¢‚½‚çA‚»‚ê‚ğ”j‰ó
+                    //ä»–ã«ã‚¢ã‚¤ãƒ†ãƒ ã‚’æ‰‹ã«æŒã£ã¦ã„ãŸã‚‰ã€ãã‚Œã‚’ç ´å£Š
                     if (nowBringItem != null)
                         Destroy(nowBringItem);
 
-                    //è‚É‘I‘ğ‚µ‚½ƒAƒCƒeƒ€‚ğoŒ»‚³‚¹‚é
+                    //æ‰‹ã«é¸æŠã—ãŸã‚¢ã‚¤ãƒ†ãƒ ã‚’å‡ºç¾ã•ã›ã‚‹
                     if (_itemSlot[_nowIndex.Value].myItemData != null)
                     {
                         nowBringItem = Instantiate(_itemSlot[_nowIndex.Value].myItemData.prefab, myRightHand.transform.position, _itemSlot[_nowIndex.Value].myItemData.prefab.transform.rotation);
                         nowBringItem.transform.parent = myRightHand.transform;
-                        nowBringItem.GetComponent<ItemInstract>().InstantIntract(_myPlayerStatus);//ƒAƒCƒeƒ€‚É•K—v‚Èî•ñ‚ğ—^‚¦‚é
+                        nowBringItem.GetComponent<ItemInstract>().InstantIntract(_myPlayerStatus);//ã‚¢ã‚¤ãƒ†ãƒ ã«å¿…è¦ãªæƒ…å ±ã‚’ä¸ãˆã‚‹
 
-                        //‹Šoã‚ÌƒoƒO‚ğ–³‚­‚·‚½‚ß‚Éè‚É‚Á‚Ä‚¢‚éŠÔ‚ÍCollider‚ğÁ‚·
+                        //è¦–è¦šä¸Šã®ãƒã‚°ã‚’ç„¡ãã™ãŸã‚ã«æ‰‹ã«æŒã£ã¦ã„ã‚‹é–“ã¯Colliderã‚’æ¶ˆã™
                         nowBringItem.GetComponent<Collider>().enabled = false;
                     }
                 }).AddTo(this);
 
-            //ƒvƒŒƒCƒ„[‚Ì“ü—Í‚É‚æ‚é_nowIndex‚Ì•ÏX
-            //1.ƒ}ƒEƒXƒzƒC[ƒ‹‚Ì“ü—Í
-            //2.”šƒL[‚Ì“ü—Í
+            //ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®å…¥åŠ›ã«ã‚ˆã‚‹_nowIndexã®å¤‰æ›´
+            //1.ãƒã‚¦ã‚¹ãƒ›ã‚¤ãƒ¼ãƒ«ã®å…¥åŠ›
+            //2.æ•°å­—ã‚­ãƒ¼ã®å…¥åŠ›
             this.UpdateAsObservable()
                     .Where(_ => Input.GetAxis("Mouse ScrollWheel") != 0 || ItemNumberKeyDown() != 0)
                     .Where(_ => _isCanChangeBringItem)
                     .Subscribe(_ =>
                     {
-                        //ƒ}ƒEƒXƒz[ƒ‹‚Ì‚İ‚Ì“ü—Í
+                        //ãƒã‚¦ã‚¹ãƒ›ãƒ¼ãƒ«ã®ã¿ã®å…¥åŠ›æ™‚
                         if (ItemNumberKeyDown() == 0)
                         {
                             scrollValue -= Input.GetAxis("Mouse ScrollWheel") * scrollSense;
@@ -221,7 +231,7 @@ namespace Scenes.Ingame.Player
                             if (_itemSlot[(int)scrollValue].myItemSlotStatus != ItemSlotStatus.unavailable)
                                 _nowIndex.Value = (int)scrollValue;
                         }
-                        //”šƒL[‚Ì‚İ‚Ì“ü—Í
+                        //æ•°å­—ã‚­ãƒ¼ã®ã¿ã®å…¥åŠ›æ™‚
                         if (Input.GetAxis("Mouse ScrollWheel") == 0)
                         {
                             int temp = ItemNumberKeyDown() - 49;
@@ -255,7 +265,7 @@ namespace Scenes.Ingame.Player
                         y += 1;
                     }
                 }
-                Debug.Log($"ƒAƒCƒeƒ€Š”F{y}");
+                Debug.Log($"ã‚¢ã‚¤ãƒ†ãƒ æ‰€æŒæ•°ï¼š{y}");
             }
 
             if (Input.GetKeyDown(KeyCode.B))
@@ -288,14 +298,14 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// ”šƒL[‚ª‰Ÿ‚³‚ê‚½‚©‚ÌŠm”F
+        /// æ•°å­—ã‚­ãƒ¼ãŒæŠ¼ã•ã‚ŒãŸã‹ã®ç¢ºèª
         /// </summary>
         /// <returns></returns>
         private int ItemNumberKeyDown()
         {
             if (Input.anyKeyDown)
             {
-                for (int i = 49; i <= 55; i++)//1ƒL[‚©‚ç7ƒL[‚Ü‚Å‚Ì”ÍˆÍ‚ğŒŸõ
+                for (int i = 49; i <= 55; i++)//1ã‚­ãƒ¼ã‹ã‚‰7ã‚­ãƒ¼ã¾ã§ã®ç¯„å›²ã‚’æ¤œç´¢
                 {
                     if (Input.GetKeyDown((KeyCode)i))
                         return i;
@@ -306,19 +316,19 @@ namespace Scenes.Ingame.Player
         }
 
         /// <summary>
-        /// ƒAƒCƒeƒ€ƒXƒƒbƒg‚ÌƒŠƒXƒg‚ğ•ÏXB
+        /// ã‚¢ã‚¤ãƒ†ãƒ ã‚¹ãƒ­ãƒƒãƒˆã®ãƒªã‚¹ãƒˆã‚’å¤‰æ›´ã€‚
         /// </summary>
-        /// <param name="index">•ÏX‚µ‚½‚¢ƒŠƒXƒg‚Ì‡”Ô</param>
-        /// <param name="value">‘ã“ü‚·‚é\‘¢‘Ì</param>
+        /// <param name="index">å¤‰æ›´ã—ãŸã„ãƒªã‚¹ãƒˆã®é †ç•ª</param>
+        /// <param name="value">ä»£å…¥ã™ã‚‹æ§‹é€ ä½“</param>
         public void ChangeListValue(int index, ItemSlotStruct value)
         {
             _itemSlot[index] = value;
         }
 
         /// <summary>
-        /// ƒAƒCƒeƒ€‚ğg‚¢Ø‚é‚Æ‚«‚ÉŒÄ‚Ño‚·BList‚Ì•ÏXi‰Šú‰»j‚Ég‚¤
+        /// ã‚¢ã‚¤ãƒ†ãƒ ã‚’ä½¿ã„åˆ‡ã‚‹ã¨ãã«å‘¼ã³å‡ºã™ã€‚Listã®å¤‰æ›´ï¼ˆåˆæœŸåŒ–ï¼‰ã«ä½¿ã†
         /// </summary>
-        /// <param name="index">•ÏX‚µ‚½‚¢ƒŠƒXƒg‚Ì‡”Ô</param>
+        /// <param name="index">å¤‰æ›´ã—ãŸã„ãƒªã‚¹ãƒˆã®é †ç•ª</param>
         public void ConsumeItem(int index)
         {
             if (nowBringItem != null)
@@ -346,11 +356,11 @@ namespace Scenes.Ingame.Player
                 {
                     if (_itemSlot[i].myItemData.itemID == 7)
                     {
-                        //‰¼‚ÌƒAƒCƒeƒ€‚ğ¶¬‚µ‚ÄA€–S‚ÌŒø‰Ê‚ğ‹N“®‚³‚¹‚é
+                        //ä»®ã®ã‚¢ã‚¤ãƒ†ãƒ ã‚’ç”Ÿæˆã—ã¦ã€æ­»äº¡æ™‚ã®åŠ¹æœã‚’èµ·å‹•ã•ã›ã‚‹
                         GameObject Item = Instantiate(_itemSlot[i].myItemData.prefab);
                         Item.GetComponent<DollEffect>().UniqueEffect(_myPlayerStatus);
 
-                        //ƒAƒCƒeƒ€”j‰ó‚ÆƒAƒCƒeƒ€ƒXƒƒbƒg‚Ì‰Šú‰»
+                        //ã‚¢ã‚¤ãƒ†ãƒ ç ´å£Šã¨ã‚¢ã‚¤ãƒ†ãƒ ã‚¹ãƒ­ãƒƒãƒˆã®åˆæœŸåŒ–
                         Destroy(Item);
                         if (_nowIndex.Value == i && nowBringItem != null)
                         {
@@ -365,7 +375,7 @@ namespace Scenes.Ingame.Player
             }
         }
 
-        //‰ù’†“d“”‚ğ‹N“®E’â~‚·‚é‚½‚ß‚ÌŠÖ”
+        //æ‡ä¸­é›»ç¯ã‚’èµ·å‹•ãƒ»åœæ­¢ã™ã‚‹ãŸã‚ã®é–¢æ•°
         public void ActiveHandLight(bool value)
         {
             _spotLight.enabled = value;
@@ -374,53 +384,134 @@ namespace Scenes.Ingame.Player
         }
 
 
-        //‰ù’†“d“”‚ÌON/OFF‚ğØ‚è‘Ö‚¦‚éŠÖ”
+        //æ‡ä¸­é›»ç¯ã®ON/OFFã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹é–¢æ•°
         public void ChangeSwitchHandLight(HandLightState state)
         {
             _switchHandLight[_nowIndex.Value] = state;
         }
 
-        //ƒRƒ“ƒpƒX‚ğ‚Â‚©‚Ç‚¤‚©Ø‚è‘Ö‚¦‚éŠÖ”
+        //ã‚³ãƒ³ãƒ‘ã‚¹ã‚’æŒã¤ã‹ã©ã†ã‹åˆ‡ã‚Šæ›¿ãˆã‚‹é–¢æ•°
         public void ActiveCompass(bool value)
         {
             _compass.SetActive(value);
         }
 
-        //‹C‰·Œv‚ğ‚Â‚©‚Ç‚¤‚©Ø‚è‘Ö‚¦‚éŠÖ”
+
+        //æ°—æ¸©è¨ˆã‚’æŒã¤ã‹ã©ã†ã‹åˆ‡ã‚Šæ›¿ãˆã‚‹é–¢æ•°
         public void ActiveThermometer(bool value)
         {
             _thermometer.SetActive(value);
         }
 
-        //‹C‰·Œv‚ğg‚¢‘ª’è‚ğŠJn‚³‚¹‚éŠÖ”
+        //æ°—æ¸©è¨ˆã‚’ä½¿ã„æ¸¬å®šã‚’é–‹å§‹ã•ã›ã‚‹é–¢æ•°
         public void UseThermometer()
         {
             _thermometerMove.StartCoroutine("MeasureTemperature");
         }
 
-        //•úËü‘ª’èŠí‚ğ‚Â‚©‚Ç‚¤‚©Ø‚è‘Ö‚¦‚éŠÖ”
+        //æ”¾å°„ç·šæ¸¬å®šå™¨ã‚’æŒã¤ã‹ã©ã†ã‹åˆ‡ã‚Šæ›¿ãˆã‚‹é–¢æ•°
         public void ActiveGeigerCounter(bool value)
         {
             _geigerCounter.SetActive(value);
         }
 
-        //•úËü‘ª’èŠí‚Ì“dŒ¹‚Ìon/off‚ğ•ÏX‚·‚éŠÖ”
+        //æ”¾å°„ç·šæ¸¬å®šå™¨ã®é›»æºã®on/offã‚’å¤‰æ›´ã™ã‚‹é–¢æ•°
         public void ChangeSwitchGeigerCounter(bool value)
         {
             _switchGeigerCounter[_nowIndex.Value] = value;
         }
 
-        //•úËü‘ª’èŠí‚Ì“®ìó‘Ô‚ğ•ÏX‚·‚éŠÖ”
+        //æ”¾å°„ç·šæ¸¬å®šå™¨ã®å‹•ä½œçŠ¶æ…‹ã‚’å¤‰æ›´ã™ã‚‹é–¢æ•°
         public void UseGeigerCounter(bool value)
         {
-            if (value)//‘ª’è‚ğŠJn‚³‚¹‚éê‡
+            if (value)//æ¸¬å®šã‚’é–‹å§‹ã•ã›ã‚‹å ´åˆ
             {
                 _geigerCounterMove.StartCoroutine("MeasureGeigerCounter"); 
             }
-            else//‘ª’è‚ğ~‚ß‚éê‡
+            else//æ¸¬å®šã‚’æ­¢ã‚ã‚‹å ´åˆ
             {
                 _geigerCounterMove.StopCoroutine("MeasureGeigerCounter");
                 _geigerCounterMove.TurnOffGeigerCounter();
+            }
+         }   
+
+        //åœ°é¢åˆ¤å®šã‚’ç¢ºèªã—ã€é¤Œã‚’ç”Ÿæˆã™ã‚‹å‡¦ç†
+        public IEnumerator CreateTrapFood()
+        {
+            RaycastHit hit;
+            int floorlayerMask = LayerMask.GetMask("Floor");
+
+            while (true)
+            {
+                yield return null;
+
+                Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, TILELENGTH, floorlayerMask);
+                Debug.DrawRay(_mainCamera.transform.position, _mainCamera.transform.forward * TILELENGTH, Color.black);
+
+                if (hit.collider != null)
+                {
+                    //ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ã®ä½œæˆãƒ»ç§»å‹•
+                    if (_createdTrapFood == null)//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ãŒãªã„ã¨ãã¯ä½œæˆ
+                    {
+                        _createdTrapFood = Instantiate(_trapFood, hit.point, _trapFood.transform.rotation);
+                    }
+                    else if (_createdTrapFood.activeInHierarchy)// ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ãŒã‚ã‚Šã‹ã¤ã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ã®æ™‚
+                    {
+                        _createdTrapFood.transform.position = hit.point;
+                    }
+                    else// ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ãŒã‚ã‚‹ãŒã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ã§ãªã„æ™‚
+                    {
+                        _createdTrapFood.SetActive(true);
+                        _createdTrapFood.GetComponent<TrapFoodCheckCollider>().ChangeTrigger(false);
+                        _createdTrapFood.transform.position = hit.point;
+                    }
+
+                    if (_createdTrapFood.GetComponent<TrapFoodCheckCollider>().IsTriggered && _isCanCreateTrapFood)
+                    {
+                        _isCanCreateTrapFood = false;
+                    }
+                    else if (!_createdTrapFood.GetComponent<TrapFoodCheckCollider>().IsTriggered && !_isCanCreateTrapFood)
+                    {
+                        _isCanCreateTrapFood = true;
+                    }
+                }
+                else
+                {
+                    _isCanCreateTrapFood = false;
+                    if (_createdTrapFood != null)//ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ãŒä½œæˆã•ã‚Œã¦ã„ãŸã‚‰éã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«ã™ã‚‹
+                    {
+                        _createdTrapFood.SetActive(false);
+                    }
+                }
+
+            }
+        }
+
+        //é¤Œã‚’è¨­ç½®ã™ã‚‹é–¢æ•°
+        public void PutTrapFood()
+        {
+            _createdTrapFood.transform.GetChild(0).gameObject.SetActive(true);
+            _createdTrapFood.layer = 10;// ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚’Itemã«å¤‰æ›´ã—ã€æ‹¾ãˆã‚‹ã‚ˆã†ã«ã™ã‚‹
+            Instantiate(_createdTrapFood, _createdTrapFood.transform.position, _createdTrapFood.transform.rotation);
+            Destroy(_createdTrapFood );       
+            ConsumeItem(nowIndex);
+        }
+
+        //é¤Œã®ã‚¢ã‚¯ãƒ†ã‚£ãƒ–çŠ¶æ…‹ã‚’åˆ‡ã‚Šæ›¿ãˆã‚‹é–¢æ•°
+        public void ChangeActiveTrapFood(bool value)
+        {
+            if (_createdTrapFood != null)
+            {
+                _createdTrapFood.SetActive(value);
+            }
+        }
+
+        public void DestroyTrapFood()
+        {
+            if ( _createdTrapFood != null ) 
+            {
+                Destroy(_createdTrapFood);
+
             }
         }
     }

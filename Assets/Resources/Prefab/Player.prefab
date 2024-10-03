@@ -788,6 +788,7 @@ MonoBehaviour:
   _spotLight: {fileID: 6911505383152764999}
   _thermometerMove: {fileID: 2934411290669842222}
   _geigerCounterMove: {fileID: 4290759907113377998}
+  _trapFood: {fileID: 9151395518792493824, guid: 7c9ce898541f3794796dd55ee44f7800, type: 3}
   _itemForDebug: {fileID: 0}
 --- !u!114 &3297469623762709221
 MonoBehaviour:
