@@ -398,8 +398,8 @@ namespace Scenes.Ingame.Player
         public void UseThermometer()
         {
             _thermometer.GetComponent<ThermometerMove>().StartCoroutine("MeasureTemperature");
-
-        //地面判定を確認し、餌を生成する処理
+        }
+               //地面判定を確認し、餌を生成する処理
         public IEnumerator CreateTrapFood()
         {
             RaycastHit hit;
