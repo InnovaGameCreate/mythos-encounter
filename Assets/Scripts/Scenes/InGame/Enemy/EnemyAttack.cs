@@ -6,6 +6,9 @@ using UniRx;
 using System;
 using UnityEngine.AI;
 using Unity.VisualScripting;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace Scenes.Ingame.Enemy
 {
@@ -16,8 +19,8 @@ namespace Scenes.Ingame.Enemy
     {
         [Header("このスクリプトを制御する変数")]
         [SerializeField][Tooltip("何秒ごとに視界の状態、攻撃可能性、SANをチェックするか")] private float _checkRate;
-        [SerializeField][Tooltip("戦闘時の視界の広さ")] private float _visivilityRange;//仕様上視界範囲は全て同一？じゃなかったらこれはEnemyStatusに送り込むよ
-        [SerializeField] [Tooltip("見失ったとしてもどれだけの時間頑張って探そうとするかどうか")]private float _blindChaseTime;
+        [Tooltip("戦闘時の視界の広さ、マップ端から端まで見える値で固定中")] private float _visivilityRange = 500;
+       
         [SerializeField][Tooltip("デバッグするかどうか")] private bool _debugMode;
 
 
@@ -39,7 +42,6 @@ namespace Scenes.Ingame.Enemy
         [SerializeField] private EnemyStatus _enemyStatus;
         [SerializeField] private EnemySearch _enemySearch;
         [SerializeField] private EnemyMove _myEnemyMove;
-        private NavMeshAgent _myAgent;
 
         //##########内部で使う変数##########
         private GameObject _player;
@@ -50,9 +52,9 @@ namespace Scenes.Ingame.Enemy
         private float _checkTimeCount;//前回チェックしてからの時間を計測
          float _blindChaseTimeCount;
         private EnemyVisibilityMap _myVisivilityMap;
-        private EnemyState _lastEnemyState = EnemyState.None;
         Vector3 nextPositionCandidate = new Vector3(0, 0, 0);
         private Camera _camera;
+        private float _blindChaseTime;
 
         public List<EnemyAttackBehaviour> GetEnemyAtackBehaviours (){
             return _enemyAttackBehaviours;
@@ -63,14 +65,14 @@ namespace Scenes.Ingame.Enemy
         }
 
 
-
         /// <summary>
         /// 初期化処理、外部からアクセスする
         /// </summary>
         public void Init(EnemyVisibilityMap setVisivilityMap) {
             _myVisivilityMap = setVisivilityMap;
-            _horror = _enemyStatus.ReturnHorror;
-            _audiomaterPower = _enemyStatus.ReturnAudiomaterPower;
+            _horror = _enemyStatus.Horror;
+            _audiomaterPower = _enemyStatus.AudiomaterPower;
+            _blindChaseTime = _enemyStatus.BrindCheseTime;
 
             _player = GameObject.FindWithTag("Player");
             if (_player == null) { Debug.LogWarning("プレイヤーが認識できません"); }
@@ -78,14 +80,13 @@ namespace Scenes.Ingame.Enemy
             if (_playerStatus == null) { Debug.LogWarning("プレイヤーステータスが認識できません"); }
 
             _camera = GameObject.Find("Main Camera").GetComponent<Camera>();
-            _myAgent = GetComponent<NavMeshAgent>();
 
             _enemyStatus.OnEnemyStateChange.Subscribe(state => 
             {
-                if ((state == EnemyState.Chase || state == EnemyState.Attack) && !((_lastEnemyState == EnemyState.Chase || _lastEnemyState == EnemyState.Attack))) 
+                if (state ==　EnemyState.Discover) 
                 { 
-                    _lastEnemyState = state;
-                    _myVisivilityMap.SetEveryGridWatchNum(50);
+                    ReturnignForDiscover(this.GetCancellationTokenOnDestroy()).Forget();
+                    _myVisivilityMap.SetEveryGridWatchNum(50);//リセット
                 } 
             }).AddTo(this);
 
@@ -104,7 +105,8 @@ namespace Scenes.Ingame.Enemy
         protected virtual void FixedUpdate()
         {
             float _playerDistance;
-            if (_enemyStatus.ReturnEnemyState == EnemyState.Chase || _enemyStatus.ReturnEnemyState == EnemyState.Attack)
+
+            if (_enemyStatus.EnemyState == EnemyState.Chase || _enemyStatus.EnemyState == EnemyState.Attack || _enemyStatus.EnemyState == EnemyState.Discover)//メモ、Discover中は移動先の変更などはするが、Stateの変更や攻撃はしない。移動速度（Discover中は移動しない）についてはEnemyMoveが行ってくれる
             { //追跡状態または攻撃状態の場合
 
                 //定期的に状態を変更
@@ -113,7 +115,7 @@ namespace Scenes.Ingame.Enemy
                 {
                     _playerDistance = Vector3.Magnitude(this.transform.position - _player.transform.position);
                     _checkTimeCount = 0;
-                    if (CheckCanPlayerVisivlleCheck()) //敵が見えるルートがあるかかどうかを確認する
+                    if (CheckCanSeeThePlayer()) //敵が見えるルートがあるかかどうかを確認する
                     {
                         //こちらが深淵を除くときry
                         SanCheck();
@@ -125,54 +127,58 @@ namespace Scenes.Ingame.Enemy
                                                      //移動目標をプレイヤーの座標にする
                             _myEnemyMove.SetMovePosition(_player.transform.position);
 
+                            if (_enemyStatus.EnemyState != EnemyState.Discover) {//発見動作中は攻撃したりしない
+                                if (_atackRange > _playerDistance && _enemyStatus.StiffnessTime <= 0)
+                                { //攻撃可能であれば
+                                    _enemyStatus.SetEnemyState(EnemyState.Attack);
 
-                            if (_atackRange > _playerDistance && _enemyStatus.GetStiffnessTime <= 0) 
-                            { //攻撃可能であれば
-                                _enemyStatus.SetEnemyState(EnemyState.Attack);
-
-                                _massSUM = 0;
-                                for (int i = 0;i < _enemyAttackBehaviours.Count;i++) {
-                                    if (_enemyAttackBehaviours[i].GetRange() > _playerDistance) 
+                                    _massSUM = 0;
+                                    for (int i = 0; i < _enemyAttackBehaviours.Count; i++)
                                     {
-                                        _massSUM += _enemyAttackBehaviours[i].GetMass();
+                                        if (_enemyAttackBehaviours[i].GetRange() > _playerDistance)
+                                        {
+                                            _massSUM += _enemyAttackBehaviours[i].GetMass();
+                                        }
+                                    }
+                                    float _pickNum = UnityEngine.Random.RandomRange(0f, _massSUM);
+                                    for (int i = 0; i < _enemyAttackBehaviours.Count; i++)
+                                    {
+                                        _massSUM -= _enemyAttackBehaviours[i].GetMass();
+                                        if (_massSUM <= _pickNum)
+                                        {
+                                            _enemyAttackBehaviours[i].Behaviour(_playerStatus);
+                                            _enemyStatus.ChangeStiffnessTime(_enemyAttackBehaviours[i].GetStiffness());
+                                            break;
+                                        }
                                     }
                                 }
-                                float _pickNum = UnityEngine.Random.RandomRange(0f, _massSUM);
-                                for (int i = 0; i < _enemyAttackBehaviours.Count; i++)
-                                {
-                                    _massSUM -= _enemyAttackBehaviours[i].GetMass();
-                                    if (_massSUM <= _pickNum)
-                                    {
-                                        _enemyAttackBehaviours[i].Behaviour(_playerStatus);
-                                        _enemyStatus.ChangeStiffnessTime(_enemyAttackBehaviours[i].GetStiffness());
-                                        break;
-                                    }
+                                else
+                                {//攻撃できないなら追いかける
+                                    _enemyStatus.SetEnemyState(EnemyState.Chase);
+                                    _massSUM = 0;
+
                                 }
-
-
-
-
-                            }
-                            else
-                            {//攻撃できないなら追いかける
-                                _enemyStatus.SetEnemyState(EnemyState.Chase);
-                                _massSUM = 0;
-
-                            }
+                            }                            
                         }
                     }
                     else
                     { //敵が見えないならせめてなんとかいそうなエリアへ行こうとする
                         _blindChaseTimeCount += _checkRate;
                         if (_blindChaseTimeCount > _blindChaseTime)
+
                         { //あきらめるかどうかの判定
-                            _enemyStatus.SetEnemyState(EnemyState.Searching);//追っかけるのあきらめた
+                            if (_enemyStatus.EnemyState != EnemyState.Discover) 
+                            { 
+                                _enemyStatus.SetEnemyState(EnemyState.Searching);//追っかけるのあきらめた
+                            }                                
                         }
                         else
                         { //まだあきらめない場合、近距離に特化したのSearchを行う
-                            _enemyStatus.SetEnemyState(EnemyState.Chase);
-
-                            if (_enemyStatus.ReturnReactToLight && _myVisivilityMap.RightCheck(this.transform.position, _player.transform.position, _visivilityRange, _playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
+                            if (_enemyStatus.EnemyState != EnemyState.Discover)
+                            {
+                                _enemyStatus.SetEnemyState(EnemyState.Chase);
+                            }
+                            if (_enemyStatus.ReactToLight && _myVisivilityMap.RightCheck(this.transform.position, _player.transform.position, _visivilityRange, _playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
                             { //光が見えるか調べる
                                 if (_debugMode) Debug.Log("追跡中光が見えた");
                                 _myEnemyMove.SetMovePosition(nextPositionCandidate);
@@ -229,7 +235,7 @@ namespace Scenes.Ingame.Enemy
             }
         }
 
-        protected virtual bool CheckCanPlayerVisivlleCheck()
+        protected virtual bool CheckCanSeeThePlayer()
         {//キャラクターによって視界の角度判定つける？ミゴは360°、深き者どもは270°、一般的な人間の狂信者とかなら180°とか...
             float range = Vector3.Magnitude(this.transform.position - _player.transform.position) - 0.2f;//プレイヤー本体のコライダーに当たるため減らしてる
                                                                                                   //視界が通るか＝Rayが通るか
@@ -254,7 +260,7 @@ namespace Scenes.Ingame.Enemy
                 if (ScreenPosition.y > 0 && ScreenPosition.y < 1080) {
                     if (ScreenPosition.z > 0)
                     {
-                        _playerStatus.ChangeSanValue(_horror, "Damage");
+                        _playerStatus.ChangeSanValue(_horror, ChangeValueMode.Damage);
 
 
 
@@ -262,6 +268,14 @@ namespace Scenes.Ingame.Enemy
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Discoverにかかる時間だけ待って、チェイスに移行する
+        /// </summary>
+        protected virtual async Cysharp.Threading.Tasks.UniTaskVoid ReturnignForDiscover(CancellationToken ct) {
+            await Task.Delay(_enemyStatus.DiscoverTime, ct);
+            _enemyStatus.SetEnemyState(EnemyState.Chase);
         }
     }
 }

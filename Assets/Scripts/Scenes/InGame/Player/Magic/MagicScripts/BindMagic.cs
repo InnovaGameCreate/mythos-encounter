@@ -45,14 +45,14 @@ namespace Scenes.Ingame.Player
                     enemyStatuses = FindObjectsOfType<EnemyStatus>();
                     for (int i = 0; i < enemyStatuses.Length; i++)
                     {
-                        enemyStatuses[i].ChangeBindBool(true);
+                        enemyStatuses[i].SetBind(true);
                     }
 
                     //拘束状態を解除するためのコルーチンを発動
                     StartCoroutine(CancelBind());
 
                     //SAN値減少
-                    myPlayerStatus.ChangeSanValue(consumeSanValue, "Damage");
+                    myPlayerStatus.ChangeSanValue(consumeSanValue, ChangeValueMode.Damage);
 
                     //呪文を使えないようにする
                     myPlayerMagic.ChangeCanUseMagicBool(false);
@@ -66,7 +66,7 @@ namespace Scenes.Ingame.Player
             yield return new WaitForSeconds(15f);
             for (int i = 0; i < enemyStatuses.Length; i++)
             {
-                enemyStatuses[i].ChangeBindBool(false);
+                enemyStatuses[i].SetBind(false);
             }
         }
     }
