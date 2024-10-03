@@ -39,12 +39,12 @@ namespace Scenes.Ingame.Player
                 {
                     Debug.Log("éÙï∂î≠ìÆÅI");
                     //å¯â î≠ìÆ
-                    myPlayerStatus.ChangeHealth(0.5f, "Heal");
+                    myPlayerStatus.ChangeHealth(0.5f, ChangeValueMode.Heal);
                     GameObject effect = Instantiate(Resources.Load<GameObject>("Effect/RecoverEffect/RecoverEffect"), myPlayerStatus.gameObject.transform.position, Quaternion.identity, myPlayerStatus.gameObject.transform);
                     Destroy(effect, effect.GetComponent<VisualEffect>().GetFloat("LifeTime"));
 
                     //SANílå∏è≠
-                    myPlayerStatus.ChangeSanValue(consumeSanValue, "Damage");
+                    myPlayerStatus.ChangeSanValue(consumeSanValue, ChangeValueMode.Damage);
 
                     //éÙï∂ÇégÇ¶Ç»Ç¢ÇÊÇ§Ç…Ç∑ÇÈ
                     myPlayerMagic.ChangeCanUseMagicBool(false);

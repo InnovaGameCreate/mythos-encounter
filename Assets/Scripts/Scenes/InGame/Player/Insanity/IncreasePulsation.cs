@@ -12,7 +12,7 @@ namespace Scenes.Ingame.Player
     public class IncreasePulsation : MonoBehaviour, IInsanity
     {
         private PlayerStatus _myPlayerStatus;
-        private TempPlayerMove _myPlayerMove;
+        private PlayerMove _myPlayerMove;
 
         private bool _isFirst = true;//‰‚ß‚ÄŒÄ‚Ño‚³‚ê‚½‚©
 
@@ -20,7 +20,7 @@ namespace Scenes.Ingame.Player
         public void Setup()
         {
             _myPlayerStatus = GetComponent<PlayerStatus>();
-            _myPlayerMove = GetComponent<TempPlayerMove>();
+            _myPlayerMove = GetComponent<PlayerMove>();
         }
 
         public void Active()

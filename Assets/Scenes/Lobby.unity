@@ -2667,19 +2667,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5495451142414428879, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5495451142414428879, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.000000059604638
+      value: 6.217249e-15
       objectReference: {fileID: 0}
     - target: {fileID: 5495451142414428879, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.00000017881393
       objectReference: {fileID: 0}
     - target: {fileID: 5495451142414428879, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.00000004214685
+      value: -0.00000004214685
       objectReference: {fileID: 0}
     - target: {fileID: 5847435930969654424, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3479,18 +3479,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 994910a74cbb31e428a3679bf8da5495, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerStatuses:
-  - {fileID: 0}
+  _playerStatus: {fileID: 0}
   _playerItem: {fileID: 0}
   _playerInsanityManager: {fileID: 0}
-  _displayPlayerStatusManager: {fileID: 1655802479}
   _isCurcleSetting: 1
-  _healthSliders:
-  - {fileID: 2049893300}
-  _sanValueSliders:
-  - {fileID: 1605987884}
-  _healthText: []
-  _sanValueText: []
+  _healthSlider: {fileID: 0}
+  _sanValueSlider: {fileID: 0}
+  _bleedingHealthSlider: {fileID: 0}
+  _healthText: {fileID: 0}
+  _sanValueText: {fileID: 0}
   _itemEmptySprite: {fileID: 21300000, guid: ce64e3088d200b445a7faa6e41cf58fd, type: 3}
   _staminaGaugeMask: {fileID: 909979398}
   _staminaGaugeFrontRect: {fileID: 909979395}
@@ -3528,6 +3525,9 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ad8bfc76f9930b64f96b742abbc95a86, type: 3}
   _castGauge: {fileID: 2060257263}
   _castGaugeImage: {fileID: 1289239461}
+  _castTimeText: {fileID: 0}
+  _miniMap: {fileID: 0}
+  _noiseFilter: {fileID: 0}
 --- !u!1001 &324252093
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -19564,7 +19564,7 @@ GameObject:
   - component: {fileID: 1795610545}
   m_Layer: 0
   m_Name: obj_Loadout
-  m_TagString: Untagged
+  m_TagString: Loadout
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

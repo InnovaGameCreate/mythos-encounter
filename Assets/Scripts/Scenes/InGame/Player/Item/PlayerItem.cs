@@ -9,6 +9,8 @@ using EPOOutline;
 using Scenes.Ingame.InGameSystem;
 using System.Diagnostics.Contracts;
 using Unity.VisualScripting;
+using UnityEngine.UIElements;
+using Unity.Burst.CompilerServices;
 
 namespace Scenes.Ingame.Player
 {
@@ -43,8 +45,15 @@ namespace Scenes.Ingame.Player
         private Subject<String> _popActive = new Subject<String>();
         private ReactiveCollection<ItemSlotStruct> _itemSlot = new ReactiveCollection<ItemSlotStruct>();//現在所持しているアイテムのリスト
 
+        //アイテムエフェクト関連
         [SerializeField] private GameObject _spotLight;//Cameraに付属しているスポットライト
         [SerializeField] private GameObject _compass;//Cameraに付属しているコンパス
+        [SerializeField] private GameObject _trapFood;
+        private const float TILELENGTH = 5.85f;
+        private GameObject _createdTrapFood;
+        private bool _isCanCreateTrapFood;
+        public bool IsCanCreateTrapFood { get => _isCanCreateTrapFood; }
+        public GameObject CreatedTrapFood { get => _createdTrapFood; }
 
         //アイテムデバッグ用
         [SerializeField] private GameObject _itemForDebug;
@@ -382,6 +391,85 @@ namespace Scenes.Ingame.Player
         public void ActiveCompass(bool value)
         {
             _compass.SetActive(value);
+        }
+
+        //地面判定を確認し、餌を生成する処理
+        public IEnumerator CreateTrapFood()
+        {
+            RaycastHit hit;
+            int floorlayerMask = LayerMask.GetMask("Floor");
+
+            while (true)
+            {
+                yield return null;
+
+                Physics.Raycast(_mainCamera.transform.position, _mainCamera.transform.forward, out hit, TILELENGTH, floorlayerMask);
+                Debug.DrawRay(_mainCamera.transform.position, _mainCamera.transform.forward * TILELENGTH, Color.black);
+
+                if (hit.collider != null)
+                {
+                    //プレビューの作成・移動
+                    if (_createdTrapFood == null)//プレビューがないときは作成
+                    {
+                        _createdTrapFood = Instantiate(_trapFood, hit.point, _trapFood.transform.rotation);
+                    }
+                    else if (_createdTrapFood.activeInHierarchy)// プレビューがありかつアクティブ状態の時
+                    {
+                        _createdTrapFood.transform.position = hit.point;
+                    }
+                    else// プレビューがあるがアクティブ状態でない時
+                    {
+                        _createdTrapFood.SetActive(true);
+                        _createdTrapFood.GetComponent<TrapFoodCheckCollider>().ChangeTrigger(false);
+                        _createdTrapFood.transform.position = hit.point;
+                    }
+
+                    if (_createdTrapFood.GetComponent<TrapFoodCheckCollider>().IsTriggered && _isCanCreateTrapFood)
+                    {
+                        _isCanCreateTrapFood = false;
+                    }
+                    else if (!_createdTrapFood.GetComponent<TrapFoodCheckCollider>().IsTriggered && !_isCanCreateTrapFood)
+                    {
+                        _isCanCreateTrapFood = true;
+                    }
+                }
+                else
+                {
+                    _isCanCreateTrapFood = false;
+                    if (_createdTrapFood != null)//プレビューが作成されていたら非アクティブにする
+                    {
+                        _createdTrapFood.SetActive(false);
+                    }
+                }
+
+            }
+        }
+
+        //餌を設置する関数
+        public void PutTrapFood()
+        {
+            _createdTrapFood.transform.GetChild(0).gameObject.SetActive(true);
+            _createdTrapFood.layer = 10;// レイヤーをItemに変更し、拾えるようにする
+            Instantiate(_createdTrapFood, _createdTrapFood.transform.position, _createdTrapFood.transform.rotation);
+            Destroy(_createdTrapFood );       
+            ConsumeItem(nowIndex);
+        }
+
+        //餌のアクティブ状態を切り替える関数
+        public void ChangeActiveTrapFood(bool value)
+        {
+            if (_createdTrapFood != null)
+            {
+                _createdTrapFood.SetActive(value);
+            }
+        }
+
+        public void DestroyTrapFood()
+        {
+            if ( _createdTrapFood != null ) 
+            {
+                Destroy(_createdTrapFood);
+            }
         }
     }
 }

@@ -14,15 +14,6 @@ namespace Scenes.Ingame.Player
             {
                 ownerPlayerItem.ActiveHandLight(true);
                 ownerPlayerItem.ChangeSwitchHandLight(HandLightState.On);
-
-                //選択アイテムを別のものにしたとき、自動でライトを停止する
-                ownerPlayerItem.OnNowIndexChange
-                    .Skip(1)
-                    .Where(x => ownerPlayerItem.ItemSlots[ownerPlayerItem.nowIndex].myItemData == null || ownerPlayerItem.ItemSlots[ownerPlayerItem.nowIndex].myItemData.itemID != 3)
-                    .Subscribe(_ =>
-                    {
-                        ownerPlayerItem.ActiveHandLight(false);
-                    });
             }
             else//アイテム選択時
             {
@@ -36,6 +27,15 @@ namespace Scenes.Ingame.Player
                     ownerPlayerItem.ActiveHandLight(true);
                 }
             }
+
+            //選択アイテムを別のものにしたとき、自動でライトを停止する
+            ownerPlayerItem.OnNowIndexChange
+                .Skip(1)
+                .Where(x => ownerPlayerItem.ItemSlots[ownerPlayerItem.nowIndex].myItemData == null || ownerPlayerItem.ItemSlots[ownerPlayerItem.nowIndex].myItemData.itemID != 3)
+                .Subscribe(_ =>
+                {
+                    ownerPlayerItem.ActiveHandLight(false);
+                }).AddTo(this);
 
         }
 

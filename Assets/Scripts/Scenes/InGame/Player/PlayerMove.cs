@@ -8,7 +8,7 @@ using System;
 
 namespace Scenes.Ingame.Player
 {
-    public class TempPlayerMove : MonoBehaviour
+    public class PlayerMove : MonoBehaviour
     {
         [SerializeField] CharacterController _characterController;
         [SerializeField] private PlayerStatus _myPlayerStatus;
@@ -34,6 +34,7 @@ namespace Scenes.Ingame.Player
 
         private bool _isTiredPenalty = false;
         private bool _isCanMove = true;
+        private bool _isCanRotate = true;//UI操作等を行うとき用。手軽に回転を許可するか決められる
         private bool _isCannotMoveByParalyze = false;
         private PlayerActionState _lastPlayerAction = PlayerActionState.Idle;
 
@@ -135,7 +136,7 @@ namespace Scenes.Ingame.Player
         void Update()
         {
             //生きている間かつ蘇生アニメーション中でないときはカメラを操作できる
-            if (_myPlayerStatus.nowPlayerSurvive && !_myPlayerStatus.nowReviveAnimationDoing)
+            if (_myPlayerStatus.nowPlayerSurvive && !_myPlayerStatus.nowReviveAnimationDoing && _isCanRotate)
             {
                 float moveMouseX = Input.GetAxis("Mouse X");
                 if (Mathf.Abs(moveMouseX) > 0.001f)
@@ -283,7 +284,7 @@ namespace Scenes.Ingame.Player
             while (_myPlayerStatus.nowPlayerActionState == PlayerActionState.Dash)
             { 
                 yield return new WaitForSeconds(0.1f);
-                _myPlayerStatus.ChangeStamina(_expandStamina / 10 * (_isPulsation ? 2 : 1), "Damage");
+                _myPlayerStatus.ChangeStamina(_expandStamina / 10 * (_isPulsation ? 2 : 1), ChangeValueMode.Damage);
             }           
         }
 
@@ -297,14 +298,14 @@ namespace Scenes.Ingame.Player
                 while (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Dash)
                 {
                     yield return new WaitForSeconds(0.1f);
-                    _myPlayerStatus.ChangeStamina(_recoverStaminaOnlyTired / 10, "Heal");
+                    _myPlayerStatus.ChangeStamina(_recoverStaminaOnlyTired / 10, ChangeValueMode.Heal);
                 }
             }else//通常時
             {
                 while (_myPlayerStatus.nowPlayerActionState != PlayerActionState.Dash)
                 {
                     yield return new WaitForSeconds(0.1f);
-                    _myPlayerStatus.ChangeStamina(_recoverStamina / 10, "Heal");
+                    _myPlayerStatus.ChangeStamina(_recoverStamina / 10, ChangeValueMode.Heal);
                 }
             }
 
@@ -371,6 +372,14 @@ namespace Scenes.Ingame.Player
             _isCanMove = value;
         }
 
+        /// <summary>
+        /// 回転できるか否かを決定する関数
+        /// </summary>
+        /// <param name="value"></param>
+        public void RotateControl(bool value)
+        {
+            _isCanRotate = value;
+        }
 
     }
 }

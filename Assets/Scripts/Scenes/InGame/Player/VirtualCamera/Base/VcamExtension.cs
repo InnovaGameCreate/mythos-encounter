@@ -9,14 +9,14 @@ using Scenes.Ingame.Player;
 /// </summary>
 public class VcamExtension : CinemachineExtension
 {
-    [SerializeField] private TempPlayerMove _tempPlayerMove;
+    [SerializeField] private PlayerMove _playerMove;
 
     protected override void PostPipelineStageCallback(CinemachineVirtualCameraBase vcam, CinemachineCore.Stage stage, ref CameraState state, float deltaTime)
     {
-        if (_tempPlayerMove != null) {
+        if (_playerMove != null) {
             if (stage == CinemachineCore.Stage.Aim) {        
                 var eulerAngles = state.RawOrientation.eulerAngles;
-                eulerAngles.x = _tempPlayerMove.NowCameraAngle.x;
+                eulerAngles.x = _playerMove.NowCameraAngle.x;
                 state.RawOrientation = Quaternion.Euler(eulerAngles);
             }
         }        
