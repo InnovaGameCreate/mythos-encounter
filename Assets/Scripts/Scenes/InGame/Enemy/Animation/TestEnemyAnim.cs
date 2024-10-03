@@ -13,7 +13,7 @@ namespace Scenes.Ingame.Enemy.Animation
         protected override void UpdateAnimationState()
         {
             // アニメーション制御
-            switch (_enemyStatus.ReturnEnemyState)
+            switch (_enemyStatus.EnemyState)
             {
                 case EnemyState.Patrolling:
                     _animator.SetTrigger(IsPatrolling);
@@ -32,6 +32,8 @@ namespace Scenes.Ingame.Enemy.Animation
                 case EnemyState.FallBack:
                     break;
                 case EnemyState.Special:
+                    break;
+                case EnemyState.Discover:
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

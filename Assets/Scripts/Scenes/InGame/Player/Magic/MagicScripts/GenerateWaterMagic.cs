@@ -49,12 +49,12 @@ namespace Scenes.Ingame.Player
                     _enemyStatuses = FindObjectsOfType<EnemyStatus>();
                     for (int i = 0; i < _enemyStatuses.Length; i++)
                     {
-                        _enemyStatuses[i].ChangeCheckWaterEffectBool(true);
+                        _enemyStatuses[i].SetCheckWaterEffect(true);
                     }
                     StartCoroutine(CancelWaterEffect());
 
                     //SAN’lŒ¸­
-                    myPlayerStatus.ChangeSanValue(consumeSanValue, "Damage");
+                    myPlayerStatus.ChangeSanValue(consumeSanValue, ChangeValueMode.Damage);
 
                     //Žô•¶‚ðŽg‚¦‚È‚¢‚æ‚¤‚É‚·‚é
                     myPlayerMagic.ChangeCanUseMagicBool(false);
@@ -73,7 +73,7 @@ namespace Scenes.Ingame.Player
             Debug.Log("…‚Ì‰e‹¿‚ª–³‚­‚È‚è‚Ü‚·B");
             for (int i = 0; i < _enemyStatuses.Length; i++)
             {
-                _enemyStatuses[i].ChangeCheckWaterEffectBool(false);
+                _enemyStatuses[i].SetCheckWaterEffect(false);
             }
         }
     }

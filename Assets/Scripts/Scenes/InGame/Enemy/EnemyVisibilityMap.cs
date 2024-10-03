@@ -686,8 +686,8 @@ namespace Scenes.Ingame.Enemy
             {
                 for (int r = 0; r < rightingGridPosition.Count; r++)
                 {
-                    if (rightingGridPosition[r].range < lightRange) { }
-                    Debug.DrawLine((ToVector3(rightGridPositionX, rightGridPositionY, rightGridPositionZ) * gridRange) + centerPosition, (ToVector3(rightingGridPosition[r].x, rightingGridPosition[r].y, rightingGridPosition[r].z) * gridRange) + centerPosition, Color.yellow, 1f);
+                    if (rightingGridPosition[r].range < lightRange) { Debug.DrawLine((ToVector3(rightGridPositionX, rightGridPositionY, rightGridPositionZ) * gridRange) + centerPosition, (ToVector3(rightingGridPosition[r].x, rightingGridPosition[r].y, rightingGridPosition[r].z) * gridRange) + centerPosition, Color.yellow, 1f); }
+                    
                 }
             }
 

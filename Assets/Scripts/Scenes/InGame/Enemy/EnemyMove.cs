@@ -17,9 +17,8 @@ namespace Scenes.Ingame.Enemy
         private NavMeshAgent _myAgent;
         [SerializeField] EnemyStatus _enemyStatus;
 
-        [SerializeField] private bool _staminaOver = false;
         /// <summary> 硬直しているか否か</summary>
-        private bool _stiffness;
+        private bool _stiffness = false;
 
         private float _staminaChangeCount = 0;//スタミナを毎秒減らすのに使用
         private Vector3 _movePosition;
@@ -51,9 +50,32 @@ namespace Scenes.Ingame.Enemy
                 else {
                     _stiffness = false;
                 }
+                SpeedChange();
             }
             ).AddTo(this);
 
+           _enemyStatus.OnBindChange
+                .Skip(1)//初期化の時は無視
+                .Subscribe(x =>
+                {
+                    SpeedChange();
+                }).AddTo(this);
+            _enemyStatus.OnEnemyStateChange.Subscribe(x =>{
+                SpeedChange();
+            }).AddTo(this);
+            _enemyStatus.OnIsWaterEffectDebuffChange.Skip(1).Subscribe(x =>
+            { 
+                SpeedChange(); 
+            }).AddTo(this);
+            _enemyStatus.OnSpeedChange.Subscribe(x => 
+            {
+                _myAgent.speed = x;
+            }).AddTo(this);
+            _enemyStatus.OnStaminaOverChange.Subscribe(x => 
+            { 
+              SpeedChange();
+            }).AddTo(this);
+            SpeedChange();
         }
 
         // Update is called once per frame
@@ -69,8 +91,77 @@ namespace Scenes.Ingame.Enemy
 
             _staminaChangeCount += Time.deltaTime;
             if (_staminaChangeCount > 1)
-            {//毎秒処理
-                _staminaChangeCount -= 1;
+                 {//毎秒処理
+                    _staminaChangeCount -= 1;
+
+                switch (_enemyStatus.EnemyState)
+                {
+                    case EnemyState.Patrolling:
+                    case EnemyState.Searching:
+                        //通常の場合
+                        if (_enemyStatus.StaminaBase > _enemyStatus.Stamina)
+                        { //スタミナが削れていたら
+                            _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
+                        }
+                        else if (_enemyStatus.StaminaBase < _enemyStatus.Stamina)
+                        {
+                            _enemyStatus.SetStuminaOver(false);
+                        }
+                        break;
+                    case EnemyState.Chase:
+                    case EnemyState.Attack:
+                        //走る場合
+                        if (_enemyStatus.StaminaOver)
+                        { //スタミナが切れ切ったかどうか
+                            if (_enemyStatus.StaminaBase <= _enemyStatus.Stamina && !(_enemyStatus.StaminaBase == 0))
+                            { //回復した状態にあるかどうか
+                                _enemyStatus.SetStuminaOver(false);
+                            }
+                            else
+                            {//回復しきっていないなら回復する
+                                if (_enemyStatus.StaminaBase > _enemyStatus.Stamina)
+                                { //スタミナが削れていたら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
+                                    _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
+                                }
+                            }
+                        }
+                        else
+                        { //まだスタミナが切れ切って無い場合
+                            if (0 >= _enemyStatus.Stamina)
+                            { //たった今切れ切ったかどうか
+                                _enemyStatus.SetStuminaOver(true);
+                                if (_enemyStatus.StaminaBase > _enemyStatus.Stamina)
+                                { //スタミナが削れていたら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
+                                    _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
+                                }
+                            }
+                            else
+                            {
+                                 //スタミナを削れるなら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
+                                    _enemyStatus.StaminaChange(_enemyStatus.Stamina - 1);
+                                
+                            }
+                        }
+                        break;
+                    case EnemyState.FallBack:
+
+                        break;
+                        case EnemyState.Discover: 
+                        break;
+                    default:
+                        Debug.LogWarning("想定外のEnemyStatus");
+                        break;
+
+                }
+
+
+                
+            }
+
+        }
+
+            private void SpeedChange() {
+            
 
                 if (_stiffness)
                 {//硬直中は移動不能に
@@ -78,134 +169,45 @@ namespace Scenes.Ingame.Enemy
                 }
                 else
                 {
-
-                    switch (_enemyStatus.ReturnEnemyState)
+                    switch (_enemyStatus.EnemyState)
                     {
                         case EnemyState.Patrolling:
-                            _myAgent.speed = _enemyStatus.ReturnPatrollingSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
-                            if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
-                            { //スタミナが削れていたら
-                                _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
-                            }
-                            else if (_enemyStatus.ReturnStaminaBase < _enemyStatus.Stamina)
-                            {
+                            _enemyStatus.SetSpeed(_enemyStatus.PatrollingSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.WaterEffectDebuff ? 0.8f : 1));
 
-
-                                _staminaOver = false;
-                            }
                             break;
                         case EnemyState.Searching:
-                            _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1);
-                            if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
-                            { //スタミナが削れていたら
-                                _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
-                            }
-                            else if (_enemyStatus.ReturnStaminaBase < _enemyStatus.Stamina)
-                            {
-                                _staminaOver = false;
-                            }
+                            _enemyStatus.SetSpeed(_enemyStatus.SearchSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.WaterEffectDebuff ? 0.8f : 1));
+
                             break;
                         case EnemyState.Chase:
-                            //スタミナ周りの処理をする
-                            if (_staminaOver)
-                            { //スタミナが切れ切ったかどうか
-                                if (_enemyStatus.ReturnStaminaBase <= _enemyStatus.Stamina && !(_enemyStatus.ReturnStaminaBase == 0))
-                                { //回復した状態にあるかどうか
-                                    _staminaOver = false;
-                                }
-                                else
-                                {//回復しきっていないなら回復する
-                                    if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
-                                    { //スタミナが削れていたら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
-                                        _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
-                                    }
-                                }
-
-                            }
-                            else
-                            { //まだスタミナが切れ切って無い場合
-                                if (0 >= _enemyStatus.Stamina)
-                                { //たった今切れ切ったかどうか
-                                    _staminaOver = true;
-                                    if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
-                                    { //スタミナが削れていたら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
-                                        _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
-                                    }
-                                }
-                                else
-                                {
-                                    if (0 < _enemyStatus.Stamina)
-                                    { //スタミナを削れるなら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
-                                        _enemyStatus.StaminaChange(_enemyStatus.Stamina - 1);
-                                    }
-                                }
-                            }
-
-
-
-
-                            if (_staminaOver)
+                            if (_enemyStatus.StaminaOver)
                             {
-                                _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                                _enemyStatus.SetSpeed(_enemyStatus.SearchSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.WaterEffectDebuff ? 0.8f : 1));
                             }
                             else
                             {
-                                _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                                _enemyStatus.SetSpeed(_enemyStatus.ChaseSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.WaterEffectDebuff ? 0.8f : 1));
                             }
                             break;
 
 
                         case EnemyState.Attack:
-                            //スタミナ周りの処理をする
-                            if (_staminaOver)
-                            { //スタミナが切れ切ったかどうか
-                                if (_enemyStatus.ReturnStaminaBase <= _enemyStatus.Stamina && !(_enemyStatus.ReturnStaminaBase == 0))
-                                { //回復した状態にあるかどうか
-                                    _staminaOver = false;
-                                }
-                                else
-                                {//回復しきっていないなら回復する
-                                    if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
-                                    { //スタミナが削れていたら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
-                                        _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
-                                    }
-                                }
-                            }
-                            else
-                            { //まだスタミナが切れ切って無い場合
-                                if (0 >= _enemyStatus.Stamina)
-                                { //たった今切れ切ったかどうか
-                                    _staminaOver = true;
-                                    if (_enemyStatus.ReturnStaminaBase > _enemyStatus.Stamina)
-                                    { //スタミナが削れていたら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
-                                        _enemyStatus.StaminaChange(_enemyStatus.Stamina + 1);
-                                    }
-                                }
-                                else
-                                {
-                                    if (0 < _enemyStatus.Stamina)
-                                    { //スタミナを削れるなら、これがあるのはスタミナが0のキャラがいた時にまともに動かすため
-                                        _enemyStatus.StaminaChange(_enemyStatus.Stamina - 1);
-                                    }
-                                }
-                            }
-
-
-
-
-
-                            if (_staminaOver)
+                            
+                            if (_enemyStatus.StaminaOver)
                             {
-                                _myAgent.speed = _enemyStatus.ReturnSearchSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                                _enemyStatus.SetSpeed(_enemyStatus.SearchSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.WaterEffectDebuff ? 0.8f : 1));
                             }
                             else
                             {
-                                _myAgent.speed = _enemyStatus.ReturnChaseSpeed * (_enemyStatus.ReturnBind ? 0.1f : 1) * (_enemyStatus.ReturnWaterEffectDebuff ? 0.8f : 1);
+                                _enemyStatus.SetSpeed(_enemyStatus.ChaseSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.WaterEffectDebuff ? 0.8f : 1));
                             }
                             break;
                         case EnemyState.FallBack:
 
                             break;
+                    case EnemyState.Discover:
+                        _enemyStatus.SetSpeed(0);
+                        break;
                         default:
                             Debug.LogWarning("想定外のEnemyStatus");
                             break;
@@ -213,10 +215,11 @@ namespace Scenes.Ingame.Enemy
 
                     }
                 }
-            }
-
-           
+            
         }
+
+
+
 
         public void SetMovePosition(Vector3 targetPosition)
         {
@@ -237,13 +240,5 @@ namespace Scenes.Ingame.Enemy
 
         }
 
-        /// <summary>
-        /// 硬直状態を変更します
-        /// </summary>
-        /// <param name="value">変更する値</param>
-        public void ChangeStiffness(bool value)
-        {
-            _stiffness = value;
-        }
     } 
 }

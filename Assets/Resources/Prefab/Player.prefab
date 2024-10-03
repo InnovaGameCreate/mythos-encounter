@@ -948,7 +948,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51fac3478be8ad14bae943384163bd68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tempPlayerMove: {fileID: 8389478554569858200}
+  _playerMove: {fileID: 8389478554569858200}
 --- !u!1 &3845817263225331235
 GameObject:
   m_ObjectHideFlags: 0
@@ -1288,7 +1288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51fac3478be8ad14bae943384163bd68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tempPlayerMove: {fileID: 8389478554569858200}
+  _playerMove: {fileID: 8389478554569858200}
 --- !u!114 &7251772328709175083
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1532,7 +1532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51fac3478be8ad14bae943384163bd68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tempPlayerMove: {fileID: 8389478554569858200}
+  _playerMove: {fileID: 8389478554569858200}
 --- !u!1 &7345394517887701047
 GameObject:
   m_ObjectHideFlags: 0
@@ -1724,7 +1724,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51fac3478be8ad14bae943384163bd68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _tempPlayerMove: {fileID: 8389478554569858200}
+  _playerMove: {fileID: 8389478554569858200}
 --- !u!1 &8571642183222114100
 GameObject:
   m_ObjectHideFlags: 0
@@ -1876,9 +1876,85 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Intensity
+      value: 81.359535
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Lightmapping
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_LightShadowCasterMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_UseBoundingSphereOverride
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_UseViewFrustumForShadowCasterCull
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Shadows.m_UseCullingMatrixOverride
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Shadows.m_CullingMatrixOverride.e00
+      value: 0.7673269
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Shadows.m_CullingMatrixOverride.e11
+      value: 0.7673269
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Shadows.m_CullingMatrixOverride.e22
+      value: 1.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Shadows.m_CullingMatrixOverride.e23
+      value: -0.202
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Shadows.m_CullingMatrixOverride.e32
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4848944704700458339, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_Shadows.m_CullingMatrixOverride.e33
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5969752699225861055, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
       propertyPath: m_Name
       value: VisionLight
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066125228625679635, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_ShadowUpdateMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066125228625679635, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_NonLightmappedOnly
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066125228625679635, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_ShadowResolution.m_Level
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066125228625679635, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_UseContactShadow.m_Level
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066125228625679635, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_UpdateShadowOnLightMovement
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9066125228625679635, guid: ee6174562e532bf47b8dfadf29a90110, type: 3}
+      propertyPath: m_UseContactShadow.m_UseOverride
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
