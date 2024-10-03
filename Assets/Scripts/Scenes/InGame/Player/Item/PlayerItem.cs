@@ -43,10 +43,15 @@ namespace Scenes.Ingame.Player
         private Subject<String> _popActive = new Subject<String>();
         private ReactiveCollection<ItemSlotStruct> _itemSlot = new ReactiveCollection<ItemSlotStruct>();//現在所持しているアイテムのリスト
 
-        [SerializeField] private GameObject _spotLight;//Cameraに付属しているスポットライト
+        //アイテム表示切り替え用
         [SerializeField] private GameObject _compass;//Cameraに付属しているコンパス
         [SerializeField] private GameObject _thermometer;//Cameraに付属している温度計
         [SerializeField] private GameObject _geigerCounter;//Cameraに付属している放射線測定器
+
+        //アイテムクラス関連
+        [SerializeField] private Light _spotLight;
+        [SerializeField] private ThermometerMove _thermometerMove;
+        [SerializeField] private GeigerCounterMove _geigerCounterMove;
 
         //アイテムデバッグ用
         [SerializeField] private GameObject _itemForDebug;
@@ -363,7 +368,7 @@ namespace Scenes.Ingame.Player
         //懐中電灯を起動・停止するための関数
         public void ActiveHandLight(bool value)
         {
-            _spotLight.GetComponent<Light>().enabled = value;
+            _spotLight.enabled = value;
             _myPlayerStatus.ChangeLightRange(value);
 
         }
@@ -390,7 +395,7 @@ namespace Scenes.Ingame.Player
         //気温計を使い測定を開始させる関数
         public void UseThermometer()
         {
-            _thermometer.GetComponent<ThermometerMove>().StartCoroutine("MeasureTemperature");
+            _thermometerMove.StartCoroutine("MeasureTemperature");
         }
 
         //放射線測定器を持つかどうか切り替える関数
@@ -410,12 +415,12 @@ namespace Scenes.Ingame.Player
         {
             if (value)//測定を開始させる場合
             {
-                _geigerCounter.GetComponent<GeigerCounterMove>().StartCoroutine("MeasureGeigerCounter"); 
+                _geigerCounterMove.StartCoroutine("MeasureGeigerCounter"); 
             }
             else//測定を止める場合
             {
-                _geigerCounter.GetComponent<GeigerCounterMove>().StopCoroutine("MeasureGeigerCounter");
-                _geigerCounter.GetComponent<GeigerCounterMove>().TurnOffGeigerCounter();
+                _geigerCounterMove.StopCoroutine("MeasureGeigerCounter");
+                _geigerCounterMove.TurnOffGeigerCounter();
             }
         }
     }
