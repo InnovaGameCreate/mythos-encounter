@@ -23,7 +23,7 @@ namespace Scenes.Ingame.Player
         public IEnumerator MeasureTemperature()
         {
             RaycastHit hit;
-            int floorlayerMask = LayerMask.GetMask("Floor");//°‚É‚¾‚¯”½‰‚·‚é‚æ‚¤‚É‚·‚é
+            int floorlayerMask = LayerMask.GetMask("Floor");//åºŠã«ã ã‘åå¿œã™ã‚‹ã‚ˆã†ã«ã™ã‚‹
             _textMeshPro.text = string.Empty;
 
             yield return new WaitForSeconds(3f);
@@ -33,18 +33,23 @@ namespace Scenes.Ingame.Player
             if(hit.collider != null)
             {
                 Debug.Log(hit.collider.gameObject.name);
-                float temperature = hit.collider.gameObject.GetComponent<StageTile>().Temperature;//@^‰º‚É‚ ‚éƒ^ƒCƒ‹‚©‚ç‰·“xƒf[ƒ^æ“¾
-                _textMeshPro.text = temperature.ToString();//@‰·“xŒv‚É•\¦‚³‚ê‚é”š‚ğ•ÏX
+                float temperature = hit.collider.gameObject.GetComponent<StageTile>().Temperature;//ã€€çœŸä¸‹ã«ã‚ã‚‹ã‚¿ã‚¤ãƒ«ã‹ã‚‰æ¸©åº¦ãƒ‡ãƒ¼ã‚¿å–å¾—
+                _textMeshPro.text = temperature.ToString();//ã€€æ¸©åº¦è¨ˆã«è¡¨ç¤ºã•ã‚Œã‚‹æ•°å­—ã‚’å¤‰æ›´
             }
             else
             {
-                Debug.Log("ƒ^ƒCƒ‹‚ğŒŸ’m‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½");
+                Debug.Log("ã‚¿ã‚¤ãƒ«ã‚’æ¤œçŸ¥ã§ãã¾ã›ã‚“ã§ã—ãŸ");
             }
 
-            _playerItem.ChangeCanUseItem(true);//@ƒAƒCƒeƒ€‚ğg—p‚Å‚«‚é‚æ‚¤‚É‚·‚é
+            _playerItem.ChangeCanUseItem(true);//ã€€ã‚¢ã‚¤ãƒ†ãƒ ã‚’ä½¿ç”¨ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹
             yield break;
         }
 
+        // æ¸©åº¦è¨ˆã‚’éã‚¢ã‚¯ãƒ†ã‚£ãƒ–ã«ã—ãŸã¨ãã«ã‚¢ã‚¤ãƒ†ãƒ ã‚’ä½¿ç”¨ã§ãã‚‹ã‚ˆã†ã«ã™ã‚‹å‡¦ç†
+        private void OnDisable()
+        {
+            _playerItem.ChangeCanUseItem(true);
+        }
     }
 }
 
