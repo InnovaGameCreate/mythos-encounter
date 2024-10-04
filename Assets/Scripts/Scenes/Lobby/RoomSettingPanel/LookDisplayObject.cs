@@ -3,18 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using Fusion;
+using DG.Tweening;
 using Common.Network;
 
 namespace Scenes.Lobby.RoomSettingPanel
 {
     public class LookDisplayObject : MonoBehaviour
     {
+        private enum DisplayState //ディスプレイ制御フラグ
+        {
+            Close,
+            Motion,
+            Open,
+        }
+
         [SerializeField] private Camera _displayCamera;
         [SerializeField] private GameObject　_uiPanel;
         [SerializeField] private NetworkRunner _runnerPrefab;
         [SerializeField] private float _motionTime = 1f;
 
-        private int _isOpened = 0; //ディスプレイUIの表示状態
+        private DisplayState _displayState = DisplayState.Close; //ディスプレイUIの表示状態
         private Vector3 _displayPosition = Vector3.zero; //ディスプレイのTransform
         private Quaternion _displayRotation = Quaternion.identity;
 
@@ -38,25 +46,23 @@ namespace Scenes.Lobby.RoomSettingPanel
         public async void OnEnableDisplay()
         {
             //操作後一回しか通らないように制御
-            if (_isOpened != 0) return;
-            else _isOpened = 1;
+            if (_displayState != DisplayState.Close) return;
+            else _displayState = DisplayState.Motion;
 
             //モーション前処理
             _displayCamera.enabled = true;
 
             //処理待機
             await UniTask.WhenAll(
-                CameraMotion(Camera.main.transform.position, //カメラモーション
-                Camera.main.transform.rotation,
-                _displayPosition,
-                _displayRotation),
+                CameraMove(Camera.main.transform.position, _displayPosition),
+                CameraRotate(Camera.main.transform.rotation, _displayRotation),
                 BootRunner()); //NetworkRunner起動
 
             //モーション後処理
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
             _uiPanel.SetActive(true);
-            _isOpened = 2;
+            _displayState = DisplayState.Open;
         }
 
         /// <summary>
@@ -65,8 +71,8 @@ namespace Scenes.Lobby.RoomSettingPanel
         public async void OnDisableDisplay()
         {
             //操作後一回しか通らないように制御
-            if (_isOpened != 2) return;
-            else _isOpened = 1;
+            if (_displayState != DisplayState.Open) return;
+            else _displayState = DisplayState.Motion;
 
             //モーション前処理
             Cursor.visible = false;
@@ -75,23 +81,43 @@ namespace Scenes.Lobby.RoomSettingPanel
             DiscardRunner(); //Runnerの停止
 
             //処理待機
-            await CameraMotion(_displayPosition, _displayRotation, Camera.main.transform.position, Camera.main.transform.rotation);
+            await UniTask.WhenAll(
+                CameraMove(_displayPosition, Camera.main.transform.position),
+                CameraRotate(_displayRotation, Camera.main.transform.rotation));
 
             //モーション後処理
             _displayCamera.enabled = false;
-            _isOpened = 0;
+            _displayState = DisplayState.Close;
         }
 
-        private async UniTask CameraMotion(Vector3 startPosition, Quaternion startRotation, Vector3 endPosition, Quaternion endRotation)
+        /// <summary>
+        /// カメラ移動
+        /// </summary>
+        /// <param name="startPosition"></param>
+        /// <param name="endPosition"></param>
+        /// <returns></returns>
+        private async UniTask CameraMove(Vector3 startPosition, Vector3 endPosition)
         {
-            float timer = 0f;
-            while (timer < _motionTime)
-            {
-                timer += Time.deltaTime; //タイマー計測
-                _displayCamera.transform.position = Vector3.Slerp(startPosition, endPosition, timer / _motionTime); //モーション
-                _displayCamera.transform.rotation = Quaternion.Slerp(startRotation, endRotation, timer / _motionTime);
-                await UniTask.Yield(PlayerLoopTiming.Update); //1フレーム待つ
-            }
+            await _displayCamera.transform
+                .DOMove(endPosition, _motionTime)
+                .From(startPosition)
+                .SetEase(Ease.InOutSine)
+                .AsyncWaitForCompletion();
+        }
+
+        /// <summary>
+        /// カメラ回転
+        /// </summary>
+        /// <param name="startRotation"></param>
+        /// <param name="endRotation"></param>
+        /// <returns></returns>
+        private async UniTask CameraRotate(Quaternion startRotation, Quaternion endRotation)
+        {
+            await _displayCamera.transform
+                .DORotate(endRotation.eulerAngles, _motionTime)
+                .From(startRotation.eulerAngles)
+                .SetEase(Ease.InOutSine)
+                .AsyncWaitForCompletion();
         }
 
         /// <summary>
@@ -113,6 +139,9 @@ namespace Scenes.Lobby.RoomSettingPanel
             }
         }
 
+        /// <summary>
+        /// NetworkRunnerを停止する
+        /// </summary>
         private void DiscardRunner()
         {
             if (RunnerManager.Runner == null)
