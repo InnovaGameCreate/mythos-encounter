@@ -20,7 +20,7 @@ namespace Scenes.Ingame.Player
             .Subscribe(_ =>
             {
                 ownerPlayerItem.ActiveCompass(false);
-            });
+            }).AddTo(this);
         }
 
         public override void OnThrow()
