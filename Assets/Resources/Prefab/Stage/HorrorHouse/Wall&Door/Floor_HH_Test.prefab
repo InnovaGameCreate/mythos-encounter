@@ -79,7 +79,6 @@ GameObject:
   - component: {fileID: 1912153678882944703}
   - component: {fileID: 8640359652895559176}
   - component: {fileID: 6485500722371118783}
-  - component: {fileID: 3373496991111364977}
   m_Layer: 7
   m_Name: Floor_4x4m(Clone)
   m_TagString: Untagged
@@ -208,19 +207,6 @@ MonoBehaviour:
   _temperature: 0
   _keep: 0
   _msv: 0
---- !u!114 &3373496991111364977
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6671873150631727905}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad80184bf25ee59439826f89b00dafe1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _stageTile: {fileID: 6485500722371118783}
 --- !u!1 &8590711201883317533
 GameObject:
   m_ObjectHideFlags: 0

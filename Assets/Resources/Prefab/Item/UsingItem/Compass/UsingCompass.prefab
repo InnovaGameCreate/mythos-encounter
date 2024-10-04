@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 6829483175622746348}
   - component: {fileID: 1724093240758351910}
   - component: {fileID: 6318887105542977164}
-  - component: {fileID: 4951859557665824573}
   m_Layer: 0
   m_Name: UsingCompass
   m_TagString: Untagged
@@ -85,21 +84,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4951859557665824573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1065273573675976029}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 629b0f0375ba1844cae85dafe183dc07, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rotateSpeed: 5
-  _brokeRotateCycle: 0.8
-  _unusableDistance: 10
 --- !u!1 &8183649203999025517
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,6 +261,7 @@ GameObject:
   - component: {fileID: 1710125048315190912}
   - component: {fileID: 5385734030246366531}
   - component: {fileID: 4847668350840559833}
+  - component: {fileID: 8832825910395255596}
   m_Layer: 0
   m_Name: CompassNeedle
   m_TagString: Untagged
@@ -351,3 +336,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8832825910395255596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8554655038087083938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 629b0f0375ba1844cae85dafe183dc07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rotateSpeed: 5
+  _brokeRotateCycle: 0.8
+  _unusableDistance: 10
