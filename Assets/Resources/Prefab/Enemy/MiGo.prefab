@@ -116,6 +116,15 @@ MonoBehaviour:
   _enemyMove: {fileID: 816805753169648624}
   _enemyUniqueAction: {fileID: 2823661622290031707}
   _debugMode: 0
+  _Speed: 0
+  _Hp: 0
+  _AudiometerPower: 0
+  _Stamina: 0
+  _State: 1
+  _Bind: 0
+  _StiffnessTime: 0
+  _IsWaterEffectDebuff: 0
+  _StaminaOver: 0
 --- !u!195 &7193522369868098007
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -166,7 +175,6 @@ MonoBehaviour:
   _debugMode: 1
   _myEneyMove: {fileID: 816805753169648624}
   _enemyStatus: {fileID: 3570193099927935822}
-  _uniqueChase: 0
 --- !u!82 &7796613447862125023
 AudioSource:
   m_ObjectHideFlags: 0
@@ -346,6 +354,11 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: 3795316866408166989}
+  - {fileID: 816805753169648624}
+  - {fileID: 3570193099927935822}
+  - {fileID: 2823661622290031707}
+  - {fileID: 5870517707342100858}
   - {fileID: -7298190128234281243}
 --- !u!1 &2820872689797213259
 GameObject:

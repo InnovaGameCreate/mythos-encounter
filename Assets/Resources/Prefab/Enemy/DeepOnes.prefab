@@ -239,6 +239,15 @@ MonoBehaviour:
   _enemyMove: {fileID: 153174845251746693}
   _enemyUniqueAction: {fileID: 1737251985559039451}
   _debugMode: 0
+  _Speed: 0
+  _Hp: 0
+  _AudiometerPower: 0
+  _Stamina: 0
+  _State: 1
+  _Bind: 0
+  _StiffnessTime: 0
+  _IsWaterEffectDebuff: 0
+  _StaminaOver: 0
 --- !u!195 &8637928095015650533
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -453,6 +462,11 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: 4132503370352304899}
+  - {fileID: 153174845251746693}
+  - {fileID: 651126892439209470}
+  - {fileID: 227141341248401291}
+  - {fileID: 1737251985559039451}
   - {fileID: 6466916487149346403}
 --- !u!1001 &9117532595097646355
 PrefabInstance:

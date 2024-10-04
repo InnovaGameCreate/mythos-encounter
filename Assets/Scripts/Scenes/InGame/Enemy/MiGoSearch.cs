@@ -1,3 +1,4 @@
+using Fusion;
 using Scenes.Ingame.Player;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,9 +8,9 @@ namespace Scenes.Ingame.Enemy
 {
     public class MiGoSearch : EnemySearch
     {
-        [SerializeField]private bool _uniqueChase;//特殊なチェイスをするかどうか
+        [Networked] private bool _uniqueChase { get; set; }//特殊なチェイスをするかどうか
 
-        protected override void FixedUpdate()
+        public override void FixedUpdateNetwork()
         {
             if (_uniqueChase) {
                 if (_myVisivilityMap != null)//索敵の準備ができていない場合
@@ -20,7 +21,7 @@ namespace Scenes.Ingame.Enemy
                 if (_enemyStatus.State == EnemyState.Patrolling || _enemyStatus.State == EnemyState.Searching)
                 { //巡回状態または捜索状態の場合
                     //定期的に視界情報を調べる
-                    _checkTimeCount += Time.deltaTime;
+                    _checkTimeCount += Runner.DeltaTime;
                     if (_checkTimeCount > _checkRate)
                     {
                         _myEneyMove.SetMovePosition(_player.transform.position);
@@ -77,7 +78,7 @@ namespace Scenes.Ingame.Enemy
                 }
             }
             else {
-                base.FixedUpdate();
+                base.FixedUpdateNetwork();
             }
 
         }
