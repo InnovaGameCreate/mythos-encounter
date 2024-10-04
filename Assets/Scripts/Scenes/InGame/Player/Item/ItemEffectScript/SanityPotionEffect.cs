@@ -9,7 +9,6 @@ namespace Scenes.Ingame.Player
     {
         private bool _stopCoroutineBool = false;
 
-
         public override void OnPickUp()
         {
             //攻撃くらったときを示すBoolがTrueになったときにアイテム使用を中断

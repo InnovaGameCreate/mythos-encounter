@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 28
   itemName: SanityPotion
-  itemSprite: {fileID: 10913, guid: 0000000000000000f000000000000000, type: 0}
+  itemSprite: {fileID: 21300000, guid: 0c82687ebbd2ef44ea041d173e4769f9, type: 3}
   price: 100
   itemInfo: "\u4F7F\u3046\u3068SAN\u5024\u304C10%\u56DE\u5FA9\u3059\u308B"
   type: 1
