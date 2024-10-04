@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using Cysharp.Threading.Tasks;
+using System.Threading;
 
 namespace Scenes.Ingame.Player
 {
@@ -10,13 +12,17 @@ namespace Scenes.Ingame.Player
         private float _startTime;
         [SerializeField] private float _animationTime;
         private bool _stopCoroutineBool = false;
-
+        CancellationTokenSource source = new CancellationTokenSource();
 
         public override void OnPickUp()
         {
             //攻撃くらったときを示すBoolがTrueになったときにアイテム使用を中断
             ownerPlayerStatus.OnEnemyAttackedMe
-                .Subscribe(_ => _stopCoroutineBool = true).AddTo(this);
+                .Subscribe(_ =>
+                { 
+                    source?.Cancel();
+                    source?.Dispose();
+                }).AddTo(this);
         }
 
         public override void OnThrow()
@@ -26,12 +32,12 @@ namespace Scenes.Ingame.Player
 
         public override void Effect()
         {
-            StartCoroutine(UseSyringe());
+            SyringeEffect().Forget();
         }
-
-
-        public IEnumerator UseSyringe()
+        
+        public async UniTaskVoid SyringeEffect()
         {
+            var token = ownerPlayerStatus.GetCancellationTokenOnDestroy();
             Debug.Log("アドレナリン注射器バフ状態");
 
             //アイテム使用直後にステータス変更を行う
@@ -40,38 +46,17 @@ namespace Scenes.Ingame.Player
             ownerPlayerItem.ChangeCanChangeBringItem(false);
             //ToDo:Playerに包帯を巻くエフェクトを発生させる
 
-            _startTime = Time.time;
-            Debug.Log(_startTime);
+            ownerPlayerStatus.SetStaminaBuff(true);//アドレナリン状態を変化させるためのコマンド
 
-            while (true)
+            await UniTask.WaitForSeconds(15f, cancellationToken: token);
+            ownerPlayerStatus.ChangeSpeed();
+            ownerPlayerStatus.UseItem(false);
+            ownerPlayerItem.ChangeCanChangeBringItem(true);
+            if (!token.IsCancellationRequested)
             {
-                yield return null;
-                //攻撃を食らった際にこのコルーチンを破棄              
-                if (_stopCoroutineBool == true)
-                {
-                    Debug.Log("包帯使用のコルーチンを破棄");
-                    _stopCoroutineBool = false;
-                    ownerPlayerStatus.UseItem(false);
-                    ownerPlayerStatus.ChangeSpeed();
-                    ownerPlayerItem.ChangeCanChangeBringItem(true);
-                    yield break;
-                }
-
-                //注射器を打つアニメーションが終わったら効果発動
-                if (Time.time - _startTime >= _animationTime)
-                {
-                    ownerPlayerStatus.UseItem(false);
-                    ownerPlayerStatus.ChangeSpeed();
-                    ownerPlayerItem.ConsumeItem(ownerPlayerItem.nowIndex);
-                    ownerPlayerItem.ChangeCanChangeBringItem(true);
-                    StopCoroutine(ownerPlayerStatus.BuffAdrenaline());
-                    ownerPlayerStatus.StartBuff();//アドレナリン状態を変化させるためのコマンド
-                    yield break;
-                }
-
+                ownerPlayerStatus.SetStaminaBuff(false);//アドレナリン状態を変化させるためのコマンド
+                ownerPlayerItem.ConsumeItem(ownerPlayerItem.nowIndex);
             }
-
-
         }
 
 
