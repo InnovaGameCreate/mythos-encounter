@@ -180,21 +180,21 @@ namespace Scenes.Ingame.Enemy
                     switch (_enemyStatus.State)
                     {
                         case EnemyState.Patrolling:
-                            _enemyStatus.SetSpeed(_enemyStatus.PatrollingSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
+                            _enemyStatus.SetSpeed(_enemyStatus.PatrollingSpeed * (_enemyStatus.Bind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
 
                             break;
                         case EnemyState.Searching:
-                            _enemyStatus.SetSpeed(_enemyStatus.SearchSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
+                            _enemyStatus.SetSpeed(_enemyStatus.SearchSpeed * (_enemyStatus.Bind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
 
                             break;
                         case EnemyState.Chase:
                             if (_enemyStatus.StaminaOver)
                             {
-                                _enemyStatus.SetSpeed(_enemyStatus.SearchSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
+                                _enemyStatus.SetSpeed(_enemyStatus.SearchSpeed * (_enemyStatus.Bind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
                             }
                             else
                             {
-                                _enemyStatus.SetSpeed(_enemyStatus.ChaseSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
+                                _enemyStatus.SetSpeed(_enemyStatus.ChaseSpeed * (_enemyStatus.Bind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
                             }
                             break;
 
@@ -203,11 +203,11 @@ namespace Scenes.Ingame.Enemy
                             
                             if (_enemyStatus.StaminaOver)
                             {
-                                _enemyStatus.SetSpeed(_enemyStatus.SearchSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
+                                _enemyStatus.SetSpeed(_enemyStatus.SearchSpeed * (_enemyStatus.Bind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
                             }
                             else
                             {
-                                _enemyStatus.SetSpeed(_enemyStatus.ChaseSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
+                                _enemyStatus.SetSpeed(_enemyStatus.ChaseSpeed * (_enemyStatus.Bind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
                             }
                             break;
                         case EnemyState.FallBack:
