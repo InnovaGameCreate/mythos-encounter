@@ -51,7 +51,7 @@ namespace Scenes.Ingame.Enemy
             _myAgent = GetComponent<NavMeshAgent>();
 
             //スペックの初期設定
-            _audiomaterPower = _enemyStatus.AudiomaterPower;
+            _audiomaterPower = _enemyStatus.AudiometerPower;
 
 
 
@@ -64,7 +64,7 @@ namespace Scenes.Ingame.Enemy
                 .Subscribe(state =>
                 {
                     //プレイヤーの騒音を聞く
-                    if (_enemyStatus.EnemyState == EnemyState.Patrolling || _enemyStatus.EnemyState == EnemyState.Searching)
+                    if (_enemyStatus.State == EnemyState.Patrolling || _enemyStatus.State == EnemyState.Searching)
                     {
                         float valume = 0;
 
@@ -100,7 +100,7 @@ namespace Scenes.Ingame.Enemy
                 return;
             }
 
-            if (_enemyStatus.EnemyState == EnemyState.Patrolling || _enemyStatus.EnemyState == EnemyState.Searching)
+            if (_enemyStatus.State == EnemyState.Patrolling || _enemyStatus.State == EnemyState.Searching)
             { //巡回状態または捜索状態の場合
 
 

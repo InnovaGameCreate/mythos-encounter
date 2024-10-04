@@ -11,13 +11,15 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks.Triggers;
 using UnityEngine.AI;
+using Fusion;
+using UnityEngine.Rendering.HighDefinition;
 
 namespace Scenes.Ingame.Enemy
 {
     /// <summary>
     /// 敵のスペックと現在の状態を記録する
     /// </summary>
-    public class EnemyStatus : MonoBehaviour
+    public class EnemyStatus : NetworkBehaviour
     {
         //Countはタイミングを計るような変数を表す。例えば..クールダウンがどれだけ終了しているかや何かい攻撃をしたかなど
         [Header("敵キャラの基本スペックの初期値")]
@@ -58,38 +60,78 @@ namespace Scenes.Ingame.Enemy
 
         [Header("デバッグするかどうか")]
         [SerializeField] private bool _debugMode;
-
-        [Tooltip("現在の敵の速度です")]private FloatReactiveProperty _speed = new FloatReactiveProperty();
-        private IntReactiveProperty _hp = new IntReactiveProperty();
-        private FloatReactiveProperty _audiometerPower = new FloatReactiveProperty();
-        private IntReactiveProperty _stamina = new IntReactiveProperty();
-        private ReactiveProperty<EnemyState> _enemyState = new ReactiveProperty<EnemyState>(EnemyState.Patrolling);
-
-        private BoolReactiveProperty _isBind = new BoolReactiveProperty(false);//拘束状態であるか否か
-        private FloatReactiveProperty _stiffnessTime = new FloatReactiveProperty(0);//硬直時間
-
-
+        
         private bool _isCheckWaterEffect = false;//水の生成がされているか否か
-        private BoolReactiveProperty _isWaterEffectDebuff = new BoolReactiveProperty(false);//水の生成によるデバフがされているか否か
-        [Tooltip("スタミナが切れて走れない状態か否か")]private BoolReactiveProperty _staminaOver = new BoolReactiveProperty(false);
 
 
-        public IObservable<int> OnHpChange { get { return _hp; } }
+        //########################
+        //[NetWorked]置き場、注意！Fusionの仕様上getsetは独自実装してはならない！
+        
 
-        public IObservable<float> OnAudiometerPowerChange { get { return _audiometerPower; } }
+        [Networked] public float Speed { get;private set;}
+        private Subject<float> _speedSubject = new Subject<float>();
+        public IObservable<float> OnSpeedChanged
+        {
+            get { return _speedSubject; }
+        }
 
-        public IObservable<int> OnStaminaChange { get { return _stamina; } }
-        public IObservable<EnemyState> OnEnemyStateChange { get { return _enemyState; } }
 
-        public IObservable<bool> OnBindChange { get { return _isBind; } }
+        [Networked] public int Hp { get;private set; }
+        private Subject<int> _hpSubject = new Subject<int>();
+        public IObservable<int> OnHpChanged
+        {
+            get { return _hpSubject; }
+        }
 
-        public IObservable<float> OnStiffnessTimeChange { get { return _stiffnessTime; } }
+        [Networked] public float AudiometerPower { get; private set; }
+        private Subject<float> _audiometerPower = new Subject<float>();
+        public IObservable<float> OnAudiometerPowerChange
+        {
+            get { return _audiometerPower; }
+        }
 
-        public IObservable<bool> OnIsWaterEffectDebuffChange { get { return _isWaterEffectDebuff; } }
+        [Networked] public int Stamina { get; private set; }
+        private Subject<int> _staminaSubject = new Subject<int>();
+        public IObservable<int> OnStaminaChange
+        {
+            get { return _staminaSubject; }
+        }
 
-        public IObservable<float> OnSpeedChange { get { return _speed; } }
+        [Networked] public EnemyState State { get; private set; } = EnemyState.Patrolling;
+        private Subject<EnemyState> _enemyStateSubject = new Subject<EnemyState>();
+        public IObservable<EnemyState> OnEnemyStateChange
+        {
+            get { return _enemyStateSubject; }
+        }
 
-        public IObservable<bool> OnStaminaOverChange { get { return _staminaOver; } }
+        [Networked] public bool IsBind { get; private set; }
+        private Subject<bool> _bindSubject = new Subject<bool>();
+        public IObservable<bool> OnBindChange
+        {
+            get { return _bindSubject; }
+        }
+
+        [Networked] public float StiffnessTime { get; private set; }
+        private Subject<float> _stiffnessTimeSubject = new Subject<float>();
+        public IObservable<float> OnStiffnessTimeChange
+        {
+            get { return _stiffnessTimeSubject; }
+        }
+
+        [Networked] public bool IsWaterEffectDebuff { get; private set; }
+        private Subject<bool> _isWaterEffectDebuffSubject = new Subject<bool>();
+        public IObservable<bool> OnIsWaterEffectDebuffChange
+        {
+            get { return _isWaterEffectDebuffSubject; }
+        }
+
+        [Networked] public bool StaminaOver { get; private set; }
+        private Subject<bool> _staminaOverSubject = new Subject<bool>();
+        public IObservable<bool> OnStaminaOverChange
+        {
+            get { return _staminaOverSubject; }
+        }
+
 
         //##########GetとかSetのかたまり
         public float PatrollingSpeed { get { return _patrollingSpeed; } }
@@ -97,25 +139,15 @@ namespace Scenes.Ingame.Enemy
         public float ChaseSpeed { get { return _chaseSpeed; } }
 
         public int StaminaBase { get { return _staminaBase; } }
-        public int Stamina { get { return _stamina.Value; } }
 
-        public float AudiomaterPower { get { return _audiometerPower.Value; } }
         public bool ReactToLight { get { return _reactToLight; } }
-        public EnemyState EnemyState { get { return _enemyState.Value; } }
 
         public int Horror { get { return _horror; } }
 
-        public float StiffnessTime { get { return _stiffnessTime.Value; } }
-
-        public float Speed { get { return _speed.Value; }}
 
         public float BrindCheseTime { get { return _blindCheseTime; } }
 
-        public bool StaminaOver { get { return _staminaOver.Value; } }
 
-        public bool IsBind { get { return _isBind.Value; } }
-
-        public bool WaterEffectDebuff { get { return _isWaterEffectDebuff.Value; } }
 
         public int DiscoverTime { get { return _discoverTime; } }
         public int EnemyId { get { return _enemyId; } }
@@ -127,6 +159,11 @@ namespace Scenes.Ingame.Enemy
         //##########UniRxにかかわらない変数
         private EnemyVisibilityMap _myEnemyVisivilityMap;
         private AudioSource _audioSource;
+
+        private ChangeDetector _changeDetector;
+
+
+
 
         /// <summary>
         /// 初期設定をする。外部から呼び出すこととする
@@ -145,13 +182,14 @@ namespace Scenes.Ingame.Enemy
             _enemyUniqueAction.Init(_actionCoolTime);
 
             //撃破されたことを検出
-            OnHpChange.Where(hp => hp <= 0).Subscribe(hp =>
+            OnHpChanged.Where(hp => hp <= 0).Subscribe(hp =>
             {
                 FallBack();
             }).AddTo(this);
 
             ////////////
-
+            //変更を検出する準備をする
+            _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
 
             this.gameObject.TryGetComponent<AudioSource>(out _audioSource);
             _audioSource.volume = _footSoundBase;
@@ -166,16 +204,34 @@ namespace Scenes.Ingame.Enemy
                         _myAgent.speed *= 10;
          */
 
-        // Update is called once per frame
-        void Update()
+        public override void FixedUpdateNetwork()
         {
+            //変更を検出しUniRxのイベントを発行す
+            foreach (var change in _changeDetector.DetectChanges(this))
+            {
+                switch (change)
+                {
+                    case nameof(Speed):
+                        _speedSubject.OnNext(Speed);
+                        break;
+                    case nameof(Hp):
+                        _hpSubject.OnNext(Hp);
+                        break;
+                }
+            }
+
+
+
+
+
+
             if (_debugMode && Input.GetKey(KeyCode.Z)) { FallBack(); }
 
-            if (_stiffnessTime.Value > 0) { 
-                _stiffnessTime.Value -= Time.deltaTime;
-                if (_stiffnessTime.Value < 0)
+            if (StiffnessTime > 0) {
+                StiffnessTime -= Time.deltaTime;
+                if (StiffnessTime < 0)
                 {
-                    _stiffnessTime.Value = 0;
+                    StiffnessTime = 0;
                 }
             }
 
@@ -186,32 +242,32 @@ namespace Scenes.Ingame.Enemy
             {
                 if (_flying)//飛翔状態の時は影響を受けない
                 {
-                    _isWaterEffectDebuff.Value = false;
+                    IsWaterEffectDebuff = false;
                 }
                 else //飛翔状態でない時は影響を受ける
                 {
-                    _isWaterEffectDebuff.Value = true;                   
+                    IsWaterEffectDebuff = true;                   
                 }
 
                 //足音の大きさを変更
-                _audioSource.volume = _footSoundBase * (_isWaterEffectDebuff.Value ? 1.5f : 1);
+                _audioSource.volume = _footSoundBase * (IsWaterEffectDebuff ? 1.5f : 1);
             }
 
         }
 
         public void SetEnemyState(EnemyState state) {
-            if (_debugMode) { Debug.Log("State変更" + _enemyState.Value); }
-            _enemyState.Value = state;
+            if (_debugMode) { Debug.Log("State変更" + State); }
+            State = state;
         }
 
         /// <summary>
         /// ステータスのみ初期化する
         /// </summary>
         public void ResetStatus() {
-            _hp.Value = _hpBase;
-            _audiometerPower.Value = _audiometerPowerBase;
-            _stamina.Value = _staminaBase;
-            _enemyState.Value = _enemyStateBase;
+            Hp = _hpBase;
+            AudiometerPower = _audiometerPowerBase;
+            Stamina = _staminaBase;
+            State = _enemyStateBase;
         }
 
         /// <summary>
@@ -219,14 +275,14 @@ namespace Scenes.Ingame.Enemy
         /// </summary>
         /// <param name="damage">与えるダメージ</param>
         public void AddDamage(int damage) {
-            _hp.Value -= damage;
+            Hp -= damage;
         }
 
         /// <summary>
         /// 移動速度を指定した値に設定する
         /// </summary>
         /// <param name="value">設定する速度</param>
-        public void SetSpeed(float value) { { _speed.Value = value; } }
+        public void SetSpeed(float value) { { Speed = value; } }
 
         /// <summary>
         /// 退散させるために使用する
@@ -247,7 +303,7 @@ namespace Scenes.Ingame.Enemy
         /// </summary>
         /// <param name="changeStamina">書き換えるスタミナの値</param>
         public void StaminaChange(int changeStamina) { 
-            _stamina.Value = changeStamina;
+            Stamina = changeStamina;
         }
 
         private async Cysharp.Threading.Tasks.UniTaskVoid ReMap(CancellationToken ct)
@@ -262,18 +318,18 @@ namespace Scenes.Ingame.Enemy
 
         public void SetBind(bool value)
         {
-            _isBind.Value = value;
+            IsBind = value;
         }
 
         public void SetStuminaOver(bool setValue) { 
-            _staminaOver.Value = setValue;
+            StaminaOver = setValue;
         }
         /// <summary>
         /// 硬直時間を変化さえる
         /// </summary>
         /// <param name="value">変化する値</param>
         public void ChangeStiffnessTime(float value) { 
-            _stiffnessTime.Value += value;
+            StiffnessTime += value;
         }
 
         /// <summary>
@@ -287,16 +343,16 @@ namespace Scenes.Ingame.Enemy
             {
                 if (_flying)//飛翔状態の時は影響を受けない
                 {
-                    _isWaterEffectDebuff.Value = false;
+                    IsWaterEffectDebuff = false;
                 }
                 else //飛翔状態でない時は影響を受ける
                 {
-                    _isWaterEffectDebuff.Value = true;
+                    IsWaterEffectDebuff = true;
                 }
             }
             else //水の生成が終わったときに、各変数を初期値に戻す
             {
-                _isWaterEffectDebuff.Value = false; 
+                IsWaterEffectDebuff = false; 
                 _audioSource.volume = _footSoundBase;
             }
         }
