@@ -20,9 +20,11 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         AudioSource _audioSource;
         private Subject<Unit> _onDestroy = new Subject<Unit>();
         public IObservable<Unit> onDestroy { get => _onDestroy; }
-        public ReactiveProperty<GameObject> TemperatureTrace = new ReactiveProperty<GameObject>();
+        private ReactiveProperty<GameObject> floor = new ReactiveProperty<GameObject>();
+        public IObservable<GameObject> OnFloor { get => floor; }
         private Vector3 direction = new Vector3(0, -1, 0);
-        public StageTile stagetile;
+        private StageTile _stagetile;
+        public StageTile stagetile { get { return _stagetile; } }
 
         public void Init()
         {
@@ -36,17 +38,16 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         {
             Ray ray = new Ray(_enemy.transform.position, direction);
             RaycastHit hit;
+            Physics.Raycast(ray.origin, ray.direction, out hit, 1.0f, 7);
             while (true)
             {
-                if (Physics.Raycast(ray, out hit))
-                {
-                    if (hit.collider.layerOverridePriority == 7)
+                if (hit.collider.layerOverridePriority == 7)
                     {
                         _floor = hit.collider.gameObject;
-                        stagetile = _floor.GetComponent<StageTile>();
-                        TemperatureTrace.Value = _floor;
-                    }
+                        _stagetile = _floor.GetComponent<StageTile>();
+                        floor.Value = _floor;
                 }
+                
                 yield return new WaitForSeconds(1f);
             }
         }

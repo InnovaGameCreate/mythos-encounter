@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine.Rendering.HighDefinition;
+using UniRx;
 
 namespace Scenes.Ingame.Enemy.Trace.Feature
 {
@@ -15,11 +16,11 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         {
             _cancellationTokenSource = new CancellationTokenSource();
             _view = view;
-            _view.TemperatureTrace.Subscribe(_ =>
+            _view.OnFloor.Skip(1).Subscribe(_ =>
             {
                 _change = _view.stagetile.Temperature - 10;
                 _view.Temperature(_change);
-            });
+            }).AddTo(view.gameObject); ;
             
         }
 
