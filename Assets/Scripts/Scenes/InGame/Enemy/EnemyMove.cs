@@ -7,6 +7,7 @@ using UniRx;
 using Scenes.Ingame.Player;
 using Fusion;
 using UnityEngine.Rendering.HighDefinition;
+using static UnityEngine.InputManagerEntry;
 
 
 namespace Scenes.Ingame.Enemy
@@ -24,7 +25,7 @@ namespace Scenes.Ingame.Enemy
         private bool _stiffness = false;
 
         private float _staminaChangeCount = 0;//スタミナを毎秒減らすのに使用
-        private Vector3 _movePosition;
+        [Networked] private Vector3 _movePosition { get; set; }//移動先
 
         public Vector3 GetMovePosition() {
             return _movePosition;
@@ -32,9 +33,7 @@ namespace Scenes.Ingame.Enemy
 
         private Vector3 _initialPosition = new Vector3(30, 0, 18);//初期位置保存用変数
 
-
-
-
+        private ChangeDetector _changeDetector;
 
 
         /// <summary>
@@ -46,6 +45,8 @@ namespace Scenes.Ingame.Enemy
             _myAgent.destination = this.transform.position;
             _initialPosition = this.transform.position;
 
+            //変更を検出する準備をする
+            _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
 
             _enemyStatus.OnStiffnessTimeChange.Subscribe(stiffnessTime => {
                 if (stiffnessTime > 0)
@@ -85,6 +86,17 @@ namespace Scenes.Ingame.Enemy
 
         public override void FixedUpdateNetwork()
         {
+
+            //変更を検出しUniRxのイベントを発行す
+            foreach (var change in _changeDetector.DetectChanges(this))
+            {
+                switch (change)
+                {
+                    case nameof(_movePosition):
+                        _myAgent.destination = _movePosition;
+                        break;
+                }
+            }
 
 
             if (Vector3.Magnitude(this.transform.position - _myAgent.path.corners[_myAgent.path.corners.Length - 1]) < 1.5f)
@@ -168,10 +180,10 @@ namespace Scenes.Ingame.Enemy
 
         }
 
-            private void SpeedChange() {
+        private void SpeedChange() {
             
 
-                if (_stiffness)
+            if (_stiffness)
                 {//硬直中は移動不能に
                     _myAgent.speed = 0;
                 }
@@ -222,7 +234,7 @@ namespace Scenes.Ingame.Enemy
 
 
                     }
-                }
+            }
             
         }
 
@@ -231,8 +243,8 @@ namespace Scenes.Ingame.Enemy
 
         public void SetMovePosition(Vector3 targetPosition)
         {
-            _movePosition = targetPosition;
-            _myAgent.destination = targetPosition;
+                _movePosition = targetPosition;
+
         }
 
         /// <summary>

@@ -136,18 +136,10 @@ namespace Scenes.Ingame.Enemy
         public float PatrollingSpeed { get { return _patrollingSpeed; } }
         public float SearchSpeed { get { return _searchSpeed; } }
         public float ChaseSpeed { get { return _chaseSpeed; } }
-
         public int StaminaBase { get { return _staminaBase; } }
-
         public bool ReactToLight { get { return _reactToLight; } }
-
         public int Horror { get { return _horror; } }
-
-
         public float BrindCheseTime { get { return _blindCheseTime; } }
-
-
-
         public int DiscoverTime { get { return _discoverTime; } }
         public int EnemyId { get { return _enemyId; } }
 
@@ -273,8 +265,11 @@ namespace Scenes.Ingame.Enemy
         }
 
         public void SetEnemyState(EnemyState state) {
-            if (_debugMode) { Debug.Log("State変更" + State); }
-            State = state;
+            if (HasStateAuthority)
+            {//Stateの変更は予期せぬ動作やアニメーションにかかわるのでホストのみが行う
+                if (_debugMode) { Debug.Log("State変更" + State); }
+                State = state;
+            }
         }
 
         /// <summary>

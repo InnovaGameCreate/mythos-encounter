@@ -3,10 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
+using Fusion;
+
 namespace Scenes.Ingame.Enemy
 {
 
-    public class EnemyAttackBehaviour : MonoBehaviour
+    public class EnemyAttackBehaviour : NetworkBehaviour
     {
         [SerializeField][Tooltip("d’¼ŠÔ")] protected float _stiffness;
         [SerializeField][Tooltip("Ë’ö")] protected float _range;
