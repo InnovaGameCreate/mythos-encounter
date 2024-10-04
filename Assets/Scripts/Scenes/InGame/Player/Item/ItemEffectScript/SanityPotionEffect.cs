@@ -7,8 +7,6 @@ namespace Scenes.Ingame.Player
 {
     public class SanityPotionEffect : ItemEffect
     {
-        private float _startTime;
-        private float _lapTime;
         private bool _stopCoroutineBool = false;
 
 
@@ -34,7 +32,6 @@ namespace Scenes.Ingame.Player
             {
                 Debug.Log("SAN値が最大なので使用不可");
             }
-
         }
 
         public IEnumerator UseSanityPotion()
@@ -46,14 +43,10 @@ namespace Scenes.Ingame.Player
             ownerPlayerStatus.ChangeSpeed();
             ownerPlayerItem.ChangeCanChangeBringItem(false);
 
-            _startTime = Time.time;
-            _lapTime = Time.time;
-
-            Debug.Log(_startTime);
+            int count = 0;
 
             while (true)
             {
-                yield return null;
                 //攻撃を食らった際にこのコルーチンを破棄              
                 if (_stopCoroutineBool == true)
                 {
@@ -66,13 +59,12 @@ namespace Scenes.Ingame.Player
                     yield break;
                 }
 
-                if(Time.time - _lapTime >= 0.45f)
-                {
-                    ownerPlayerStatus.ChangeSanValue(1, ChangeValueMode.Heal);
-                    _lapTime = Time.time;
-                }
+                yield return new WaitForSeconds(0.5f);
+                ownerPlayerStatus.ChangeSanValue(1, ChangeValueMode.Heal);
+                count++;
 
-                if (Time.time - _startTime >= 5.0f || ownerPlayerStatus.nowPlayerSanValue == 100)
+                //SAN値が10回復または最大となった場合にアイテムを消費
+                if (count >= 10 || ownerPlayerStatus.nowPlayerSanValue >= 100)
                 {
                     ownerPlayerStatus.UseItem(false);
                     ownerPlayerStatus.ChangeSpeed();
