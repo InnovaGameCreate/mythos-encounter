@@ -61,6 +61,7 @@ namespace Scenes.Ingame.InGameSystem.UI
             }
         }
 
+        // マウスがどのボタンをクリックしたかの判定
         public void OnPointerClick(PointerEventData eventData) 
         {
             if (!TitleState.GetSetWindow)
