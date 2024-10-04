@@ -1,41 +1,38 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UniRx;
-using UniRx.Triggers;
-using TMPro;
+using Fusion;
 using Common.Network;
 
 namespace Scenes.Lobby.RoomSettingPanel
 {
     public class RoomSetting_3 : MonoBehaviour
     {
-        [SerializeField] private List<TMP_Text> _playerNames;
-
-        private void Start()
-        {
-            this.FixedUpdateAsObservable(). //プレイヤーリストの更新
-                Subscribe(_ => UpdatePlayerList());
-        }
+        [SerializeField] private UIManager _uiManagerCs;
+        [SerializeField] private int _sessionStartSceneIndex = 0;
 
         /// <summary>
-        /// プレイヤーリストの更新
+        /// パブリックセッションへの参加
         /// </summary>
-        private void UpdatePlayerList()
+        public async void JoinPublicSession()
         {
-            var playerInfos = FindObjectsOfType<PlayerInfo>();
+            if (RunnerManager.Instance.SessionInfoList.Count == 0) return; //セッションが存在するかを判定
 
-            for (int i = 0; i < _playerNames.Count; i++)
+            var args = new StartGameArgs()
             {
-                if (i < playerInfos.Length)
-                {
-                    _playerNames[i].text = playerInfos[i].userName;
-                }
-                else
-                {
-                    _playerNames[i].text = "メンバーがいません";
-                }
-            }
+                GameMode = GameMode.Client, //セッション内権限
+                Scene = SceneRef.FromIndex(_sessionStartSceneIndex), //セッション開始シーン
+                SceneManager = RunnerManager.Runner.GetComponent<NetworkSceneManagerDefault>(), //Fusion用のシーン遷移を管理するコンポーネント
+                ConnectionToken = Guid.NewGuid().ToByteArray(), //プレイヤーの接続トークン
+            };
+
+            var result = await RunnerManager.Runner.StartGame(args); //セッション開始
+        }
+
+        public void ToRoomSetting_4()
+        {
+            _uiManagerCs.ChangePanel(3);
         }
     }
 }

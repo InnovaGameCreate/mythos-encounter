@@ -10,31 +10,20 @@ namespace Scenes.Lobby.RoomSettingPanel
     public class RoomSetting_2 : MonoBehaviour
     {
         [SerializeField] private UIManager _uiManagerCs;
-        [SerializeField] private int _playerNum = 4;
+        [SerializeField] private int _maxPlayer = 4;
         [SerializeField] private int _sessionStartSceneIndex = 0;
 
-        public void ToRoomSetting_3()
-        {
-            _uiManagerCs.ChangePanel(2);
-            SessionCreate(); //パブリックセッション作成
-        }
-
-        public void ToRoomSetting_4()
-        {
-            _uiManagerCs.ChangePanel(3);
-            SessionCreate(Guid.NewGuid().ToString()); //プライベートセッション作成
-        }
-
         /// <summary>
-        /// セッション作成
+        /// セッション作成（パブリック）
         /// </summary>
-        private async void SessionCreate()
+        public async void CreatePublicSession()
         {
             var args = new StartGameArgs()
             {
                 GameMode = GameMode.Host, //セッション内権限
-                SceneManager = RunnerManager.Runner.GetComponent<NetworkSceneManagerDefault>(),
-                PlayerCount = _playerNum, //最大人数の決定
+                Scene = SceneRef.FromIndex(_sessionStartSceneIndex), //セッション開始シーン
+                SceneManager = RunnerManager.Runner.GetComponent<NetworkSceneManagerDefault>(), //Fusion用のシーン遷移を管理するコンポーネント
+                PlayerCount = _maxPlayer, //最大人数の決定
                 ConnectionToken = Guid.NewGuid().ToByteArray(), //プレイヤーの接続トークン
             };
 
@@ -45,16 +34,18 @@ namespace Scenes.Lobby.RoomSettingPanel
         /// セッション作成（プライベート）
         /// </summary>
         /// <param name="sessionName"></param>
-        private async void SessionCreate(string sessionName)
+        public async void CreatePrivateSession()
         {
+            string sessionName = Guid.NewGuid().ToString();
             Debug.Log("Session Name : " + sessionName);
 
             var args = new StartGameArgs()
             {
                 GameMode = GameMode.Host, //セッション内権限
+                Scene = SceneRef.FromIndex(_sessionStartSceneIndex), //セッション開始シーン
                 SceneManager = RunnerManager.Runner.GetComponent<NetworkSceneManagerDefault>(), //Fusion用のシーン遷移を管理するコンポーネント
                 SessionName = sessionName, //セッション名
-                PlayerCount = _playerNum, //最大人数の決定
+                PlayerCount = _maxPlayer, //最大人数の決定
                 ConnectionToken = Guid.NewGuid().ToByteArray(), //プレイヤーの接続トークン
             };
 
