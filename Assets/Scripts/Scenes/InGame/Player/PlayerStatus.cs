@@ -28,7 +28,12 @@ namespace Scenes.Ingame.Player
         /// <summary>
         /// ダメージを受ける（体力専用）
         /// </summary>
-        Bleeding
+        Bleeding,
+
+        /// <summary>
+        /// デバッグ用.DebugToolのSliderの影響を受ける
+        /// </summary>
+        Debug
     }
 
     public class PlayerStatus : MonoBehaviour
@@ -131,6 +136,7 @@ namespace Scenes.Ingame.Player
         private bool _isUseMagic = false;
         private bool _isHaveCharm = false;
         private bool _isProtect = false;//バリア呪文でダメージを防ぐか否か
+        private bool _isInvincibleMode = false;//デバッグ用. 敵による体力,SAN値の減少を無効化
         private bool _isUseEscapePoint = false;
         private bool _isPulsationBleeding = false;
 
@@ -259,10 +265,13 @@ namespace Scenes.Ingame.Player
             }
             else if (mode == ChangeValueMode.Damage)
             {
+                if (_isInvincibleMode)
+                    return;
+
                 if (_isProtect)
                 {
                     _isProtect = false;
-                    Debug.Log("呪文によりダメージが無効化されました。");
+                    Debug.Log("ダメージが無効化されました。");
                     return;
                 }
                 lastHP = _health.Value;
@@ -273,6 +282,12 @@ namespace Scenes.Ingame.Player
             {
                 lastHP = _health.Value;
                 _health.Value = Mathf.Max(0, _health.Value - value);
+            }
+            else if (mode == ChangeValueMode.Debug)
+            {
+                lastHP = _health.Value;
+                _health.Value = value;
+                _bleedingHealth.Value = value;
             }
         }
 
@@ -294,10 +309,13 @@ namespace Scenes.Ingame.Player
             }
             else if (mode == ChangeValueMode.Damage)
             {
+                if (_isInvincibleMode)
+                    return;
+
                 if (_isProtect)
                 {
                     _isProtect = false;
-                    Debug.Log("呪文によりダメージが無効化されました。");
+                    Debug.Log("ダメージが無効化されました。");
                     return;
                 }
                 lastHP = _health.Value;
@@ -349,8 +367,16 @@ namespace Scenes.Ingame.Player
 
             else if (mode == ChangeValueMode.Damage)
             {
+                if (_isInvincibleMode)
+                    return;
+
                 lastSanValue = _san.Value;
                 _san.Value = Mathf.Max(0, _san.Value - value / (_isHaveCharm ? 2 : 1));
+            }
+            else if (mode == ChangeValueMode.Debug)
+            {
+                lastSanValue = _san.Value;
+                _san.Value = value;
             }
         }
 
@@ -397,6 +423,16 @@ namespace Scenes.Ingame.Player
         { 
             _isProtect = value;
         }
+
+        /// <summary>
+        /// デバッグ用。敵による体力,SAN値の減少を無効化するのか判定するBoolを変更する関数
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetInvincibleModeBool(bool value)
+        {
+            _isInvincibleMode = value;
+        }
+
 
         /// <summary>
         /// 呪文を唱えているか管理するための関数
