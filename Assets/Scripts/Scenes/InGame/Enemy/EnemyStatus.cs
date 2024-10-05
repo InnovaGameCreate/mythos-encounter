@@ -131,6 +131,7 @@ namespace Scenes.Ingame.Enemy
             get { return _staminaOverSubject; }
         }
 
+        [HideInInspector][Networked] private EnemySpawner _enemySpawner { get; set; }
 
         //##########GetとかSetのかたまり
         public float PatrollingSpeed { get { return _patrollingSpeed; } }
@@ -155,21 +156,27 @@ namespace Scenes.Ingame.Enemy
 
 
 
-
         /// <summary>
         /// 初期設定をする。外部から呼び出すこととする
         /// </summary>
-        /// <param name="visivilityMap">このEnemyの扱うEnemyVisivilityMap</param>
-        /// <returns>正常にセットアップできたかどうか</returns>
-        public bool Init(EnemyVisibilityMap visivilityMap) {
+        public void Init(EnemySpawner spawner) {
+            _enemySpawner = spawner;
+            RPC_Init();
+        }
+
+
+        [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
+        public void RPC_Init()
+        {
+            _myEnemyVisivilityMap = _enemySpawner.GetEnemyVisivilityMap().DeepCopy();
             //初期値を設定してゆく
             ResetStatus();
 
 
             //自身についているメソッドの初期化
             _enemyMove.Init();
-            _enemySearch.Init(visivilityMap);
-            _enemyAttack.Init(visivilityMap.DeepCopy());//Atackはサーチの後にInit          
+            _enemySearch.Init(_myEnemyVisivilityMap);
+            _enemyAttack.Init(_myEnemyVisivilityMap.DeepCopy());//Atackはサーチの後にInit          
             _enemyUniqueAction.Init(_actionCoolTime);
 
             //撃破されたことを検出
@@ -184,9 +191,9 @@ namespace Scenes.Ingame.Enemy
 
             this.gameObject.TryGetComponent<AudioSource>(out _audioSource);
             _audioSource.volume = _footSoundBase;
-
-            return true;
         }
+
+
 
         /*
          if (x)//拘束状態になった瞬間
@@ -368,5 +375,7 @@ namespace Scenes.Ingame.Enemy
                 _audioSource.volume = _footSoundBase;
             }
         }
+
+
     }
 }
