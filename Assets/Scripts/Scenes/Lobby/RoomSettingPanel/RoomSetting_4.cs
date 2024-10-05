@@ -39,7 +39,7 @@ namespace Scenes.Lobby.RoomSettingPanel
                 GameMode = GameMode.Client, //セッション内権限
                 Scene = SceneRef.FromIndex(_sessionStartSceneIndex), //セッション開始シーン
                 SceneManager = RunnerManager.Runner.GetComponent<NetworkSceneManagerDefault>(), //Fusion用のシーン遷移を管理するコンポーネント
-                SessionName = sessionName, //セッション名
+                SessionName = sessionName, //セッションID
                 ConnectionToken = Guid.NewGuid().ToByteArray(), //プレイヤーの接続トークン
             };
 
