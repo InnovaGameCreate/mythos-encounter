@@ -668,6 +668,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 830e5c02a7bf2c143be7c4c937c69f29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _publicButton: {fileID: 6792360745135182743}
+  _privateButton: {fileID: 7993751112309032849}
+  _closeButton: {fileID: 2914081624970914739}
   _uiManagerCs: {fileID: 7483356567508321421}
   _maxPlayer: 4
   _sessionStartSceneIndex: 2
@@ -1597,8 +1600,6 @@ MonoBehaviour:
   _roomSettingPanels:
   - {fileID: 7654372781694056009}
   - {fileID: 1330679485525505362}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 3087905441002177067}
   - {fileID: 7687122041519802470}
   _lookDisplayObjectCs: {fileID: 666526297674444513}
@@ -1650,7 +1651,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86de992529e611a4da3b4a8f5dadef8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _publicButton: {fileID: 9035703584150871592}
+  _privateButton: {fileID: 7615734773406203871}
+  _closeButton: {fileID: 2914081624970914739}
   _uiManagerCs: {fileID: 7483356567508321421}
+  _dialog: {fileID: 6608634192861274817, guid: b385e2a1cc3641349857c091ab1e86b9, type: 3}
   _sessionStartSceneIndex: 2
 --- !u!1 &3815794444053654733
 GameObject:
@@ -3535,7 +3540,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u30EB\u30FC\u30E0\u53C2\u52A0\uFF08\u30D1\u30D6\u30EA\u30C3\u30AF\uFF09"
+  m_text: "\u30EB\u30FC\u30E0\u53C2\u52A0\uFF08\u30D7\u30E9\u30A4\u30D9\u30FC\u30C8\uFF09"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 13f777f8d3e8a2548a2c04bf16ab08db, type: 2}
   m_sharedMaterial: {fileID: 3593318242743413944, guid: 13f777f8d3e8a2548a2c04bf16ab08db, type: 2}
@@ -3701,7 +3706,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd14394ff0911f14f82e80797d2e0381, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _enterRoomButton: {fileID: 8337852471687236395}
+  _closeButton: {fileID: 2914081624970914739}
   _sessionName: {fileID: 63734234674812912}
+  _uiManagerCs: {fileID: 7483356567508321421}
+  _dialog: {fileID: 6608634192861274817, guid: b385e2a1cc3641349857c091ab1e86b9, type: 3}
   _sessionStartSceneIndex: 2
 --- !u!1 &8243487597123938025
 GameObject:

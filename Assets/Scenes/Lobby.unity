@@ -2543,19 +2543,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5495451142414428879, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -1
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5495451142414428879, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 6.217249e-15
+      value: -0.000000059604638
       objectReference: {fileID: 0}
     - target: {fileID: 5495451142414428879, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.00000017881393
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 5495451142414428879, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.00000004214685
+      value: 0.00000004214685
       objectReference: {fileID: 0}
     - target: {fileID: 5847435930969654424, guid: 532daeab6706e1146b06e5cf476c0d7e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -13252,6 +13252,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1490878117}
     m_Modifications:
+    - target: {fileID: 2623005211520337473, guid: b9023d7160081a9408f5b7892bdcbb2e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3087905441002177067, guid: b9023d7160081a9408f5b7892bdcbb2e, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4642258471064195046, guid: b9023d7160081a9408f5b7892bdcbb2e, type: 3}
       propertyPath: m_Name
       value: obj_Settings_tmp
@@ -18569,10 +18577,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7b2e274c57daed4184ccf55e7baad5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _players:
-  - {fileID: 0}
-  _playerStatuses:
-  - {fileID: 0}
 --- !u!114 &1655802480
 MonoBehaviour:
   m_ObjectHideFlags: 0

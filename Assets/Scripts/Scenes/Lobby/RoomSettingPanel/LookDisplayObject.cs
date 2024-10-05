@@ -5,6 +5,7 @@ using Cysharp.Threading.Tasks;
 using Fusion;
 using DG.Tweening;
 using Common.Network;
+using Scenes.Ingame.Player;
 
 namespace Scenes.Lobby.RoomSettingPanel
 {
@@ -50,7 +51,10 @@ namespace Scenes.Lobby.RoomSettingPanel
             else _displayState = DisplayState.Motion;
 
             //モーション前処理
-            _displayCamera.enabled = true;
+            var playerMove = FindObjectOfType<PlayerMove>(); //プレイヤーの固定
+            playerMove.MoveControl(false);
+            playerMove.RotateControl(false);
+            _displayCamera.enabled = true; //カメラの切り替え
 
             //処理待機
             await UniTask.WhenAll(
@@ -59,9 +63,9 @@ namespace Scenes.Lobby.RoomSettingPanel
                 BootRunner()); //NetworkRunner起動
 
             //モーション後処理
-            Cursor.visible = true;
+            Cursor.visible = true; //カーソル固定の解除
             Cursor.lockState = CursorLockMode.None;
-            _uiPanel.SetActive(true);
+            _uiPanel.SetActive(true); //パネルUIの有効化
             _displayState = DisplayState.Open;
         }
 
@@ -75,9 +79,9 @@ namespace Scenes.Lobby.RoomSettingPanel
             else _displayState = DisplayState.Motion;
 
             //モーション前処理
-            Cursor.visible = false;
+            Cursor.visible = false; //カーソルの固定
             Cursor.lockState = CursorLockMode.Locked;
-            _uiPanel.SetActive(false);
+            _uiPanel.SetActive(false); //パネルUIの無効化
             DiscardRunner(); //Runnerの停止
 
             //処理待機
@@ -86,7 +90,10 @@ namespace Scenes.Lobby.RoomSettingPanel
                 CameraRotate(_displayRotation, Camera.main.transform.rotation));
 
             //モーション後処理
-            _displayCamera.enabled = false;
+            _displayCamera.enabled = false; //カメラの切り替え
+            var playerMove = FindObjectOfType<PlayerMove>(); //プレイヤーの固定解除
+            playerMove.MoveControl(true);
+            playerMove.RotateControl(true);
             _displayState = DisplayState.Close;
         }
 

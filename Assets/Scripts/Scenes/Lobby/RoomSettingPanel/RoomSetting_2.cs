@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Fusion;
 using Common.Network;
 
@@ -9,6 +10,9 @@ namespace Scenes.Lobby.RoomSettingPanel
 {
     public class RoomSetting_2 : MonoBehaviour
     {
+        [SerializeField] private Button _publicButton;
+        [SerializeField] private Button _privateButton;
+        [SerializeField] private Button _closeButton;
         [SerializeField] private UIManager _uiManagerCs;
         [SerializeField] private int _maxPlayer = 4;
         [SerializeField] private int _sessionStartSceneIndex = 0;
@@ -18,6 +22,8 @@ namespace Scenes.Lobby.RoomSettingPanel
         /// </summary>
         public async void CreatePublicSession()
         {
+            ButtonControl(false); //ボタンロック
+
             var args = new StartGameArgs()
             {
                 GameMode = GameMode.Host, //セッション内権限
@@ -28,6 +34,10 @@ namespace Scenes.Lobby.RoomSettingPanel
             };
 
             var result = await RunnerManager.Runner.StartGame(args); //セッション開始
+            if (result.Ok == false)
+            {
+                ButtonControl(true); //ボタンロック解除
+            }
         }
 
         /// <summary>
@@ -36,6 +46,8 @@ namespace Scenes.Lobby.RoomSettingPanel
         /// <param name="sessionName"></param>
         public async void CreatePrivateSession()
         {
+            ButtonControl(false); //ボタンロック
+
             string sessionName = Guid.NewGuid().ToString();
             Debug.Log("Session Name : " + sessionName);
 
@@ -50,6 +62,21 @@ namespace Scenes.Lobby.RoomSettingPanel
             };
 
             var result = await RunnerManager.Runner.StartGame(args); //セッション開始
+            if (result.Ok == false)
+            {
+                ButtonControl(true); //ボタンロック解除
+            }
+        }
+
+        /// <summary>
+        /// ボタンのロック制御
+        /// </summary>
+        /// <param name="state"></param>
+        private void ButtonControl(bool state)
+        {
+            _publicButton.interactable = state;
+            _privateButton.interactable = state;
+            _closeButton.interactable = state;
         }
     }
 }
