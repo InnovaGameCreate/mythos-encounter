@@ -147,6 +147,13 @@ public class DebugTool : EditorWindow
             }
         }
 
+        if (GUILayout.Button("アイテムリスト更新", GUILayout.Width(250)))
+        {
+            _itemPrefabs = SetItemPrefabList();
+            if (_searchText != "")
+                _searchText = "";
+        }
+
 
         //脱出地点にワープ
         EditorGUILayout.LabelField("脱出地点にワープ", EditorStyles.largeLabel);
@@ -183,7 +190,7 @@ public class DebugTool : EditorWindow
 
         //プレイヤーの体力増減を行う
         EditorGUILayout.LabelField("プレイヤーのパラメータ変更", EditorStyles.largeLabel);
-        _isInvincibleMode.Value = EditorGUILayout.Toggle("攻撃を無敵化", _isInvincibleMode.Value);
+        _isInvincibleMode.Value = EditorGUILayout.Toggle("攻撃を無効化", _isInvincibleMode.Value);
         _applyDebugValueMode.Value = EditorGUILayout.Toggle("Sliderの値を適応", _applyDebugValueMode.Value);
         _debugHealth.Value = EditorGUILayout.IntSlider("体力", _debugHealth.Value, 0, 100);
         _debugSanValue.Value = EditorGUILayout.IntSlider("SAN値", _debugSanValue.Value, 0, 100);
