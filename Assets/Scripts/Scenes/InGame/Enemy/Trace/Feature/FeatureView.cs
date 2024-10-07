@@ -36,18 +36,17 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
 
         IEnumerator FloorCheck()
         {
-            Ray ray = new Ray(_enemy.transform.position, direction);
+            LayerMask floorMask = LayerMask.GetMask("Floor");
             RaycastHit hit;
-            Physics.Raycast(ray.origin, ray.direction, out hit, 1.0f, 7);
             while (true)
             {
-                if (hit.collider.layerOverridePriority == 7)
-                    {
-                        _floor = hit.collider.gameObject;
-                        _stagetile = _floor.GetComponent<StageTile>();
-                        floor.Value = _floor;
-                }
-                
+                Ray ray = new Ray(_enemy.transform.position, direction);
+                if (Physics.Raycast(ray.origin, ray.direction, out hit, 1.0f, floorMask))
+                {
+                    _floor = hit.collider.gameObject;
+                    _stagetile = _floor.GetComponent<StageTile>();
+                    floor.Value = _floor;
+                }    
                 yield return new WaitForSeconds(1f);
             }
         }
@@ -55,6 +54,7 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         public void Temperature(float change)
         {
             stagetile.TemperatureChange(change);
+            Debug.Log(stagetile.Temperature);
         }
 
         public void Msv(int change)

@@ -19,6 +19,8 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
             _view.OnFloor.Skip(1).Subscribe(_ =>
             {
                 _change = _view.stagetile.Temperature - 10;
+                if (_change < _view.stagetile.Keep - 10)
+                    _change = _view.stagetile.Keep;
                 _view.Temperature(_change);
             }).AddTo(view.gameObject); ;
             

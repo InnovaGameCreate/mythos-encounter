@@ -57,8 +57,11 @@ namespace Scenes.Ingame.Stage
                     _msv -= 1;
                     yield return new WaitForSeconds(1f);
                 }
-                _msv = Random.Range(90, 101);
-                yield return new WaitForSeconds(0.5f);
+                else
+                {
+                    _msv = Random.Range(90, 101);
+                    yield return new WaitForSeconds(0.5f);
+                }
             }
         }
 
@@ -119,9 +122,9 @@ namespace Scenes.Ingame.Stage
             get { return _msv; } 
         }
 
-        public bool Flag
+        public float Keep
         {
-            get { return _flag; }
+            get { return _keep; }
         }
     }
 }
