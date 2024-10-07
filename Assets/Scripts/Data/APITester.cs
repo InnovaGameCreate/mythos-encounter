@@ -131,6 +131,7 @@ public class APITester : MonoBehaviour
             _textMeshPro.text += $"not met enemy id is {item}\n";
         }
     }
+
     private void ViewEnemyAttackTable()
     {
         var data = WebDataRequest.GetEnemyAttacArrayList;
@@ -141,6 +142,7 @@ public class APITester : MonoBehaviour
             _textMeshPro.text += $"{item.attackId},{item.name},{item.directDamage},{item.bleedingDamage},{item.stanTime},{item.attackProbability},{item.accuracy},{item.speed}\n";
         }
     }
+
     private void PutPlayerDebugData()
     {
         if (_NameIput.text == "" || _IdInput.text == "")

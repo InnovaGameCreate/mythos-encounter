@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
 namespace Data
 {
     public class PlayerInformationFacade : MonoBehaviour
@@ -33,6 +34,7 @@ namespace Data
 
         public static PlayerInformationFacade Instance;
         PlayerInformation playerInformation;
+
         private void Awake()
         {
             Instance = this;
@@ -98,7 +100,7 @@ namespace Data
                 case ItemRequestType.All:
                     return playerInformation.Items;
                 case ItemRequestType.Owned:
-                    return playerInformation.Items.Where(x => x.Value > 0).ToDictionary(x => x.Key,x => x.Value);
+                    return playerInformation.Items.Where(x => x.Value > 0).ToDictionary(x => x.Key, x => x.Value);
                 case ItemRequestType.NotOwned:
                     return playerInformation.Items.Where(x => x.Value == 0).ToDictionary(x => x.Key, x => x.Value);
                 default:
@@ -121,7 +123,7 @@ namespace Data
                 case spellRequestType.NotOwned:
                     return playerInformation.Spell.Where(x => x.Value == false).ToDictionary(x => x.Key, x => WebDataRequest.GetSpellDataArrayList[x.Key]);
                 default:
-                    Debug.LogError("?????????m??????????????");
+                    Debug.LogError("ˆø”‚ª³Šm‚Å‚Í‚ ‚è‚Ü‚¹‚ñ");
                     return null;
             }
         }
@@ -131,14 +133,15 @@ namespace Data
             playerInformation.SpellUnlock(spellId);
         }
 
-        public void GetItem(int itemId,int count)
+        public void GetItem(int itemId, int count)
         {
             playerInformation.GetItem(itemId, count);
         }
-        public void LostItem(int itemId,int count)
+
+        public void LostItem(int itemId, int count)
         {
             int lostCount = 0;
-            if(playerInformation.Items[itemId] > count)
+            if (playerInformation.Items[itemId] > count)
             {
                 lostCount = count;
             }
@@ -148,9 +151,32 @@ namespace Data
             }
             playerInformation.GetItem(itemId, -lostCount);
         }
+
         public void MetEnemy(int enemyId)
         {
             playerInformation.MetEnemy(enemyId);
+        }
+
+        public void SendPlayerInformation()
+        {
+            PlayerDataStruct sendData = new PlayerDataStruct();
+            var items = playerInformation.Items
+                .Where(kv => kv.Value > 0)
+                .GroupBy(kv => kv.Key)
+                .Select(g => $"{g.Key}={g.Sum(kv => kv.Value)}")
+                .ToArray();
+            var encount = playerInformation.MythCreature
+                .Where(kv => kv.Value > 0)
+                .GroupBy(kv => kv.Key)
+                .Select(g => $"{g.Key}={g.Sum(kv => kv.Value)}")
+                .ToArray();
+            var spells = playerInformation.Spell
+                .Where(kv => kv.Value)
+                .GroupBy(kv => kv.Key)
+                .Select(g => $"{g.Key}")
+                .ToArray();
+            sendData.PlayerDataSet(playerInformation.CharacterId, playerInformation.name, playerInformation.Created, playerInformation.End, playerInformation.Money, items, encount, spells, GetEscapeCount(EscapeRequestType.EscapeAndDispersingEscape));
+            WebDataRequest.PutPlayerData(sendData).Forget();
         }
     }
 }
