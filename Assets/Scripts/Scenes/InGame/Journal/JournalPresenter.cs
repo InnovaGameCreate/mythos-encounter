@@ -1,31 +1,29 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UniRx;
+using Unity.VisualScripting;
 
-public enum JurnalState
+namespace Scenes.Ingame.Journal
 {
-    Feature,
-    Spell,
-    EnemyInfo,
-    Item,
-    Progress,
-    Setting
-}
-public class JournalPresenter : MonoBehaviour
-{
-    [SerializeField]
-    List<GameObject> _pages = new List<GameObject>();
-
-    int _nowPageNumber = 0;
-
-    void Start()
+    public class JournalPresenter : MonoBehaviour
     {
-        for(int i = 0; i < _pages.Count; i++)   //最初のページ以外非表示
+        [SerializeField] private JournalView _jornalView;
+        private JournalPageManager _journalPageManager;
+        void Start()
         {
-            if (i != _nowPageNumber)
-                _pages[i].SetActive(false);
+            _journalPageManager = GetComponent<JournalPageManager>();
+            _journalPageManager.Init();
+            _jornalView.Init();
+            _journalPageManager.CurrentPage.Subscribe(pageType => _jornalView.PageChange(pageType)).AddTo(this);
+            _journalPageManager.OnJornalOpen.Subscribe(_ => _jornalView.Open()).AddTo(this);
+            _journalPageManager.OnJornalClose.Subscribe(_ => _jornalView.Close()).AddTo(this);
+            _jornalView.OnJornalTagClick.Subscribe(pageType =>
+            {
+                Debug.Log("OnJornalTagClick");
+                _journalPageManager.ChangePage(pageType);
+            }).AddTo(this);
         }
-
-
     }
 }

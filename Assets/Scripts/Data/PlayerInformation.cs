@@ -92,7 +92,6 @@ namespace Data
             {
                 var decode = data.MythCreature[i].Split('=');
                 if (decode.Length > 2) Debug.LogError($"Failed decode mythCreature data. {data.MythCreature[i]}");
-                 Debug.Log($"decode  {data.MythCreature[i]}");
                 _mythCreature[int.Parse(decode[0])] = int.Parse(decode[1]);
             }
             Debug.Log("end");

@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using LitJson;
 using Scenes.Ingame.Enemy.Trace;
+using Scenes.Ingame.Journal;
 
 public enum DataType
 {
@@ -96,6 +97,9 @@ public class WebDataRequest : MonoBehaviour
     private const int TIMEOUTMILISECOND = 10000;//?^?C???A?E?g????10?b(?~???P??)
     private List<string[]>[] DataArrayList;
     private bool debugMode = true;
+    public static WebDataRequest instance;
+    private Subject<Unit> _endLoad = new Subject<Unit>();
+    public IObservable<Unit> OnEndLoad { get { return _endLoad; } }
     public static List<ItemDataStruct> GetItemDataArrayList { get => ItemDataArrayList; }
     public static List<SpellStruct> GetSpellDataArrayList { get => SpellDataArrayList; }
     public static List<PlayerDataStruct> GetPlayerDataArrayList { get => PlayerDataArrayList; }
@@ -104,6 +108,14 @@ public class WebDataRequest : MonoBehaviour
     public static bool OnCompleteLoadData = false;
     void Awake()
     {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this);
+        }
         _timeOutToken = new CancellationTokenSource();
         _loadSuccessToken = new CancellationTokenSource();
         TimeOutTimer(_loadSuccessToken.Token).Forget();
@@ -152,6 +164,7 @@ public class WebDataRequest : MonoBehaviour
         ConvertStringToEnemyAttackData(DataArrayList[(int)DataType.EnemyAttackTable]);
         OnCompleteLoadData = true;
         _loadSuccessToken.Cancel();
+        _endLoad.OnNext(default);
     }
     public static async UniTaskVoid PutPlayerData(PlayerDataStruct sendData)
     {

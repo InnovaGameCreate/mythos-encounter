@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using UnityEngine.InputSystem;
+using System;
 
 namespace Scenes.Ingame.Journal
 {
@@ -13,9 +14,13 @@ namespace Scenes.Ingame.Journal
 
         [SerializeField]
         PlayerJournalTest _player;
-        
-        [SerializeField]
-        List<GameObject> _pages = new List<GameObject>();
+
+        private ReactiveProperty<PageType> _currentPage = new ReactiveProperty<PageType>(PageType.Progress);//現在のページ
+        public IObservable<PageType> CurrentPage { get { return _currentPage; } }
+        private Subject<Unit> _jornalOpen = new Subject<Unit>();
+        public IObservable<Unit> OnJornalOpen { get { return _jornalOpen; } }
+        private Subject<Unit> _jornalClsoe = new Subject<Unit>();
+        public IObservable<Unit> OnJornalClose { get { return _jornalClsoe; } }
         int _nowPage = 0;
 
         void Awake()
@@ -24,7 +29,7 @@ namespace Scenes.Ingame.Journal
             _inputs.UI.ChangePage.performed += OnChangePage;  //ページ変更ボタンが押されたときのコールバックを登録
         }
 
-        void Start()
+        public void Init()
         {
             _player.OnChangeJournalState
                 .Subscribe(x =>
@@ -34,12 +39,6 @@ namespace Scenes.Ingame.Journal
                     else
                         CloseJournal();
                 }).AddTo(this);
-
-            foreach (var element in _pages)
-            {
-                element.SetActive(false);
-            }
-
             this.gameObject.SetActive(false);
         }
 
@@ -52,22 +51,21 @@ namespace Scenes.Ingame.Journal
         void OpenJournal()
         {
             this.gameObject.SetActive(true);
-            _pages[_nowPage].SetActive(true);   //現在のページを表示
+            _jornalOpen.OnNext(default);
+        }
+
+        //ページを指定して変更
+        public void ChangePage(PageType pageType)
+        {
+            _currentPage.Value = pageType;
         }
 
         //ページ変更
-        void OnChangePage(InputAction.CallbackContext context)
+        private void OnChangePage(InputAction.CallbackContext context)
         {
             //if (!this.gameObject.activeSelf) return;
 
-            _pages[_nowPage].SetActive(false);
-
-            if (_nowPage < _pages.Count - 1)    //最終ページの場合、最初のページに戻る
-                _nowPage++;
-            else if (_nowPage == _pages.Count - 1)
-                _nowPage = 0;
-
-            _pages[_nowPage].SetActive(true);
+            _currentPage.Value = (PageType)Enum.ToObject(typeof(PageType), ((int)_currentPage.Value + 1) % Enum.GetValues(typeof(PageType)).Length);
         }
 
         void OnDestroy()
@@ -78,8 +76,8 @@ namespace Scenes.Ingame.Journal
         //ジャーナルを閉じる
         void CloseJournal()
         {
-            _pages[_nowPage].SetActive(false);
             this.gameObject.SetActive(false);
+            _jornalClsoe.OnNext(default);
         }
     }
 }
