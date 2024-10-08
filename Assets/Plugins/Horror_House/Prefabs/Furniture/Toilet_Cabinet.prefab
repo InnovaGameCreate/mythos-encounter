@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 372794287650274581}
   - component: {fileID: 5240013730682685493}
   - component: {fileID: 6207225465436183222}
-  - component: {fileID: 2377437439737234303}
+  - component: {fileID: 1799456515939463726}
   m_Layer: 11
   m_Name: Toilet_Cabinet_Box_LOD2
-  m_TagString: StageIntract
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2377437439737234303
+--- !u!114 &1799456515939463726
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,7 +122,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2179970273721753357}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -146,7 +146,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2179970273721753357}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -213,9 +213,9 @@ GameObject:
   - component: {fileID: 2738906013211750641}
   - component: {fileID: 1497496055133386387}
   - component: {fileID: 8716252795489392177}
-  - component: {fileID: 6880836467895431135}
-  - component: {fileID: 648675417026424935}
-  - component: {fileID: 7639805382921595941}
+  - component: {fileID: 595395351145674823}
+  - component: {fileID: 8266339436708435454}
+  - component: {fileID: 4326716436772894325}
   m_Layer: 11
   m_Name: Toilet_Cabinet_Box_LOD0
   m_TagString: StageIntract
@@ -256,7 +256,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2932024224111585873}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -311,21 +311,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.47320485, y: 0.28637785, z: 0.6679672}
   m_Center: {x: 0.24661708, y: 0.7618835, z: 0.355344}
---- !u!114 &6880836467895431135
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2932024224111585873}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8c42b0ddf104834eba065e2435c2642, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  drawType: 2
-  _initialStateOpen: 0
---- !u!114 &648675417026424935
+--- !u!114 &595395351145674823
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -400,37 +386,13 @@ MonoBehaviour:
       serializedProperties:
       - PropertyName: _PublicColor
         Property:
-          ColorValue: {r: 0.5, g: 0.5, b: 0.5, a: 0.1764706}
+          ColorValue: {r: 1, g: 1, b: 1, a: 0.2}
           FloatValue: 0
           VectorValue: {x: 0, y: 0, z: 0, w: 0}
           PropertyType: 0
-      - PropertyName: _PublicOuterColor
-        Property:
-          ColorValue: {r: 1, g: 0, b: 0, a: 1}
-          FloatValue: 0
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 0
-      - PropertyName: _PublicInnerColor
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 0
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 0
-      - PropertyName: _PublicFresnelPower
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 2
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 2
-      - PropertyName: _PublicFresnelMultiplier
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 1
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 2
   backParameters:
     enabled: 1
-    color: {r: 1, g: 0.015686274, b: 0.034576498, a: 1}
+    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     dilateShift: 1
     blurShift: 1
     fillPass:
@@ -444,7 +406,7 @@ MonoBehaviour:
     fillPass:
       shader: {fileID: 0}
       serializedProperties: []
---- !u!114 &7639805382921595941
+--- !u!114 &8266339436708435454
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -456,6 +418,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 034bc47afcbf5e141a58d5c20b7808e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4326716436772894325
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2932024224111585873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8c42b0ddf104834eba065e2435c2642, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  drawType: 2
+  _initialStateOpen: 0
 --- !u!1 &4948430946283628135
 GameObject:
   m_ObjectHideFlags: 0
@@ -533,10 +509,10 @@ GameObject:
   - component: {fileID: 4541201332009445792}
   - component: {fileID: 2210725396636972234}
   - component: {fileID: 1844576693736297815}
-  - component: {fileID: 4599181156636048689}
+  - component: {fileID: 2862446280166969801}
   m_Layer: 11
   m_Name: Toilet_Cabinet_Box_LOD1
-  m_TagString: StageIntract
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -606,7 +582,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4599181156636048689
+--- !u!114 &2862446280166969801
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -667,7 +643,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8662931386574298009}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -750,7 +726,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8786337413538849623}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
