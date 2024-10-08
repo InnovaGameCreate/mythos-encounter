@@ -45,10 +45,13 @@ namespace Scenes.Ingame.Player
         private Subject<String> _popActive = new Subject<String>();
         private ReactiveCollection<ItemSlotStruct> _itemSlot = new ReactiveCollection<ItemSlotStruct>();//現在所持しているアイテムのリスト
 
-        //アイテムエフェクト関連
-        [SerializeField] private GameObject _spotLight;//Cameraに付属しているスポットライト
-        [SerializeField] private GameObject _compass;//Cameraに付属しているコンパス
-        [SerializeField] private GameObject _thermometer;//Cameraに付属している温度計
+        //アイテムクラス関連
+        [SerializeField] private GameObject _compass;
+        [SerializeField] private Light _spotLight;
+        [SerializeField] private ThermometerMove _thermometerMove;
+        [SerializeField] private GeigerCounterMove _geigerCounterMove;
+        
+        //TrapFood関連
         [SerializeField] private GameObject _trapFood;
         private const float TILELENGTH = 5.85f;
         private GameObject _createdTrapFood;
@@ -58,13 +61,14 @@ namespace Scenes.Ingame.Player
 
         //アイテムデバッグ用
         [SerializeField] private GameObject _itemForDebug;
-
-        //懐中電灯のon/off状態保存用
-        private List<HandLightState> _switchHandLight = new List<HandLightState>();
+       
+        private List<HandLightState> _switchHandLight = new List<HandLightState>();//懐中電灯のon/off状態保存用
+        private List<bool>_switchGeigerCounter = new List<bool>();//放射線測定器のon/off状態保存用  
 
         public List<ItemSlotStruct> ItemSlots { get { return _itemSlot.ToList(); } }//外部に_itemSlotの内容を公開する
         public int nowIndex { get => _nowIndex.Value; }
         public List<HandLightState> SwitchHandLights { get {  return _switchHandLight.ToList(); } }
+        public List<bool> SwitchGeigerCounter { get { return _switchGeigerCounter.ToList(); } }
 
         public IObservable<int> OnNowIndexChange { get { return _nowIndex; } }//外部で_nowIndexの値が変更されたときに行う処理を登録できるようにする
         public IObservable<String> OnPopActive { get { return _popActive; } }
@@ -90,6 +94,7 @@ namespace Scenes.Ingame.Player
             for(int i = 0; i < 7; i++)
             {
                 _switchHandLight.Add(LightSwitch);
+                _switchGeigerCounter.Add(false);
             }
 
             //色々な変数の初期化
@@ -369,7 +374,7 @@ namespace Scenes.Ingame.Player
         //懐中電灯を起動・停止するための関数
         public void ActiveHandLight(bool value)
         {
-            _spotLight.GetComponent<Light>().enabled = value;
+            _spotLight.enabled = value;
             _myPlayerStatus.ChangeLightRange(value);
 
         }
@@ -391,15 +396,42 @@ namespace Scenes.Ingame.Player
         //気温計を持つかどうか切り替える関数
         public void ActiveThermometer(bool value)
         {
-            _thermometer.SetActive(value);
+            _thermometerMove.gameObject.SetActive(value);
         }
 
         //気温計を使い測定を開始させる関数
         public void UseThermometer()
         {
-            _thermometer.GetComponent<ThermometerMove>().StartCoroutine("MeasureTemperature");
+            _thermometerMove.StartCoroutine("MeasureTemperature");
         }
-               //地面判定を確認し、餌を生成する処理
+
+        //放射線測定器を持つかどうか切り替える関数
+        public void ActiveGeigerCounter(bool value)
+        {
+            _geigerCounterMove.gameObject.SetActive(value);
+        }
+
+        //放射線測定器の電源のon/offを変更する関数
+        public void ChangeSwitchGeigerCounter(bool value)
+        {
+            _switchGeigerCounter[_nowIndex.Value] = value;
+        }
+
+        //放射線測定器の動作状態を変更する関数
+        public void UseGeigerCounter(bool value)
+        {
+            if (value)//測定を開始させる場合
+            {
+                _geigerCounterMove.StartCoroutine("MeasureGeigerCounter"); 
+            }
+            else//測定を止める場合
+            {
+                _geigerCounterMove.StopCoroutine("MeasureGeigerCounter");
+                _geigerCounterMove.TurnOffGeigerCounter();
+            }
+         }   
+
+        //地面判定を確認し、餌を生成する処理
         public IEnumerator CreateTrapFood()
         {
             RaycastHit hit;
@@ -475,6 +507,7 @@ namespace Scenes.Ingame.Player
             if ( _createdTrapFood != null ) 
             {
                 Destroy(_createdTrapFood);
+
             }
         }
     }

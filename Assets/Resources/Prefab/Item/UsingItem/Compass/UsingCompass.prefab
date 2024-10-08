@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 6835983287482124258}
   - component: {fileID: 6991120697937196937}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -179,7 +179,7 @@ GameObject:
   - component: {fileID: 1240917902157114454}
   - component: {fileID: 7030801091457079294}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: 'Cube '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -261,8 +261,9 @@ GameObject:
   - component: {fileID: 1710125048315190912}
   - component: {fileID: 5385734030246366531}
   - component: {fileID: 4847668350840559833}
+  - component: {fileID: 8832825910395255596}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: CompassNeedle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -335,3 +336,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8832825910395255596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8554655038087083938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 629b0f0375ba1844cae85dafe183dc07, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rotateSpeed: 5
+  _brokeRotateCycle: 0.8
+  _unusableDistance: 10
