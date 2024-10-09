@@ -39,7 +39,6 @@ public class DebugTool : EditorWindow
     {
         //Subscribe
         _isInvincibleMode
-            .Skip(1)
             .Subscribe(x =>
             {
                 //bool’l‚É‰ž‚¶‚Ä–³“G‰»‚Ì—LŒø,–³Œø‰»
