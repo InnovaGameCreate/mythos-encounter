@@ -132,7 +132,9 @@ MonoBehaviour:
   - {fileID: 9013434076112409299}
   - {fileID: 6720222008600931390}
   - {fileID: 4086690883504562189}
+  _fillCell: {fileID: 21300000, guid: 036834ddf82f9324cb7f13ed06caf454, type: 3}
   _checkCell: {fileID: 21300000, guid: e8ce60945b67b044db1ab70247048069, type: 3}
+  _checkCell2: {fileID: 21300000, guid: 810fd7e2a635c1d488e5dd535cd7c59f, type: 3}
   _name: {fileID: 1209745447554159115}
 --- !u!1 &288330389350870940
 GameObject:

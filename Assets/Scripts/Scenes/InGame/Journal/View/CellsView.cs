@@ -9,21 +9,40 @@ using UnityEngine.UI;
 public class CellsView : MonoBehaviour
 {
     [SerializeField] private Image[] _cells;
+    [SerializeField] private Sprite _fillCell;
     [SerializeField] private Sprite _checkCell;
+    [SerializeField] private Sprite _checkCell2;
     [SerializeField] private TextMeshProUGUI _name;
+    private TraceType[] _iInitalTrace;
     public void Init(TraceType[] traces,string name)
     {
+        _iInitalTrace = traces;
         Debug.Log($"CellsView.size {traces.Length}");
         _name.text = name;
         for (int i = 0; i < _cells.Length; i++)
         {
             if (traces.Any(t => (int)t == i))
             {
-                _cells[i].color = Color.white;
             }
             else
             {
-                _cells[i].sprite = _checkCell;
+                _cells[i].sprite = _fillCell;
+            }
+        }
+    }
+
+    public void UpdateCells(TraceType[] traces)
+    {
+        var difference = _iInitalTrace.Except(traces).ToArray();
+        Debug.Log($"TracesLength {traces.Length} - {_iInitalTrace.Length} = {difference.Length}");
+        for (int i = 0; i < _cells.Length; i++)
+        {
+            if (difference.Any(t => (int)t == i))
+            {
+                _cells[i].sprite = _fillCell;
+            }
+            else
+            {
             }
         }
     }
