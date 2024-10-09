@@ -18,5 +18,5 @@ MonoBehaviour:
   price: 250
   itemInfo: "SAN\u5024\u3092\u6E1B\u5C11\u3055\u305B\u306A\u304C\u3089\u5F37\u529B\u306A\u529B\u3092\u5F97\u308B"
   type: 1
-  isSingleUse: 1
-  prefab: {fileID: 919132149155446097, guid: 78742d0f0bb0e42439edeb08819332bf, type: 3}
+  isSingleUse: 0
+  prefab: {fileID: 3356984425975218463, guid: abbc20ee169cf344da7407e794c6b81b, type: 3}

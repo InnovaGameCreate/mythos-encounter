@@ -5,7 +5,7 @@ using UniRx;
 
 namespace Scenes.Ingame.Player
 {
-    public class Tentacle : ItemEffect
+    public class TentacleEffect : ItemEffect
     {
         public override void OnPickUp()
         {
