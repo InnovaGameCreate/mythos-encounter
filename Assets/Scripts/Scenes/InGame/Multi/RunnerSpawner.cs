@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Fusion;
+using static Fusion.NetworkBehaviour;
+using static UnityEngine.InputManagerEntry;
 
 public class RunnerSpawner : MonoBehaviour
 {
@@ -34,6 +36,8 @@ public class RunnerSpawner : MonoBehaviour
             Scene = scene,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
+
+ 
     }
 
     void OnGUI()
@@ -78,5 +82,6 @@ public class RunnerSpawner : MonoBehaviour
         // Reset of scene network objects is needed, reload the whole scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
 
 }

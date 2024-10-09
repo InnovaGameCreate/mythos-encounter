@@ -144,7 +144,8 @@ namespace Scenes.Ingame.Enemy
         public int DiscoverTime { get { return _discoverTime; } }
         public int EnemyId { get { return _enemyId; } }
 
-
+        public List<GameObject> Players { get; private set; }
+        public List<PlayerStatus> PlayerStatuses { get; private set; } 
 
 
 
@@ -168,8 +169,8 @@ namespace Scenes.Ingame.Enemy
         [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
         public void RPC_Init(EnemySpawner spawner)
         {
+            //他所のデータを読み込んでゆく
             _enemySpawner = spawner;
-            _myEnemyVisivilityMap = _enemySpawner.GetEnemyVisivilityMap().DeepCopy();
             //初期値を設定してゆく
             ResetStatus();
 
@@ -288,6 +289,10 @@ namespace Scenes.Ingame.Enemy
             AudiometerPower = _audiometerPowerBase;
             Stamina = _staminaBase;
             State = _enemyStateBase;
+            _myEnemyVisivilityMap = _enemySpawner.GetEnemyVisivilityMap().DeepCopy();
+            Players = _enemySpawner.Players;
+            PlayerStatuses = _enemySpawner.PlayerStatuses;
+
         }
 
         /// <summary>
