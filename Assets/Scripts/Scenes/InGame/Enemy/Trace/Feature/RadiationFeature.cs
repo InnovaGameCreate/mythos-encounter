@@ -19,8 +19,8 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
             _view = view;
             _view.OnFloor.Skip(1).Subscribe(_ =>
             {
-                _change = _view.stagetile.Msv + 10;
-                if (_change < 200)
+                _change = _view.stagetile.Msv + 50;
+                if (_change > 200)
                     _change = 200;
                 _view.Msv(_change);
             }).AddTo(view.gameObject); ;

@@ -20,7 +20,7 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
             {
                 _change = _view.stagetile.Temperature - 10;
                 if (_change < _view.stagetile.Keep - 10)
-                    _change = _view.stagetile.Keep;
+                    _change = _view.stagetile.Keep - 10;
                 _view.Temperature(_change);
             }).AddTo(view.gameObject); ;
             
