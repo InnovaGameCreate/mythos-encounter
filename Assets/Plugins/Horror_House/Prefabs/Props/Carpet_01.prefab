@@ -26,8 +26,8 @@ Transform:
   m_GameObject: {fileID: 1160356720224473442}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.67, y: 0.67, z: 0.67}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 3322822535130567955}
   - {fileID: 3793002454679546670}
@@ -68,7 +68,6 @@ GameObject:
   - component: {fileID: 3322822535130567955}
   - component: {fileID: 7977688246873137536}
   - component: {fileID: 610194792360898670}
-  - component: {fileID: 2730385657402677448}
   m_Layer: 0
   m_Name: Carpet_01_LOD0
   m_TagString: Untagged
@@ -141,28 +140,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &2730385657402677448
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5641013282944933346}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -6560101634666310491, guid: 9df9b49aaed47844e81c902dee917055, type: 3}
 --- !u!1 &6068645524816287676
 GameObject:
   m_ObjectHideFlags: 0
