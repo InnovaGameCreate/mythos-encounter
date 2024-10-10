@@ -12,6 +12,7 @@ public class JournalView : ViewBase
     [SerializeField] private ViewBase _progressView;
     [SerializeField] private ViewBase _featureView;
     [SerializeField] private ViewBase _compatibilityView;
+    [SerializeField] private ViewBase _enemyView;
     [SerializeField] private ViewBase _itemView;
     [SerializeField] private ViewBase _spellView;
 
@@ -24,6 +25,7 @@ public class JournalView : ViewBase
         _progressView.Init();
         _featureView.Init();
         _compatibilityView.Init();
+        _enemyView.Init();
         _itemView.Init();
         _spellView.Init();
     }
@@ -44,6 +46,10 @@ public class JournalView : ViewBase
             case PageType.Compatibility:
                 _compatibilityView.Open();
                 _pastView = _compatibilityView;
+                break;
+                case PageType.Enemy:
+                _enemyView.Open();
+                _pastView = _enemyView;
                 break;
             case PageType.Item:
                 _itemView.Open();

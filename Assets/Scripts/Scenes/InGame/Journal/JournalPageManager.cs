@@ -48,7 +48,7 @@ namespace Scenes.Ingame.Journal
         }
 
         //ジャーナルを開く
-        void OpenJournal()
+        private void OpenJournal()
         {
             this.gameObject.SetActive(true);
             _jornalOpen.OnNext(default);
@@ -64,7 +64,7 @@ namespace Scenes.Ingame.Journal
         private void OnChangePage(InputAction.CallbackContext context)
         {
             //if (!this.gameObject.activeSelf) return;
-
+            Debug.Log("OnChangePage");
             _currentPage.Value = (PageType)Enum.ToObject(typeof(PageType), ((int)_currentPage.Value + 1) % Enum.GetValues(typeof(PageType)).Length);
         }
 

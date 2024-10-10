@@ -43,7 +43,6 @@ public class TraceModel
                     if (!usedCombinationsKey.Contains(combinationKey))
                     {
                         _usedCombinations.Add(selectedTraits);
-                        Debug.Log($"{enemy.Name} の特徴: {string.Join(", ", selectedTraits.Select(t => t.ToString()))}");
                         break; // 重複がない場合、ループを終了
                     }
                     else

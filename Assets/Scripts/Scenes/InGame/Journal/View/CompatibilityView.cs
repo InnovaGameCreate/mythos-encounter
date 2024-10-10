@@ -15,7 +15,6 @@ public class CompatibilityView : ViewBase
         _traceFeatureController = FindObjectOfType<TraceFeatureController>();
         WebDataRequest.instance.OnEndLoad.Subscribe(_ =>
         {
-            Debug.Log("CompatibilityView.Init");
             _girdView.Init(WebDataRequest.GetEnemyDataArrayList);
             _girdView.UpdateJournalList(_traceFeatureController.traceModel.usedCombinations);
         }).AddTo(this);

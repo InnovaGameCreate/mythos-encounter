@@ -184,7 +184,19 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
             ]
         }
     ],
-    ""controlSchemes"": []
+    ""controlSchemes"": [
+        {
+            ""name"": ""ControlSchemes"",
+            ""bindingGroup"": ""ControlSchemes"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        }
+    ]
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
@@ -368,6 +380,15 @@ public partial class @PlayerAction: IInputActionCollection2, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+    private int m_ControlSchemesSchemeIndex = -1;
+    public InputControlScheme ControlSchemesScheme
+    {
+        get
+        {
+            if (m_ControlSchemesSchemeIndex == -1) m_ControlSchemesSchemeIndex = asset.FindControlSchemeIndex("ControlSchemes");
+            return asset.controlSchemes[m_ControlSchemesSchemeIndex];
+        }
+    }
     public interface IPlayerActions
     {
         void OnMove(InputAction.CallbackContext context);

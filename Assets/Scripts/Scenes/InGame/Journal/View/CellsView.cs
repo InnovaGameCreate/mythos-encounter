@@ -17,7 +17,6 @@ public class CellsView : MonoBehaviour
     public void Init(TraceType[] traces,string name)
     {
         _iInitalTrace = traces;
-        Debug.Log($"CellsView.size {traces.Length}");
         _name.text = name;
         for (int i = 0; i < _cells.Length; i++)
         {
@@ -34,7 +33,6 @@ public class CellsView : MonoBehaviour
     public void UpdateCells(TraceType[] traces)
     {
         var difference = _iInitalTrace.Except(traces).ToArray();
-        Debug.Log($"TracesLength {traces.Length} - {_iInitalTrace.Length} = {difference.Length}");
         for (int i = 0; i < _cells.Length; i++)
         {
             if (difference.Any(t => (int)t == i))

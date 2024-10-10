@@ -5,7 +5,8 @@ namespace Scenes.Ingame.Journal
         Progress = 0,
         Feature  = 1,
         Compatibility = 2,
-        Item = 3,
-        Spell = 4,
+        Enemy = 3,
+        Item = 4,
+        Spell = 5,
     }
 }
