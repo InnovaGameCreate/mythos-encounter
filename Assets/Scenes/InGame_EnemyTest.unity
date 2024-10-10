@@ -3970,6 +3970,7 @@ MonoBehaviour:
   - {fileID: 423328474}
   - {fileID: 515994050}
   _playerPrefab: {fileID: 6905625351583902760, guid: 7fadc7457feedff4dba96558a2b42d5c, type: 3}
+  _playerNetworkList: []
 --- !u!4 &1684936248
 Transform:
   m_ObjectHideFlags: 0
@@ -4021,6 +4022,10 @@ PrefabInstance:
       propertyPath: _enemyName
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1614493044594472170, guid: bba2b43ed544a404ba6e0b9ccad16846, type: 3}
+      propertyPath: _playerSpawner
+      value: 
+      objectReference: {fileID: 1684936245}
     - target: {fileID: 1614493044594472170, guid: bba2b43ed544a404ba6e0b9ccad16846, type: 3}
       propertyPath: _centerPosition.x
       value: -0.465
