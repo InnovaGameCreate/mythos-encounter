@@ -15,6 +15,7 @@ namespace Scenes.Ingame.Player
         private bool _isCanUseMagic = true;//現在魔法が使えるか否か
         private bool _isUsedMagic = false;//魔法を1度使ったか否か
         [SerializeField] private Magic _myMagic;//使用可能な魔法
+        [SerializeField] private PlayerSoundManager _playerSoundManager;
 
         private Subject<Unit> _FinishUseMagic = new Subject<Unit>();//魔法の詠唱が終わり、効果が発動したらイベントが発生.
         public IObserver<Unit> OnPlayerFinishUseMagic { get { return _FinishUseMagic; } }//外部で_FinishUseMagicのOnNextを呼ぶためにIObserverを公開
@@ -94,6 +95,9 @@ namespace Scenes.Ingame.Player
 
                             //PlayerUIの方で呪文の詠唱時間を表示させる
                             myPlayerStatus.OnCastEventCall.OnNext(_myMagic.chantTime);
+
+                            //SEを鳴らす
+                            _playerSoundManager.PlayEffectClip(EffectClip.Cast);
                         }
                     }
                 });

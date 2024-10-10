@@ -29,7 +29,7 @@ namespace Scenes.Ingame.Enemy
                     case EnemyState.Patrolling:
                         _audioSource.clip = _slowClips;
                         _audioSource.Play();
-        break;
+                        break;
                     case EnemyState.Searching:
                         _audioSource.clip = _slowClips;
                         _audioSource.Play();

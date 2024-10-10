@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &649450498923269719
 MonoBehaviour:
@@ -73,6 +73,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1ae1296fc32e4a8e84156606c2a4c08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _breathes:
+  - {fileID: 8300000, guid: 6a265f07a6aa59d488b70e0601eb6e54, type: 3}
+  - {fileID: 8300000, guid: 7fbfe036ff7e0bc4ebd2775cb5d354b3, type: 3}
 --- !u!82 &4795825088596803511
 AudioSource:
   m_ObjectHideFlags: 0
@@ -83,7 +86,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: d88d28b1347dc4f76a9efb68436d5971, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 6a265f07a6aa59d488b70e0601eb6e54, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0
   m_Pitch: 1

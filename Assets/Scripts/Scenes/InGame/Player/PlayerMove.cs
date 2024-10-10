@@ -12,6 +12,7 @@ namespace Scenes.Ingame.Player
     {
         [SerializeField] CharacterController _characterController;
         [SerializeField] private PlayerStatus _myPlayerStatus;
+        [SerializeField] private PlayerSoundManager _myPlayerSoundManager;
         Vector3 _moveVelocity;
         private float _moveAdjustValue;
 
@@ -100,10 +101,13 @@ namespace Scenes.Ingame.Player
             //スタミナが切れた際の歩行状態への切り替え（ペナルティがつく）
             this.UpdateAsObservable()
                 .Where(_ => Input.GetKey(dash) && Input.GetKey(KeyCode.W) && _myPlayerStatus.nowStaminaValue == 0)
+                .ThrottleFirst(TimeSpan.FromMilliseconds(1000))//1秒間の間は再度ペナルティがつかないようにする。
                 .Subscribe(_ =>
                 {
                     _lastPlayerAction = _myPlayerStatus.nowPlayerActionState;//変化前の状態を記録する。
                     _moveAdjustValue = 1.0f;
+
+                    _myPlayerSoundManager.PlayEffectClip(EffectClip.Breathlessness, 0.2f);
                     StartCoroutine(CountTiredPenalty());
                 });
 
