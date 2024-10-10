@@ -53,14 +53,12 @@ namespace Scenes.Ingame.Player
         /// </summary>
         public override void FixedUpdateNetwork()
         {
-            Debug.Log("ネットワークリストの長さ" + playerNetworkList.Count);
 
             foreach (var change in _changeDetector.DetectChanges(this))
             {
                 switch (change)
                 {
                     case nameof(playerNetworkList):
-                        Debug.Log("変更検知");
                         List<GameObject> set = new List<GameObject>();
                         List<PlayerStatus> setCs = new List<PlayerStatus>();
                         for (int i = 0 ; i < playerNetworkList.Count; i++) {
@@ -75,7 +73,6 @@ namespace Scenes.Ingame.Player
                         
                 }
             }
-            Debug.Log("マネージャーPlayerList" + PlayerList.Count);
         }
     }
 }

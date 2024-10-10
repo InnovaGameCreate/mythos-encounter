@@ -29,10 +29,14 @@ namespace Scenes.Ingame.Enemy
         [SerializeField]
         protected EnemyStatus _enemyStatus;
         protected float _audiomaterPower;
+
         //索敵行動のクラスです
         // Start is called before the first frame update
         void Start()
         {
+
+
+
         }
 
         /// <summary>
@@ -94,8 +98,6 @@ namespace Scenes.Ingame.Enemy
 
             if (_enemyStatus.State == EnemyState.Patrolling || _enemyStatus.State == EnemyState.Searching)
             { //巡回状態または捜索状態の場合
-                Debug.Log(_enemyStatus.MultiPlayManager.PlayerStatusList.Count);
-
                 //定期的に視界情報を調べる
                 _checkTimeCount += Runner.DeltaTime;
                 if (_checkTimeCount > _checkRate)
@@ -142,9 +144,9 @@ namespace Scenes.Ingame.Enemy
             foreach (PlayerStatus playerStatus in _enemyStatus.MultiPlayManager.PlayerStatusList)
             {//プレイヤーごとの処理
                 float range = Vector3.Magnitude(this.transform.position - playerStatus.transform.position);//平方根を求めるのはすごくコストが重いらしいので確実に計算が必要になってからしてます
-                bool hit;
-                Ray ray = new Ray(this.transform.position, playerStatus.transform.position - this.transform.position);
-                hit = Physics.Raycast(ray, out RaycastHit hitInfo, range, -1 - 1 << LayerMask.NameToLayer("Player"), QueryTriggerInteraction.Collide);
+                bool hit = true;
+                Ray ray = new Ray(this.transform.position + new Vector3(0,2,0), playerStatus.transform.position - this.transform.position);
+                hit = Physics.Raycast(ray, out RaycastHit hitInfo, range, -1 ^ LayerMask.GetMask(new string[] { "Ignore Raycast", "Player" }), QueryTriggerInteraction.Collide);
                 if (!hit) 
                 { //何にもあたっていない=対称まで直線的に視界が通る
                     SanCheck(playerStatus);
@@ -152,7 +154,7 @@ namespace Scenes.Ingame.Enemy
                     {
                         if (true) { //視野角内部にプレイヤーがいるかどうか=今はずっとTrue
                             see = true;
-                            if (_debugMode) { Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 3); Debug.Log("プレイヤー発見"); }
+                            if (_debugMode) { Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 5); Debug.Log("プレイヤー発見"); }
                             if (approachRange > range)
                             { //先ほどまでに直接見ることのできたプレイヤーより近いプレイヤーである場合
                                 approachRange = range;
