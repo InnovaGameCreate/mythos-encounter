@@ -29,7 +29,6 @@ namespace Scenes.Ingame.Enemy
         [SerializeField]
         protected EnemyStatus _enemyStatus;
         protected float _audiomaterPower;
-        protected Vector3 positionCandidate = Vector3.zero;
         //索敵行動のクラスです
         // Start is called before the first frame update
         void Start()
@@ -183,9 +182,10 @@ namespace Scenes.Ingame.Enemy
                 //そもそも光が見えるか調べる
                 foreach (PlayerStatus playerStatus in _enemyStatus.MultiPlayManager.PlayerStatusList)
                 {//プレイヤーごとの処理
-                    if (_myVisivilityMap.RightCheck(this.transform.position, playerStatus.transform.position, _visivilityRange, playerStatus.nowPlayerLightRange, ref positionCandidate)) {
+                    Vector3 positionCandidate = Vector3.zero;
+                    if (_myVisivilityMap.RightCheck(this.transform.position, playerStatus.transform.position, _visivilityRange, playerStatus.nowPlayerLightRange, ref  positionCandidate)) {
                         //対称のプレイヤーの光が見えるかどうか
-                        if (canWatchLight) {
+                        if (canWatchLight) {//光が見えた
                             if ((this.transform.position - neerLightPosition).magnitude > (this.transform.position - positionCandidate).magnitude) {
                                 neerLightPosition = positionCandidate;
                             }
@@ -245,7 +245,6 @@ namespace Scenes.Ingame.Enemy
             }
             else { return false; }
         }
-
 
         protected void SanCheck(PlayerStatus playerStatus) { 
         //#######################################プレイヤーの情報が必要です。
