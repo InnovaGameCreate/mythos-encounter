@@ -13,7 +13,7 @@ namespace Scenes.Ingame.Player
         [SerializeField] GameObject _playerPrefab;
 
         
-        [Networked]
+        [Networked][Capacity(4)]
         public NetworkLinkedList<NetworkId> playerNetworkList { get;}
         
 
