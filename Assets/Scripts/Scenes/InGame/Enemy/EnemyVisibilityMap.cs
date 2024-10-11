@@ -632,12 +632,6 @@ namespace Scenes.Ingame.Enemy
                 }
             }
 
-
-
-
-
-
-
             if (debugMode)
             {
                 for (int e = 0; e < enemyVisivilityGridPosition.Count; e++)
@@ -645,13 +639,11 @@ namespace Scenes.Ingame.Enemy
                     if (enemyVisivilityGridPosition[e].range < visivilityRange) Debug.DrawLine((ToVector3(enemyGridPositionX, enemyGridPositionY, enemyGridPositionZ) * gridRange) + centerPosition, (ToVector3(enemyVisivilityGridPosition[e].x, enemyVisivilityGridPosition[e].y, enemyVisivilityGridPosition[e].z) * gridRange) + centerPosition, Color.green, 1f);
                 }
             }
-
             //光が届く可能性のあるマスを取得
             byte rightGridPositionX, rightGridPositionY, rightGridPositionZ;
             rightGridPositionX = (byte)Mathf.FloorToInt((float)(playerPosition.x - centerPosition.x + 0.5 * gridRange) / gridRange);
             rightGridPositionY = (byte)Mathf.FloorToInt((float)(playerPosition.y - centerPosition.y + 0.5 * gridRange) / gridRange);
             rightGridPositionZ = (byte)Mathf.FloorToInt((float)(playerPosition.z - centerPosition.z + 0.5 * gridRange) / gridRange);
-            Debug.Log(rightGridPositionY);
             List<TripleByteAndMonoFloat> rightingGridPosition = new List<TripleByteAndMonoFloat>();//今してることはこの先においてプレイヤーからドアの問題なく見えるマスだけを抽出すること
             foreach (TripleByteAndMonoFloat item in visivilityAreaGrid[rightGridPositionX][rightGridPositionY][rightGridPositionZ].canVisivleAreaPosition)
             {

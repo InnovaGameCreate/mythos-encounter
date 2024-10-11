@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Fusion;
 
 namespace Scenes.Ingame.Enemy
 {
-    public class EnemyUniqueAction : MonoBehaviour
+    public class EnemyUniqueAction : NetworkBehaviour
     {
         private float _actionCoolDownTime;
         private float _actionCoolDownTimeCount = 0;
@@ -17,9 +18,9 @@ namespace Scenes.Ingame.Enemy
 
 
         // Update is called once per frame
-        protected virtual void Update()
+        public override void FixedUpdateNetwork()
         {
-            _actionCoolDownTimeCount += Time.deltaTime;
+            _actionCoolDownTimeCount += Runner.DeltaTime;
             if (_actionCoolDownTimeCount > _actionCoolDownTime)
             {
                 _actionCoolDownTimeCount -= _actionCoolDownTime;

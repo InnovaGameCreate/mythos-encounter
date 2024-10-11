@@ -78,11 +78,12 @@ namespace Scenes.Ingame.Player
         private Subject<float> castEvent = new Subject<float>();//呪文の詠唱時間を発行
         private Subject<Unit> cancelCastEvent = new Subject<Unit>();//呪文の詠唱をキャンセルされた際のイベント
         public IObserver<float> OnCastEventCall { get { return castEvent; } }//別のスクリプトから呪文の詠唱時間イベントのOnNextを飛ばせるようにする
-        
+
 
 
         //その他のSubject
         private Subject<Unit> _enemyAttackedMe = new Subject<Unit>();//敵から攻撃を食らったときのイベント
+        private Subject<PlayerStatus> playerActionStateChangeEvent = new Subject<PlayerStatus>();//プレイヤーのStateが変化した時のイベント（どのプレイヤーステータスか判別可能）
 
         //それぞれの購読側を公開する。他のClassでSubscribeできる。
         public IObservable<int> OnPlayerHealthChange { get { return _health; } }//_health(体力)が変化した際にイベントが発行
@@ -105,6 +106,8 @@ namespace Scenes.Ingame.Player
         public IObservable<float> OnCastEvent { get { return castEvent; } }//呪文詠唱を始めた際に呼ばれるイベント
         public IObservable<Unit> OnCancelCastEvent { get { return cancelCastEvent; } }//敵から攻撃を受けた際のイベントを登録させる
         public IObserver<Unit> OnCancelCastEventCall { get { return cancelCastEvent; } }//敵から攻撃を受けた際にイベントが発行
+
+        public IObservable<PlayerStatus> OnPlayerActionStateChangeEvent{get { return playerActionStateChangeEvent; }}//PlayerStateが変化した場合にイベント発行
 
         //一部情報の開示
         public int playerID { get { return _playerID; } }
@@ -183,6 +186,8 @@ namespace Scenes.Ingame.Player
             _survive
                 .Skip(1)
                 .Subscribe(x => CheckSurvive(x)).AddTo(this);
+
+            OnPlayerActionStateChange.Skip(1).Subscribe(x => playerActionStateChangeEvent.OnNext(this)).AddTo(this);
 
             //呪文解放条件関連
             _san

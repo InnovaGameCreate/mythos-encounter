@@ -18,6 +18,8 @@ GameObject:
   - component: {fileID: 3253462088583653797}
   - component: {fileID: 1768430814085762199}
   - component: {fileID: 5634362069311426784}
+  - component: {fileID: -8496475578568436870}
+  - component: {fileID: -6556081758576456034}
   m_Layer: 0
   m_Name: SpawnOfCthulhu
   m_TagString: Enemy
@@ -89,7 +91,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _checkRate: 1
   _debugMode: 0
-  _myEneyMove: {fileID: 6372555738571843037}
+  _myEnemyMove: {fileID: 6372555738571843037}
   _enemyStatus: {fileID: 3554846491491567640}
 --- !u!114 &3554846491491567640
 MonoBehaviour:
@@ -119,7 +121,7 @@ MonoBehaviour:
   _uniqueItem: {fileID: 6146547148148849240, guid: 1460fd555e5df4f4ba1ca88617706b73, type: 3}
   _enemyMagics: 
   _hasMagicNum: 0
-  _fallBackTime: 3000
+  _fallBackTime: 3
   _visual: {fileID: 5563363999148163310}
   _discoverTime: 0
   _enemyId: 2
@@ -128,6 +130,16 @@ MonoBehaviour:
   _enemyMove: {fileID: 6372555738571843037}
   _enemyUniqueAction: {fileID: -6560108259669412476}
   _debugMode: 0
+  _Speed: 0
+  _Hp: 0
+  _AudiometerPower: 0
+  _Stamina: 0
+  _State: 1
+  _Bind: 0
+  _StiffnessTime: 0
+  _IsWaterEffectDebuff: 0
+  _StaminaOver: 0
+  _MultiPlayManager: {fileID: 0}
 --- !u!195 &3288929370343354425
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -162,7 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7c61ef92cd64014bbbc0d43cb64b2cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _canSpawn: 0
+  _canSpawn: 1
 --- !u!114 &3253462088583653797
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -292,6 +304,46 @@ MonoBehaviour:
   _mass: 100
   _damage: 70
   _breedDamage: 30
+--- !u!114 &-8496475578568436870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502827998043956805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 2378311475
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 8515988114254047942}
+  - {fileID: 6372555738571843037}
+  - {fileID: 7631687704071867374}
+  - {fileID: 3554846491491567640}
+  - {fileID: -6560108259669412476}
+  - {fileID: 5634362069311426784}
+  - {fileID: -6556081758576456034}
+--- !u!114 &-6556081758576456034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1502827998043956805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0
 --- !u!1 &5563363999148163310
 GameObject:
   m_ObjectHideFlags: 0

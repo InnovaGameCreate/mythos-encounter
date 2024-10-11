@@ -1,21 +1,15 @@
-﻿using Scenes.Ingame.Player;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
+using Scenes.Ingame.Player;
 using UnityEngine;
-using UniRx;
-using System;
-using UnityEngine.AI;
-using Unity.VisualScripting;
-using System.Threading;
-using Cysharp.Threading.Tasks;
-using System.Threading.Tasks;
+using Fusion;
 
 namespace Scenes.Ingame.Enemy
 {
     /// <summary>
     /// 敵キャラの攻撃を管理する。追跡状態と攻撃状態はこのスクリプトが作動する
     /// </summary>
-    public class EnemyAttack : MonoBehaviour
+    public class EnemyAttack : NetworkBehaviour
     {
         [Header("このスクリプトを制御する変数")]
         [SerializeField][Tooltip("何秒ごとに視界の状態、攻撃可能性、SANをチェックするか")] private float _checkRate;
@@ -44,17 +38,16 @@ namespace Scenes.Ingame.Enemy
         [SerializeField] private EnemyMove _myEnemyMove;
 
         //##########内部で使う変数##########
-        private GameObject _player;
-        private PlayerStatus _playerStatus;
-        private float _attackTimeCount;
-        private float _shotTimeCount;
+
         private float _audiomaterPower;//聞く力
         private float _checkTimeCount;//前回チェックしてからの時間を計測
-         float _blindChaseTimeCount;
+        
         private EnemyVisibilityMap _myVisivilityMap;
         Vector3 nextPositionCandidate = new Vector3(0, 0, 0);
         private Camera _camera;
         private float _blindChaseTime;
+
+        [Networked] private float _blindChaseTimeCount { get; set; }
 
         public List<EnemyAttackBehaviour> GetEnemyAtackBehaviours (){
             return _enemyAttackBehaviours;
@@ -71,24 +64,10 @@ namespace Scenes.Ingame.Enemy
         public void Init(EnemyVisibilityMap setVisivilityMap) {
             _myVisivilityMap = setVisivilityMap;
             _horror = _enemyStatus.Horror;
-            _audiomaterPower = _enemyStatus.AudiomaterPower;
+            _audiomaterPower = _enemyStatus.AudiometerPower;
             _blindChaseTime = _enemyStatus.BrindCheseTime;
 
-            _player = GameObject.FindWithTag("Player");
-            if (_player == null) { Debug.LogWarning("プレイヤーが認識できません"); }
-            _playerStatus = _player.GetComponent<PlayerStatus>();
-            if (_playerStatus == null) { Debug.LogWarning("プレイヤーステータスが認識できません"); }
-
             _camera = GameObject.Find("Main Camera").GetComponent<Camera>();
-
-            _enemyStatus.OnEnemyStateChange.Subscribe(state => 
-            {
-                if (state ==　EnemyState.Discover) 
-                { 
-                    ReturnignForDiscover(this.GetCancellationTokenOnDestroy()).Forget();
-                    _myVisivilityMap.SetEveryGridWatchNum(50);//リセット
-                } 
-            }).AddTo(this);
 
 
             /*
@@ -97,115 +76,60 @@ namespace Scenes.Ingame.Enemy
             _atackRange = _enemyAttackBehaviours[_enemyAttackBehaviours.Count -1].GetRange();
 
 
-            if(_debugMode)_playerStatus.OnEnemyAttackedMe.Subscribe(_ => Debug.Log("攻撃された"));
+            //if(_debugMode)_playerStatus.OnEnemyAttackedMe.Subscribe(_ => Debug.Log("攻撃された"));
 
         }
 
         // Update is called once per frame
-        protected virtual void FixedUpdate()
+        public override void FixedUpdateNetwork()
         {
-            float _playerDistance;
-
-            if (_enemyStatus.EnemyState == EnemyState.Chase || _enemyStatus.EnemyState == EnemyState.Attack || _enemyStatus.EnemyState == EnemyState.Discover)//メモ、Discover中は移動先の変更などはするが、Stateの変更や攻撃はしない。移動速度（Discover中は移動しない）についてはEnemyMoveが行ってくれる
+            if (_enemyStatus.State == EnemyState.Chase || _enemyStatus.State == EnemyState.Attack || _enemyStatus.State == EnemyState.Discover)//メモ、Discover中は移動先の変更などはするが、Stateの変更や攻撃はしない。移動速度（Discover中は移動しない）についてはEnemyMoveが行ってくれる
             { //追跡状態または攻撃状態の場合
+              //定期的に状態を変更
+                _checkTimeCount += Runner.DeltaTime;
+                if (EnemyState.Discover == _enemyStatus.State)//発見動作
+                {//発見動作をする場合
+                    if (_checkTimeCount > _enemyStatus.DiscoverTime) {
 
-                //定期的に状態を変更
-                _checkTimeCount += Time.deltaTime;
+                        _myVisivilityMap.SetEveryGridWatchNum(50);//リセット
+                        _enemyStatus.SetEnemyState(EnemyState.Chase);
+                        _blindChaseTimeCount = 0;
+                    }
+                    return;
+                }
                 if (_checkTimeCount > _checkRate)
                 {
-                    _playerDistance = Vector3.Magnitude(this.transform.position - _player.transform.position);
                     _checkTimeCount = 0;
                     if (CheckCanSeeThePlayer()) //敵が見えるルートがあるかかどうかを確認する
                     {
-                        //こちらが深淵を除くときry
-                        SanCheck();
-                        if (_playerDistance < _visivilityRange)//見える距離にいるかどうか
-                        {
-                            _myVisivilityMap.ChangeEveryGridWatchNum(1, true);
-                            _myVisivilityMap.SetGridWatchNum(_player.transform.position, 0);
-                            _blindChaseTimeCount = 0;//見えたのであきらめるまでのカウントはリセット
-                                                     //移動目標をプレイヤーの座標にする
-                            _myEnemyMove.SetMovePosition(_player.transform.position);
-
-                            if (_enemyStatus.EnemyState != EnemyState.Discover) {//発見動作中は攻撃したりしない
-                                if (_atackRange > _playerDistance && _enemyStatus.StiffnessTime <= 0)
-                                { //攻撃可能であれば
-                                    _enemyStatus.SetEnemyState(EnemyState.Attack);
-
-                                    _massSUM = 0;
-                                    for (int i = 0; i < _enemyAttackBehaviours.Count; i++)
-                                    {
-                                        if (_enemyAttackBehaviours[i].GetRange() > _playerDistance)
-                                        {
-                                            _massSUM += _enemyAttackBehaviours[i].GetMass();
-                                        }
-                                    }
-                                    float _pickNum = UnityEngine.Random.RandomRange(0f, _massSUM);
-                                    for (int i = 0; i < _enemyAttackBehaviours.Count; i++)
-                                    {
-                                        _massSUM -= _enemyAttackBehaviours[i].GetMass();
-                                        if (_massSUM <= _pickNum)
-                                        {
-                                            _enemyAttackBehaviours[i].Behaviour(_playerStatus);
-                                            _enemyStatus.ChangeStiffnessTime(_enemyAttackBehaviours[i].GetStiffness());
-                                            break;
-                                        }
-                                    }
-                                }
-                                else
-                                {//攻撃できないなら追いかける
-                                    _enemyStatus.SetEnemyState(EnemyState.Chase);
-                                    _massSUM = 0;
-
-                                }
-                            }                            
-                        }
+                        _blindChaseTimeCount = 0;
                     }
                     else
                     { //敵が見えないならせめてなんとかいそうなエリアへ行こうとする
                         _blindChaseTimeCount += _checkRate;
                         if (_blindChaseTimeCount > _blindChaseTime)
-
                         { //あきらめるかどうかの判定
-                            if (_enemyStatus.EnemyState != EnemyState.Discover) 
+                            if (_enemyStatus.State != EnemyState.Discover) 
                             { 
                                 _enemyStatus.SetEnemyState(EnemyState.Searching);//追っかけるのあきらめた
                             }                                
                         }
                         else
                         { //まだあきらめない場合、近距離に特化したのSearchを行う
-                            if (_enemyStatus.EnemyState != EnemyState.Discover)
+                            if (_enemyStatus.State != EnemyState.Discover)
                             {
                                 _enemyStatus.SetEnemyState(EnemyState.Chase);
                             }
-                            if (_enemyStatus.ReactToLight && _myVisivilityMap.RightCheck(this.transform.position, _player.transform.position, _visivilityRange, _playerStatus.nowPlayerLightRange, ref nextPositionCandidate))//&&は左から評価される事に注意
+                            if (CheckCanSeeTheLight())//&&は左から評価される事に注意
                             { //光が見えるか調べる
                                 if (_debugMode) Debug.Log("追跡中光が見えた");
-                                _myEnemyMove.SetMovePosition(nextPositionCandidate);
                             }
                             else if (_myEnemyMove._endMove)
                             { //移動が終了している場合
-                                if (_playerStatus.nowPlayerActionState == PlayerActionState.Sneak && Mathf.Pow((float)(_playerStatus.nowPlayerSneakVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)//忍音が聞こえるかどうか
+                                if (CheckCanHearThePlayerSound())//忍音が聞こえるかどうか
                                 {
 
                                     if (_debugMode) Debug.Log("追跡中忍ぶ音が聞こえる");
-                                    _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
-                                    _myEnemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
-
-                                }
-                                else if (_playerStatus.nowPlayerActionState == PlayerActionState.Walk && Mathf.Pow((float)(_playerStatus.nowPlayerWalkVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)//歩く音が聞こえるかどうか
-                                {
-                                    if (_debugMode) Debug.Log("追跡中歩く音が聞こえる");
-                                    _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
-                                    _myEnemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
-
-                                }
-                                else if (_playerStatus.nowPlayerActionState == PlayerActionState.Dash && Mathf.Pow((float)(_playerStatus.nowPlayerRunVolume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - _player.transform.position.x, 2) - (Mathf.Pow(transform.position.y - _player.transform.position.y, 2))) > 0)//走る音が聞こえるかどうか
-                                {
-
-                                    if (_debugMode) Debug.Log("追跡中走る音が聞こえる");
-                                    _myVisivilityMap.HearingSound(_player.transform.position, 15, true);
-                                    _myEnemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
 
                                 }
                                 else
@@ -224,27 +148,84 @@ namespace Scenes.Ingame.Enemy
                     }
                 }
             }
-            else 
-            {//追跡攻撃状態でなくても定期的にSANダメージを与えているかを確認する
-                _checkTimeCount += Time.deltaTime;
-                if (_checkTimeCount > _checkRate)
-                {
-                    _checkTimeCount = 0;
-                    //Debug.LogWarning("San判定");現状視界が360なので視界が通らないここに要は無し
-                }
-            }
         }
 
         protected virtual bool CheckCanSeeThePlayer()
         {//キャラクターによって視界の角度判定つける？ミゴは360°、深き者どもは270°、一般的な人間の狂信者とかなら180°とか...
-            float range = Vector3.Magnitude(this.transform.position - _player.transform.position) - 0.2f;//プレイヤー本体のコライダーに当たるため減らしてる
-                                                                                                  //視界が通るか＝Rayが通るか
-            bool hit;
-            Ray ray = new Ray(this.transform.position, _player.transform.position - this.transform.position);
-            hit = Physics.Raycast(ray, out RaycastHit hitInfo, range, -1, QueryTriggerInteraction.Collide);
-            if (!hit)
-            { //何にもあたっていなかった場合
-                if (_debugMode) { Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 3); Debug.Log("プレイヤー発見"); }
+            float _playerDistance = float.MaxValue;
+            PlayerStatus neerPlayerStatus = null;
+            bool canWatch = false;
+            foreach (PlayerStatus playerStatus in _enemyStatus.MultiPlayManager.PlayerStatusList)
+            { //全てのプレイヤーをチェック
+                bool hit = true;//あたったかどうか
+                float checkPlayerDistance = Vector3.Magnitude(this.transform.position - playerStatus.transform.position); //プレイヤーまでの距離
+                Ray ray = new Ray(this.transform.position + new Vector3(0, 2, 0), playerStatus.transform.position - this.transform.position);
+                hit = Physics.Raycast(ray, out RaycastHit hitInfo, checkPlayerDistance, -1 ^ LayerMask.GetMask(new string[] { "Ignore Raycast", "Player" }), QueryTriggerInteraction.Collide);
+                if (!hit)
+                { //何にもあたっていない=対称までの間に障害物はないを見ることが来た
+                    SanCheck(playerStatus);//こちらまでプレイヤーはまっすぐ見れる
+                    if (true) 
+                    { //視野角内にプレイヤーはいるかどうか?＝現状は常にTrue
+                        if (checkPlayerDistance < _visivilityRange) {//見える距離内にいるかどうか
+                            canWatch = true;
+                            if (_debugMode) { Debug.DrawRay(ray.origin, ray.direction * checkPlayerDistance, Color.red, 3); Debug.Log("プレイヤー発見"); }
+
+                            if (checkPlayerDistance < _playerDistance)//最も近い対象であるのか？
+                            {
+                                _playerDistance = checkPlayerDistance;
+                                neerPlayerStatus = playerStatus;
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            if (canWatch)
+            { //プレイヤーが存在する場合
+              //こちらがなんらかのプレイヤーを見れるならSanチェックしてしまおう
+                _myVisivilityMap.ChangeEveryGridWatchNum(1, true);
+                _myVisivilityMap.SetGridWatchNum(neerPlayerStatus.transform.position, 0);
+                _blindChaseTimeCount = 0;//見えたのであきらめるまでのカウントはリセット
+                                         //移動目標をプレイヤーの座標にする
+                _myEnemyMove.SetMovePosition(neerPlayerStatus.transform.position);
+
+                if (_enemyStatus.State != EnemyState.Discover)
+                {//発見動作中は攻撃したりしない
+                    if (_atackRange > _playerDistance && _enemyStatus.StiffnessTime <= 0)
+                    { //攻撃可能であれば
+                        _enemyStatus.SetEnemyState(EnemyState.Attack);
+                        if (HasStateAuthority)
+                        {//攻撃のスクリプトを叩くのはホストのみ
+                            _massSUM = 0;
+                            for (int i = 0; i < _enemyAttackBehaviours.Count; i++)
+                            {
+                                if (_enemyAttackBehaviours[i].GetRange() > _playerDistance)
+                                {
+                                    _massSUM += _enemyAttackBehaviours[i].GetMass();
+                                }
+                            }
+                            float _pickNum = UnityEngine.Random.RandomRange(0f, _massSUM);
+                            for (int i = 0; i < _enemyAttackBehaviours.Count; i++)
+                            {
+                                _massSUM -= _enemyAttackBehaviours[i].GetMass();
+                                if (_massSUM <= _pickNum)
+                                {
+                                    _enemyAttackBehaviours[i].Behaviour(neerPlayerStatus);
+                                    _enemyStatus.ChangeStiffnessTime(_enemyAttackBehaviours[i].GetStiffness());
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {//攻撃できないなら追いかける
+                        _enemyStatus.SetEnemyState(EnemyState.Chase);
+                        _massSUM = 0;
+
+                    }
+                }
+
                 return true;
             }
             else
@@ -253,7 +234,86 @@ namespace Scenes.Ingame.Enemy
             }
         }
 
-        protected virtual void SanCheck() {
+        protected bool CheckCanSeeTheLight()
+        {
+            Vector3 neerLightPosition = _myEnemyMove.GetMovePosition();//最も近い光のとこ
+            bool canWatchLight = false;
+            if (_enemyStatus.ReactToLight)
+            {//そもそも光が見えるか調べる
+                foreach (PlayerStatus playerStatus in _enemyStatus.MultiPlayManager.PlayerStatusList)
+                {//プレイヤーごとの処理
+                    Vector3 positionCandidate = Vector3.zero;//候補として使う
+                    if (_myVisivilityMap.RightCheck(this.transform.position, playerStatus.transform.position, _visivilityRange, playerStatus.nowPlayerLightRange, ref positionCandidate))
+                    {
+                        //対称のプレイヤーの光が見えるかどうか
+                        if (canWatchLight)
+                        {
+                            if ((this.transform.position - neerLightPosition).magnitude > (this.transform.position - positionCandidate).magnitude)
+                            {
+                                neerLightPosition = positionCandidate;
+                            }
+                        }
+                        else
+                        {
+                            canWatchLight = true;
+                            neerLightPosition = positionCandidate;
+                        }
+                    }
+                }
+            }
+            if (canWatchLight)
+            {
+                //光が見えるか調べる
+                if (_debugMode) Debug.Log("光が見えた");
+                _enemyStatus.SetEnemyState(EnemyState.Chase);
+                _myEnemyMove.SetMovePosition(neerLightPosition);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        protected bool CheckCanHearThePlayerSound()
+        {
+            bool canHear = false;
+            foreach (PlayerStatus playerStatus in _enemyStatus.MultiPlayManager.PlayerStatusList)
+            {
+                float valume = 0;//プレイヤーの騒音を記録
+                switch (playerStatus.nowPlayerActionState)
+                {
+                    case PlayerActionState.Sneak:
+                        valume = playerStatus.nowPlayerSneakVolume;
+                        if (_debugMode) Debug.Log("忍ぶ音が聞こえる");
+                        break;
+                    case PlayerActionState.Walk:
+                        valume = playerStatus.nowPlayerWalkVolume;
+                        if (_debugMode) Debug.Log("歩く音が聞こえる");
+                        break;
+                    case PlayerActionState.Dash:
+                        valume = playerStatus.nowPlayerRunVolume;
+                        if (_debugMode) Debug.Log("走る音が聞こえる");
+                        break;
+                }
+                if (Mathf.Pow((float)(valume * _audiomaterPower * 0.01f), 2f) - (Mathf.Pow(transform.position.x - playerStatus.transform.position.x, 2) + (Mathf.Pow(transform.position.y - playerStatus.transform.position.y, 2))) > 0)
+                {
+                    _myVisivilityMap.HearingSound(playerStatus.transform.position, 15, true);
+                    canHear = true;
+                }
+            }
+            if (canHear)
+            {
+                _enemyStatus.SetEnemyState(EnemyState.Chase);
+                _myEnemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
+                return true;
+            }
+            else { return false; }
+        }
+
+        protected virtual void SanCheck(PlayerStatus playerStatus) {
+            /*
+             ################################################### 各プレイヤーごとのカメラ判定が必要です。向きとか視野角とかいわもとくんまかせたー
             Vector3 ScreenPosition = _camera.WorldToScreenPoint(this.transform.position);
             //Debug.Log(ScreenPosition);
             if (ScreenPosition.x > 0 && ScreenPosition.x < 1920) {
@@ -261,21 +321,11 @@ namespace Scenes.Ingame.Enemy
                     if (ScreenPosition.z > 0)
                     {
                         _playerStatus.ChangeSanValue(_horror, ChangeValueMode.Damage);
-
-
-
-
                     }
                 }
             }
+            */
         }
 
-        /// <summary>
-        /// Discoverにかかる時間だけ待って、チェイスに移行する
-        /// </summary>
-        protected virtual async Cysharp.Threading.Tasks.UniTaskVoid ReturnignForDiscover(CancellationToken ct) {
-            await Task.Delay(_enemyStatus.DiscoverTime, ct);
-            _enemyStatus.SetEnemyState(EnemyState.Chase);
-        }
     }
 }

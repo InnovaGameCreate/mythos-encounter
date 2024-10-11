@@ -13,7 +13,7 @@ namespace Scenes.Ingame.Enemy.Animation
         protected override void UpdateAnimationState()
         {
             // アニメーション制御
-            switch (_enemyStatus.EnemyState)
+            switch (_enemyStatus.State)
             {
                 case EnemyState.Patrolling:
                     _animator.SetTrigger(IsPatrolling);

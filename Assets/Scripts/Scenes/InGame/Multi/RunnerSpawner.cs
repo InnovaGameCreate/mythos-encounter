@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Fusion;
@@ -34,6 +33,8 @@ public class RunnerSpawner : MonoBehaviour
             Scene = scene,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
+
+ 
     }
 
     void OnGUI()
@@ -47,6 +48,10 @@ public class RunnerSpawner : MonoBehaviour
             if (GUI.Button(new Rect(0, 40, 200, 40), "Join"))
             {
                 StartGame(GameMode.Client);
+            }
+            if (GUI.Button(new Rect(0, 80, 200, 40), "Single"))
+            {
+                StartGame(GameMode.Single);
             }
         }
     }
@@ -74,5 +79,6 @@ public class RunnerSpawner : MonoBehaviour
         // Reset of scene network objects is needed, reload the whole scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
 
 }

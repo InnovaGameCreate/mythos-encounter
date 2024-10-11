@@ -1,17 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using UnityEngine;
 using UnityEngine.AI;
 using UniRx;
-using Scenes.Ingame.Player;
+using Fusion;
+
 
 namespace Scenes.Ingame.Enemy
 {
     /// <summary>
     /// 敵キャラクターの移動を管理する
     /// </summary>
-    public class EnemyMove : MonoBehaviour
+    public class EnemyMove : NetworkBehaviour
     {
         public bool _endMove;
         private NavMeshAgent _myAgent;
@@ -21,7 +21,7 @@ namespace Scenes.Ingame.Enemy
         private bool _stiffness = false;
 
         private float _staminaChangeCount = 0;//スタミナを毎秒減らすのに使用
-        private Vector3 _movePosition;
+        [Networked] private Vector3 _movePosition { get; set; }//移動先
 
         public Vector3 GetMovePosition() {
             return _movePosition;
@@ -29,9 +29,7 @@ namespace Scenes.Ingame.Enemy
 
         private Vector3 _initialPosition = new Vector3(30, 0, 18);//初期位置保存用変数
 
-
-
-
+        private ChangeDetector _changeDetector;
 
 
         /// <summary>
@@ -42,6 +40,10 @@ namespace Scenes.Ingame.Enemy
             if (_myAgent == null) Debug.LogError("NavMeshAgentが認識できません");
             _myAgent.destination = this.transform.position;
             _initialPosition = this.transform.position;
+
+            //変更を検出する準備をする
+            _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
+
             _enemyStatus.OnStiffnessTimeChange.Subscribe(stiffnessTime => {
                 if (stiffnessTime > 0)
                 {
@@ -67,20 +69,32 @@ namespace Scenes.Ingame.Enemy
             { 
                 SpeedChange(); 
             }).AddTo(this);
-            _enemyStatus.OnSpeedChange.Subscribe(x => 
-            {
-                _myAgent.speed = x;
-            }).AddTo(this);
             _enemyStatus.OnStaminaOverChange.Subscribe(x => 
             { 
               SpeedChange();
             }).AddTo(this);
+            _enemyStatus.OnSpeedChanged.Subscribe(x => 
+            {
+                _myAgent.speed = x; 
+            }).AddTo(this);
             SpeedChange();
         }
 
-        // Update is called once per frame
-        void FixedUpdate()
+        public override void FixedUpdateNetwork()
         {
+
+            //変更を検出しUniRxのイベントを発行す
+            foreach (var change in _changeDetector.DetectChanges(this))
+            {
+                switch (change)
+                {
+                    case nameof(_movePosition):
+                        _myAgent.destination = _movePosition;
+                        break;
+                }
+            }
+
+
             if (Vector3.Magnitude(this.transform.position - _myAgent.path.corners[_myAgent.path.corners.Length - 1]) < 1.5f)
             {
                 _endMove = true;
@@ -94,7 +108,7 @@ namespace Scenes.Ingame.Enemy
                  {//毎秒処理
                     _staminaChangeCount -= 1;
 
-                switch (_enemyStatus.EnemyState)
+                switch (_enemyStatus.State)
                 {
                     case EnemyState.Patrolling:
                     case EnemyState.Searching:
@@ -158,35 +172,37 @@ namespace Scenes.Ingame.Enemy
                 
             }
 
+
+
         }
 
-            private void SpeedChange() {
+        private void SpeedChange() {
             
 
-                if (_stiffness)
+            if (_stiffness)
                 {//硬直中は移動不能に
                     _myAgent.speed = 0;
                 }
                 else
                 {
-                    switch (_enemyStatus.EnemyState)
+                    switch (_enemyStatus.State)
                     {
                         case EnemyState.Patrolling:
-                            _enemyStatus.SetSpeed(_enemyStatus.PatrollingSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.WaterEffectDebuff ? 0.8f : 1));
+                            _enemyStatus.SetSpeed(_enemyStatus.PatrollingSpeed * (_enemyStatus.Bind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
 
                             break;
                         case EnemyState.Searching:
-                            _enemyStatus.SetSpeed(_enemyStatus.SearchSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.WaterEffectDebuff ? 0.8f : 1));
+                            _enemyStatus.SetSpeed(_enemyStatus.SearchSpeed * (_enemyStatus.Bind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
 
                             break;
                         case EnemyState.Chase:
                             if (_enemyStatus.StaminaOver)
                             {
-                                _enemyStatus.SetSpeed(_enemyStatus.SearchSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.WaterEffectDebuff ? 0.8f : 1));
+                                _enemyStatus.SetSpeed(_enemyStatus.SearchSpeed * (_enemyStatus.Bind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
                             }
                             else
                             {
-                                _enemyStatus.SetSpeed(_enemyStatus.ChaseSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.WaterEffectDebuff ? 0.8f : 1));
+                                _enemyStatus.SetSpeed(_enemyStatus.ChaseSpeed * (_enemyStatus.Bind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
                             }
                             break;
 
@@ -195,11 +211,11 @@ namespace Scenes.Ingame.Enemy
                             
                             if (_enemyStatus.StaminaOver)
                             {
-                                _enemyStatus.SetSpeed(_enemyStatus.SearchSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.WaterEffectDebuff ? 0.8f : 1));
+                                _enemyStatus.SetSpeed(_enemyStatus.SearchSpeed * (_enemyStatus.Bind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
                             }
                             else
                             {
-                                _enemyStatus.SetSpeed(_enemyStatus.ChaseSpeed * (_enemyStatus.IsBind ? 0.1f : 1) * (_enemyStatus.WaterEffectDebuff ? 0.8f : 1));
+                                _enemyStatus.SetSpeed(_enemyStatus.ChaseSpeed * (_enemyStatus.Bind ? 0.1f : 1) * (_enemyStatus.IsWaterEffectDebuff ? 0.8f : 1));
                             }
                             break;
                         case EnemyState.FallBack:
@@ -214,7 +230,7 @@ namespace Scenes.Ingame.Enemy
 
 
                     }
-                }
+            }
             
         }
 
@@ -223,8 +239,8 @@ namespace Scenes.Ingame.Enemy
 
         public void SetMovePosition(Vector3 targetPosition)
         {
-            _movePosition = targetPosition;
-            _myAgent.destination = targetPosition;
+                _movePosition = targetPosition;
+
         }
 
         /// <summary>

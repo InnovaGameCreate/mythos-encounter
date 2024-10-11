@@ -126,6 +126,8 @@ GameObject:
   - component: {fileID: 7371785723401529223}
   - component: {fileID: -6877180654909065778}
   - component: {fileID: -1417630428139418448}
+  - component: {fileID: 6466916487149346403}
+  - component: {fileID: -8526917259086333199}
   m_Layer: 0
   m_Name: DeepOnes
   m_TagString: Enemy
@@ -198,7 +200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _checkRate: 1
   _debugMode: 0
-  _myEneyMove: {fileID: 153174845251746693}
+  _myEnemyMove: {fileID: 153174845251746693}
   _enemyStatus: {fileID: 227141341248401291}
 --- !u!114 &227141341248401291
 MonoBehaviour:
@@ -228,7 +230,7 @@ MonoBehaviour:
   _uniqueItem: {fileID: 6146547148148849240, guid: 1460fd555e5df4f4ba1ca88617706b73, type: 3}
   _enemyMagics: 
   _hasMagicNum: 0
-  _fallBackTime: 3000
+  _fallBackTime: 3
   _visual: {fileID: 447870234884017220}
   _discoverTime: 0
   _enemyId: 1
@@ -237,6 +239,16 @@ MonoBehaviour:
   _enemyMove: {fileID: 153174845251746693}
   _enemyUniqueAction: {fileID: 1737251985559039451}
   _debugMode: 0
+  _Speed: 0
+  _Hp: 0
+  _AudiometerPower: 0
+  _Stamina: 0
+  _State: 1
+  _Bind: 0
+  _StiffnessTime: 0
+  _IsWaterEffectDebuff: 0
+  _StaminaOver: 0
+  _MultiPlayManager: {fileID: 0}
 --- !u!195 &8637928095015650533
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -418,6 +430,47 @@ MonoBehaviour:
   _mass: 10
   _bullet: {fileID: 2261882221392382239, guid: 39e56c2c101133e4ba9db45ecad211dd, type: 3}
   _hand: {fileID: 5088418229967577375}
+--- !u!114 &6466916487149346403
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6990575043391720951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncScale: 0
+  SyncParent: 0
+  _autoAOIOverride: 1
+  DisableSharedModeInterpolation: 0
+--- !u!114 &-8526917259086333199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6990575043391720951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SortKey: 1203507831
+  ObjectInterest: 1
+  Flags: 262145
+  NestedObjects: []
+  NetworkedBehaviours:
+  - {fileID: 4132503370352304899}
+  - {fileID: 153174845251746693}
+  - {fileID: 651126892439209470}
+  - {fileID: 227141341248401291}
+  - {fileID: 1737251985559039451}
+  - {fileID: -6877180654909065778}
+  - {fileID: -1417630428139418448}
+  - {fileID: 6466916487149346403}
 --- !u!1001 &9117532595097646355
 PrefabInstance:
   m_ObjectHideFlags: 0
