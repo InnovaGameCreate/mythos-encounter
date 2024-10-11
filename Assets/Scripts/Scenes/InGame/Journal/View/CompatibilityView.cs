@@ -1,10 +1,8 @@
 using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UniRx;
 using Scenes.Ingame.Enemy.Trace;
+using Scenes.Ingame.Manager;
 
 public class CompatibilityView : ViewBase
 {
@@ -16,8 +14,9 @@ public class CompatibilityView : ViewBase
         WebDataRequest.instance.OnEndLoad.Subscribe(_ =>
         {
             _girdView.Init(WebDataRequest.GetEnemyDataArrayList);
-            _girdView.UpdateJournalList(_traceFeatureController.traceModel.usedCombinations);
         }).AddTo(this);
+
+        IngameManager.Instance.OnGetJournal.Subscribe(_ => _girdView.UpdateJournalList(_traceFeatureController.traceModel.usedCombinations)).AddTo(this);
         base.Init();
     }
 }
