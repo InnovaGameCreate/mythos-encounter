@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 744484960752590301}
   - component: {fileID: 1005845583282322004}
   - component: {fileID: 8670383314192168327}
-  - component: {fileID: 5579919215103553775}
-  - component: {fileID: 7662346061124895368}
-  - component: {fileID: 8297354565459404262}
+  - component: {fileID: 9101310080509202326}
+  - component: {fileID: 4559250436159446982}
+  - component: {fileID: 8409130527454520692}
   m_Layer: 11
   m_Name: Wardrobe_04_Door_02_LOD0
   m_TagString: StageIntract
@@ -29,7 +29,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 50747862763709430}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0.2274936, z: -0, w: 0.9737796}
   m_LocalPosition: {x: 0.29479456, y: 0.18780279, z: 0.30537912}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -37,7 +37,7 @@ Transform:
   - {fileID: 7911234440305008501}
   m_Father: {fileID: 9214117382904198360}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -26.299002, z: 0}
 --- !u!33 &744484960752590301
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -54,7 +54,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 50747862763709430}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -109,7 +109,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.07326794, y: 2.2923117, z: 0.61832166}
   m_Center: {x: 0.03663397, y: 1.1461558, z: -0.3091606}
---- !u!114 &5579919215103553775
+--- !u!114 &9101310080509202326
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -118,12 +118,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 50747862763709430}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8c42b0ddf104834eba065e2435c2642, type: 3}
+  m_Script: {fileID: 11500000, guid: 034bc47afcbf5e141a58d5c20b7808e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawType: 0
-  _initialStateOpen: 0
---- !u!114 &7662346061124895368
+--- !u!114 &4559250436159446982
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -182,37 +180,13 @@ MonoBehaviour:
       serializedProperties:
       - PropertyName: _PublicColor
         Property:
-          ColorValue: {r: 0.5, g: 0.5, b: 0.5, a: 0.1764706}
+          ColorValue: {r: 1, g: 1, b: 1, a: 0.2}
           FloatValue: 0
           VectorValue: {x: 0, y: 0, z: 0, w: 0}
           PropertyType: 0
-      - PropertyName: _PublicOuterColor
-        Property:
-          ColorValue: {r: 1, g: 0, b: 0, a: 1}
-          FloatValue: 0
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 0
-      - PropertyName: _PublicInnerColor
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 0
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 0
-      - PropertyName: _PublicFresnelPower
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 2
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 2
-      - PropertyName: _PublicFresnelMultiplier
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 1
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 2
   backParameters:
     enabled: 1
-    color: {r: 1, g: 0.015686274, b: 0.034576498, a: 1}
+    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     dilateShift: 1
     blurShift: 1
     fillPass:
@@ -226,7 +200,7 @@ MonoBehaviour:
     fillPass:
       shader: {fileID: 0}
       serializedProperties: []
---- !u!114 &8297354565459404262
+--- !u!114 &8409130527454520692
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -235,9 +209,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 50747862763709430}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 034bc47afcbf5e141a58d5c20b7808e4, type: 3}
+  m_Script: {fileID: 11500000, guid: d8c42b0ddf104834eba065e2435c2642, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawType: 0
+  _initialStateOpen: 0
 --- !u!1 &118664678330715302
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,9 +226,9 @@ GameObject:
   - component: {fileID: 8048804687115722840}
   - component: {fileID: 6592283069996061020}
   - component: {fileID: 5424137448535871615}
-  - component: {fileID: 9111703366270712561}
-  - component: {fileID: 4928623624804330787}
-  - component: {fileID: 6248363248309412878}
+  - component: {fileID: 4488080104823234262}
+  - component: {fileID: 994522125623079186}
+  - component: {fileID: 3400139580938307675}
   m_Layer: 11
   m_Name: Wardrobe_04_Box_LOD0
   m_TagString: StageIntract
@@ -292,7 +268,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 118664678330715302}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -347,7 +323,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5212927, y: 0.25433367, z: 0.61557245}
   m_Center: {x: 0.027133465, y: -0.022950977, z: 0.00000023841858}
---- !u!114 &9111703366270712561
+--- !u!114 &4488080104823234262
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -356,12 +332,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 118664678330715302}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8c42b0ddf104834eba065e2435c2642, type: 3}
+  m_Script: {fileID: 11500000, guid: 034bc47afcbf5e141a58d5c20b7808e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawType: 2
-  _initialStateOpen: 0
---- !u!114 &4928623624804330787
+--- !u!114 &994522125623079186
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -420,37 +394,13 @@ MonoBehaviour:
       serializedProperties:
       - PropertyName: _PublicColor
         Property:
-          ColorValue: {r: 0.5, g: 0.5, b: 0.5, a: 0.1764706}
+          ColorValue: {r: 1, g: 1, b: 1, a: 0.2}
           FloatValue: 0
           VectorValue: {x: 0, y: 0, z: 0, w: 0}
           PropertyType: 0
-      - PropertyName: _PublicOuterColor
-        Property:
-          ColorValue: {r: 1, g: 0, b: 0, a: 1}
-          FloatValue: 0
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 0
-      - PropertyName: _PublicInnerColor
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 0
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 0
-      - PropertyName: _PublicFresnelPower
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 2
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 2
-      - PropertyName: _PublicFresnelMultiplier
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 1
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 2
   backParameters:
     enabled: 1
-    color: {r: 1, g: 0.015686274, b: 0.034576498, a: 1}
+    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     dilateShift: 1
     blurShift: 1
     fillPass:
@@ -464,7 +414,7 @@ MonoBehaviour:
     fillPass:
       shader: {fileID: 0}
       serializedProperties: []
---- !u!114 &6248363248309412878
+--- !u!114 &3400139580938307675
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -473,9 +423,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 118664678330715302}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 034bc47afcbf5e141a58d5c20b7808e4, type: 3}
+  m_Script: {fileID: 11500000, guid: d8c42b0ddf104834eba065e2435c2642, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawType: 2
+  _initialStateOpen: 0
 --- !u!1 &513379438477651714
 GameObject:
   m_ObjectHideFlags: 0
@@ -487,10 +439,10 @@ GameObject:
   - component: {fileID: 8656100163911762861}
   - component: {fileID: 4767885754121397226}
   - component: {fileID: 3022597627837352233}
-  - component: {fileID: 608082790864996939}
+  - component: {fileID: 7817316638607698080}
   m_Layer: 11
   m_Name: Wardrobe_04_Box_LOD1
-  m_TagString: StageIntract
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -526,7 +478,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 513379438477651714}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -560,7 +512,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &608082790864996939
+--- !u!114 &7817316638607698080
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -584,9 +536,9 @@ GameObject:
   - component: {fileID: 5120592546131368556}
   - component: {fileID: 5102722723372854814}
   - component: {fileID: 4192782946476659158}
-  - component: {fileID: 1151600324341920840}
-  - component: {fileID: 5549657971602075964}
-  - component: {fileID: 8454823948513262207}
+  - component: {fileID: 9106924092044515145}
+  - component: {fileID: 5597239599711536462}
+  - component: {fileID: 9079818641496577542}
   m_Layer: 11
   m_Name: Wardrobe_04_Box_02_LOD0
   m_TagString: StageIntract
@@ -626,7 +578,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 878772628816681034}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -681,7 +633,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5212927, y: 0.25433367, z: 0.61557245}
   m_Center: {x: 0.027133465, y: -0.022950977, z: -0.00000023841858}
---- !u!114 &1151600324341920840
+--- !u!114 &9106924092044515145
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -690,12 +642,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 878772628816681034}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8c42b0ddf104834eba065e2435c2642, type: 3}
+  m_Script: {fileID: 11500000, guid: 034bc47afcbf5e141a58d5c20b7808e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawType: 2
-  _initialStateOpen: 0
---- !u!114 &5549657971602075964
+--- !u!114 &5597239599711536462
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -754,37 +704,13 @@ MonoBehaviour:
       serializedProperties:
       - PropertyName: _PublicColor
         Property:
-          ColorValue: {r: 0.5, g: 0.5, b: 0.5, a: 0.1764706}
+          ColorValue: {r: 1, g: 1, b: 1, a: 0.2}
           FloatValue: 0
           VectorValue: {x: 0, y: 0, z: 0, w: 0}
           PropertyType: 0
-      - PropertyName: _PublicOuterColor
-        Property:
-          ColorValue: {r: 1, g: 0, b: 0, a: 1}
-          FloatValue: 0
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 0
-      - PropertyName: _PublicInnerColor
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 0
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 0
-      - PropertyName: _PublicFresnelPower
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 2
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 2
-      - PropertyName: _PublicFresnelMultiplier
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 1
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 2
   backParameters:
     enabled: 1
-    color: {r: 1, g: 0.015686274, b: 0.034576498, a: 1}
+    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     dilateShift: 1
     blurShift: 1
     fillPass:
@@ -798,7 +724,7 @@ MonoBehaviour:
     fillPass:
       shader: {fileID: 0}
       serializedProperties: []
---- !u!114 &8454823948513262207
+--- !u!114 &9079818641496577542
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -807,9 +733,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 878772628816681034}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 034bc47afcbf5e141a58d5c20b7808e4, type: 3}
+  m_Script: {fileID: 11500000, guid: d8c42b0ddf104834eba065e2435c2642, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawType: 2
+  _initialStateOpen: 0
 --- !u!1 &1955603199174626404
 GameObject:
   m_ObjectHideFlags: 0
@@ -821,10 +749,10 @@ GameObject:
   - component: {fileID: 7911234440305008501}
   - component: {fileID: 4541373142175522846}
   - component: {fileID: 5998006567571295234}
-  - component: {fileID: 4853190181450176224}
+  - component: {fileID: 1794828854879533531}
   m_Layer: 11
   m_Name: Wardrobe_04_Door_02_LOD1
-  m_TagString: StageIntract
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -860,7 +788,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1955603199174626404}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -894,7 +822,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &4853190181450176224
+--- !u!114 &1794828854879533531
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -956,7 +884,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2082307509099451392}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -1023,9 +951,9 @@ GameObject:
   - component: {fileID: 5609084196190057590}
   - component: {fileID: 5954979597879770013}
   - component: {fileID: 4426492301157149374}
-  - component: {fileID: 2120690529737278654}
-  - component: {fileID: 8391966954907680047}
-  - component: {fileID: 2894928074672575970}
+  - component: {fileID: 1884466515336114371}
+  - component: {fileID: 401495206474277898}
+  - component: {fileID: 6130899192430270295}
   m_Layer: 11
   m_Name: Wardrobe_04_Door_01_LOD0
   m_TagString: StageIntract
@@ -1040,7 +968,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2124689764218113602}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: 0.7066952, z: -0, w: 0.7075182}
   m_LocalPosition: {x: 0.29479456, y: 0.18780279, z: -0.9257658}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1048,7 +976,7 @@ Transform:
   - {fileID: 2829644169937261626}
   m_Father: {fileID: 9214117382904198360}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 89.93301, z: 0}
 --- !u!33 &5609084196190057590
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1065,7 +993,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2124689764218113602}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -1120,7 +1048,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.07326795, y: 2.2923117, z: 0.61833334}
   m_Center: {x: 0.036633976, y: 1.1461558, z: 0.30916572}
---- !u!114 &2120690529737278654
+--- !u!114 &1884466515336114371
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1129,12 +1057,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2124689764218113602}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8c42b0ddf104834eba065e2435c2642, type: 3}
+  m_Script: {fileID: 11500000, guid: 034bc47afcbf5e141a58d5c20b7808e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawType: 1
-  _initialStateOpen: 0
---- !u!114 &8391966954907680047
+--- !u!114 &401495206474277898
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1193,37 +1119,13 @@ MonoBehaviour:
       serializedProperties:
       - PropertyName: _PublicColor
         Property:
-          ColorValue: {r: 0.5, g: 0.5, b: 0.5, a: 0.1764706}
+          ColorValue: {r: 1, g: 1, b: 1, a: 0.2}
           FloatValue: 0
           VectorValue: {x: 0, y: 0, z: 0, w: 0}
           PropertyType: 0
-      - PropertyName: _PublicOuterColor
-        Property:
-          ColorValue: {r: 1, g: 0, b: 0, a: 1}
-          FloatValue: 0
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 0
-      - PropertyName: _PublicInnerColor
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 0
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 0
-      - PropertyName: _PublicFresnelPower
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 2
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 2
-      - PropertyName: _PublicFresnelMultiplier
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 1
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 2
   backParameters:
     enabled: 1
-    color: {r: 1, g: 0.015686274, b: 0.034576498, a: 1}
+    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     dilateShift: 1
     blurShift: 1
     fillPass:
@@ -1237,7 +1139,7 @@ MonoBehaviour:
     fillPass:
       shader: {fileID: 0}
       serializedProperties: []
---- !u!114 &2894928074672575970
+--- !u!114 &6130899192430270295
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1246,9 +1148,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 2124689764218113602}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 034bc47afcbf5e141a58d5c20b7808e4, type: 3}
+  m_Script: {fileID: 11500000, guid: d8c42b0ddf104834eba065e2435c2642, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawType: 1
+  _initialStateOpen: 0
 --- !u!1 &2151258151145010562
 GameObject:
   m_ObjectHideFlags: 0
@@ -1260,10 +1164,10 @@ GameObject:
   - component: {fileID: 2829644169937261626}
   - component: {fileID: 6510513289070715039}
   - component: {fileID: 1654271236730664632}
-  - component: {fileID: 3679985865254880045}
+  - component: {fileID: 2735837552092007527}
   m_Layer: 11
   m_Name: Wardrobe_04_Door_01_LOD1
-  m_TagString: StageIntract
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1299,7 +1203,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2151258151145010562}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -1333,7 +1237,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &3679985865254880045
+--- !u!114 &2735837552092007527
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1394,7 +1298,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5135452152561551180}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -1477,7 +1381,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6170653880613250048}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -1523,9 +1427,9 @@ GameObject:
   - component: {fileID: 1985312038507595671}
   - component: {fileID: 6472759416560152262}
   - component: {fileID: 1682545659220518236}
-  - component: {fileID: 3537712702752636715}
-  - component: {fileID: 8837302702990798363}
-  - component: {fileID: 900411133275653918}
+  - component: {fileID: 168368658950763031}
+  - component: {fileID: 4034884772662780691}
+  - component: {fileID: 4150531084213562828}
   m_Layer: 11
   m_Name: Wardrobe_04_Door_03_LOD0
   m_TagString: StageIntract
@@ -1565,7 +1469,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6356278133344743188}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -1620,7 +1524,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.07326788, y: 1.1461558, z: 0.6155724}
   m_Center: {x: 0.03663394, y: 0.5730779, z: -0.3077862}
---- !u!114 &3537712702752636715
+--- !u!114 &168368658950763031
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1629,12 +1533,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6356278133344743188}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d8c42b0ddf104834eba065e2435c2642, type: 3}
+  m_Script: {fileID: 11500000, guid: 034bc47afcbf5e141a58d5c20b7808e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drawType: 0
-  _initialStateOpen: 0
---- !u!114 &8837302702990798363
+--- !u!114 &4034884772662780691
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1693,37 +1595,13 @@ MonoBehaviour:
       serializedProperties:
       - PropertyName: _PublicColor
         Property:
-          ColorValue: {r: 0.5, g: 0.5, b: 0.5, a: 0.1764706}
+          ColorValue: {r: 1, g: 1, b: 1, a: 0.2}
           FloatValue: 0
           VectorValue: {x: 0, y: 0, z: 0, w: 0}
           PropertyType: 0
-      - PropertyName: _PublicOuterColor
-        Property:
-          ColorValue: {r: 1, g: 0, b: 0, a: 1}
-          FloatValue: 0
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 0
-      - PropertyName: _PublicInnerColor
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 0
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 0
-      - PropertyName: _PublicFresnelPower
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 2
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 2
-      - PropertyName: _PublicFresnelMultiplier
-        Property:
-          ColorValue: {r: 0, g: 1, b: 0, a: 1}
-          FloatValue: 1
-          VectorValue: {x: 0, y: 0, z: 0, w: 0}
-          PropertyType: 2
   backParameters:
     enabled: 1
-    color: {r: 1, g: 0.015686274, b: 0.034576498, a: 1}
+    color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     dilateShift: 1
     blurShift: 1
     fillPass:
@@ -1737,7 +1615,7 @@ MonoBehaviour:
     fillPass:
       shader: {fileID: 0}
       serializedProperties: []
---- !u!114 &900411133275653918
+--- !u!114 &4150531084213562828
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1746,9 +1624,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6356278133344743188}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 034bc47afcbf5e141a58d5c20b7808e4, type: 3}
+  m_Script: {fileID: 11500000, guid: d8c42b0ddf104834eba065e2435c2642, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  drawType: 0
+  _initialStateOpen: 0
 --- !u!1 &6552447829132088408
 GameObject:
   m_ObjectHideFlags: 0
@@ -1760,10 +1640,10 @@ GameObject:
   - component: {fileID: 6158558971483005912}
   - component: {fileID: 5057115154325660329}
   - component: {fileID: 5476820243722618017}
-  - component: {fileID: 447712034287853074}
+  - component: {fileID: 3452602269616522561}
   m_Layer: 11
   m_Name: Wardrobe_04_Box_02_LOD1
-  m_TagString: StageIntract
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1799,7 +1679,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6552447829132088408}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -1833,7 +1713,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &447712034287853074
+--- !u!114 &3452602269616522561
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1856,10 +1736,10 @@ GameObject:
   - component: {fileID: 8562164086231801089}
   - component: {fileID: 5544240002997442163}
   - component: {fileID: 303899306095171131}
-  - component: {fileID: 8066454576325303072}
+  - component: {fileID: 5475247507440931816}
   m_Layer: 11
   m_Name: Wardrobe_04_Door_03_LOD1
-  m_TagString: StageIntract
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1895,7 +1775,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6966421358200682954}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -1929,7 +1809,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &8066454576325303072
+--- !u!114 &5475247507440931816
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

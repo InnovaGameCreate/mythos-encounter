@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7201e6afb63bb241ac8b64f7cd95a71, type: 3}
+  m_Name: GeigerCounter
+  m_EditorClassIdentifier: 
+  itemID: 19
+  itemName: GeigerCounter
+  itemSprite: {fileID: 21300000, guid: e5505ebbb8e0ffe44b3dd322307e6123, type: 3}
+  price: 100
+  itemInfo: "\u6E2C\u5B9A\u3057\u305F\u5834\u6240\u306E\u653E\u5C04\u7DDA\u6FC3\u5EA6\u304C\u308F\u304B\u308B"
+  type: 1
+  isSingleUse: 1
+  prefab: {fileID: 4570247510132778309, guid: df7d0d203c95c9a4b9efa2b426e565e8, type: 3}

@@ -93,6 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2727402327496487849}
   - component: {fileID: 7170771149336265944}
+  - component: {fileID: 2458644921613426919}
   m_Layer: 0
   m_Name: Home_Flower_03
   m_TagString: Untagged
@@ -116,7 +117,7 @@ Transform:
   - {fileID: 6501593000302582071}
   - {fileID: 7864364962776550505}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!205 &7170771149336265944
 LODGroup:
@@ -145,6 +146,25 @@ LODGroup:
     renderers:
     - renderer: {fileID: 4894554727915136905}
   m_Enabled: 1
+--- !u!114 &2458644921613426919
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3355882506178013459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &3411011628977653638
 GameObject:
   m_ObjectHideFlags: 0
@@ -239,7 +259,6 @@ GameObject:
   - component: {fileID: 3683702460154016977}
   - component: {fileID: 6590713132663617843}
   - component: {fileID: 1951917887301448269}
-  - component: {fileID: 9117691272899864109}
   m_Layer: 0
   m_Name: Home_Flower_03_LOD0
   m_TagString: Untagged
@@ -312,24 +331,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &9117691272899864109
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4687973646548490111}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.26625133, y: 0.36654735, z: 0.20984161}
-  m_Center: {x: -0.004739642, y: 0.18327367, z: 0.0013272166}

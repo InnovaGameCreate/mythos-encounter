@@ -49,10 +49,6 @@ public class RunnerSpawner : MonoBehaviour
             {
                 StartGame(GameMode.Client);
             }
-            if (GUI.Button(new Rect(0, 80, 200, 40), "Single"))
-            {
-                StartGame(GameMode.Single);
-            }
         }
     }
 

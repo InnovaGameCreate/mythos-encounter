@@ -93,6 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3157298625751374585}
   - component: {fileID: 7893374143363804552}
+  - component: {fileID: 4459358709300779053}
   m_Layer: 0
   m_Name: Home_Flower_01
   m_TagString: Untagged
@@ -145,6 +146,25 @@ LODGroup:
     renderers:
     - renderer: {fileID: 4983218922247116898}
   m_Enabled: 1
+--- !u!114 &4459358709300779053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2349518856571912259}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OverrideArea: 0
+  m_Area: 0
+  m_OverrideGenerateLinks: 0
+  m_GenerateLinks: 0
+  m_IgnoreFromBuild: 1
+  m_ApplyToChildren: 1
+  m_AffectedAgents: ffffffff
 --- !u!1 &4541041171900861532
 GameObject:
   m_ObjectHideFlags: 0
@@ -239,7 +259,6 @@ GameObject:
   - component: {fileID: 8760449760448467397}
   - component: {fileID: 4004491349541739416}
   - component: {fileID: 6924923761508521134}
-  - component: {fileID: 3195940700004826384}
   m_Layer: 0
   m_Name: Home_Flower_01_LOD0
   m_TagString: Untagged
@@ -312,16 +331,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &3195940700004826384
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7951971595981993186}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.34869885, y: 1.1309086, z: 0.36281657}
-  m_Center: {x: 0.0020893812, y: 0.5654542, z: -0.007065773}

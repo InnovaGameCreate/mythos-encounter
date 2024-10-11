@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2261838382363167123}
   - component: {fileID: 4079254348672376939}
   - component: {fileID: 7816629565449058331}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Wardrobe_03_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,7 +50,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2569584132683772917}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -115,7 +115,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3748138126980640282}
   - component: {fileID: 8241042431693937003}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Wardrobe_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +173,7 @@ GameObject:
   - component: {fileID: 8222922164122619568}
   - component: {fileID: 1355391753585799336}
   - component: {fileID: 7496635768812605279}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Wardrobe_03_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -211,7 +211,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7245153225403505136}
   m_Enabled: 1
-  m_CastShadows: 2
+  m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0

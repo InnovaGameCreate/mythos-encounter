@@ -1,8 +1,5 @@
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.Triggers;
-using Scenes.Ingame.Manager;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -24,6 +21,7 @@ namespace Data
         private int _dispersingEscape;//‘ŞU‚µ‚Ä’Eo‚µ‚½‰ñ”
         public static PlayerInformation Instance;
 
+        public int CharacterId { get => characterId; }
         public string Name { get => _name; }
         public DateTime Created { get => _created; }
         public DateTime End { get => _end; }

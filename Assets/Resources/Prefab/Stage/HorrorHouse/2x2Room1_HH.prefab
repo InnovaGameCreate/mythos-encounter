@@ -925,6 +925,14 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: 1395172732709527836, guid: d7e27c49ded1ba24fb5206c2631dd3aa, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3388131271752462470, guid: d7e27c49ded1ba24fb5206c2631dd3aa, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4236188120899928084, guid: d7e27c49ded1ba24fb5206c2631dd3aa, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -984,6 +992,10 @@ PrefabInstance:
     - target: {fileID: 8785860779851899279, guid: d7e27c49ded1ba24fb5206c2631dd3aa, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 8838184362996361789, guid: d7e27c49ded1ba24fb5206c2631dd3aa, type: 3}
+      propertyPath: m_CastShadows
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
