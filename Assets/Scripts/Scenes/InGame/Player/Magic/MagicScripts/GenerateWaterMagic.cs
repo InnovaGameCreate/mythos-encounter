@@ -44,7 +44,7 @@ namespace Scenes.Ingame.Player
                     Debug.Log("呪文発動！");
                     //効果発動
                     //Todo：水エフェクト生成
-                    //_waterEffect = Instantiate(Resources.Load<GameObject>(水エフェクトのパス名), myPlayerStatus.gameObject.transform.position, Quaternion.identity, myPlayerStatus.gameObject.transform);
+                    _waterEffect = Instantiate(Resources.Load<GameObject>("Prefab/Magic/Water"), myPlayerStatus.gameObject.transform.position, Quaternion.identity, myPlayerStatus.gameObject.transform);
 
                     _enemyStatuses = FindObjectsOfType<EnemyStatus>();
                     for (int i = 0; i < _enemyStatuses.Length; i++)
