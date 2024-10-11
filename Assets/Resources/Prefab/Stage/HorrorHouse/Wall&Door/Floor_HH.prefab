@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 3246062741570735863}
   - component: {fileID: 1912153678882944703}
   - component: {fileID: 8640359652895559176}
+  - component: {fileID: 5386539916428713305}
   m_Layer: 7
   m_Name: Floor_4x4m(Clone)
   m_TagString: Untagged
@@ -159,6 +160,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4, y: 0.1350579, z: 4}
   m_Center: {x: 2, y: -0.06752895, z: -2}
+--- !u!114 &5386539916428713305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6671873150631727905}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1558acce02dabda4fbdb78d89d9ef6c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _temperature: 0
+  _keep: 0
+  _msv: 0
 --- !u!1 &8590711201883317533
 GameObject:
   m_ObjectHideFlags: 0

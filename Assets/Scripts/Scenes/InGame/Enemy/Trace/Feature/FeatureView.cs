@@ -3,7 +3,6 @@ using System.Linq;
 using Scenes.Ingame.Player;
 using UniRx;
 using System;
-using static UnityEngine.UI.Image;
 using Scenes.Ingame.Stage;
 using System.Collections;
 
@@ -20,17 +19,16 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         AudioSource _audioSource;
         private Subject<Unit> _onDestroy = new Subject<Unit>();
         public IObservable<Unit> onDestroy { get => _onDestroy; }
-        private ReactiveProperty<GameObject> floor = new ReactiveProperty<GameObject>();
-        public IObservable<GameObject> OnFloor { get => floor; }
+        private ReactiveProperty<StageTile> _stageTile = new ReactiveProperty<StageTile>();
+        public IObservable<StageTile> OnStageTileChange { get { return _stageTile; } }
         private Vector3 direction = new Vector3(0, -1, 0);
-        private StageTile _stagetile;
-        public StageTile stagetile { get { return _stagetile; } }
 
         public void Init()
         {
             _audioSource = GetComponent<AudioSource>();
             _enemy = GameObject.FindWithTag("Enemy");
             _stageInteracts = GameObject.FindGameObjectsWithTag("StageIntract");
+
             StartCoroutine(FloorCheck());
         }
 
@@ -41,11 +39,12 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
             while (true)
             {
                 Ray ray = new Ray(_enemy.transform.position, direction);
+                // レイをデバッグ表示
+                Debug.DrawRay(ray.origin, ray.direction * 1.0f, Color.red, 2.0f);
                 if (Physics.Raycast(ray.origin, ray.direction, out hit, 1.0f, floorMask))
                 {
                     _floor = hit.collider.gameObject;
-                    _stagetile = _floor.GetComponent<StageTile>();
-                    floor.Value = _floor;
+                    _stageTile.Value = _floor.GetComponent<StageTile>();
                 }    
                 yield return new WaitForSeconds(1f);
             }
@@ -53,13 +52,13 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
 
         public void Temperature(float change)
         {
-            stagetile.TemperatureChange(change);
-            Debug.Log(stagetile.Temperature);
+            _stageTile.Value.TemperatureChange(change);
+            Debug.Log(_stageTile.Value.Temperature);
         }
 
         public void Msv(int change)
         {
-            stagetile.MsvChange(change);
+            _stageTile.Value.MsvChange(change);
         }
 
         public void Breath()

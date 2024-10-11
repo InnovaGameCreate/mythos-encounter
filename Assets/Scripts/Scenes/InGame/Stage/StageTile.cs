@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Scenes.Ingame.Stage
@@ -9,7 +8,7 @@ namespace Scenes.Ingame.Stage
         [SerializeField] private float _temperature;
         [SerializeField] private float _keep;
         [SerializeField] private int _msv;
-        private float _time = 120;
+        private const float TIME = 120;
         private float _count = 0;
         private bool _flag = false;
         private float _over;
@@ -19,8 +18,7 @@ namespace Scenes.Ingame.Stage
 
         void Start()
         {
-            GameObject obj = GameObject.Find("StageManager");
-            _temperature = obj.GetComponent<StageManager>().StandardTemperature;
+            _temperature = FindObjectOfType<StageManager>().StandardTemperature;
             _keep = _temperature;
             _max = _temperature + 3;
             _min = _temperature - 3;
@@ -33,9 +31,9 @@ namespace Scenes.Ingame.Stage
         {
             _count += 1;
 
-            if (_count < _time)
+            if (_count < TIME)
             {
-                _temperature = Mathf.Lerp(_over, _keep, _count / _time);
+                _temperature = Mathf.Lerp(_over, _keep, _count / TIME);
             }
             else
             {

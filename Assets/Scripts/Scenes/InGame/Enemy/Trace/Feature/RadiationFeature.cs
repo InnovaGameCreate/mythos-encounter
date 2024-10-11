@@ -1,4 +1,3 @@
-using System;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using UniRx;
@@ -17,9 +16,9 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         {
             _cancellationTokenSource = new CancellationTokenSource();
             _view = view;
-            _view.OnFloor.Skip(1).Subscribe(_ =>
+            _view.OnStageTileChange.Skip(1).Subscribe(tile =>
             {
-                _change = _view.stagetile.Msv + 50;
+                _change = tile.Msv + 50;
                 if (_change > 200)
                     _change = 200;
                 _view.Msv(_change);
