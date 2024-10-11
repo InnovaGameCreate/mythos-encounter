@@ -2,7 +2,6 @@ using Scenes.Ingame.Journal;
 using UnityEngine;
 using UnityEngine.UI;
 using UniRx;
-using UniRx.Triggers;
 using System;
 
 public class JournalView : ViewBase

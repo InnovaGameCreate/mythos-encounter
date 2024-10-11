@@ -253,6 +253,7 @@ public class WebDataRequest : MonoBehaviour
 
             trace.Clear();
             var traceCode = dataRecord[(int)EnemyFormat.feature];
+            traceCode = traceCode.Length == 7 ? traceCode : $"0{traceCode}";
             for (int i = 0; i < traceCode.Length; i++)
             {
                 if (traceCode[i].ToString() == "1")
