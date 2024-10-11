@@ -145,7 +145,8 @@ namespace Scenes.Ingame.Player
         private bool _startReviveAnimation = false;//蘇生アニメーションが始まったか否か
 
         private bool _startDeathAnimation = false;//死亡アニメーションが始まったか否か
-        private bool _isBuffedAdrenaline = false;
+        private bool _isStaminaHealBuff = false;
+        private bool _isStaminaBuff = false;
 
         private void Init()
         {
@@ -347,9 +348,9 @@ namespace Scenes.Ingame.Player
         public void ChangeStamina(int value, ChangeValueMode mode)
         {
             if (mode == ChangeValueMode.Heal)
-                _stamina.Value = Mathf.Min(100, _stamina.Value + value);
+                _stamina.Value = Mathf.Min(100, _stamina.Value + (int)(value * (_isStaminaHealBuff ? 1.5f : 1)));
             else if (mode == ChangeValueMode.Damage)
-                _stamina.Value = Mathf.Max(0, _stamina.Value - (int)(value * (_isBuffedAdrenaline ? 0.5f : 1)));
+                _stamina.Value = Mathf.Max(0, _stamina.Value - (int)(value * (_isStaminaBuff ? 0.5f : 1)));
         }
 
         /// <summary>
@@ -616,22 +617,21 @@ namespace Scenes.Ingame.Player
             _startReviveAnimation = false;
         }
 
-        public void StartBuff()
-        {
-            StartCoroutine(BuffAdrenaline());
-        }
-        
         /// <summary>
-        /// アドレナリン上昇状態を変化させるための関数
+        /// スタミナの減少を半減させるバフの状態を変化させるための関数
         /// </summary>
-        public IEnumerator BuffAdrenaline()
+        public void SetStaminaBuff(bool value)
         {
-            _isBuffedAdrenaline = true;
-            yield return new WaitForSeconds(15.0f);
-            _isBuffedAdrenaline = false;
-            yield break;
+            _isStaminaBuff = value;
         }
 
+        /// <summary>
+        ///  スタミナの減少を50%上昇させるバフの状態を変化させるための関数
+        /// </summary>
+        public void SetStaminaHealBuff(bool value)
+        {
+            _isStaminaHealBuff = value;
+        }
 
         /// <summary>
         /// 光の距離を変化させる関数
