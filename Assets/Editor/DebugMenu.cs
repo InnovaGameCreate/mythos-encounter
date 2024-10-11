@@ -15,7 +15,7 @@ public class DebugTool : EditorWindow
     //private bool _isInvincibleMode = false;
 
     private ReactiveProperty<bool> _isInvincibleMode = new ReactiveProperty<bool>(true);
-    private ReactiveProperty<bool> _applyDebugValueMode = new ReactiveProperty<bool>(true);
+    private bool _applyDebugValueMode = true;
 
     //private bool _applyDebugValue = false;
     private ReactiveProperty<int> _debugHealth = new ReactiveProperty<int>(100);
@@ -51,7 +51,7 @@ public class DebugTool : EditorWindow
 
         _debugHealth
             .Skip(1)
-            .Where(_ => _applyDebugValueMode.Value)
+            .Where(_ => _applyDebugValueMode)
             .Subscribe(x =>
             {
                 //_applyDebugValueModeがtrueになっているとき、値を変更
@@ -63,7 +63,7 @@ public class DebugTool : EditorWindow
 
         _debugSanValue
             .Skip(1)
-            .Where(_ => _applyDebugValueMode.Value)
+            .Where(_ => _applyDebugValueMode)
             .Subscribe(x =>
             {
                 //_applyDebugValueModeがtrueになっているとき、値を変更
@@ -190,7 +190,7 @@ public class DebugTool : EditorWindow
         //プレイヤーの体力増減を行う
         EditorGUILayout.LabelField("プレイヤーのパラメータ変更", EditorStyles.largeLabel);
         _isInvincibleMode.Value = EditorGUILayout.Toggle("攻撃を無効化", _isInvincibleMode.Value);
-        _applyDebugValueMode.Value = EditorGUILayout.Toggle("Sliderの値を適応", _applyDebugValueMode.Value);
+        _applyDebugValueMode = EditorGUILayout.Toggle("Sliderの値を適応", _applyDebugValueMode);
         _debugHealth.Value = EditorGUILayout.IntSlider("体力", _debugHealth.Value, 0, 100);
         _debugSanValue.Value = EditorGUILayout.IntSlider("SAN値", _debugSanValue.Value, 0, 100);
 
