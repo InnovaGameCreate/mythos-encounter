@@ -4,6 +4,17 @@ using UnityEngine;
 
 namespace Scenes.Ingame.Player
 {
+    public enum ItemClip
+    { 
+        //記述
+    }
+
+    public enum EffectClip
+    { 
+        Cast,//呪文詠唱
+        Breathlessness, //息切れ
+    }
+
     /// <summary>
     /// プレイヤーの影響で出る音を管理する。
     /// 足音,アイテムの音など
@@ -118,6 +129,27 @@ namespace Scenes.Ingame.Player
             }
         }
 
+        /// <summary>
+        /// アイテムに関するクリップを流す関数
+        /// </summary>
+        /// <param name="clip">クリップの種類</param>
+        /// <param name="volume">音量</param>
+        public void PlayItemClip(ItemClip clip, float volume = 1.0f)
+        {
+            _audio.volume = volume;
+            _audio.PlayOneShot(_itemClips[(int)clip]);
+        }
+
+        /// <summary>
+        /// 効果音のクリップを流す関数
+        /// </summary>
+        /// <param name="clip">クリップの種類</param>
+        /// <param name="volume">音量</param>
+        public void PlayEffectClip(EffectClip clip, float volume = 1.0f)
+        {
+            _audio.volume = volume;
+            _audio.PlayOneShot(_effectClips[(int)clip]);
+        }
     }
 }
 
