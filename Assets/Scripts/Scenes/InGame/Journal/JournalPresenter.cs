@@ -16,7 +16,7 @@ namespace Scenes.Ingame.Journal
             _journalPageManager = GetComponent<JournalPageManager>();
             _journalPageManager.Init();
             _jornalView.Init();
-            _journalPageManager.CurrentPage.Subscribe(pageType => _jornalView.PageChange(pageType)).AddTo(this);
+            _journalPageManager.CurrentPage.Skip(1).Subscribe(pageType => _jornalView.PageChange(pageType)).AddTo(this);
             _journalPageManager.OnJornalOpen.Subscribe(_ => _jornalView.Open()).AddTo(this);
             _journalPageManager.OnJornalClose.Subscribe(_ => _jornalView.Close()).AddTo(this);
             _jornalView.OnJornalTagClick.Subscribe(pageType =>

@@ -9,12 +9,24 @@ public class JournalView : ViewBase
 {
     [SerializeField] private Animator _animator;
 
+    [Header("View")]
     [SerializeField] private ViewBase _progressView;
     [SerializeField] private ViewBase _featureView;
     [SerializeField] private ViewBase _compatibilityView;
     [SerializeField] private ViewBase _enemyView;
     [SerializeField] private ViewBase _itemView;
     [SerializeField] private ViewBase _spellView;
+
+    [Header("Tag")]
+    [SerializeField] private Button _progressTag;
+    [SerializeField] private Button _featureTag;
+    [SerializeField] private Button _compatibilityTag;
+    [SerializeField] private Button _enemyTag;
+    [SerializeField] private Button _itemTag;
+    [SerializeField] private Button _spellTag;
+
+
+
 
     private Subject<PageType> _jornalTagClick = new Subject<PageType>();
     public IObservable<PageType> OnJornalTagClick { get { return _jornalTagClick; } }
@@ -28,9 +40,17 @@ public class JournalView : ViewBase
         _enemyView.Init();
         _itemView.Init();
         _spellView.Init();
+
+        _progressTag.OnClickAsObservable().Subscribe(_ => PageChange(PageType.Progress)).AddTo(this);
+        _featureTag.OnClickAsObservable().Subscribe(_ => PageChange(PageType.Feature)).AddTo(this);
+        _compatibilityTag.OnClickAsObservable().Subscribe(_ => PageChange(PageType.Compatibility)).AddTo(this);
+        _enemyTag.OnClickAsObservable().Subscribe(_ => PageChange(PageType.Enemy)).AddTo(this);
+        _itemTag.OnClickAsObservable().Subscribe(_ => PageChange(PageType.Item)).AddTo(this);
+        _spellTag.OnClickAsObservable().Subscribe(_ => PageChange(PageType.Spell)).AddTo(this);
     }
     public void PageChange(PageType pageType)
     {
+        Debug.Log("PageChange");
         _animator.SetTrigger("isNext");
         _pastView?.Close();
         switch (pageType)

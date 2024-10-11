@@ -39,7 +39,6 @@ namespace Scenes.Ingame.Journal
                     else
                         CloseJournal();
                 }).AddTo(this);
-            this.gameObject.SetActive(false);
         }
 
         void OnEnable()
@@ -50,7 +49,6 @@ namespace Scenes.Ingame.Journal
         //ジャーナルを開く
         private void OpenJournal()
         {
-            this.gameObject.SetActive(true);
             _jornalOpen.OnNext(default);
         }
 
@@ -76,7 +74,6 @@ namespace Scenes.Ingame.Journal
         //ジャーナルを閉じる
         void CloseJournal()
         {
-            this.gameObject.SetActive(false);
             _jornalClsoe.OnNext(default);
         }
     }
