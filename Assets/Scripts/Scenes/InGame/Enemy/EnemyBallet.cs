@@ -3,10 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using System;
-using DG.Tweening;
-using TMPro;
-using UnityEditor.Rendering;
 using Fusion;
 
 public class EnemyBallet : NetworkBehaviour

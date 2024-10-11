@@ -1,18 +1,14 @@
+using System.Collections;
+using System.Collections.Generic;
 using Scenes.Ingame.Player;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
-using Scenes.Ingame.InGameSystem;
-using System;
 using System.Threading;
-using Cysharp.Threading.Tasks.Triggers;
-using UnityEngine.AI;
 using Fusion;
-using UnityEngine.Rendering.HighDefinition;
 
 namespace Scenes.Ingame.Enemy
 {
