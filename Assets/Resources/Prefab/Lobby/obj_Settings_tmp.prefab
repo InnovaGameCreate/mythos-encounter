@@ -608,7 +608,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2482591647211020140}
+      - m_Target: {fileID: 1749003142736538026}
         m_TargetAssemblyTypeName: Scenes.Lobby.RoomSettingPanel.RoomSetting_4, Assembly-CSharp
         m_MethodName: JoinPrivateSession
         m_Mode: 1
@@ -1334,7 +1334,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5519033248237964641}
+      - m_Target: {fileID: 4340791622207910546}
         m_TargetAssemblyTypeName: Scenes.Lobby.RoomSettingPanel.RoomSetting_3, Assembly-CSharp
         m_MethodName: JoinPublicSession
         m_Mode: 1
@@ -1612,7 +1612,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3807702804729551973}
-  - component: {fileID: 5519033248237964641}
+  - component: {fileID: 4340791622207910546}
   m_Layer: 0
   m_Name: RoomSetting_3
   m_TagString: Untagged
@@ -1639,7 +1639,7 @@ Transform:
   m_Father: {fileID: 7195025391724811853}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5519033248237964641
+--- !u!114 &4340791622207910546
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1914,7 +1914,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5519033248237964641}
+      - m_Target: {fileID: 4340791622207910546}
         m_TargetAssemblyTypeName: Scenes.Lobby.RoomSettingPanel.RoomSetting_3, Assembly-CSharp
         m_MethodName: ToRoomSetting_4
         m_Mode: 1
@@ -3667,7 +3667,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7151755185498736418}
-  - component: {fileID: 2482591647211020140}
+  - component: {fileID: 1749003142736538026}
   m_Layer: 0
   m_Name: RoomSetting_4
   m_TagString: Untagged
@@ -3694,7 +3694,7 @@ Transform:
   m_Father: {fileID: 7195025391724811853}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2482591647211020140
+--- !u!114 &1749003142736538026
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
