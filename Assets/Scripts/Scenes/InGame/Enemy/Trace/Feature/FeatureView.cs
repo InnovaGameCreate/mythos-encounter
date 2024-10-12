@@ -22,6 +22,7 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         private ReactiveProperty<StageTile> _stageTile = new ReactiveProperty<StageTile>();
         public IObservable<StageTile> OnStageTileChange { get { return _stageTile; } }
         private Vector3 direction = new Vector3(0, -1, 0);
+        [SerializeField] private GameObject _trackSprite;
 
         private EnemyStatus _enemyStatus;
         public AudioClip[] _breathes;
@@ -90,7 +91,10 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
                 }
             }
         }
-
+        public void InstanceTrackSprite()
+        {
+            GameObject trackSprite = Instantiate(_trackSprite, _enemy.transform.position, Quaternion.identity);
+        }
         private void OnDestroy()
         {
             _onDestroy.OnNext(default);
