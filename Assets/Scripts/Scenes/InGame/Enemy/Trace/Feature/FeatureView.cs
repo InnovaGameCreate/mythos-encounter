@@ -33,7 +33,7 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
             _audioSource.transform.position = _enemy.transform.position;
 
             //敵の状態に応じて呼吸音を変更
-            if (_enemyStatus.EnemyState == EnemyState.Chase || _enemyStatus.EnemyState == EnemyState.Attack)
+            if (_enemyStatus.State == EnemyState.Chase || _enemyStatus.State == EnemyState.Attack)
                 _audioSource.clip = _breathes[1];//追跡時 or 攻撃時
             else
                 _audioSource.clip = _breathes[0];//平常時
