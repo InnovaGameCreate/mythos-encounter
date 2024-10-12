@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6218402309767923495}
   - component: {fileID: 4553456516774223073}
   - component: {fileID: 8673242576878163234}
+  - component: {fileID: -724477179161409262}
   m_Layer: 0
   m_Name: Runner_Tmp_Kobayashi
   m_TagString: Untagged
@@ -73,3 +74,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerInfoPrefab: {fileID: 6167712678183842292, guid: 8c143ae05ffa8224a95d80773beb2457, type: 3}
+--- !u!114 &-724477179161409262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7183311776629293842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed246f2aa7cd9eb4aa7f7bffdf9b4aae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
