@@ -37,6 +37,8 @@ namespace Scenes.Ingame.Player
                     _spawnPosition = _stageGenerator.spawnPosition;
                     SpawnPlayer();
                 }).AddTo(this);
+
+            
         }
 
 

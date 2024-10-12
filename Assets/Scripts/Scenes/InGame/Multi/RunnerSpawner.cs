@@ -36,6 +36,19 @@ public class RunnerSpawner : MonoBehaviour
         });
     }
 
+    public void Action()
+    {
+        try
+        {
+            _runnerInstance.LoadScene(SceneRef.FromIndex(1), LoadSceneMode.Single);
+        }
+        catch
+        {
+            Debug.LogError("ƒV[ƒ“‘JˆÚ‚Å–â‘è‚ª”­¶‚µ‚Ü‚µ‚½B");
+            throw;
+        }
+    }
+
     void OnGUI()
     {
         if (_runnerInstance == null)

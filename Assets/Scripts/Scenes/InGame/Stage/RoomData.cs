@@ -1,7 +1,10 @@
 using UnityEngine;
+using System;
+using System.Runtime.Serialization;
 
 namespace Scenes.Ingame.Stage
 {
+    [Serializable]
     public struct RoomData
     {
         private RoomType _roomType;
@@ -14,7 +17,7 @@ namespace Scenes.Ingame.Stage
         public string roomName { get => _roomName; }
         public GameObject gameObject { get => _gameObject; }
 
-        public void RoomDataSet(RoomType roomType,int roomId)
+        public void RoomDataSet(RoomType roomType, int roomId)
         {
             _roomType = roomType;
             _roomId = roomId;

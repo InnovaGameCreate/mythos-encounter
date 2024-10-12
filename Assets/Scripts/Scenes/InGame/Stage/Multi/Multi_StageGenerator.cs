@@ -9,47 +9,50 @@ using UniRx;
 using Unity.AI.Navigation;
 using UnityEngine.AI;
 using System;
+using Fusion;
+using Fusion.Sockets;
+
 
 namespace Scenes.Ingame.Stage
 {
     /// <summary>
-    /// å‹•ä½œèª¬æ˜
-    /// ï¼‘._stageSizeã«è¨­å®šã•ã‚ŒãŸã‚µã‚¤ã‚ºã®ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ‡ãƒ¼ã‚¿ã‚’ç”Ÿæˆï¼ˆé…åˆ—ã®_stageGenerateDataã§ç®¡ç†ï¼‰
-    /// ï¼’.RandomFullSpaceRoomPloté–¢æ•°ã‚’ä½¿ã„å¤§ãã„éƒ¨å±‹ã‹ã‚‰é †ã«_stageGenerateDatå†…ã«éƒ¨å±‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ç”Ÿæˆã€‚ã“ã®æ™‚ç”Ÿæˆã™ã‚‹éƒ¨å±‹ã¯4x4,3x3,2x2ã®å¤§ãã•
-    /// ï¼“.RommShapingé–¢æ•°ã‚’ä½¿ã„ã€å­¤ç«‹ã—ã¦ç©ºã„ã¦ã„ã‚‹éš™é–“ã‚’åŸ‹ã‚ã‚‹ã‚ˆã†ã«éƒ¨å±‹ã‚’æ‹¡å¼µã€‚
-    /// ï¼”.GenerateAisleé–¢æ•°ã‚’ä½¿ã„ã€é€šè·¯ã®ä½œæˆã€‚ç¾åœ¨ã¯ç¸¦æ¨ªï¼‘ã¤ãšã¤ä½œæˆã—ã¦ã„ã‚‹
+    /// “®ìà–¾
+    /// ‚P._stageSize‚Éİ’è‚³‚ê‚½ƒTƒCƒY‚ÌƒXƒe[ƒWƒf[ƒ^‚ğ¶¬i”z—ñ‚Ì_stageGenerateData‚ÅŠÇ—j
+    /// ‚Q.RandomFullSpaceRoomPlotŠÖ”‚ğg‚¢‘å‚«‚¢•”‰®‚©‚ç‡‚É_stageGenerateDat“à‚É•”‰®‚Ìƒf[ƒ^‚ğ¶¬B‚±‚Ì¶¬‚·‚é•”‰®‚Í4x4,3x3,2x2‚Ì‘å‚«‚³
+    /// ‚R.RommShapingŠÖ”‚ğg‚¢AŒÇ—§‚µ‚Ä‹ó‚¢‚Ä‚¢‚éŒ„ŠÔ‚ğ–„‚ß‚é‚æ‚¤‚É•”‰®‚ğŠg’£B
+    /// ‚S.GenerateAisleŠÖ”‚ğg‚¢A’Ê˜H‚Ìì¬BŒ»İ‚Íc‰¡‚P‚Â‚¸‚Âì¬‚µ‚Ä‚¢‚é
     /// </summary>
     ///
-    public class StageGenerator : MonoBehaviour
+    public class Multi_StageGenerator : NetworkBehaviour
     {
-        [SerializeField, Tooltip("intã§ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç¸¦æ¨ªã®ã‚µã‚¤ã‚º")]
+        [SerializeField, Tooltip("int‚ÅƒXƒe[ƒW‚Ìc‰¡‚ÌƒTƒCƒY")]
         private Vector2 _stageSize;
         private Vector3 _spawnPosition;
         public Vector3 spawnPosition { get => _spawnPosition; }
         private List<Vector2> candidatePosition = new List<Vector2>();
-        private RoomData[,] _firsrFloorData;
+        private RoomData[,] _firstFloorData;
         private RoomData[,] _secondFloorData;
         private GameObject spawnPositionRoom = null;
         private GameObject instantiateRoom;
         private int _roomId = 0;
         const float TILESIZE = 5.85f;
-        const int OFFSET = 2;//é€šè·¯ã‚’ä½œã‚‰ãªã„ç¯„å›²
+        const int OFFSET = 2;//’Ê˜H‚ğì‚ç‚È‚¢”ÍˆÍ
         private bool playerSpawnRoom = false;
         private bool escapeSpawnRoom = false;
         [SerializeField]
-        private bool viewDebugLog = false;//ç¢ºèªç”¨ã®ãƒ‡ãƒãƒƒã‚¯ãƒ­ã‚°ã‚’è¡¨ç¤ºã™ã‚‹
+        private bool viewDebugLog = true;//Šm”F—p‚ÌƒfƒoƒbƒNƒƒO‚ğ•\¦‚·‚é
         private CancellationTokenSource source = new CancellationTokenSource();
         [SerializeField]
-        LineRenderer line;//ãƒ‡ãƒãƒƒã‚¯ç”¨ã®ãƒ©ã‚¤ãƒ³è¡¨ç¤º
+        LineRenderer line;//ƒfƒoƒbƒN—p‚Ìƒ‰ƒCƒ“•\¦
         private List<Vector2> _xSideWallPos = new List<Vector2>();
         private List<Vector2> _ySideWallPos = new List<Vector2>();
 
         Dictionary<int, LinqRoomData> linqData = new Dictionary<int, LinqRoomData>();
 
         [SerializeField]
-        private GameObject marker;//éš£æ¥ã™ã‚‹éƒ¨å±‹ã‚’åˆ†ã‹ã‚Šã‚„ã™ãã™ã‚‹ãŸã‚ã®ãƒãƒ¼ã‚«ãƒ¼
+        private GameObject marker;//—×Ú‚·‚é•”‰®‚ğ•ª‚©‚è‚â‚·‚­‚·‚é‚½‚ß‚Ìƒ}[ƒJ[
         [SerializeField]
-        private GameObject markerRed;//å¾Œã‹ã‚‰è¨­ç½®ã—ãŸãƒ‰ã‚¢ã®ä½ç½®ã‚’ã‚ã‹ã‚Šã‚„ã™ãã™ã‚‹ã‚‚ã®
+        private GameObject markerRed;//Œã‚©‚çİ’u‚µ‚½ƒhƒA‚ÌˆÊ’u‚ğ‚í‚©‚è‚â‚·‚­‚·‚é‚à‚Ì
         [Header("Room Size Count")]
         [SerializeField]
         private int LARGEROOM = 20;
@@ -75,15 +78,29 @@ namespace Scenes.Ingame.Stage
         private NavMeshSurface floorNavMeshSurface = null;
         private RoomLinqConfig _roomLinqConfig;
 
+        NetworkEvents events;
+        NetworkRunner runner;
+
+        int GetStageDataFlag = 0;
         void Start()
         {
             CancellationToken token = source.Token;
             _prefabPool = GetComponent<StagePrefabPool>();
             _roomLinqConfig = GetComponent<RoomLinqConfig>();
-            _firsrFloorData = new RoomData[(int)_stageSize.x, (int)_stageSize.y];
+            _firstFloorData = new RoomData[(int)_stageSize.x, (int)_stageSize.y];
             _secondFloorData = new RoomData[(int)_stageSize.x, (int)_stageSize.y];
             floorNavMeshSurface = floorObject.GetComponent<NavMeshSurface>();
-            IngameManager.Instance.OnInitial
+
+            runner = FindObjectOfType<NetworkRunner>();
+
+            if (runner != null)
+            {
+                events = runner.GetComponent<NetworkEvents>();
+                events.OnReliableData.AddListener(OnStageDataReceived);
+                Debug.Log("AddListener");
+            }
+
+            IngameManager.Instance.OnInitial    //‰Šú‰»ƒtƒ‰ƒO‚ª—§‚Á‚½‚ç
                 .Subscribe(_ =>
                 {
                     if (viewDebugLog) Debug.Log("Stage.OnInitial");
@@ -94,24 +111,27 @@ namespace Scenes.Ingame.Stage
 
         private async UniTaskVoid Generate(CancellationToken token)
         {
-            //ã‚¹ãƒ†ãƒ¼ã‚¸ãƒ‡ãƒ¼ã‚¿ã®è¨ˆç®—
+            if (!runner.IsServer) return;
+
+            //ƒXƒe[ƒWƒf[ƒ^‚ÌŒvZ
             for (int floor = 1; floor <= 2; floor++)
             {
-                RoomData[,] targetFloor = new RoomData[(int)_stageSize.x, (int)_stageSize.y];   //ãƒ‡ãƒ¼ã‚¿ã®åˆæœŸåŒ–
-                RoomPlotId(RoomType.room3x3Stair, new Vector2((int)_stageSize.x - 3, (int)_stageSize.y - 3), targetFloor);//ç¢ºå®šã®éšæ®µéƒ¨å±‹ãƒ‡ãƒ¼ã‚¿ã®å…¥åŠ›
-                RandomFullSpaceRoomPlot(targetFloor, LARGEROOM, MEDIUMROOM, SMALLROOM);                                //ãƒ‡ãƒ¼ã‚¿ã«éƒ¨å±‹ã®IDã®å‰²ã‚Šå½“ã¦
+                RoomData[,] targetFloor = new RoomData[(int)_stageSize.x, (int)_stageSize.y];   //ƒf[ƒ^‚Ì‰Šú‰»
+                RoomPlotId(RoomType.room3x3Stair, new Vector2((int)_stageSize.x - 3, (int)_stageSize.y - 3), targetFloor);  //Šm’è‚ÌŠK’i•”‰®ƒf[ƒ^‚Ì“ü—Í@(ŠK’i‚ÌˆÊ’u‚ÍŒÅ’èH)
+                if (viewDebugLog) DebugStageData(targetFloor);
+                RandomFullSpaceRoomPlot(targetFloor, LARGEROOM, MEDIUMROOM, SMALLROOM);                                //ƒf[ƒ^‚É•”‰®‚ÌID‚ÌŠ„‚è“–‚Ä
 
                 if (viewDebugLog) DebugStageData(targetFloor);
-                await RommShaping(token, targetFloor);                                          //ç©ºé–“ã‚’åŸ‹ã‚ã‚‹ã‚ˆã†ã«éƒ¨å±‹ã®å¤§ãã•ã‚’èª¿æ•´
+                await RommShaping(token, targetFloor);                                          //‹óŠÔ‚ğ–„‚ß‚é‚æ‚¤‚É•”‰®‚Ì‘å‚«‚³‚ğ’²®
                 targetFloor = GenerateAisle(token, targetFloor);
 
-                if (viewDebugLog) Debug.Log("é€šè·¯ç”Ÿæˆå‡¦ç†å¾Œã®ãƒ‡ãƒ¼ã‚¿");
+                if (viewDebugLog) Debug.Log("’Ê˜H¶¬ˆ—Œã‚Ìƒf[ƒ^");
                 if (viewDebugLog) DebugStageData(targetFloor);
                 switch (floor)
                 {
                     case 1:
                         _stairPosition.Add(ToVector2((int)_stageSize.x, (int)_stageSize.y));
-                        _firsrFloorData = targetFloor;
+                        _firstFloorData = targetFloor;
                         break;
                     case 2:
                         _secondFloorData = targetFloor;
@@ -120,24 +140,112 @@ namespace Scenes.Ingame.Stage
                         break;
                 }
             }
-            await StairRoomSelect(_firsrFloorData, _secondFloorData);                           //éšæ®µã®ä½ç½®ã®é¸æŠ
+
+            await StairRoomSelect(_firstFloorData, _secondFloorData);                           //ŠK’i‚ÌˆÊ’u‚Ì‘I‘ğ
             for (int i = 0; i <= _roomId; i++)
             {
                 linqData[i] = new LinqRoomData();
             }
 
-            //ã‚¹ãƒ†ãƒ¼ã‚¸ã®ç”Ÿæˆ
+
+            byte[] datat = { 0 };
+            foreach (PlayerRef player in runner.ActivePlayers)   //©•ªˆÈŠO‚Ì‚·‚×‚Ä‚ÌƒvƒŒƒCƒ„[‚É‘—M
+            {
+                if (player != runner.LocalPlayer)
+                {
+                    runner.SendReliableDataToPlayer(player, ReliableKey.FromInts(3,0,0,0), datat);
+                }
+
+            }
+
+
+            //key‚Ìˆê‚Â–Ú‚ğ¯•ÊqA“ñ‚Â–ÚEO‚Â–Ú‚ğ‚»‚ê‚¼‚êƒXƒe[ƒW‚Ìc‰¡ƒTƒCƒY‚Æ‚µ‚Ä‘—M
+            SendDataToAllPlayer(ReliableKey.FromInts(1, (int)_firstFloorData.GetLength(0), (int)_firstFloorData.GetLength(1), 0), _firstFloorData); 
+            SendDataToAllPlayer(ReliableKey.FromInts(2, (int)_secondFloorData.GetLength(0), (int)_secondFloorData.GetLength(1), 0), _secondFloorData);
+
+            DebugStageData(_secondFloorData);
+            //ƒXƒe[ƒW‚Ì¶¬
             for (int floor = 1; floor <= 2; floor++)
             {
-                RoomData[,] targetFloor = floor == 1 ? _firsrFloorData : _secondFloorData;
-                await GenerateStage(token, targetFloor, floor - 1);                             //éƒ¨å±‹ã®ç”Ÿæˆ
+                RoomData[,] targetFloor = floor == 1 ? _firstFloorData : _secondFloorData;
+                await GenerateStage(token, targetFloor, floor - 1);                             //•”‰®‚Ì¶¬
 
-                await CorridorShaping(token, targetFloor, floor - 1);                         //é€šè·¯ã®è£…é£¾
+                await CorridorShaping(token, targetFloor, floor - 1);                         //’Ê˜H‚Ì‘•ü
 
-                await LinqBaseGenerateWall(token, targetFloor, floor - 1);                                 //æ–°ã—ã„éš£æ¥ã—ã¦ã„ã‚‹å£ã®è¨ˆç®—
-                await GenerateWall(token, targetFloor, floor - 1);                              //å£ã®ç”Ÿæˆ
+                await LinqBaseGenerateWall(token, targetFloor, floor - 1);                                 //V‚µ‚¢—×Ú‚µ‚Ä‚¢‚é•Ç‚ÌŒvZ
+                await GenerateWall(token, targetFloor, floor - 1);                              //•Ç‚Ì¶¬
             }
-            StairConnectLinqRoom(_firsrFloorData, _secondFloorData);
+            StairConnectLinqRoom(_firstFloorData, _secondFloorData);
+            ErrorCheck();
+            if (AreAllRoomsConnected())
+            {
+                Debug.Log($"All Room linqed Success!");
+            }
+            else
+            {
+                Debug.LogWarning($"All Room linqed Failed!");
+            }
+
+            floorNavMeshSurface.BuildNavMesh();
+            IngameManager.Instance.SetReady(ReadyEnum.StageReady);
+
+        }
+
+        void OnStageDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data)
+        {
+            Debug.Log("ƒf[ƒ^ó‚¯æ‚è");
+            int[] keys = new int[4];
+            key.GetInts(out keys[0], out keys[1], out keys[2], out keys[3]);
+            Debug.Log(keys[0] == 1 ? "_firstFloor:" + data.Array.Length : "_secondFloor:" + data.Array.Length);
+            if(keys[0] == 1)    //_firstFloor‚ğó‚¯æ‚Á‚½
+            {
+                RoomDataArray recievedData = BinarySerializer<RoomDataArray>.DeserializeFromBytes(data.Array);
+                _firstFloorData = recievedData.TranslateTwoDimentionArrayFromArray(keys[1], keys[2]);
+                _roomId = recievedData._roomId;
+                GetStageDataFlag |= 1 << 0;
+                //linqData = recievedData.ConvertListToDic();
+                //DebugStageData(_firstFloorData);
+            }
+            else if(keys[0] == 2)
+            {
+                RoomDataArray recievedData = BinarySerializer<RoomDataArray>.DeserializeFromBytes(data.Array);
+                _secondFloorData = recievedData.TranslateTwoDimentionArrayFromArray(keys[1], keys[2]);
+                _roomId = recievedData._roomId;
+                //linqData = recievedData.ConvertListToDic();
+                DebugStageData(_secondFloorData);
+                GetStageDataFlag |= 1 << 1;
+            }
+            else if(keys[0] == 3)
+            {
+                Debug.Log("1‰ñ–Úó‚¯æ‚è");
+            }
+
+            if(GetStageDataFlag == 3)
+            {
+                for (int i = 0; i <= _roomId; i++)
+                {
+                    linqData[i] = new LinqRoomData();
+                }
+                StageInstantiate(source.Token).Forget();
+            }
+            
+            //BinarySerializer<RoomData[,]>.DeserializeFromBytes(data); 
+        }
+
+        async UniTaskVoid StageInstantiate(CancellationToken token)
+        {
+            //ƒXƒe[ƒW‚Ì¶¬
+            for (int floor = 1; floor <= 2; floor++)
+            {
+                RoomData[,] targetFloor = floor == 1 ? _firstFloorData : _secondFloorData;
+                await GenerateStage(token, targetFloor, floor - 1);                             //•”‰®‚Ì¶¬
+
+                await CorridorShaping(token, targetFloor, floor - 1);                         //’Ê˜H‚Ì‘•ü
+
+                await LinqBaseGenerateWall(token, targetFloor, floor - 1);                                 //V‚µ‚¢—×Ú‚µ‚Ä‚¢‚é•Ç‚ÌŒvZ
+                await GenerateWall(token, targetFloor, floor - 1);                              //•Ç‚Ì¶¬
+            }
+            StairConnectLinqRoom(_firstFloorData, _secondFloorData);
             ErrorCheck();
             if (AreAllRoomsConnected())
             {
@@ -151,24 +259,27 @@ namespace Scenes.Ingame.Stage
             floorNavMeshSurface.BuildNavMesh();
             IngameManager.Instance.SetReady(ReadyEnum.StageReady);
         }
+
         private void ErrorCheck()
         {
             if (!playerSpawnRoom || !escapeSpawnRoom)
             {
-                if (!playerSpawnRoom) Debug.LogError($"playerSpawnRoomãŒç”Ÿæˆã•ã‚Œã¦ã„ã¾ã›ã‚“");
-                if (!escapeSpawnRoom) Debug.LogError($"escapeSpawnRoomãŒç”Ÿæˆã•ã‚Œã¦ã„ã¾ã›ã‚“");
+                if (!playerSpawnRoom) Debug.LogError($"playerSpawnRoom‚ª¶¬‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
+                if (!escapeSpawnRoom) Debug.LogError($"escapeSpawnRoom‚ª¶¬‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ");
             }
         }
+
+        //‰Šú‰»ˆ—
         private void InitialSet()
         {
-            playerSpawnRoom = false;
+            playerSpawnRoom = false;    //ƒvƒŒƒCƒ„[‚ÌƒXƒ|[ƒ“ˆÊ’u‚ª‚ ‚é‚©‚Ç‚¤‚©‚Ìƒtƒ‰ƒO?
             RoomData initialData = new RoomData();
             initialData.RoomDataSet(RoomType.none, 0);
-            for (int y = 0; y < _firsrFloorData.GetLength(1); y++)
+            for (int y = 0; y < _firstFloorData.GetLength(1); y++)
             {
-                for (int x = 0; x < _firsrFloorData.GetLength(0); x++)
+                for (int x = 0; x < _firstFloorData.GetLength(0); x++)
                 {
-                    _firsrFloorData[x, y] = initialData;
+                    _firstFloorData[x, y] = initialData;
                     _secondFloorData[x, y] = initialData;
                 }
             }
@@ -185,7 +296,9 @@ namespace Scenes.Ingame.Stage
             {
                 roomFlag[i] = true;
             }
-            //tileã®ç”Ÿæˆ
+            //tile‚Ì¶¬
+
+            Debug.Log("flas‚Ì’·‚³:" + roomFlag.Length);
 
             for (int y = 0; y < _stageSize.y + 1; y++)
             {
@@ -195,12 +308,12 @@ namespace Scenes.Ingame.Stage
                     checkPosition = ToVector2(x, y);
                     if (floor == 0)
                     {
-                        //1éšå¤©äº•
+                        //1ŠK“Vˆä
                         if (!_stairPosition.Contains(checkPosition))
                         {
                             Instantiate(_prefabPool.getTilePrefab, instantiatePosition, Quaternion.identity, floorObject.transform);
                         }
-                        //åœ°é¢
+                        //’n–Ê
                         instantiatePosition = ToVector3(x * TILESIZE, 0, y * TILESIZE);
                         Instantiate(_prefabPool.getTilePrefab, instantiatePosition, Quaternion.identity, floorObject.transform);
                     }
@@ -228,7 +341,7 @@ namespace Scenes.Ingame.Stage
 
                     }
 
-                    //éƒ¨å±‹ã®é…ç½®
+                    //•”‰®‚Ì”z’u
                     instantiatePosition = ToVector3(x * TILESIZE, floor * 5.8f, y * TILESIZE);
                     int roomId = stage[x, y].RoomId;
                     if (roomFlag[roomId])
@@ -300,7 +413,7 @@ namespace Scenes.Ingame.Stage
                         }
                         if (stage[x, y].RoomType != RoomType.none)
                         {
-                            stage[x, y].SetRoomName(instantiateRoom.name);  //ç”Ÿæˆã—ãŸéƒ¨å±‹ã®æƒ…å ±ã«éƒ¨å±‹ã®åå‰ã‚’è¿½åŠ 
+                            stage[x, y].SetRoomName(instantiateRoom.name);  //¶¬‚µ‚½•”‰®‚Ìî•ñ‚É•”‰®‚Ì–¼‘O‚ğ’Ç‰Á
                             stage[x, y].SetGameObject(instantiateRoom);
                         }
                     }
@@ -309,14 +422,14 @@ namespace Scenes.Ingame.Stage
         }
 
         /// <summary>
-        /// ãƒãƒƒãƒ—ã«å¤§ãã„é †ã«ãƒ©ãƒ³ãƒ€ãƒ ã«éƒ¨å±‹ã‚’å‰²ã‚Šå½“ã¦ã‚‹
+        /// ƒ}ƒbƒv‚É‘å‚«‚¢‡‚Éƒ‰ƒ“ƒ_ƒ€‚É•”‰®‚ğŠ„‚è“–‚Ä‚é
         /// </summary>
-        /// <param name="smallRoom">2x2ã®ã‚µã‚¤ã‚ºã®éƒ¨å±‹ã‚’ç”Ÿæˆã™ã‚‹æ•°</param>
-        /// <param name="mediumRoom">3x3ã®ã‚µã‚¤ã‚ºã®éƒ¨å±‹ã‚’ç”Ÿæˆã™ã‚‹æ•°</param>
-        /// <param name="largeRoom">4z4ã®ã‚µã‚¤ã‚ºã®éƒ¨å±‹ã‚’ç”Ÿæˆã™ã‚‹æ•°</param>
+        /// <param name="smallRoom">2x2‚ÌƒTƒCƒY‚Ì•”‰®‚ğ¶¬‚·‚é”</param>
+        /// <param name="mediumRoom">3x3‚ÌƒTƒCƒY‚Ì•”‰®‚ğ¶¬‚·‚é”</param>
+        /// <param name="largeRoom">4z4‚ÌƒTƒCƒY‚Ì•”‰®‚ğ¶¬‚·‚é”</param>
         private void RandomFullSpaceRoomPlot(RoomData[,] stage, int smallRoom = 0, int mediumRoom = 0, int largeRoom = 0)
         {
-            int roomSize = 3;//éƒ¨å±‹ã®å¤§ãã•
+            int roomSize = 3;//•”‰®‚Ì‘å‚«‚³
             Vector2 roomPosition = Vector2.zero;
             while (roomSize > 0)
             {
@@ -352,11 +465,11 @@ namespace Scenes.Ingame.Stage
         }
 
         /// <summary>
-        /// ãƒ‡ãƒ¼ã‚¿ä¸Šã«éƒ¨å±‹ã®ãƒ‡ãƒ¼ã‚¿ã‚’ç™»éŒ²ã™ã‚‹
+        /// ƒf[ƒ^ã‚É•”‰®‚Ìƒf[ƒ^‚ğ“o˜^‚·‚é
         /// </summary>
-        /// <param name="plotRoomSize">ãƒ«ãƒ¼ãƒ ã®å¤§ãã•</param>
-        /// <param name="plotPosition">ãƒ«ãƒ¼ãƒ ã®è¨­å®šä½ç½®</param>
-        /// <param name="updateRoomId">RoomIdã‚’æ›´æ–°ã™ã‚‹ã‹ã©ã†ã‹</param>
+        /// <param name="plotRoomSize">ƒ‹[ƒ€‚Ì‘å‚«‚³</param>
+        /// <param name="plotPosition">ƒ‹[ƒ€‚Ìİ’èˆÊ’u</param>
+        /// <param name="updateRoomId">RoomId‚ğXV‚·‚é‚©‚Ç‚¤‚©</param>
         private void RoomPlotId(RoomType plotRoomType, Vector2 plotPosition, RoomData[,] stage, bool updateRoomId = true)
         {
             int inputRoomId = updateRoomId ? 1 + _roomId++ : stage[(int)plotPosition.x, (int)plotPosition.y].RoomId;
@@ -400,7 +513,7 @@ namespace Scenes.Ingame.Stage
         }
 
         /// <summary>
-        /// ãƒ«ãƒ¼ãƒ ã‚’é…ç½®å¯èƒ½ãªåº§æ¨™ã®ãƒªã‚¹ãƒˆã‚’ä½œæˆã™ã‚‹
+        /// ƒ‹[ƒ€‚ğ”z’u‰Â”\‚ÈÀ•W‚ÌƒŠƒXƒg‚ğì¬‚·‚é
         /// </summary>
         private List<Vector2> candidatePositionSet(RoomData[,] stage, int offsetX = 1, int offsetY = 1)
         {
@@ -422,11 +535,11 @@ namespace Scenes.Ingame.Stage
         }
 
         /// <summary>
-        /// å­¤ç«‹ã—ãŸéƒ¨å±‹ã‚’æ¤œç´¢ã™ã‚‹ãŸã‚ã®é–¢æ•°
+        /// ŒÇ—§‚µ‚½•”‰®‚ğŒŸõ‚·‚é‚½‚ß‚ÌŠÖ”
         /// </summary>
         private List<Vector2> candidateAislePosition(RoomData[,] stage, int offsetX = 0, int offsetY = 0)
         {
-            if (offsetX == 0 && offsetY == 0) Debug.LogError("offsetã®å€¤ãŒä¸¡æ–¹ã¨ã‚‚0ã§ã™");
+            if (offsetX == 0 && offsetY == 0) Debug.LogError("offset‚Ì’l‚ª—¼•û‚Æ‚à0‚Å‚·");
             List<Vector2> candidatePositions = new List<Vector2>();
             for (int y = 0; y < _stageSize.y - offsetY; y++)
             {
@@ -467,11 +580,11 @@ namespace Scenes.Ingame.Stage
         }
 
         /// <summary>
-        /// åºƒã„é€šè·¯ã‚’æ¤œç´¢ã™ã‚‹ãŸã‚ã®é–¢æ•°
+        /// L‚¢’Ê˜H‚ğŒŸõ‚·‚é‚½‚ß‚ÌŠÖ”
         /// </summary>
         private List<Vector2> candidateCorridorPosition(RoomData[,] stage, int offsetX = 0, int offsetY = 0)
         {
-            if (offsetX == 0 && offsetY == 0) Debug.LogError("offsetã®å€¤ãŒä¸¡æ–¹ã¨ã‚‚0ã§ã™");
+            if (offsetX == 0 && offsetY == 0) Debug.LogError("offset‚Ì’l‚ª—¼•û‚Æ‚à0‚Å‚·");
             List<Vector2> candidatePositions = new List<Vector2>();
             for (int y = 0; y < _stageSize.y - offsetY; y++)
             {
@@ -508,11 +621,11 @@ namespace Scenes.Ingame.Stage
         }
 
         /// <summary>
-        /// æ¬¡ã®å ´æ‰€ã¯å£ã®ã‚¿ã‚¤ãƒ«ã‚’æ¤œç´¢ã™ã‚‹ãŸã‚ã®é–¢æ•°
+        /// Ÿ‚ÌêŠ‚Í•Ç‚Ìƒ^ƒCƒ‹‚ğŒŸõ‚·‚é‚½‚ß‚ÌŠÖ”
         /// </summary>
         private List<Vector2> candidateNextWallPosition(RoomData[,] stage, int offsetX = 0, int offsetY = 0, int targetRoomId = 0)
         {
-            if (offsetX != 0 && offsetY != 0) { Debug.LogError("ç„¡åŠ¹ãªå¼•æ•°ã§ã™ã€‚ã©ã¡ã‚‰ã‹ã‚’0ã«ã—ã¦ãã ã•ã„"); }
+            if (offsetX != 0 && offsetY != 0) { Debug.LogError("–³Œø‚Èˆø”‚Å‚·B‚Ç‚¿‚ç‚©‚ğ0‚É‚µ‚Ä‚­‚¾‚³‚¢"); }
             List<Vector2> candidatePositions = new List<Vector2>();
             int xLength = stage.GetLength(0);
             int yLength = stage.GetLength(1);
@@ -528,7 +641,7 @@ namespace Scenes.Ingame.Stage
                             {
                                 continue;
                             }
-                            if (targetRoomId == 0 || stage[x + offsetX, y + offsetY].RoomId == targetRoomId)//TODO:ã‚ã¨ã§ä¸Šã®æ¡ä»¶å¼ã«å…¥ã‚ŒãŸã„
+                            if (targetRoomId == 0 || stage[x + offsetX, y + offsetY].RoomId == targetRoomId)//TODO:‚ ‚Æ‚Åã‚ÌğŒ®‚É“ü‚ê‚½‚¢
                             {
                                 candidatePositions.Add(ToVector2(x + offsetX, y));
                             }
@@ -544,7 +657,7 @@ namespace Scenes.Ingame.Stage
         }
 
         /// <summary>
-        /// xè»¸ã¨yè»¸ã«ï¼‘ã¤ãšã¤é€šè·¯ã®ä½œæˆ
+        /// x²‚Æy²‚É‚P‚Â‚¸‚Â’Ê˜H‚Ìì¬
         /// </summary>
         private RoomData[,] GenerateAisle(CancellationToken token, RoomData[,] stage)
         {
@@ -564,7 +677,7 @@ namespace Scenes.Ingame.Stage
                     newStageGenerateData[i, j] = initialData;
                 }
             }
-            //Xè»¸ã‚’é€šè·¯åˆ†ãšã‚‰ã™å‡¦ç†
+            //X²‚ğ’Ê˜H•ª‚¸‚ç‚·ˆ—
             for (int y = 0; y < stage.GetLength(1); y++)
             {
                 xSlide = false;
@@ -595,7 +708,7 @@ namespace Scenes.Ingame.Stage
                     tempXPlotData[i, j] = initialData;
                 }
             }
-            //yè»¸ã‚’é€šè·¯åˆ†ãšã‚‰ã™å‡¦ç†
+            //y²‚ğ’Ê˜H•ª‚¸‚ç‚·ˆ—
             for (int x = 0; x < newStageGenerateData.GetLength(0); x++)
             {
                 ySlide = false;
@@ -619,7 +732,7 @@ namespace Scenes.Ingame.Stage
         }
 
         /// <summary>
-        ///ã€€ãƒ©ãƒ³ãƒ€ãƒ ã§Xè»¸ã®é€šéŒ²ã‚’ä½œã‚‹å ´æ‰€ã‚’æ¤œç´¢
+        ///@ƒ‰ƒ“ƒ_ƒ€‚ÅX²‚Ì’Ê˜^‚ğì‚éêŠ‚ğŒŸõ
         /// </summary>
         private int GenerateXAisle(RoomData[,] stage, int max, int min = 0)
         {
@@ -646,7 +759,7 @@ namespace Scenes.Ingame.Stage
         }
 
         /// <summary>
-        /// å­¤ç«‹ã—ãŸéƒ¨å±‹ã‚’åŸ‹ã‚ã‚‹ã‚ˆã†ã«éƒ¨å±‹ã‚’æ‹¡å¼µã™ã‚‹é–¢æ•°
+        /// ŒÇ—§‚µ‚½•”‰®‚ğ–„‚ß‚é‚æ‚¤‚É•”‰®‚ğŠg’£‚·‚éŠÖ”
         /// </summary>
         private async UniTask RommShaping(CancellationToken token, RoomData[,] stage)
         {
@@ -663,7 +776,7 @@ namespace Scenes.Ingame.Stage
             if (viewDebugLog) Debug.Log($"Aisle count  1x3 only = {_only1x3Aisle.Count},3x1 = {_only3x1Aisle.Count}, 1x2 only = {_only1x2Aisle.Count},2x1 = {_only2x1Aisle.Count},");
             foreach (var item in _only1x3Aisle)
             {
-                if (item.x > 2)//ãƒ–ãƒ­ãƒƒã‚¯ã®å·¦ã«room3x3ãŒã‚ã‚‹å ´åˆ
+                if (item.x > 2)//ƒuƒƒbƒN‚Ì¶‚Éroom3x3‚ª‚ ‚éê‡
                 {
                     if (stage[(int)item.x - 1, (int)item.y].RoomType == RoomType.room3x3)
                     {
@@ -682,7 +795,7 @@ namespace Scenes.Ingame.Stage
                         }
                     }
                 }
-                if (item.x < stage.GetLength(0) - 2)//ãƒ–ãƒ­ãƒƒã‚¯ã®å³ã«room3x3ãŒã‚ã‚‹å ´åˆ
+                if (item.x < stage.GetLength(0) - 2)//ƒuƒƒbƒN‚Ì‰E‚Éroom3x3‚ª‚ ‚éê‡
                 {
                     if (stage[(int)item.x + 1, (int)item.y].RoomType == RoomType.room3x3)
                     {
@@ -704,7 +817,7 @@ namespace Scenes.Ingame.Stage
             }
             foreach (var item in _only3x1Aisle)
             {
-                if (item.y < stage.GetLength(1) - 2)//ãƒ–ãƒ­ãƒƒã‚¯ã®ä¸‹ã«room3x3ãŒã‚ã‚‹å ´åˆ
+                if (item.y < stage.GetLength(1) - 2)//ƒuƒƒbƒN‚Ì‰º‚Éroom3x3‚ª‚ ‚éê‡
                 {
                     if (stage[(int)item.x, (int)item.y + 1].RoomType == RoomType.room3x3)
                     {
@@ -723,7 +836,7 @@ namespace Scenes.Ingame.Stage
                         }
                     }
                 }
-                if (item.y > 2)//ãƒ–ãƒ­ãƒƒã‚¯ã®ä¸Šã«room3x3ãŒã‚ã‚‹å ´åˆ
+                if (item.y > 2)//ƒuƒƒbƒN‚Ìã‚Éroom3x3‚ª‚ ‚éê‡
                 {
                     if (stage[(int)item.x, (int)item.y - 1].RoomType == RoomType.room3x3)
                     {
@@ -745,7 +858,7 @@ namespace Scenes.Ingame.Stage
             }
             foreach (var item in _only1x2Aisle)
             {
-                if (item.x > 1)//ãƒ–ãƒ­ãƒƒã‚¯ã®å·¦ã«room2x2ãŒã‚ã‚‹å ´åˆ
+                if (item.x > 1)//ƒuƒƒbƒN‚Ì¶‚Éroom2x2‚ª‚ ‚éê‡
                 {
                     if (stage[(int)item.x - 1, (int)item.y].RoomType == RoomType.room2x2)
                     {
@@ -763,7 +876,7 @@ namespace Scenes.Ingame.Stage
                         }
                     }
                 }
-                if (item.x < stage.GetLength(0) - 1)//ãƒ–ãƒ­ãƒƒã‚¯ã®å³ã«room2x2ãŒã‚ã‚‹å ´åˆ
+                if (item.x < stage.GetLength(0) - 1)//ƒuƒƒbƒN‚Ì‰E‚Éroom2x2‚ª‚ ‚éê‡
                 {
                     if (stage[(int)item.x + 1, (int)item.y].RoomType == RoomType.room2x2)
                     {
@@ -784,7 +897,7 @@ namespace Scenes.Ingame.Stage
             }
             foreach (var item in _only2x1Aisle)
             {
-                if (item.y < stage.GetLength(1) - 1)//ãƒ–ãƒ­ãƒƒã‚¯ã‚ˆã‚Šä¸‹ã«room2x2ãŒã‚ã‚‹
+                if (item.y < stage.GetLength(1) - 1)//ƒuƒƒbƒN‚æ‚è‰º‚Éroom2x2‚ª‚ ‚é
                 {
                     if (stage[(int)item.x, (int)item.y + 1].RoomType == RoomType.room2x2)
                     {
@@ -802,7 +915,7 @@ namespace Scenes.Ingame.Stage
                         }
                     }
                 }
-                if (item.y > 1)//ãƒ–ãƒ­ãƒƒã‚¯ã‚ˆã‚Šä¸Šã«room2x2ãŒã‚ã‚‹
+                if (item.y > 1)//ƒuƒƒbƒN‚æ‚èã‚Éroom2x2‚ª‚ ‚é
                 {
                     if (stage[(int)item.x, (int)item.y - 1].RoomType == RoomType.room2x2)
                     {
@@ -824,7 +937,7 @@ namespace Scenes.Ingame.Stage
         }
 
         /// <summary>
-        /// å£ã‚’è¨­ç½®ã™ã‚‹ã‚¹ã‚¯ãƒªãƒ—ãƒˆ
+        /// •Ç‚ğİ’u‚·‚éƒXƒNƒŠƒvƒg
         /// </summary>
         private async UniTask CorridorShaping(CancellationToken token, RoomData[,] stage, int floor)
         {
@@ -844,7 +957,7 @@ namespace Scenes.Ingame.Stage
         }
 
         /// <summary>
-        ///  éš£æ¥ã™ã‚‹éƒ¨å±‹ã®è¨ˆç®—
+        ///  —×Ú‚·‚é•”‰®‚ÌŒvZ
         /// </summary>
         private async UniTask LinqBaseGenerateWall(CancellationToken token, RoomData[,] stage, int floor)
         {
@@ -852,7 +965,7 @@ namespace Scenes.Ingame.Stage
             int roomIdMin = stage.Cast<RoomData>()
                                   .Select(rt => rt.RoomId)
                                   .Where(id => id != 0)
-                                  .DefaultIfEmpty(int.MaxValue)  // ã™ã¹ã¦ã®è¦ç´ ãŒ0ã®å ´åˆã«å‚™ãˆã‚‹
+                                  .DefaultIfEmpty(int.MaxValue)  // ‚·‚×‚Ä‚Ì—v‘f‚ª0‚Ìê‡‚É”õ‚¦‚é
                                   .Min();
             if (viewDebugLog)
             {
@@ -872,7 +985,7 @@ namespace Scenes.Ingame.Stage
                             {
                                 if (_stageSize.x <= x + (int)item.x - 1 || _stageSize.y <= y + (int)item.y - 1)
                                 {
-                                    continue;//äºˆæ¸¬ã•ããŒã‚¹ãƒ†ãƒ¼ã‚¸å¤–ã®å ´åˆã¯æ¬¡ã®ãƒ«ãƒ¼ãƒ—ã«ç§»å‹•ã•ã›ã‚‹
+                                    continue;//—\‘ª‚³‚«‚ªƒXƒe[ƒWŠO‚Ìê‡‚ÍŸ‚Ìƒ‹[ƒv‚ÉˆÚ“®‚³‚¹‚é
                                 }
                                 if (stage[x, y].RoomId != stage[x + (int)item.x, y + (int)item.y].RoomId)
                                 {
@@ -882,7 +995,7 @@ namespace Scenes.Ingame.Stage
                                         Instantiate(marker, instantiatePosition, Quaternion.identity);
                                     }
 
-                                    //ãƒªã‚¹ãƒˆã«è¿½åŠ 
+                                    //ƒŠƒXƒg‚É’Ç‰Á
                                     roomName.Add(stage[x + (int)item.x, y + (int)item.y].RoomId);
                                     linqData[i].SetLinqRoomData(stage[x + (int)item.x, y + (int)item.y].RoomId);
                                     linqData[stage[x + (int)item.x, y + (int)item.y].RoomId].SetLinqRoomData(stage[x, y].RoomId);
@@ -895,7 +1008,7 @@ namespace Scenes.Ingame.Stage
         }
 
         /// <summary>
-        /// å£ã‚’è¨­ç½®ã™ã‚‹ã‚¹ã‚¯ãƒªãƒ—ãƒˆ
+        /// •Ç‚ğİ’u‚·‚éƒXƒNƒŠƒvƒg
         /// </summary>
         private async UniTask GenerateWall(CancellationToken token, RoomData[,] stage, int floor, int xDoorParameter = 0, int yDoorParameter = 0)
         {
@@ -910,7 +1023,7 @@ namespace Scenes.Ingame.Stage
             int roomIdMin = stage.Cast<RoomData>()
                                   .Select(rt => rt.RoomId)
                                   .Where(id => id != 0)
-                                  .DefaultIfEmpty(int.MaxValue)  // ã™ã¹ã¦ã®è¦ç´ ãŒ0ã®å ´åˆã«å‚™ãˆã‚‹
+                                  .DefaultIfEmpty(int.MaxValue)  // ‚·‚×‚Ä‚Ì—v‘f‚ª0‚Ìê‡‚É”õ‚¦‚é
                                   .Min();
 
             foreach (var item in linqData.Where(d => (d.Value.linqData.Count < 2 || (d.Value.linqData.Count < 3 && largeRoom(stage.Cast<RoomData>().FirstOrDefault(s => s.RoomId == d.Key).RoomType)))
@@ -934,11 +1047,11 @@ namespace Scenes.Ingame.Stage
             }
             foreach (var xDoor in _xSideDoorPos)
             {
-                // linqDataã«ç™»éŒ²
+                // linqData‚É“o˜^
                 linqData[stage[(int)xDoor.x, (int)xDoor.y].RoomId].SetLinqRoomData(stage[(int)xDoor.x - 1, (int)xDoor.y].RoomId);
                 linqData[stage[(int)xDoor.x - 1, (int)xDoor.y].RoomId].SetLinqRoomData(stage[(int)xDoor.x, (int)xDoor.y].RoomId);
 
-                // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ
+                // ƒIƒuƒWƒFƒNƒg‚Ì¶¬
                 instantiatePosition = ToVector3(xDoor.x * TILESIZE, floor * 5.8f, xDoor.y * TILESIZE);
                 Instantiate(_prefabPool.getWallXDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallObject.transform);
                 if (markerRed != null && viewDebugLog)
@@ -950,12 +1063,12 @@ namespace Scenes.Ingame.Stage
 
             foreach (var yDoor in _ySideDoorPos)
             {
-                // linqDataã«ç™»éŒ²
+                // linqData‚É“o˜^
                 linqData[stage[(int)yDoor.x, (int)yDoor.y].RoomId].SetLinqRoomData(stage[(int)yDoor.x, (int)yDoor.y + 1].RoomId);
                 linqData[stage[(int)yDoor.x, (int)yDoor.y + 1].RoomId].SetLinqRoomData(stage[(int)yDoor.x, (int)yDoor.y].RoomId);
 
-                //Debug.Log($"è¿½åŠ ã®yå£ç”Ÿæˆæ¬¡ã®éš£æ¥ãƒ‡ãƒ¼ã‚¿ {stage[(int)yDoor.x, (int)yDoor.y].RoomId} : {stage[(int)yDoor.x, (int)yDoor.y + 1].RoomId}");
-                // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ç”Ÿæˆ
+                //Debug.Log($"’Ç‰Á‚Ìy•Ç¶¬Ÿ‚Ì—×Úƒf[ƒ^ {stage[(int)yDoor.x, (int)yDoor.y].RoomId} : {stage[(int)yDoor.x, (int)yDoor.y + 1].RoomId}");
+                // ƒIƒuƒWƒFƒNƒg‚Ì¶¬
                 instantiatePosition = ToVector3(yDoor.x * TILESIZE, floor * 5.8f, yDoor.y * TILESIZE);
                 Instantiate(_prefabPool.getWallYDoorPrefab, instantiatePosition, Quaternion.identity, inSideWallObject.transform);
                 if (markerRed != null && viewDebugLog)
@@ -1025,7 +1138,7 @@ namespace Scenes.Ingame.Stage
             }
             if (viewDebugLog)
             {
-                String connected = "AreAllRoomsConnected : é€£ç¶šã—ã¦ã„ãŸéƒ¨å±‹ã¯ ";
+                String connected = "AreAllRoomsConnected : ˜A‘±‚µ‚Ä‚¢‚½•”‰®‚Í ";
                 foreach (int adjacentRoom in visited)
                 {
                     connected += $", {adjacentRoom}";
@@ -1035,12 +1148,12 @@ namespace Scenes.Ingame.Stage
 
             if (viewDebugLog)
             {
-                Debug.Log($"AreAllRoomsConnected : é€£ç¶šã—ã¦ã„ãŸéƒ¨å±‹ã®æ•°ã¯ {visited.Count} : {nonVisited.Count},linqData = {linqData.Count},maxRoomCount = {_roomId}");
+                Debug.Log($"AreAllRoomsConnected : ˜A‘±‚µ‚Ä‚¢‚½•”‰®‚Ì”‚Í {visited.Count} : {nonVisited.Count},linqData = {linqData.Count},maxRoomCount = {_roomId}");
 
                 if (visited.Count != linqData.Count)
                 {
                     var except = linqData.Select(v => v.Key).Except(visited).ToHashSet();
-                    String excepts = "AreAllRoomsConnected : é€£ç¶šã—ã¦ã„ãªã„éƒ¨å±‹ã¯ ";
+                    String excepts = "AreAllRoomsConnected : ˜A‘±‚µ‚Ä‚¢‚È‚¢•”‰®‚Í ";
                     foreach (var item in except)
                     {
                         excepts += $", {item}";
@@ -1049,11 +1162,11 @@ namespace Scenes.Ingame.Stage
                 }
             }
 
-            // å…¥ã‚Œãªã„éƒ¨å±‹ã«ã¯ã‚¢ã‚¤ãƒ†ãƒ ãŒã‚¹ãƒãƒ¼ãƒ³ã—ãªã„ã‚ˆã†ã«ã™ã‚‹
+            // “ü‚ê‚È‚¢•”‰®‚É‚ÍƒAƒCƒeƒ€‚ªƒXƒ|[ƒ“‚µ‚È‚¢‚æ‚¤‚É‚·‚é
             if (visited.Count != linqData.Count)
             {
                 var except = linqData.Select(v => v.Key).Except(visited).ToHashSet();
-                var allData = _firsrFloorData.Cast<RoomData>().Distinct().Concat(_secondFloorData.Cast<RoomData>().Distinct()).ToArray();
+                var allData = _firstFloorData.Cast<RoomData>().Distinct().Concat(_secondFloorData.Cast<RoomData>().Distinct()).ToArray();
                 foreach (var item in except)
                 {
                     var roomObject = allData.FirstOrDefault(d => d.RoomId == item).gameObject;
@@ -1082,7 +1195,7 @@ namespace Scenes.Ingame.Stage
                 result.AddRange(FindChildrenByTag(child, tag));
             }
 
-            // çµæœã‚’é…åˆ—ã¨ã—ã¦è¿”ã™
+            // Œ‹‰Ê‚ğ”z—ñ‚Æ‚µ‚Ä•Ô‚·
             return result.ToArray();
         }
 
@@ -1092,8 +1205,8 @@ namespace Scenes.Ingame.Stage
             {
                 for (int x = 0; x < floor1fData.GetLength(0); x++)
                 {
-                    //2x2ã®stairRoomã«ã¤ã„ã¦
-                    if (y > floor1fData.GetLength(1) - 2 || x > floor1fData.GetLength(0) - 2)//ã‚¹ãƒ†ãƒ¼ã‚¸ç«¯ã‹ã‚‰OFFSETåˆ†ã—ã‹è¨ˆç®—ã—ãªã„ã‚ˆã†ã«ã™ã‚‹ãƒã‚§ãƒƒã‚¯
+                    //2x2‚ÌstairRoom‚É‚Â‚¢‚Ä
+                    if (y > floor1fData.GetLength(1) - 2 || x > floor1fData.GetLength(0) - 2)//ƒXƒe[ƒW’[‚©‚çOFFSET•ª‚µ‚©ŒvZ‚µ‚È‚¢‚æ‚¤‚É‚·‚éƒ`ƒFƒbƒN
                     {
                         continue;
                     }
@@ -1102,13 +1215,13 @@ namespace Scenes.Ingame.Stage
                         RoomIdEqual(ToVector2(x, y), ToVector2(1, 1), floor1fData[x, y].RoomId, floor1fData) &&
                         RoomIdEqual(ToVector2(x, y), ToVector2(1, 1), floor1fData[x, y].RoomId, floor2fData))
                     {
-                            RoomPlotId(RoomType.room2x2Stair, new Vector2(x, y), floor1fData, updateRoomId: false);
-                            RoomPlotId(RoomType.room2x2Stair, new Vector2(x, y), floor2fData, updateRoomId: false);
+                        RoomPlotId(RoomType.room2x2Stair, new Vector2(x, y), floor1fData, updateRoomId: false);
+                        RoomPlotId(RoomType.room2x2Stair, new Vector2(x, y), floor2fData, updateRoomId: false);
 
-                            _stairPosition.Add(ToVector2(x + 1, y + 1));
+                        _stairPosition.Add(ToVector2(x + 1, y + 1));
                     }
-                    //3x3ã®stairRoomã«ã¤ã„ã¦
-                    if (y > floor1fData.GetLength(1) - 3 || x > floor1fData.GetLength(0) - 3)//ã‚¹ãƒ†ãƒ¼ã‚¸ç«¯ã‹ã‚‰OFFSETåˆ†ã—ã‹è¨ˆç®—ã—ãªã„ã‚ˆã†ã«ã™ã‚‹ãƒã‚§ãƒƒã‚¯
+                    //3x3‚ÌstairRoom‚É‚Â‚¢‚Ä
+                    if (y > floor1fData.GetLength(1) - 3 || x > floor1fData.GetLength(0) - 3)//ƒXƒe[ƒW’[‚©‚çOFFSET•ª‚µ‚©ŒvZ‚µ‚È‚¢‚æ‚¤‚É‚·‚éƒ`ƒFƒbƒN
                     {
                         continue;
                     }
@@ -1117,10 +1230,10 @@ namespace Scenes.Ingame.Stage
                         RoomIdEqual(ToVector2(x, y), ToVector2(2, 2), floor1fData[x, y].RoomId, floor1fData) &&
                         RoomIdEqual(ToVector2(x, y), ToVector2(2, 2), floor1fData[x, y].RoomId, floor2fData))
                     {
-                            RoomPlotId(RoomType.room3x3Stair, new Vector2(x, y), floor1fData, updateRoomId: false);
-                            RoomPlotId(RoomType.room3x3Stair, new Vector2(x, y), floor2fData, updateRoomId: false);
+                        RoomPlotId(RoomType.room3x3Stair, new Vector2(x, y), floor1fData, updateRoomId: false);
+                        RoomPlotId(RoomType.room3x3Stair, new Vector2(x, y), floor2fData, updateRoomId: false);
 
-                            _stairPosition.Add(ToVector2(x + 2, y + 2));
+                        _stairPosition.Add(ToVector2(x + 2, y + 2));
                     }
                 }
             }
@@ -1181,9 +1294,27 @@ namespace Scenes.Ingame.Stage
                 }
                 printData += "\n";
             }
+            Debug.Log(target.Length);
             Debug.Log("RoomData:" + printData);
         }
 
+        
+        void SendDataToAllPlayer(ReliableKey key, RoomData[,] data)
+        {
+            
+            RoomDataArray DataForJson = new RoomDataArray(data.Length, _roomId, linqData);
+            DataForJson.SetData(data);
+            var serializedData = BinarySerializer<RoomDataArray>.SerializeToBytes(DataForJson);
+            foreach(PlayerRef player in runner.ActivePlayers)   //©•ªˆÈŠO‚Ì‚·‚×‚Ä‚ÌƒvƒŒƒCƒ„[‚É‘—M
+            {
+                if (player != runner.LocalPlayer)
+                {
+                    runner.SendReliableDataToPlayer(player, key, serializedData);
+                }
+                    
+            }
+            
+        }
         private void OnDestroy()
         {
             source.Cancel();

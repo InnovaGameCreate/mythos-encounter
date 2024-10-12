@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 namespace Scenes.Ingame.Stage
 {
+    [Serializable]
     public class LinqRoomData
     {
         private List<int> _linqData = new List<int>();//隣接してる部屋を格納する
