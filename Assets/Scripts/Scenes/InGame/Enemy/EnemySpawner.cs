@@ -62,12 +62,6 @@ namespace Scenes.Ingame.Enemy
         [Header("生成する際の設定")]
         [SerializeField] private Vector3 _enemySpawnPosition;
 
-
-        [SerializeField] public MultiPlayManager _multiPlayerManagerCs { get; private set; }
-
-        public List<GameObject> Players { get; private set; }
-        public List<PlayerStatus> PlayerStatuses { get; private set; }
-
         /*
         [Header("プレイヤー一覧")]
         [SerializeField] private List<GameObject> _players;
@@ -94,8 +88,6 @@ namespace Scenes.Ingame.Enemy
                 Instance = this;
             else
                 Destroy(this.gameObject);
-            Players = _multiPlayerManagerCs.PlayerList;
-            PlayerStatuses = _multiPlayerManagerCs.PlayerStatusList;
         }
 
 
