@@ -83,10 +83,10 @@ namespace Scenes.Ingame.Enemy
         }
 
         [HideInInspector][Networked] public float AudiometerPower { get; private set; }
-        private Subject<float> _audiometerPowerSubject = new Subject<float>();
+        private Subject<float> _audiometerPower = new Subject<float>();
         public IObservable<float> OnAudiometerPowerChange
         {
-            get { return _audiometerPowerSubject; }
+            get { return _audiometerPower; }
         }
 
         [HideInInspector][Networked] public int Stamina { get; private set; }
@@ -97,13 +97,13 @@ namespace Scenes.Ingame.Enemy
         }
 
         [HideInInspector][Networked] public EnemyState State { get; private set; } = EnemyState.Patrolling;
-        private Subject<EnemyState> _stateSubject = new Subject<EnemyState>();
+        private Subject<EnemyState> _enemyStateSubject = new Subject<EnemyState>();
         public IObservable<EnemyState> OnEnemyStateChange
         {
-            get { return _stateSubject; }
+            get { return _enemyStateSubject; }
         }
 
-        [HideInInspector][Networked] public bool Bind { get; private set; }
+        [HideInInspector][Networked] public bool IsBind { get; private set; }
         private Subject<bool> _bindSubject = new Subject<bool>();
         public IObservable<bool> OnBindChange
         {
@@ -203,9 +203,6 @@ namespace Scenes.Ingame.Enemy
                         _myAgent.speed *= 10;
          */
 
-        /// <summary>
-        /// ネットワークのシミュレーションごとに呼び出される。ロールバック等にも対応
-        /// </summary>
         public override void FixedUpdateNetwork()
         {
             //変更を検出しUniRxのイベントを発行す
@@ -219,29 +216,14 @@ namespace Scenes.Ingame.Enemy
                     case nameof(Hp):
                         _hpSubject.OnNext(Hp);
                         break;
-                    case nameof(AudiometerPower):
-                        _audiometerPowerSubject.OnNext(AudiometerPower);
-                        break;
-                    case nameof(Stamina):
-                        _staminaSubject.OnNext(Stamina);
-                        break;
-                    case nameof(State):
-                        _stateSubject.OnNext(State);
-                        break;
-                    case nameof(Bind):
-                        _bindSubject.OnNext(Bind);
-                        break;
-                    case nameof(StiffnessTime):
-                        _stiffnessTimeSubject.OnNext(StiffnessTime);
-                        break;
-                    case nameof(IsWaterEffectDebuff):
-                        _isWaterEffectDebuffSubject.OnNext(IsWaterEffectDebuff);
-                        break;
-                    case nameof(StaminaOver):
-                        _staminaOverSubject.OnNext(StaminaOver);
-                        break;
                 }
             }
+
+
+
+
+
+
             if (_debugMode && Input.GetKey(KeyCode.Z)) { FallBack(); }
 
             if (StiffnessTime > 0) {
@@ -335,7 +317,7 @@ namespace Scenes.Ingame.Enemy
 
         public void SetBind(bool value)
         {
-            Bind = value;
+            IsBind = value;
         }
 
         public void SetStuminaOver(bool setValue) { 

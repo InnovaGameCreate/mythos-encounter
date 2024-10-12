@@ -4,14 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using UnityEngine.AI;
-using Fusion;
 
 namespace Scenes.Ingame.Enemy
 {
     /// <summary>
     /// パトロールする。プレイヤーの痕跡を探す。巡回状態と索敵状態の動きを決定し、追跡と攻撃状態への移行を行う。
     /// </summary>
-    public class EnemySearch : NetworkBehaviour
+    public class EnemySearch : MonoBehaviour
     {
         protected EnemyVisibilityMap _myVisivilityMap;
         [SerializeField]
