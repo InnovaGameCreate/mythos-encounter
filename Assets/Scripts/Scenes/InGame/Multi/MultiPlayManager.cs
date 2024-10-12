@@ -1,8 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
+using Scenes.Ingame.Manager;
+using UniRx;
+using Scenes.Ingame.Stage;
+using Scenes.Ingame.InGameSystem.UI;
+using Scenes.Ingame.InGameSystem;
 
 namespace Scenes.Ingame.Player
 {
@@ -22,22 +26,49 @@ namespace Scenes.Ingame.Player
         public List<PlayerStatus> PlayerStatusList { get; private set; } = new List<PlayerStatus>();
         public void PlayerJoined(PlayerRef playerRef)
         {
+            /*
             if (HasStateAuthority == false)
                 return;
 
             var player = Runner.Spawn(_playerPrefab, GetSpawnPosition(), Quaternion.identity, playerRef);
             playerNetworkList.Add(player.Id);
             Runner.SetPlayerObject(playerRef, player.GetComponent<MultiPlayerMove>().Object);
+            */
         }
+
 
         public void PlayerLeft(PlayerRef playerRef)
         {
 
         }
 
+        private StageGenerator _stageGenerator;
+        [SerializeField] private Vector3 _spawnPosition;
+        [SerializeField] private GameObject _playerUI;
+
+        public void Start()
+        {
+            IngameManager.Instance.OnStageGenerateEvent
+                .Subscribe(_ =>
+                {
+                    _stageGenerator = FindObjectOfType<StageGenerator>();
+                    Debug.Log("PlayerSpawnSuccess");
+                    _spawnPosition = _stageGenerator.spawnPosition;
+
+                    //沸く処理
+                    var player = Runner.Spawn(_playerPrefab, _spawnPosition, Quaternion.identity, Runner.LocalPlayer);
+                    playerNetworkList.Add(player.Id);
+                    var playerUI = Instantiate(_playerUI, Vector3.zero, Quaternion.identity);
+                    playerUI.transform.Find("FadeOut_InCanvas").GetComponent<FadeBlackImage>().SubscribeFadePanelEvent();//プレイヤーの死亡・蘇生時のイベントを登録
+                    //プレイヤーの沸きが完了したことを知らせる
+                    IngameManager.Instance.SetReady(ReadyEnum.PlayerReady);
+                    Debug.LogWarning("プレイヤーの沸きが終了");
+                }).AddTo(this);
+        }
         public override void Spawned()
         {
             _changeDetector = GetChangeDetector(ChangeDetector.Source.SimulationState);
+            
         }
 
         Vector3 GetSpawnPosition()

@@ -40,6 +40,11 @@ public sealed class PlayerInput : NetworkBehaviour, IBeforeUpdate, IAfterTick
 
         //コールバックを購読
         var networkEvents = Runner.GetComponent<NetworkEvents>();
+        if (networkEvents == null)
+            Debug.LogError("無いよ");
+        else
+            Debug.LogError("あるよ:" + networkEvents.gameObject.name);
+
         networkEvents.OnInput.AddListener(OnInput);
 
         Cursor.lockState = CursorLockMode.Locked;

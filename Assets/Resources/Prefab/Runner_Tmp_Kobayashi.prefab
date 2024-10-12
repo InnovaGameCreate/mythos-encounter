@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4553456516774223073}
   - component: {fileID: 8673242576878163234}
   - component: {fileID: -724477179161409262}
+  - component: {fileID: 4268273811955454408}
   m_Layer: 0
   m_Name: Runner_Tmp_Kobayashi
   m_TagString: Untagged
@@ -33,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6218402309767923495
 MonoBehaviour:
@@ -86,3 +87,72 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed246f2aa7cd9eb4aa7f7bffdf9b4aae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4268273811955454408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7183311776629293842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -232609262, guid: e725a070cec140c4caffb81624c8c787, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnInput:
+    m_PersistentCalls:
+      m_Calls: []
+  OnInputMissing:
+    m_PersistentCalls:
+      m_Calls: []
+  OnConnectedToServer:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDisconnectedFromServer:
+    m_PersistentCalls:
+      m_Calls: []
+  OnConnectRequest:
+    m_PersistentCalls:
+      m_Calls: []
+  OnConnectFailed:
+    m_PersistentCalls:
+      m_Calls: []
+  PlayerJoined:
+    m_PersistentCalls:
+      m_Calls: []
+  PlayerLeft:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSimulationMessage:
+    m_PersistentCalls:
+      m_Calls: []
+  OnShutdown:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSessionListUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  OnCustomAuthenticationResponse:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHostMigration:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSceneLoadDone:
+    m_PersistentCalls:
+      m_Calls: []
+  OnSceneLoadStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnReliableData:
+    m_PersistentCalls:
+      m_Calls: []
+  OnReliableProgress:
+    m_PersistentCalls:
+      m_Calls: []
+  OnObjectEnterAOI:
+    m_PersistentCalls:
+      m_Calls: []
+  OnObjectExitAOI:
+    m_PersistentCalls:
+      m_Calls: []

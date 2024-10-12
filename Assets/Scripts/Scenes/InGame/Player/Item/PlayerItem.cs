@@ -96,6 +96,8 @@ namespace Scenes.Ingame.Player
             //色々な変数の初期化
             scrollValue = 0;
 
+            _mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<Camera>();
+
             RaycastHit hit = new RaycastHit();
             //視線の先にアイテムがあるか確認。あれば右クリックで拾得できるようにする
             this.UpdateAsObservable()
