@@ -71,7 +71,7 @@ namespace Scenes.Ingame.Enemy
         public void Init(EnemyVisibilityMap setVisivilityMap) {
             _myVisivilityMap = setVisivilityMap;
             _horror = _enemyStatus.Horror;
-            _audiomaterPower = _enemyStatus.AudiometerPower;
+            _audiomaterPower = _enemyStatus.AudiomaterPower;
             _blindChaseTime = _enemyStatus.BrindCheseTime;
 
             _player = GameObject.FindWithTag("Player");
@@ -106,7 +106,7 @@ namespace Scenes.Ingame.Enemy
         {
             float _playerDistance;
 
-            if (_enemyStatus.State == EnemyState.Chase || _enemyStatus.State == EnemyState.Attack || _enemyStatus.State == EnemyState.Discover)//メモ、Discover中は移動先の変更などはするが、Stateの変更や攻撃はしない。移動速度（Discover中は移動しない）についてはEnemyMoveが行ってくれる
+            if (_enemyStatus.EnemyState == EnemyState.Chase || _enemyStatus.EnemyState == EnemyState.Attack || _enemyStatus.EnemyState == EnemyState.Discover)//メモ、Discover中は移動先の変更などはするが、Stateの変更や攻撃はしない。移動速度（Discover中は移動しない）についてはEnemyMoveが行ってくれる
             { //追跡状態または攻撃状態の場合
 
                 //定期的に状態を変更
@@ -127,7 +127,7 @@ namespace Scenes.Ingame.Enemy
                                                      //移動目標をプレイヤーの座標にする
                             _myEnemyMove.SetMovePosition(_player.transform.position);
 
-                            if (_enemyStatus.State != EnemyState.Discover) {//発見動作中は攻撃したりしない
+                            if (_enemyStatus.EnemyState != EnemyState.Discover) {//発見動作中は攻撃したりしない
                                 if (_atackRange > _playerDistance && _enemyStatus.StiffnessTime <= 0)
                                 { //攻撃可能であれば
                                     _enemyStatus.SetEnemyState(EnemyState.Attack);
@@ -167,14 +167,14 @@ namespace Scenes.Ingame.Enemy
                         if (_blindChaseTimeCount > _blindChaseTime)
 
                         { //あきらめるかどうかの判定
-                            if (_enemyStatus.State != EnemyState.Discover) 
+                            if (_enemyStatus.EnemyState != EnemyState.Discover) 
                             { 
                                 _enemyStatus.SetEnemyState(EnemyState.Searching);//追っかけるのあきらめた
                             }                                
                         }
                         else
                         { //まだあきらめない場合、近距離に特化したのSearchを行う
-                            if (_enemyStatus.State != EnemyState.Discover)
+                            if (_enemyStatus.EnemyState != EnemyState.Discover)
                             {
                                 _enemyStatus.SetEnemyState(EnemyState.Chase);
                             }

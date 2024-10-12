@@ -17,7 +17,7 @@ namespace Scenes.Ingame.Enemy
                     Debug.LogError("マップ情報がありません、_myVisivilityMapを作成してください");
                     return;
                 }
-                if (_enemyStatus.State == EnemyState.Patrolling || _enemyStatus.State == EnemyState.Searching)
+                if (_enemyStatus.EnemyState == EnemyState.Patrolling || _enemyStatus.EnemyState == EnemyState.Searching)
                 { //巡回状態または捜索状態の場合
                     //定期的に視界情報を調べる
                     _checkTimeCount += Time.deltaTime;
