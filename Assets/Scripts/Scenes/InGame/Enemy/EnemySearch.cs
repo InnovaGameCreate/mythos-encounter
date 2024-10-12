@@ -171,13 +171,11 @@ namespace Scenes.Ingame.Enemy
         }
 
         protected bool CheckCanSeeThePlayer() {
-            Debug.LogWarning("プレイヤーの姿を探すスクリプトがプレイヤーに衝突してしまい作動しません、プレイヤーのレイヤーを除外してください プレイヤーの居場所は" + _player.transform.position + "自分の場所は" + this.transform.position);
             float range = Vector3.Magnitude(this.transform.position - _player.transform.position);//平方根を求めるのはすごくコストが重いらしいので確実に計算が必要になってからしてます
                                              //視界が通るか＝Rayが通るか
             bool hit;
             Ray ray = new Ray(this.transform.position, _player.transform.position - this.transform.position);
-            hit = Physics.Raycast(ray, out RaycastHit hitInfo, range, -1 - 1 << LayerMask.NameToLayer("Player"), QueryTriggerInteraction.Collide);
-            //Debug.Log(hitInfo.rigidbody.gameObject);
+            hit = Physics.Raycast(ray, out RaycastHit hitInfo, range, -1, QueryTriggerInteraction.Collide);
             if (!hit)
             { //何にもあたっていなかった場合
                 if (_debugMode) { Debug.DrawRay(ray.origin, ray.direction * range, Color.red, 3); Debug.Log("プレイヤー発見"); }
