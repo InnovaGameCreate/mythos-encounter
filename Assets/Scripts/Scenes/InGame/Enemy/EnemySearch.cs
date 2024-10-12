@@ -1,10 +1,11 @@
+using Scenes.Ingame.Player;
 using System.Collections;
 using System.Collections.Generic;
-using Scenes.Ingame.Player;
 using UnityEngine;
 using UniRx;
 using UnityEngine.AI;
 using Fusion;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 namespace Scenes.Ingame.Enemy
 {
