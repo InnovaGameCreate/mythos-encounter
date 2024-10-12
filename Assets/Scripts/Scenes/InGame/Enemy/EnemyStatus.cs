@@ -136,12 +136,12 @@ namespace Scenes.Ingame.Enemy
         public bool Init(EnemyVisibilityMap visivilityMap) {
             //初期値を設定してゆく
             ResetStatus();
-
+            
 
             //自身についているメソッドの初期化
-            _enemyMove.Init();
             _enemySearch.Init(visivilityMap);
-            _enemyAttack.Init(visivilityMap.DeepCopy());//Atackはサーチの後にInit          
+            _enemyAttack.Init(visivilityMap.DeepCopy());//Atackはサーチの後にInit
+            _enemyMove.Init();
             _enemyUniqueAction.Init(_actionCoolTime);
 
             //撃破されたことを検出
