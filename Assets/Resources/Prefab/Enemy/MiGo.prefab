@@ -19,8 +19,6 @@ GameObject:
   - component: {fileID: 6318576627715813200}
   - component: {fileID: 377333734689836576}
   - component: {fileID: 4761551339375554962}
-  - component: {fileID: -7298190128234281243}
-  - component: {fileID: 5351360873228200208}
   m_Layer: 0
   m_Name: MiGo
   m_TagString: Enemy
@@ -313,40 +311,6 @@ MonoBehaviour:
   _mass: 100
   _bullet: {fileID: 2261882221392382239, guid: af41eff741c24b740a037720d7460db2, type: 3}
   _hand: {fileID: 4998852644197398608}
---- !u!114 &-7298190128234281243
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2083930819845757192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SyncScale: 0
-  SyncParent: 0
-  _autoAOIOverride: 1
-  DisableSharedModeInterpolation: 0
---- !u!114 &5351360873228200208
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2083930819845757192}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SortKey: 1550750282
-  ObjectInterest: 1
-  Flags: 262145
-  NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: -7298190128234281243}
 --- !u!1 &2820872689797213259
 GameObject:
   m_ObjectHideFlags: 0

@@ -74,8 +74,6 @@ GameObject:
   - component: {fileID: 4646188634127463172}
   - component: {fileID: 3881673920415878492}
   - component: {fileID: 3252102760658322517}
-  - component: {fileID: -5093638253762453570}
-  - component: {fileID: -6939517269602671049}
   m_Layer: 0
   m_Name: TestEnemy
   m_TagString: Enemy
@@ -181,7 +179,6 @@ MonoBehaviour:
   _fallBackTime: 3000
   _visual: {fileID: 1019585848636112783}
   _discoverTime: 3000
-  _enemyId: 0
   _enemySearch: {fileID: 41553992271996288}
   _enemyAttack: {fileID: 1690901522004022849}
   _enemyMove: {fileID: 7130656707961021328}
@@ -367,40 +364,6 @@ MonoBehaviour:
   _mass: 10
   _bullet: {fileID: 2261882221392382239, guid: af41eff741c24b740a037720d7460db2, type: 3}
   _hand: {fileID: 8470773532925398790}
---- !u!114 &-5093638253762453570
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9201936745783884321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SortKey: 3105557524
-  ObjectInterest: 1
-  Flags: 262145
-  NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: -6939517269602671049}
---- !u!114 &-6939517269602671049
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9201936745783884321}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SyncScale: 0
-  SyncParent: 0
-  _autoAOIOverride: 1
-  DisableSharedModeInterpolation: 0
 --- !u!1001 &1945881014760464139
 PrefabInstance:
   m_ObjectHideFlags: 0
