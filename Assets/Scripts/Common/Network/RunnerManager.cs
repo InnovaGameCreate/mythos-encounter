@@ -29,6 +29,8 @@ namespace Common.Network
             if (runner.IsServer == false) return;
 
             var playerInfo = runner.Spawn(_playerInfoPrefab, Vector3.zero, Quaternion.identity, player);
+
+            if (runner.TryGetPlayerObject(player, out var _)) return;
             runner.SetPlayerObject(player, playerInfo);
         }
 
@@ -44,7 +46,13 @@ namespace Common.Network
 
         public void OnInput(NetworkRunner runner, NetworkInput input) { }
         public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
-        public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
+
+        public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason)
+        {
+            Runner = null;
+            Instance = null;
+        }
+
         public void OnConnectedToServer(NetworkRunner runner) { }
         public void OnDisconnectedFromServer(NetworkRunner runner, NetDisconnectReason reason) { }
         public void OnConnectRequest(NetworkRunner runner, NetworkRunnerCallbackArgs.ConnectRequest request, byte[] token) { }

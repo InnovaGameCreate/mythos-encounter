@@ -66,6 +66,7 @@ namespace Scenes.Lobby.RoomSettingPanel
             Cursor.visible = true; //カーソル有効化
             Cursor.lockState = CursorLockMode.None; //カーソル固定解除
             _roomSettingPanels.SetActive(true); //ルーム設定UIを表示
+            _roomSettingManagerCs.SwitchPanel(0);
 
             //ディスプレイ有効化完了
             _displayState = DisplayState.Open;
