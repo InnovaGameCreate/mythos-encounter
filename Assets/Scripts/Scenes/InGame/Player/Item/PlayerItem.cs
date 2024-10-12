@@ -7,10 +7,6 @@ using System;
 using System.Linq;
 using EPOOutline;
 using Scenes.Ingame.InGameSystem;
-using System.Diagnostics.Contracts;
-using Unity.VisualScripting;
-using UnityEngine.UIElements;
-using Unity.Burst.CompilerServices;
 
 namespace Scenes.Ingame.Player
 {
@@ -191,7 +187,7 @@ namespace Scenes.Ingame.Player
                     });
 
             //アイテムスロットの選択状態が変わったときに、手元に適切なアイテムを出現させる
-            _nowIndex
+            OnNowIndexChange
                 .Subscribe(_ =>
                 {
                     //他にアイテムを手に持っていたら、それを破壊
