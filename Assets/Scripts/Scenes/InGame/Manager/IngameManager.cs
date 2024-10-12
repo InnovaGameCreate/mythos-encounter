@@ -37,6 +37,9 @@ namespace Scenes.Ingame.Manager
         private ReactiveProperty<int> _getEscapeItemCount = new ReactiveProperty<int>();
         public IObservable<int> OnEscapeCount => _getEscapeItemCount; //現在取得している脱出アイテムの数
 
+        private Subject<Unit> _getJournal = new Subject<Unit>();
+
+        public IObservable<Unit> OnGetJournal => _getJournal; //ジャーナルの断片を誰かが拾った際に発行されるイベント
         public int GetEscapeItemCurrentCount { get => _getEscapeItemCount.Value; }
         public int GetEscapeItemMaxCount { get => _escapeItemCount; }
 
@@ -114,6 +117,11 @@ namespace Scenes.Ingame.Manager
             {
                 _openEscapePointEvent.OnNext(default);
             }
+        }
+
+        public void GetJournalItem()
+        {
+            _getJournal.OnNext(default);
         }
     }
 }
