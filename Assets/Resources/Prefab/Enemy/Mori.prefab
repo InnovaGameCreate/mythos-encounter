@@ -12,8 +12,6 @@ GameObject:
   - component: {fileID: 5749762219999536947}
   - component: {fileID: 525937747241424695}
   - component: {fileID: 6900646090663490225}
-  - component: {fileID: -8281426485376484559}
-  - component: {fileID: -7650820767508675674}
   m_Layer: 0
   m_Name: Mori
   m_TagString: Untagged
@@ -107,41 +105,6 @@ CapsuleCollider:
   m_Height: 2.26
   m_Direction: 2
   m_Center: {x: 0, y: 0, z: 0.15}
---- !u!114 &-8281426485376484559
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2261882221392382239}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SortKey: 2680909069
-  ObjectInterest: 1
-  Flags: 262145
-  NestedObjects: []
-  NetworkedBehaviours:
-  - {fileID: 5749762219999536947}
-  - {fileID: -7650820767508675674}
---- !u!114 &-7650820767508675674
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2261882221392382239}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 158639473, guid: e725a070cec140c4caffb81624c8c787, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SyncScale: 0
-  SyncParent: 0
-  _autoAOIOverride: 1
-  DisableSharedModeInterpolation: 0
 --- !u!1001 &7817362003886820300
 PrefabInstance:
   m_ObjectHideFlags: 0
