@@ -60,14 +60,15 @@ namespace Scenes.Ingame.Enemy
 
         [Header("デバッグするかどうか")]
         [SerializeField] private bool _debugMode;
+        
         private bool _isCheckWaterEffect = false;//水の生成がされているか否か
 
 
         //########################
         //[NetWorked]置き場、注意！Fusionの仕様上getsetは独自実装してはならない！
+        
 
-
-        [HideInInspector][Networked] public float Speed { get;private set;}
+        [Networked] public float Speed { get;private set;}
         private Subject<float> _speedSubject = new Subject<float>();
         public IObservable<float> OnSpeedChanged
         {
@@ -75,56 +76,56 @@ namespace Scenes.Ingame.Enemy
         }
 
 
-        [HideInInspector][Networked] public int Hp { get;private set; }
+        [Networked] public int Hp { get;private set; }
         private Subject<int> _hpSubject = new Subject<int>();
         public IObservable<int> OnHpChanged
         {
             get { return _hpSubject; }
         }
 
-        [HideInInspector][Networked] public float AudiometerPower { get; private set; }
+        [Networked] public float AudiometerPower { get; private set; }
         private Subject<float> _audiometerPower = new Subject<float>();
         public IObservable<float> OnAudiometerPowerChange
         {
             get { return _audiometerPower; }
         }
 
-        [HideInInspector][Networked] public int Stamina { get; private set; }
+        [Networked] public int Stamina { get; private set; }
         private Subject<int> _staminaSubject = new Subject<int>();
         public IObservable<int> OnStaminaChange
         {
             get { return _staminaSubject; }
         }
 
-        [HideInInspector][Networked] public EnemyState State { get; private set; } = EnemyState.Patrolling;
+        [Networked] public EnemyState State { get; private set; } = EnemyState.Patrolling;
         private Subject<EnemyState> _enemyStateSubject = new Subject<EnemyState>();
         public IObservable<EnemyState> OnEnemyStateChange
         {
             get { return _enemyStateSubject; }
         }
 
-        [HideInInspector][Networked] public bool IsBind { get; private set; }
+        [Networked] public bool IsBind { get; private set; }
         private Subject<bool> _bindSubject = new Subject<bool>();
         public IObservable<bool> OnBindChange
         {
             get { return _bindSubject; }
         }
 
-        [HideInInspector][Networked] public float StiffnessTime { get; private set; }
+        [Networked] public float StiffnessTime { get; private set; }
         private Subject<float> _stiffnessTimeSubject = new Subject<float>();
         public IObservable<float> OnStiffnessTimeChange
         {
             get { return _stiffnessTimeSubject; }
         }
 
-        [HideInInspector][Networked] public bool IsWaterEffectDebuff { get; private set; }
+        [Networked] public bool IsWaterEffectDebuff { get; private set; }
         private Subject<bool> _isWaterEffectDebuffSubject = new Subject<bool>();
         public IObservable<bool> OnIsWaterEffectDebuffChange
         {
             get { return _isWaterEffectDebuffSubject; }
         }
 
-        [HideInInspector][Networked] public bool StaminaOver { get; private set; }
+        [Networked] public bool StaminaOver { get; private set; }
         private Subject<bool> _staminaOverSubject = new Subject<bool>();
         public IObservable<bool> OnStaminaOverChange
         {
