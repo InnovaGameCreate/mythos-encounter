@@ -160,15 +160,14 @@ namespace Scenes.Ingame.Enemy
         /// 初期設定をする。外部から呼び出すこととする
         /// </summary>
         public void Init(EnemySpawner spawner) {
-            
-            RPC_Init(spawner);
+            _enemySpawner = spawner;
+            RPC_Init();
         }
 
 
         [Rpc(sources: RpcSources.StateAuthority, targets: RpcTargets.All)]
-        public void RPC_Init(EnemySpawner spawner)
+        public void RPC_Init()
         {
-            _enemySpawner = spawner;
             _myEnemyVisivilityMap = _enemySpawner.GetEnemyVisivilityMap().DeepCopy();
             //初期値を設定してゆく
             ResetStatus();
