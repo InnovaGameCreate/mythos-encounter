@@ -20,7 +20,7 @@ namespace Scenes.Ingame.Stage
     }
     public class RoomDataCalculator
     {
-        readonly RoomSizeDictionary RoomTypeOfSize = new RoomSizeDictionary
+        /*readonly RoomSizeDictionary RoomTypeOfSize = new RoomSizeDictionary
         {
             {RoomType.room2x2, new Vector2(2, 2)},
             {RoomType.room2x2Stair, new Vector2(2, 2)},
@@ -494,7 +494,7 @@ namespace Scenes.Ingame.Stage
                 value = GenerateYAisle(stage, min, max);
             }
             return value;
-        }
+        }*/
     }
 
 
