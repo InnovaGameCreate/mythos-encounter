@@ -51,13 +51,11 @@ namespace Scenes.Ingame.Enemy
         private float _shotTimeCount;
         private float _audiomaterPower;//聞く力
         private float _checkTimeCount;//前回チェックしてからの時間を計測
-        
+         float _blindChaseTimeCount;
         private EnemyVisibilityMap _myVisivilityMap;
         Vector3 nextPositionCandidate = new Vector3(0, 0, 0);
         private Camera _camera;
         private float _blindChaseTime;
-
-        [Networked] private float _blindChaseTimeCount { get; set; }
 
         public List<EnemyAttackBehaviour> GetEnemyAtackBehaviours (){
             return _enemyAttackBehaviours;
@@ -105,12 +103,13 @@ namespace Scenes.Ingame.Enemy
         }
 
         // Update is called once per frame
-        public override void FixedUpdateNetwork()
+        protected virtual void FixedUpdateNetwork()
         {
             float _playerDistance;
 
             if (_enemyStatus.State == EnemyState.Chase || _enemyStatus.State == EnemyState.Attack || _enemyStatus.State == EnemyState.Discover)//メモ、Discover中は移動先の変更などはするが、Stateの変更や攻撃はしない。移動速度（Discover中は移動しない）についてはEnemyMoveが行ってくれる
-            { //追跡状態または攻撃状態の場合               
+            { //追跡状態または攻撃状態の場合
+
                 //定期的に状態を変更
                 _checkTimeCount += Runner.DeltaTime;
                 if (_checkTimeCount > _checkRate)
@@ -133,26 +132,24 @@ namespace Scenes.Ingame.Enemy
                                 if (_atackRange > _playerDistance && _enemyStatus.StiffnessTime <= 0)
                                 { //攻撃可能であれば
                                     _enemyStatus.SetEnemyState(EnemyState.Attack);
-                                    if (HasStateAuthority) 
-                                    {//攻撃のスクリプトを叩くのはホストのみ
-                                        _massSUM = 0;
-                                        for (int i = 0; i < _enemyAttackBehaviours.Count; i++)
+
+                                    _massSUM = 0;
+                                    for (int i = 0; i < _enemyAttackBehaviours.Count; i++)
+                                    {
+                                        if (_enemyAttackBehaviours[i].GetRange() > _playerDistance)
                                         {
-                                            if (_enemyAttackBehaviours[i].GetRange() > _playerDistance)
-                                            {
-                                                _massSUM += _enemyAttackBehaviours[i].GetMass();
-                                            }
+                                            _massSUM += _enemyAttackBehaviours[i].GetMass();
                                         }
-                                        float _pickNum = UnityEngine.Random.RandomRange(0f, _massSUM);
-                                        for (int i = 0; i < _enemyAttackBehaviours.Count; i++)
+                                    }
+                                    float _pickNum = UnityEngine.Random.RandomRange(0f, _massSUM);
+                                    for (int i = 0; i < _enemyAttackBehaviours.Count; i++)
+                                    {
+                                        _massSUM -= _enemyAttackBehaviours[i].GetMass();
+                                        if (_massSUM <= _pickNum)
                                         {
-                                            _massSUM -= _enemyAttackBehaviours[i].GetMass();
-                                            if (_massSUM <= _pickNum)
-                                            {
-                                                _enemyAttackBehaviours[i].Behaviour(_playerStatus);
-                                                _enemyStatus.ChangeStiffnessTime(_enemyAttackBehaviours[i].GetStiffness());
-                                                break;
-                                            }
+                                            _enemyAttackBehaviours[i].Behaviour(_playerStatus);
+                                            _enemyStatus.ChangeStiffnessTime(_enemyAttackBehaviours[i].GetStiffness());
+                                            break;
                                         }
                                     }
                                 }
