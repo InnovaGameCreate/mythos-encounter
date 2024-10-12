@@ -27,7 +27,7 @@ namespace Scenes.Ingame.Player
                 return;
 
             var player = Runner.Spawn(_playerPrefab, GetSpawnPosition(), Quaternion.identity, playerRef);
-            playerNetworkList.Add(player.Id);
+            //playerNetworkList.Add(player.Id);
             Runner.SetPlayerObject(playerRef, player.GetComponent<MultiPlayerMove>().Object);
         }
 
@@ -53,14 +53,11 @@ namespace Scenes.Ingame.Player
         /// </summary>
         public override void FixedUpdateNetwork()
         {
-            Debug.Log("ネットワークリストの長さ" + playerNetworkList.Count);
-
             foreach (var change in _changeDetector.DetectChanges(this))
             {
                 switch (change)
                 {
                     case nameof(playerNetworkList):
-                        Debug.Log("変更検知");
                         List<GameObject> set = new List<GameObject>();
                         List<PlayerStatus> setCs = new List<PlayerStatus>();
                         for (int i = 0 ; i < playerNetworkList.Count; i++) {
@@ -70,12 +67,10 @@ namespace Scenes.Ingame.Player
                             }
                         }
                         PlayerList = set;
-                        PlayerStatusList = setCs;
                         break;
-                        
+                    
                 }
             }
-            Debug.Log("マネージャーPlayerList" + PlayerList.Count);
         }
     }
 }

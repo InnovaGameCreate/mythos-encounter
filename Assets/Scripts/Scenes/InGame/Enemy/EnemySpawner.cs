@@ -61,10 +61,12 @@ namespace Scenes.Ingame.Enemy
 
         [Header("生成する際の設定")]
         [SerializeField] private Vector3 _enemySpawnPosition;
-        [SerializeField] private GameObject _playerSpawner;
 
-        public MultiPlayManager _multiPlayerManagerCs { get; private set; }//なぁぜぇかぁ直接シリアライズできない（メソッド扱い？でもこれ表示されるケースもあるんだよなぁ...）
 
+        [SerializeField] public MultiPlayManager _multiPlayerManagerCs { get; private set; }
+
+        public List<GameObject> Players { get; private set; }
+        public List<PlayerStatus> PlayerStatuses { get; private set; }
 
         /*
         [Header("プレイヤー一覧")]
@@ -77,7 +79,7 @@ namespace Scenes.Ingame.Enemy
 
         // Start is called before the first frame update
         async void Start()
-        { _multiPlayerManagerCs = _playerSpawner.GetComponent<MultiPlayManager>();
+        {
             _cancellationTokenSource = new CancellationTokenSource();
             if (_nonInGameManagerMode)
             {
@@ -92,6 +94,8 @@ namespace Scenes.Ingame.Enemy
                 Instance = this;
             else
                 Destroy(this.gameObject);
+            Players = _multiPlayerManagerCs.PlayerList;
+            PlayerStatuses = _multiPlayerManagerCs.PlayerStatusList;
         }
 
 
