@@ -80,12 +80,9 @@ namespace Scenes.Ingame.Stage
 
         NetworkEvents events;
         NetworkRunner runner;
-        int sessionPlayerNum;
-        int count;
-        bool readyFlag = false;
 
         int GetStageDataFlag = 0;
-        void Start()
+        async void Start()
         {
             CancellationToken token = source.Token;
             _prefabPool = GetComponent<StagePrefabPool>();
@@ -95,16 +92,12 @@ namespace Scenes.Ingame.Stage
             floorNavMeshSurface = floorObject.GetComponent<NavMeshSurface>();
 
             runner = FindObjectOfType<NetworkRunner>();
-            if(runner.IsServer)
-            {
-                sessionPlayerNum = runner.SessionInfo.PlayerCount;
-                Debug.Log(sessionPlayerNum);
-            }
+
             
             if (runner != null)
             {
                 events = runner.GetComponent<NetworkEvents>();
-                events.OnReliableData.AddListener(OnStageDataReceived);
+                //events.OnReliableData.AddListener(OnStageDataReceived);
                 Debug.Log("AddListener");
             }
 
@@ -116,17 +109,10 @@ namespace Scenes.Ingame.Stage
                     Generate(token).Forget();
                 }).AddTo(this);
 
-            RPC_ClientReadyCount();
+            await DataSet();
         }
 
-        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
-        public void RPC_ClientReadyCount()
-        {
-            count++;
-            Debug.Log(count);
-            if (count == sessionPlayerNum)
-                readyFlag = true;
-        }
+
 
 
         private async UniTaskVoid Generate(CancellationToken token)
@@ -179,7 +165,6 @@ namespace Scenes.Ingame.Stage
             }
 
             Debug.Log("シーンロード待機");
-            await UniTask.WaitUntil(() => readyFlag == true);
 
             //keyの一つ目を識別子、二つ目・三つ目をそれぞれステージの縦横サイズとして送信
             SendDataToAllPlayer(ReliableKey.FromInts(1, (int)_firstFloorData.GetLength(0), (int)_firstFloorData.GetLength(1), 0), _firstFloorData); 
@@ -212,6 +197,32 @@ namespace Scenes.Ingame.Stage
             floorNavMeshSurface.BuildNavMesh();
             IngameManager.Instance.SetReady(ReadyEnum.StageReady);
 
+        }
+
+        async UniTask DataSet()
+        {
+            await UniTask.WaitUntil(() => RoomDataHolder.GetFlag == true);
+
+            RoomDataArray recievedData_first = BinarySerializer<RoomDataArray>.DeserializeFromBytes(RoomDataHolder._first.data.Array);
+            _firstFloorData = recievedData_first.TranslateTwoDimentionArrayFromArray(RoomDataHolder._first.keys[1], RoomDataHolder._first.keys[2]);
+            _roomId = recievedData_first._roomId;
+            GetStageDataFlag |= 1 << 0;
+
+            RoomDataArray recievedData_second = BinarySerializer<RoomDataArray>.DeserializeFromBytes(RoomDataHolder._second.data.Array);
+            _secondFloorData = recievedData_second.TranslateTwoDimentionArrayFromArray(RoomDataHolder._second.keys[1], RoomDataHolder._second.keys[2]);
+            _roomId = recievedData_second._roomId;
+            //linqData = recievedData.ConvertListToDic();
+            DebugStageData(_secondFloorData);
+            GetStageDataFlag |= 1 << 1;
+
+            if (GetStageDataFlag == 3)
+            {
+                for (int i = 0; i <= _roomId; i++)
+                {
+                    linqData[i] = new LinqRoomData();
+                }
+                StageInstantiate(source.Token).Forget();
+            }
         }
 
         void OnStageDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data)
