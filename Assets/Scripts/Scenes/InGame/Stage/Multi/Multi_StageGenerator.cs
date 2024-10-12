@@ -80,9 +80,11 @@ namespace Scenes.Ingame.Stage
 
         NetworkEvents events;
         NetworkRunner runner;
+        ReadyFlagManager _flagManager;
+        bool wait = false;
 
         int GetStageDataFlag = 0;
-        async void Start()
+        void Start()
         {
             CancellationToken token = source.Token;
             _prefabPool = GetComponent<StagePrefabPool>();
@@ -97,7 +99,12 @@ namespace Scenes.Ingame.Stage
             if (runner != null)
             {
                 events = runner.GetComponent<NetworkEvents>();
-                //events.OnReliableData.AddListener(OnStageDataReceived);
+                events.OnReliableData.AddListener(OnStageDataReceived);
+                _flagManager = runner.GetComponent<ReadyFlagManager>();
+                if (runner.IsClient)
+                {
+                    _flagManager.ReadyState.Add(runner.LocalPlayer, 1);
+                }
                 Debug.Log("AddListener");
             }
 
@@ -109,7 +116,13 @@ namespace Scenes.Ingame.Stage
                     Generate(token).Forget();
                 }).AddTo(this);
 
-            await DataSet();
+            _flagManager.OnReady
+                .Subscribe(_ =>
+                {
+                    wait = true;
+                }).AddTo(this);
+
+            //await DataSet();
         }
 
 
@@ -154,7 +167,7 @@ namespace Scenes.Ingame.Stage
             }
 
 
-            byte[] datat = { 0 };
+            /*byte[] datat = { 0 };
             foreach (PlayerRef player in runner.ActivePlayers)   //自分以外のすべてのプレイヤーに送信
             {
                 if (player != runner.LocalPlayer)
@@ -162,10 +175,11 @@ namespace Scenes.Ingame.Stage
                     runner.SendReliableDataToPlayer(player, ReliableKey.FromInts(3,0,0,0), datat);
                 }
 
-            }
+            }*/
 
             Debug.Log("シーンロード待機");
 
+            await UniTask.WaitUntil(() => wait == true);
             //keyの一つ目を識別子、二つ目・三つ目をそれぞれステージの縦横サイズとして送信
             SendDataToAllPlayer(ReliableKey.FromInts(1, (int)_firstFloorData.GetLength(0), (int)_firstFloorData.GetLength(1), 0), _firstFloorData); 
             SendDataToAllPlayer(ReliableKey.FromInts(2, (int)_secondFloorData.GetLength(0), (int)_secondFloorData.GetLength(1), 0), _secondFloorData);
@@ -199,7 +213,7 @@ namespace Scenes.Ingame.Stage
 
         }
 
-        async UniTask DataSet()
+        /*async UniTask DataSet()
         {
             await UniTask.WaitUntil(() => RoomDataHolder.GetFlag == true);
 
@@ -223,7 +237,7 @@ namespace Scenes.Ingame.Stage
                 }
                 StageInstantiate(source.Token).Forget();
             }
-        }
+        }*/
 
         void OnStageDataReceived(NetworkRunner runner, PlayerRef player, ReliableKey key, ArraySegment<byte> data)
         {

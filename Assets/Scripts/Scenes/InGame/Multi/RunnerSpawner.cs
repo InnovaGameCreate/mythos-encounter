@@ -7,20 +7,22 @@ using UnityEngine.SceneManagement;
 using Fusion;
 using Scenes.Ingame.Stage;
 
-public class RunnerSpawner : MonoBehaviour
+public class RunnerSpawner : MonoBehaviour, IPlayerJoined
 {
     public NetworkRunner RunnerPrefabs;
     NetworkRunner _runnerInstance;
+    [SerializeField]
+    ReadyFlagManager _readyFlag;
 
     async void StartGame(GameMode mode)
     {
         _runnerInstance = Instantiate(RunnerPrefabs);
-
+        _readyFlag = _runnerInstance.GetComponent<ReadyFlagManager>();
         //予期しないシャットダウンを処理できるようにシャットダウン用のリスナーを設定
         var events = _runnerInstance.GetComponent<NetworkEvents>();
         events.OnShutdown.AddListener(OnShutdown);
 
-        RoomDataHolder.AddListener(events);
+        //RoomDataHolder.AddListener(events);
 
         var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
         var sceneInfo = new NetworkSceneInfo();
@@ -37,6 +39,14 @@ public class RunnerSpawner : MonoBehaviour
             Scene = scene,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
+
+        //await _readyFlag.WaitClientsReady();
+    }
+
+    public void PlayerJoined(PlayerRef playerRef)
+    {
+        _readyFlag.PlayerNum++;
+        Debug.Log(_readyFlag.PlayerNum);
     }
 
     public void Action()
