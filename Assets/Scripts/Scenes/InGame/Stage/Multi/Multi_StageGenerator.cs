@@ -80,7 +80,9 @@ namespace Scenes.Ingame.Stage
 
         NetworkEvents events;
         NetworkRunner runner;
-        bool _loadFlag = false;
+        int sessionPlayerNum;
+        int count;
+        bool readyFlag = false;
 
         int GetStageDataFlag = 0;
         void Start()
@@ -93,7 +95,12 @@ namespace Scenes.Ingame.Stage
             floorNavMeshSurface = floorObject.GetComponent<NavMeshSurface>();
 
             runner = FindObjectOfType<NetworkRunner>();
-
+            if(runner.IsServer)
+            {
+                sessionPlayerNum = runner.SessionInfo.PlayerCount;
+                Debug.Log(sessionPlayerNum);
+            }
+            
             if (runner != null)
             {
                 events = runner.GetComponent<NetworkEvents>();
@@ -109,19 +116,18 @@ namespace Scenes.Ingame.Stage
                     Generate(token).Forget();
                 }).AddTo(this);
 
-            if(runner.IsServer)
-            {
-                if(events == null)
-                    events = runner.GetComponent<NetworkEvents>();
-                events.OnSceneLoadDone.AddListener(OnSceneLoadFlag);
-            }
+            RPC_ClientReadyCount();
         }
 
-        void OnSceneLoadFlag(NetworkRunner runner)
+        [Rpc(RpcSources.All, RpcTargets.StateAuthority)]
+        public void RPC_ClientReadyCount()
         {
-            Debug.Log("ロード完了フラグ");
-            _loadFlag = true;
+            count++;
+            Debug.Log(count);
+            if (count == sessionPlayerNum)
+                readyFlag = true;
         }
+
 
         private async UniTaskVoid Generate(CancellationToken token)
         {
@@ -173,7 +179,7 @@ namespace Scenes.Ingame.Stage
             }
 
             Debug.Log("シーンロード待機");
-            await UniTask.WaitUntil(() => _loadFlag == true);
+            await UniTask.WaitUntil(() => readyFlag == true);
 
             //keyの一つ目を識別子、二つ目・三つ目をそれぞれステージの縦横サイズとして送信
             SendDataToAllPlayer(ReliableKey.FromInts(1, (int)_firstFloorData.GetLength(0), (int)_firstFloorData.GetLength(1), 0), _firstFloorData); 
