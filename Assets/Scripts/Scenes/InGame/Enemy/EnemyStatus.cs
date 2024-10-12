@@ -283,8 +283,8 @@ namespace Scenes.Ingame.Enemy
         public void SetEnemyState(EnemyState state) {
             if (HasStateAuthority)
             {//Stateの変更は予期せぬ動作やアニメーションにかかわるのでホストのみが行う
-                State = state;
                 if (_debugMode) { Debug.Log("State変更" + State); }
+                State = state;
             }
         }
 

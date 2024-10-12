@@ -12,7 +12,6 @@ using System.Threading.Tasks;
 using Fusion;
 using static UnityEditor.Experimental.GraphView.GraphView;
 using static Unity.Burst.Intrinsics.X86;
-using UnityEngine.SocialPlatforms;
 
 namespace Scenes.Ingame.Enemy
 {
@@ -79,6 +78,15 @@ namespace Scenes.Ingame.Enemy
 
             _camera = GameObject.Find("Main Camera").GetComponent<Camera>();
 
+            _enemyStatus.OnEnemyStateChange.Subscribe(state => 
+            {
+                if (state ==　EnemyState.Discover) 
+                { 
+                    ReturnignForDiscover(this.GetCancellationTokenOnDestroy()).Forget();
+                    _myVisivilityMap.SetEveryGridWatchNum(50);//リセット
+                } 
+            }).AddTo(this);
+
 
             /*
              #####################射程順に並び変える
@@ -94,19 +102,9 @@ namespace Scenes.Ingame.Enemy
         public override void FixedUpdateNetwork()
         {
             if (_enemyStatus.State == EnemyState.Chase || _enemyStatus.State == EnemyState.Attack || _enemyStatus.State == EnemyState.Discover)//メモ、Discover中は移動先の変更などはするが、Stateの変更や攻撃はしない。移動速度（Discover中は移動しない）についてはEnemyMoveが行ってくれる
-            { //追跡状態または攻撃状態の場合
-              //定期的に状態を変更
+            { //追跡状態または攻撃状態の場合               
+                //定期的に状態を変更
                 _checkTimeCount += Runner.DeltaTime;
-                if (EnemyState.Discover == _enemyStatus.State)//発見動作
-                {//発見動作をする場合
-                    if (_checkTimeCount > _enemyStatus.DiscoverTime) {
-
-                        _myVisivilityMap.SetEveryGridWatchNum(50);//リセット
-                        _enemyStatus.SetEnemyState(EnemyState.Chase);
-                        _blindChaseTimeCount = 0;
-                    }
-                    return;
-                }
                 if (_checkTimeCount > _checkRate)
                 {
                     _checkTimeCount = 0;
@@ -118,6 +116,7 @@ namespace Scenes.Ingame.Enemy
                     { //敵が見えないならせめてなんとかいそうなエリアへ行こうとする
                         _blindChaseTimeCount += _checkRate;
                         if (_blindChaseTimeCount > _blindChaseTime)
+
                         { //あきらめるかどうかの判定
                             if (_enemyStatus.State != EnemyState.Discover) 
                             { 
@@ -158,6 +157,15 @@ namespace Scenes.Ingame.Enemy
                     }
                 }
             }
+            else 
+            {//追跡攻撃状態でなくても定期的にSANダメージを与えているかを確認する
+                _checkTimeCount += Time.deltaTime;
+                if (_checkTimeCount > _checkRate)
+                {
+                    _checkTimeCount = 0;
+                    //Debug.LogWarning("San判定");現状視界が360なので視界が通らないここに要は無し
+                }
+            }
         }
 
         protected virtual bool CheckCanSeeThePlayer()
@@ -167,16 +175,16 @@ namespace Scenes.Ingame.Enemy
             bool canWatch = false;
             foreach (PlayerStatus playerStatus in _enemyStatus.MultiPlayManager.PlayerStatusList)
             { //全てのプレイヤーをチェック
-                bool hit = true;//あたったかどうか
+                bool hit;//あたったかどうか
                 float checkPlayerDistance = Vector3.Magnitude(this.transform.position - playerStatus.transform.position); //プレイヤーまでの距離
-                Ray ray = new Ray(this.transform.position + new Vector3(0, 2, 0), playerStatus.transform.position - this.transform.position);
-                hit = Physics.Raycast(ray, out RaycastHit hitInfo, checkPlayerDistance, -1 ^ LayerMask.GetMask(new string[] { "Ignore Raycast", "Player" }), QueryTriggerInteraction.Collide);
+                Ray ray = new Ray(this.transform.position, playerStatus.transform.position - this.transform.position);
+                hit = Physics.Raycast(ray, out RaycastHit hitInfo, checkPlayerDistance, -1 - 1 << LayerMask.NameToLayer("Player"), QueryTriggerInteraction.Collide);
                 if (!hit)
                 { //何にもあたっていない=対称までの間に障害物はないを見ることが来た
                     SanCheck(playerStatus);//こちらまでプレイヤーはまっすぐ見れる
                     if (true) 
                     { //視野角内にプレイヤーはいるかどうか?＝現状は常にTrue
-                        if (checkPlayerDistance < _visivilityRange) {//見える距離内にいるかどうか
+                        if (_playerDistance < _visivilityRange) {//見える距離内にいるかどうか
                             canWatch = true;
                             if (_debugMode) { Debug.DrawRay(ray.origin, ray.direction * checkPlayerDistance, Color.red, 3); Debug.Log("プレイヤー発見"); }
 
@@ -275,7 +283,7 @@ namespace Scenes.Ingame.Enemy
             {
                 //光が見えるか調べる
                 if (_debugMode) Debug.Log("光が見えた");
-                _enemyStatus.SetEnemyState(EnemyState.Chase);
+                _enemyStatus.SetEnemyState(EnemyState.Searching);
                 _myEnemyMove.SetMovePosition(neerLightPosition);
                 return true;
             }
@@ -314,7 +322,7 @@ namespace Scenes.Ingame.Enemy
             }
             if (canHear)
             {
-                _enemyStatus.SetEnemyState(EnemyState.Chase);
+                _enemyStatus.SetEnemyState(EnemyState.Searching);
                 _myEnemyMove.SetMovePosition(_myVisivilityMap.GetNextNearWatchPosition(this.transform.position));
                 return true;
             }
@@ -337,5 +345,12 @@ namespace Scenes.Ingame.Enemy
             */
         }
 
+        /// <summary>
+        /// Discoverにかかる時間だけ待って、チェイスに移行する
+        /// </summary>
+        protected virtual async Cysharp.Threading.Tasks.UniTaskVoid ReturnignForDiscover(CancellationToken ct) {
+            await Task.Delay(_enemyStatus.DiscoverTime, ct);
+            _enemyStatus.SetEnemyState(EnemyState.Chase);
+        }
     }
 }

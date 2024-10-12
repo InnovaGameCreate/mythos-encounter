@@ -200,7 +200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _checkRate: 1
   _debugMode: 0
-  _myEnemyMove: {fileID: 153174845251746693}
+  _myEneyMove: {fileID: 153174845251746693}
   _enemyStatus: {fileID: 227141341248401291}
 --- !u!114 &227141341248401291
 MonoBehaviour:
@@ -230,7 +230,7 @@ MonoBehaviour:
   _uniqueItem: {fileID: 6146547148148849240, guid: 1460fd555e5df4f4ba1ca88617706b73, type: 3}
   _enemyMagics: 
   _hasMagicNum: 0
-  _fallBackTime: 3
+  _fallBackTime: 3000
   _visual: {fileID: 447870234884017220}
   _discoverTime: 0
   _enemyId: 1
@@ -248,7 +248,6 @@ MonoBehaviour:
   _StiffnessTime: 0
   _IsWaterEffectDebuff: 0
   _StaminaOver: 0
-  _MultiPlayManager: {fileID: 0}
 --- !u!195 &8637928095015650533
 NavMeshAgent:
   m_ObjectHideFlags: 0
