@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Scenes.Ingame.Player;
 using System;
+using System.Collections.Generic;
 using UniRx;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
