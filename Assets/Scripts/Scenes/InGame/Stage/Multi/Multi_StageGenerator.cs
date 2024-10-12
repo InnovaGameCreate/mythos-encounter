@@ -80,6 +80,7 @@ namespace Scenes.Ingame.Stage
 
         NetworkEvents events;
         NetworkRunner runner;
+        bool _loadFlag = false;
 
         int GetStageDataFlag = 0;
         void Start()
@@ -107,6 +108,19 @@ namespace Scenes.Ingame.Stage
                     InitialSet();
                     Generate(token).Forget();
                 }).AddTo(this);
+
+            if(runner.IsServer)
+            {
+                if(events == null)
+                    events = runner.GetComponent<NetworkEvents>();
+                events.OnSceneLoadDone.AddListener(OnSceneLoadFlag);
+            }
+        }
+
+        void OnSceneLoadFlag(NetworkRunner runner)
+        {
+            Debug.Log("ロード完了フラグ");
+            _loadFlag = true;
         }
 
         private async UniTaskVoid Generate(CancellationToken token)
@@ -158,10 +172,13 @@ namespace Scenes.Ingame.Stage
 
             }
 
+            Debug.Log("シーンロード待機");
+            await UniTask.WaitUntil(() => _loadFlag == true);
 
             //keyの一つ目を識別子、二つ目・三つ目をそれぞれステージの縦横サイズとして送信
             SendDataToAllPlayer(ReliableKey.FromInts(1, (int)_firstFloorData.GetLength(0), (int)_firstFloorData.GetLength(1), 0), _firstFloorData); 
             SendDataToAllPlayer(ReliableKey.FromInts(2, (int)_secondFloorData.GetLength(0), (int)_secondFloorData.GetLength(1), 0), _secondFloorData);
+            Debug.Log("データ送信完了");
 
             DebugStageData(_secondFloorData);
             //ステージの生成

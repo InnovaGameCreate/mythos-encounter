@@ -5,6 +5,7 @@ namespace Scenes.Ingame.InGameSystem
 {
     public enum ReadyEnum
     {
+        SyncReady,
         StageReady,
         PlayerReady,
         EnemyReady,
