@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using System;
 using System.Threading;
 
 namespace Scenes.Ingame.Enemy.Trace.Feature
@@ -11,6 +13,15 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         {
             _cancellationTokenSource = new CancellationTokenSource();
             _view = view;
+            Track(_cancellationTokenSource.Token).Forget();
+        }
+        private async UniTaskVoid Track(CancellationToken token)
+        {
+            while (true)
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(30), cancellationToken: token);
+                _view.InstanceTrackSprite();
+            }
         }
 
         public override void Cancel()
