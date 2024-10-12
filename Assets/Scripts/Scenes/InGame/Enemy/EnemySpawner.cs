@@ -293,7 +293,7 @@ namespace Scenes.Ingame.Enemy
             {
                 if (_debugMode) Debug.Log("作成した敵にはEnemyStatusクラスがあります");
                 createEnemyVisiviityMap.DontApproachPlayer();
-                createEnemyStatus.Init(this);
+                createEnemyStatus.Init(createEnemyVisiviityMap.DeepCopy());
 
             }
             return createEnemy;
@@ -314,9 +314,7 @@ namespace Scenes.Ingame.Enemy
             _cancellationTokenSource.Dispose();
         }
 
-        public  EnemyVisibilityMap GetEnemyVisivilityMap() {
-            return _enemyVisibilityMap;
-        }
+
 
 
     }
