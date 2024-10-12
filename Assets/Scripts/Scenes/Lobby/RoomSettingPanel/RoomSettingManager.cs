@@ -27,11 +27,6 @@ namespace Scenes.Lobby.RoomSettingPanel
 
         private int _panelIndex = 0;
 
-        private void OnEnable()
-        {
-            SwitchPanel(0);
-        }
-
         /// <summary>
         /// NetworkRunner‚ð‹N“®‚·‚é
         /// </summary>
