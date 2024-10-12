@@ -15,8 +15,8 @@ namespace Scenes.Ingame.Player
     public class Map : MonoBehaviour
     {
         const float WALLSIZE = 5.85f;
-        const float FLOOR_1F = -533.91f;//一階の様子を撮影するのに最適なy座標
-        const float FLOOR_2F = -528.05f;
+        const float FLOOR_1F = -526.65f;//一階の様子を撮影するのに最適なy座標
+        const float FLOOR_2F = -518.49f;//二階の様子を撮影するのに最適なy座標
         const float PROJECTIONSIZE_MAX = 38.5f;//カメラの射角の最大値(マップ半径19のときは55)
         const float PROJECTIONSIZE_FOLLOW = 15;//プレイヤー追従時のカメラの射角
         const float STAGERADIUS = 13;//ステージの半径（タイルの枚数）
