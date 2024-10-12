@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Fusion;
+using Scenes.Ingame.Stage;
 
 public class RunnerSpawner : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class RunnerSpawner : MonoBehaviour
         //予期しないシャットダウンを処理できるようにシャットダウン用のリスナーを設定
         var events = _runnerInstance.GetComponent<NetworkEvents>();
         events.OnShutdown.AddListener(OnShutdown);
+
+        RoomDataHolder.AddListener(events);
 
         var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
         var sceneInfo = new NetworkSceneInfo();
@@ -35,6 +38,19 @@ public class RunnerSpawner : MonoBehaviour
         });
 
  
+    }
+
+    public void Action()
+    {
+        try
+        {
+            _runnerInstance.LoadScene(SceneRef.FromIndex(1), LoadSceneMode.Single);
+        }
+        catch
+        {
+            Debug.LogError("シーン遷移で問題が発生しました。");
+            throw;
+        }
     }
 
     void OnGUI()

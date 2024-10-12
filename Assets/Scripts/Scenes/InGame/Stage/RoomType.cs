@@ -13,4 +13,5 @@ namespace Scenes.Ingame.Stage
         room2x2Stair = 8,
         room3x3Stair = 9,
     }
+
 }
