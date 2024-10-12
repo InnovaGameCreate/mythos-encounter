@@ -2,32 +2,35 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using Fusion;
 using DG.Tweening;
-using Common.Network;
+using Scenes.Ingame.Player;
 
 namespace Scenes.Lobby.RoomSettingPanel
 {
-    public class LookDisplayObject : MonoBehaviour
+    [RequireComponent(typeof(RoomSettingManager))]
+    public class DisplayCameraMotion : MonoBehaviour
     {
         private enum DisplayState //ディスプレイ制御フラグ
         {
             Close,
-            Motion,
+            CameraMove,
             Open,
         }
 
+        [Header("Scene Objects")]
         [SerializeField] private Camera _displayCamera;
-        [SerializeField] private GameObject　_uiPanel;
-        [SerializeField] private NetworkRunner _runnerPrefab;
+        [SerializeField] private GameObject _roomSettingPanels;
+        [Header("Time Setting")]
         [SerializeField] private float _motionTime = 1f;
 
-        private DisplayState _displayState = DisplayState.Close; //ディスプレイUIの表示状態
+        private RoomSettingManager _roomSettingManagerCs;
+        private DisplayState _displayState = DisplayState.Close; //ディスプレイの表示状態
         private Vector3 _displayPosition = Vector3.zero; //ディスプレイのTransform
         private Quaternion _displayRotation = Quaternion.identity;
 
         private void Start()
         {
+            _roomSettingManagerCs = GetComponent<RoomSettingManager>();
             _displayPosition = _displayCamera.transform.position;
             _displayRotation = _displayCamera.transform.rotation;
         }
@@ -47,21 +50,24 @@ namespace Scenes.Lobby.RoomSettingPanel
         {
             //操作後一回しか通らないように制御
             if (_displayState != DisplayState.Close) return;
-            else _displayState = DisplayState.Motion;
+            else _displayState = DisplayState.CameraMove;
 
             //モーション前処理
-            _displayCamera.enabled = true;
+            _displayCamera.enabled = true; //ディスプレイカメラ有効化
+            PlayerLock(true); //プレイヤーを固定
 
             //処理待機
             await UniTask.WhenAll(
                 CameraMove(Camera.main.transform.position, _displayPosition),
                 CameraRotate(Camera.main.transform.rotation, _displayRotation),
-                BootRunner()); //NetworkRunner起動
+                _roomSettingManagerCs.BootRunner()); //Runnerの起動
 
             //モーション後処理
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
-            _uiPanel.SetActive(true);
+            Cursor.visible = true; //カーソル有効化
+            Cursor.lockState = CursorLockMode.None; //カーソル固定解除
+            _roomSettingPanels.SetActive(true); //ルーム設定UIを表示
+
+            //ディスプレイ有効化完了
             _displayState = DisplayState.Open;
         }
 
@@ -72,13 +78,13 @@ namespace Scenes.Lobby.RoomSettingPanel
         {
             //操作後一回しか通らないように制御
             if (_displayState != DisplayState.Open) return;
-            else _displayState = DisplayState.Motion;
+            else _displayState = DisplayState.CameraMove;
 
             //モーション前処理
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
-            _uiPanel.SetActive(false);
-            DiscardRunner(); //Runnerの停止
+            Cursor.visible = false; //カーソル無効化
+            Cursor.lockState = CursorLockMode.Locked; //カーソルの固定
+            _roomSettingPanels.SetActive(false); //ルーム設定UIを非表示
+            _roomSettingManagerCs.DiscardRunner(); //Runnerの停止
 
             //処理待機
             await UniTask.WhenAll(
@@ -86,7 +92,10 @@ namespace Scenes.Lobby.RoomSettingPanel
                 CameraRotate(_displayRotation, Camera.main.transform.rotation));
 
             //モーション後処理
-            _displayCamera.enabled = false;
+            _displayCamera.enabled = false; //ディスプレイカメラを無効化
+            PlayerLock(false); //プレイヤー固定解除
+
+            //ディスプレイ無効化完了
             _displayState = DisplayState.Close;
         }
 
@@ -121,37 +130,14 @@ namespace Scenes.Lobby.RoomSettingPanel
         }
 
         /// <summary>
-        /// NetworkRunnerを起動する
+        /// プレイヤーの状態を変更する
         /// </summary>
-        private async UniTask BootRunner()
+        /// <param name="state"></param>
+        private void PlayerLock(bool state)
         {
-            var runner = Instantiate(_runnerPrefab); //Runnerインスタンスを設置
-            runner.ProvideInput = true; //入植権限を使う
-
-            var result = await runner.JoinSessionLobby(SessionLobby.ClientServer); //セッションロビーに参加（仮想的）
-            if (result.Ok)
-            {
-                //Debug.Log("JoinSessionLobby");
-            }
-            else
-            {
-                //Debug.LogError($"Error : {result.ShutdownReason}");
-            }
-        }
-
-        /// <summary>
-        /// NetworkRunnerを停止する
-        /// </summary>
-        private void DiscardRunner()
-        {
-            if (RunnerManager.Runner == null)
-            {
-                Debug.LogError("Error : Not Found Runner");
-            }
-            else
-            {
-                RunnerManager.Runner.Shutdown();
-            }
+            var playerMove = FindObjectOfType<PlayerMove>();
+            playerMove.MoveControl(!state);
+            playerMove.RotateControl(!state);
         }
     }
 }
