@@ -9,14 +9,13 @@ using Unity.VisualScripting;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using System.Threading.Tasks;
-using Fusion;
 
 namespace Scenes.Ingame.Enemy
 {
     /// <summary>
     /// 敵キャラの攻撃を管理する。追跡状態と攻撃状態はこのスクリプトが作動する
     /// </summary>
-    public class EnemyAttack : NetworkBehaviour
+    public class EnemyAttack : MonoBehaviour
     {
         [Header("このスクリプトを制御する変数")]
         [SerializeField][Tooltip("何秒ごとに視界の状態、攻撃可能性、SANをチェックするか")] private float _checkRate;
@@ -103,7 +102,7 @@ namespace Scenes.Ingame.Enemy
         }
 
         // Update is called once per frame
-        protected virtual void FixedUpdateNetwork()
+        protected virtual void FixedUpdate()
         {
             float _playerDistance;
 
@@ -111,7 +110,7 @@ namespace Scenes.Ingame.Enemy
             { //追跡状態または攻撃状態の場合
 
                 //定期的に状態を変更
-                _checkTimeCount += Runner.DeltaTime;
+                _checkTimeCount += Time.deltaTime;
                 if (_checkTimeCount > _checkRate)
                 {
                     _playerDistance = Vector3.Magnitude(this.transform.position - _player.transform.position);

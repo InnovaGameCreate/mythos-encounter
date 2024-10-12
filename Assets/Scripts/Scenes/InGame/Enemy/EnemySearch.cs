@@ -93,7 +93,7 @@ namespace Scenes.Ingame.Enemy
         }
 
 
-        public override void FixedUpdateNetwork()
+        protected virtual void FixedUpdate()
         {
             if (_myVisivilityMap != null)//索敵の準備ができていない場合
             {
@@ -106,7 +106,7 @@ namespace Scenes.Ingame.Enemy
 
 
                 //定期的に視界情報を調べる
-                _checkTimeCount += Runner.DeltaTime;
+                _checkTimeCount += Time.deltaTime;
                 if (_checkTimeCount > _checkRate)
                 {
                     float valume = 0;//プレイヤーの騒音を記録

@@ -24,7 +24,7 @@ RenderSettings:
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
-  m_AmbientMode: 0
+  m_AmbientMode: 4
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
   m_SkyboxMaterial: {fileID: 0}
   m_HaloStrength: 0.5
@@ -3383,11 +3383,11 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.1
-  far clip plane: 5000
-  field of view: 40
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
   orthographic: 0
-  orthographic size: 10
+  orthographic size: 5
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -3411,7 +3411,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1518187893}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.5705848, z: 0.25}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3756,7 +3756,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1614493044594472170, guid: bba2b43ed544a404ba6e0b9ccad16846, type: 3}
       propertyPath: _debugMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1614493044594472170, guid: bba2b43ed544a404ba6e0b9ccad16846, type: 3}
       propertyPath: _enemyName
@@ -3789,10 +3789,6 @@ PrefabInstance:
     - target: {fileID: 2356478341575929910, guid: bba2b43ed544a404ba6e0b9ccad16846, type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6647799633242644205, guid: bba2b43ed544a404ba6e0b9ccad16846, type: 3}
-      propertyPath: SortKey
-      value: 1793039239
       objectReference: {fileID: 0}
     - target: {fileID: 7736650679182576676, guid: bba2b43ed544a404ba6e0b9ccad16846, type: 3}
       propertyPath: m_RootOrder
