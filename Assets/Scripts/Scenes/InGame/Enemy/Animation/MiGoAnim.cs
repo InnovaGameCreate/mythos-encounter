@@ -13,7 +13,7 @@ namespace Scenes.Ingame.Enemy.Animation
         protected override void UpdateAnimationState()
         {
             // アニメーション制御
-            switch (_enemyStatus.State)
+            switch (_enemyStatus.EnemyState)
             {
                 case EnemyState.Patrolling:
                     _animator.SetTrigger(IsPatrolling);
@@ -28,11 +28,8 @@ namespace Scenes.Ingame.Enemy.Animation
                     _animator.SetTrigger(IsAttack);
                     break;
                 case EnemyState.None:
-                    break;
                 case EnemyState.FallBack:
-                    break;
                 case EnemyState.Special:
-                    break;
                 case EnemyState.Discover:
                     break;
                 default:
