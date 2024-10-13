@@ -125,7 +125,7 @@ namespace Scenes.Ingame.Enemy
         /// <summary>
         /// 食欲を持っているかどうか
         /// </summary>
-        public bool HasAppetite { get; private set; } = true;
+        public bool HasAppetite { get; private set; };
         /// <summary>
         /// 強制移動モード
         /// </summary>
