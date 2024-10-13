@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &649450498923269719
 MonoBehaviour:
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1ae1296fc32e4a8e84156606c2a4c08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _trackSprite: {fileID: 4087507912217722897, guid: c27386024d53df04296c01c5b77bac05, type: 3}
+  _trackSprite: {fileID: 1991188923463921097, guid: e0cf1a396a012ae4cb5ff3c611cb6d62, type: 3}
   _breathes:
   - {fileID: 8300000, guid: 6a265f07a6aa59d488b70e0601eb6e54, type: 3}
   - {fileID: 8300000, guid: 7fbfe036ff7e0bc4ebd2775cb5d354b3, type: 3}
