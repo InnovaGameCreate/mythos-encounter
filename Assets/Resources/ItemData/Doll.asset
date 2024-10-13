@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemID: 7
   itemName: "\u8EAB\u4EE3\u308F\u308A\u4EBA\u5F62"
-  itemSprite: {fileID: 21300000, guid: 2b9bf8ec5d54fe249ac9e20979ccd42c, type: 3}
+  itemSprite: {fileID: 21300000, guid: f9795855d75790b43a27a57626cc8956, type: 3}
   price: 250
   itemInfo: "HP\u3067\u6B7B\u3093\u3060\u5834\u5408\u306B50%\u306E\u4F53\u529B\u3067\u5FA9\u6D3B\u3059\u308B\u3002"
   type: 1
