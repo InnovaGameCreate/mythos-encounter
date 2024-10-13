@@ -178,7 +178,6 @@ namespace Scenes.Ingame.Enemy
         // Update is called once per frame
         void Update()
         {
-            Debug.Log("食欲" + HasAppetite);
             if (_debugMode && Input.GetKey(KeyCode.Z)) { FallBack(); }
 
             if (_stiffnessTime.Value > 0) { 
