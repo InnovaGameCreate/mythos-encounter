@@ -51,5 +51,11 @@ MonoBehaviour:
   - {fileID: 4570247510132778309, guid: 31905bfc70a2ddf409c551bcb6df779e, type: 3}
   - {fileID: 4570247510132778309, guid: aee2d85a02b82534598bb8aca49bf407, type: 3}
   - {fileID: 4570247510132778309, guid: ab67a0a3e18354c4d95587b785f10572, type: 3}
+  - {fileID: 4570247510132778309, guid: fc9c04bd587a12d4f96c43cae2be6760, type: 3}
+  - {fileID: 4570247510132778309, guid: 179b029440dd2154cb7c786baab810a4, type: 3}
+  - {fileID: 4570247510132778309, guid: df7d0d203c95c9a4b9efa2b426e565e8, type: 3}
+  - {fileID: 4570247510132778309, guid: 0008be7d88cf4624699394f365afd844, type: 3}
+  - {fileID: 4570247510132778309, guid: 6d7e0bec780684244ac7d92c2309699a, type: 3}
+  - {fileID: 4570247510132778309, guid: 3407a59925522614baac081df3ac9efc, type: 3}
   _escapeItemPrefab: {fileID: 1949379199197260525, guid: 1138eb2a82e55ec48aada3998ffcf7d2, type: 3}
   _escapePointPrefab: {fileID: 62901747889602305, guid: 585ca18ea7e82a64490e201b2b2e3eea, type: 3}
