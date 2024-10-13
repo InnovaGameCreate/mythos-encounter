@@ -4,6 +4,7 @@ using UnityEngine;
 using UniRx;
 using Fusion;
 using System;
+using UnityEngine.SceneManagement;
 using Common.Player;
 
 /// <summary>
@@ -589,6 +590,7 @@ namespace Scenes.Ingame.Player
                 _playerMagic.ChangeCanUseMagicBool(false);
                 _playerItem.ChangeCanUseItem(false);
                 _deathEventCount = 0;
+                SceneManager.LoadScene("Title");
             }
         }
 
