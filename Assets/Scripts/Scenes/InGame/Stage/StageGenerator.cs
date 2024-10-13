@@ -272,7 +272,15 @@ namespace Scenes.Ingame.Stage
                                 instantiateRoom = Instantiate(_prefabPool.get2x3RoomPrefab[UnityEngine.Random.Range(0, _prefabPool.get2x3RoomPrefab.Length)], instantiatePosition, Quaternion.identity, roomObject.transform);
                                 break;
                             case RoomType.room3x3:
-                                instantiateRoom = Instantiate(_prefabPool.get3x3RoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
+                                if(!journalRoom)
+                                {
+                                    instantiateRoom = Instantiate(_prefabPool.getJournalRoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
+                                    journalRoom = true;
+                                }
+                                else
+                                {
+                                    instantiateRoom = Instantiate(_prefabPool.get3x3RoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
+                                }
                                 break;
 
                             case RoomType.room3x3Stair:
@@ -292,15 +300,7 @@ namespace Scenes.Ingame.Stage
                                 instantiateRoom = Instantiate(_prefabPool.get3x4RoomPrefab[UnityEngine.Random.Range(0, _prefabPool.get3x4RoomPrefab.Length)], instantiatePosition, Quaternion.identity, roomObject.transform);
                                 break;
                             case RoomType.room4x4:
-                                if(!journalRoom)
-                                {
-                                    instantiateRoom = Instantiate(_prefabPool.getJournalRoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
-                                    journalRoom = true;
-                                }
-                                else
-                                {
-                                    instantiateRoom = Instantiate(_prefabPool.get4x4RoomPrefab[UnityEngine.Random.Range(0, _prefabPool.get4x4RoomPrefab.Length)], instantiatePosition, Quaternion.identity, roomObject.transform);
-                                }
+                                instantiateRoom = Instantiate(_prefabPool.get4x4RoomPrefab[UnityEngine.Random.Range(0, _prefabPool.get4x4RoomPrefab.Length)], instantiatePosition, Quaternion.identity, roomObject.transform);
                                 break;
                             default:
                                 Debug.Log($"select not set roomtype {stage[x, y].RoomType}");
