@@ -36,6 +36,7 @@ namespace Scenes.Ingame.Stage
         const int OFFSET = 2;//通路を作らない範囲
         private bool playerSpawnRoom = false;
         private bool escapeSpawnRoom = false;
+        private bool journalRoom = false;
         [SerializeField]
         private bool viewDebugLog = false;//確認用のデバックログを表示する
         private CancellationTokenSource source = new CancellationTokenSource();
@@ -291,7 +292,15 @@ namespace Scenes.Ingame.Stage
                                 instantiateRoom = Instantiate(_prefabPool.get3x4RoomPrefab[UnityEngine.Random.Range(0, _prefabPool.get3x4RoomPrefab.Length)], instantiatePosition, Quaternion.identity, roomObject.transform);
                                 break;
                             case RoomType.room4x4:
-                                instantiateRoom = Instantiate(_prefabPool.get4x4RoomPrefab[UnityEngine.Random.Range(0, _prefabPool.get4x4RoomPrefab.Length)], instantiatePosition, Quaternion.identity, roomObject.transform);
+                                if(!journalRoom)
+                                {
+                                    instantiateRoom = Instantiate(_prefabPool.getJournalRoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
+                                    journalRoom = true;
+                                }
+                                else
+                                {
+                                    instantiateRoom = Instantiate(_prefabPool.get4x4RoomPrefab[UnityEngine.Random.Range(0, _prefabPool.get4x4RoomPrefab.Length)], instantiatePosition, Quaternion.identity, roomObject.transform);
+                                }
                                 break;
                             default:
                                 Debug.Log($"select not set roomtype {stage[x, y].RoomType}");
