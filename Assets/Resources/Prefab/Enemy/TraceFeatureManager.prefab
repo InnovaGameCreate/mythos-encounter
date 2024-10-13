@@ -33,7 +33,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &649450498923269719
 MonoBehaviour:
@@ -47,8 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81186e893f10045418cf97a1541ffcd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _debugAddTrace: 0
-  _deugType: 000000000100000002000000
+  _debugAddTrace: 1
+  _deugType: 010000000300000000000000
 --- !u!114 &7545456096240902115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -73,6 +73,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1ae1296fc32e4a8e84156606c2a4c08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _trackSprite: {fileID: 4087507912217722897, guid: c27386024d53df04296c01c5b77bac05, type: 3}
   _breathes:
   - {fileID: 8300000, guid: 6a265f07a6aa59d488b70e0601eb6e54, type: 3}
   - {fileID: 8300000, guid: 7fbfe036ff7e0bc4ebd2775cb5d354b3, type: 3}
@@ -88,7 +89,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 6a265f07a6aa59d488b70e0601eb6e54, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 0
+  m_Volume: 0.1
   m_Pitch: 1
   Loop: 0
   Mute: 0
