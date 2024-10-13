@@ -83,6 +83,7 @@ namespace Scenes.Ingame.Enemy
         {
             if (Vector3.Magnitude(this.transform.position - _myAgent.path.corners[_myAgent.path.corners.Length - 1]) < 1.5f)
             {
+                _enemyStatus.SetForcedMoveMode(false);
                 _endMove = true;
             } else
             {
@@ -223,8 +224,13 @@ namespace Scenes.Ingame.Enemy
 
         public void SetMovePosition(Vector3 targetPosition)
         {
-            _movePosition = targetPosition;
-            _myAgent.destination = targetPosition;
+            if (_enemyStatus.ForcedMoveMode)
+            {
+            }
+            else {
+                _movePosition = targetPosition;
+                _myAgent.destination = targetPosition;
+            }
         }
 
         /// <summary>

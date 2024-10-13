@@ -72,6 +72,8 @@ namespace Scenes.Ingame.Enemy
         private bool _isCheckWaterEffect = false;//水の生成がされているか否か
         private BoolReactiveProperty _isWaterEffectDebuff = new BoolReactiveProperty(false);//水の生成によるデバフがされているか否か
         [Tooltip("スタミナが切れて走れない状態か否か")]private BoolReactiveProperty _staminaOver = new BoolReactiveProperty(false);
+        
+
 
 
         public IObservable<int> OnHpChange { get { return _hp; } }
@@ -120,7 +122,14 @@ namespace Scenes.Ingame.Enemy
         public int DiscoverTime { get { return _discoverTime; } }
         public int EnemyId { get { return _enemyId; } }
 
-
+        /// <summary>
+        /// 食欲を持っているかどうか
+        /// </summary>
+        public bool HasAppetite { get; private set; }
+        /// <summary>
+        /// 強制移動モード
+        /// </summary>
+        public bool ForcedMoveMode { get; private set;}
 
 
 
@@ -299,6 +308,14 @@ namespace Scenes.Ingame.Enemy
                 _isWaterEffectDebuff.Value = false; 
                 _audioSource.volume = _footSoundBase;
             }
+        }
+
+        public void SetHasAppetite(bool set) { 
+            HasAppetite = set;
+        }
+
+        public void SetForcedMoveMode(bool set) { 
+            ForcedMoveMode = set;
         }
     }
 }
