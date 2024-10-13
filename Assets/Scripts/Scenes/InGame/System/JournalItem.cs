@@ -23,6 +23,6 @@ public class JournalItem : MonoBehaviour, IInteractable
 
     public string ReturnPopString()
     {
-        return null;
+        return "ƒWƒƒ[ƒiƒ‹‚Ì’f•Ğ";
     }
 }

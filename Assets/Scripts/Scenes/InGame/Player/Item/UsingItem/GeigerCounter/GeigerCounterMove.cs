@@ -22,7 +22,7 @@ namespace Scenes.Ingame.Player
 
             while (true)
             {
-                yield return new WaitForSeconds(3f);
+                yield return new WaitForSeconds(0.1f);
                 Physics.Raycast(_playerTransform.position, -transform.up, out hit, 20f, floorlayerMask);
                 Debug.DrawRay(_playerTransform.position, -transform.up * 20f, Color.black);
 

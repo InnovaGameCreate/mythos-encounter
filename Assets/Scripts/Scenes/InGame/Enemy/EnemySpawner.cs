@@ -1,14 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using Scenes.Ingame.Manager;
 using Scenes.Ingame.Player;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UniRx;
+using Scenes.Ingame.Manager;
 using Scenes.Ingame.InGameSystem;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using Scenes.Ingame.Stage;
-using Fusion;
 
 
 
@@ -18,7 +20,7 @@ namespace Scenes.Ingame.Enemy
     /// <summary>
     /// 敵キャラを作成する
     /// </summary>
-    public class EnemySpawner : NetworkBehaviour
+    public class EnemySpawner : MonoBehaviour
     {
         public static EnemySpawner Instance;
 
@@ -58,15 +60,7 @@ namespace Scenes.Ingame.Enemy
 
         [Header("生成する際の設定")]
         [SerializeField] private Vector3 _enemySpawnPosition;
-        [SerializeField] private GameObject _playerSpawner;
 
-        public MultiPlayManager _multiPlayerManagerCs { get; private set; }//なぁぜぇかぁ直接シリアライズできない（メソッド扱い？でもこれ表示されるケースもあるんだよなぁ...）
-
-
-        /*
-        [Header("プレイヤー一覧")]
-        [SerializeField] private List<GameObject> _players;
-        */
 
         private List<StageDoor> _doors = new List<StageDoor>();
 
@@ -74,7 +68,7 @@ namespace Scenes.Ingame.Enemy
 
         // Start is called before the first frame update
         async void Start()
-        { _multiPlayerManagerCs = _playerSpawner.GetComponent<MultiPlayManager>();
+        {
             _cancellationTokenSource = new CancellationTokenSource();
             if (_nonInGameManagerMode)
             {
@@ -243,11 +237,7 @@ namespace Scenes.Ingame.Enemy
             }
             if (_nonInGameManagerMode)
             {
-                Debug.Log("必要な数のプレイヤーが沸いた場合、Xキーを押してください");
-                while (true) {
-                    await UniTask.WaitUntil(() => Input.GetKeyDown(KeyCode.X), cancellationToken: token);
-                    break;
-                }
+
                 EnemySpawn(_enemyName, _enemySpawnPosition);
 
             }
@@ -271,19 +261,19 @@ namespace Scenes.Ingame.Enemy
             {
 
                 case EnemyName.TestEnemy:
-                    createEnemy = Runner.Spawn(_testEnemy, spownPosition, Quaternion.identity).gameObject;
+                    createEnemy = GameObject.Instantiate(_testEnemy, spownPosition, Quaternion.identity);
                     if (_debugMode) Debug.Log("エネミーは制作されました");
                     break;
                 case EnemyName.DeepOnes:
-                    createEnemy = Runner.Spawn(_deepOnes, spownPosition, Quaternion.identity).gameObject;
+                    createEnemy = GameObject.Instantiate(_deepOnes, spownPosition, Quaternion.identity);
                     if (_debugMode) Debug.Log("エネミーは制作されました");
                     break;
                 case EnemyName.SpawnOfCthulhu:
-                    createEnemy = Runner.Spawn(_spawnOfCthulhu, spownPosition, Quaternion.identity).gameObject;
+                    createEnemy = GameObject.Instantiate(_spawnOfCthulhu, spownPosition, Quaternion.identity);
                     if (_debugMode) Debug.Log("エネミーは制作されました");
                     break;
                 case EnemyName.MiGo:
-                    createEnemy = Runner.Spawn(_MiGo, spownPosition, Quaternion.identity).gameObject;
+                    createEnemy = GameObject.Instantiate(_MiGo, spownPosition, Quaternion.identity);
                     if (_debugMode) Debug.Log("エネミーは制作されました");
                     break;
                 default:
@@ -294,7 +284,7 @@ namespace Scenes.Ingame.Enemy
             {
                 if (_debugMode) Debug.Log("作成した敵にはEnemyStatusクラスがあります");
                 createEnemyVisiviityMap.DontApproachPlayer();
-                createEnemyStatus.Init(this);
+                createEnemyStatus.Init(createEnemyVisiviityMap.DeepCopy());
 
             }
             return createEnemy;
@@ -314,11 +304,6 @@ namespace Scenes.Ingame.Enemy
             _cancellationTokenSource.Cancel();
             _cancellationTokenSource.Dispose();
         }
-
-        public  EnemyVisibilityMap GetEnemyVisivilityMap() {
-            return _enemyVisibilityMap;
-        }
-
 
     }
 }

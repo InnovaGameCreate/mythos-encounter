@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tantacle
   m_EditorClassIdentifier: 
   itemID: 17
-  itemName: Tantacle
+  itemName: "\u89E6\u624B"
   itemSprite: {fileID: 21300000, guid: 5f9cd8597c052044cb775dfb1185820d, type: 3}
   price: 250
   itemInfo: "SAN\u5024\u3092\u6E1B\u5C11\u3055\u305B\u306A\u304C\u3089\u5F37\u529B\u306A\u529B\u3092\u5F97\u308B"

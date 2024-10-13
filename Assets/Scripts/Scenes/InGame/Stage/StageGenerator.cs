@@ -36,6 +36,7 @@ namespace Scenes.Ingame.Stage
         const int OFFSET = 2;//通路を作らない範囲
         private bool playerSpawnRoom = false;
         private bool escapeSpawnRoom = false;
+        private bool journalRoom = false;
         [SerializeField]
         private bool viewDebugLog = false;//確認用のデバックログを表示する
         private CancellationTokenSource source = new CancellationTokenSource();
@@ -271,7 +272,15 @@ namespace Scenes.Ingame.Stage
                                 instantiateRoom = Instantiate(_prefabPool.get2x3RoomPrefab[UnityEngine.Random.Range(0, _prefabPool.get2x3RoomPrefab.Length)], instantiatePosition, Quaternion.identity, roomObject.transform);
                                 break;
                             case RoomType.room3x3:
-                                instantiateRoom = Instantiate(_prefabPool.get3x3RoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
+                                if(!journalRoom)
+                                {
+                                    instantiateRoom = Instantiate(_prefabPool.getJournalRoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
+                                    journalRoom = true;
+                                }
+                                else
+                                {
+                                    instantiateRoom = Instantiate(_prefabPool.get3x3RoomPrefab, instantiatePosition, Quaternion.identity, roomObject.transform);
+                                }
                                 break;
 
                             case RoomType.room3x3Stair:

@@ -360,7 +360,7 @@ Transform:
   - {fileID: 2997796602784301469}
   - {fileID: 5847778510826722918}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2817882825628233842
 MonoBehaviour:
@@ -379,7 +379,7 @@ MonoBehaviour:
   line: {fileID: 3625524245052678187}
   marker: {fileID: 0}
   markerRed: {fileID: 0}
-  LARGEROOM: 8
+  LARGEROOM: 9
   MEDIUMROOM: 5
   SMALLROOM: 4
   floorObject: {fileID: 1938581473151959162}
@@ -406,8 +406,9 @@ MonoBehaviour:
   inSideWallYPrefab: {fileID: 109861664846363845, guid: e2affe5c2d976bf41a24ad67e112139a, type: 3}
   wallXDoorPrefab: {fileID: 3064727835192536343, guid: 8457aec2305875b45b017bcb1dee3ab9, type: 3}
   wallYDoorPrefab: {fileID: 109861664846363845, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
-  playerSpawnRoomPrefab: {fileID: 8786186942910803785, guid: fb3b94e0d3de78842a2c2cdd2820335d, type: 3}
+  playerSpawnRoomPrefab: {fileID: 6720460764856524669, guid: fb3b94e0d3de78842a2c2cdd2820335d, type: 3}
   escapeSpawnRoomPrefab: {fileID: 8786186942910803785, guid: d7b4bafd6d0cc6c4b8672dd9b1ed1882, type: 3}
+  journalRoomPrefab: {fileID: 7104717311803946632, guid: eeba671f4abdc4442abd6a7d33463b2f, type: 3}
   _2x2RoomPrefab:
   - {fileID: 8786186942910803785, guid: 7db0cf38dce9fa64999c1eb0a4233904, type: 3}
   - {fileID: 8786186942910803785, guid: 22cdd846fff648f4bba972715526e4a8, type: 3}
@@ -606,7 +607,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7488444315121541053}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 38.025, y: 0, z: 18.175}
+  m_LocalPosition: {x: 35.1, y: 0, z: 15.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

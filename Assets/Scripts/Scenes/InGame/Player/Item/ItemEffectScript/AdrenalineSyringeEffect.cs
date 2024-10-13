@@ -48,9 +48,10 @@ namespace Scenes.Ingame.Player
 
             ownerPlayerStatus.SetStaminaBuff(true);//アドレナリン状態を変化させるためのコマンド
 
-            await UniTask.WaitForSeconds(15f, cancellationToken: token);
-            ownerPlayerStatus.ChangeSpeed();
+            await UniTask.WaitForSeconds(1f, cancellationToken: token);
             ownerPlayerStatus.UseItem(false);
+            ownerPlayerStatus.ChangeSpeed();
+            await UniTask.WaitForSeconds(14f, cancellationToken: token);
             ownerPlayerItem.ChangeCanChangeBringItem(true);
             if (!token.IsCancellationRequested)
             {
