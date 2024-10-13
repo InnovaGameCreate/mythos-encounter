@@ -11,6 +11,7 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         {
             _cancellationTokenSource = new CancellationTokenSource();
             _view = view;
+            _view.SetEnemyAppitute();
         }
 
         public override void Cancel()
