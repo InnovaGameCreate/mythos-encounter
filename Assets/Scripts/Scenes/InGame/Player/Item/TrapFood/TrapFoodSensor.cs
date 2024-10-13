@@ -17,16 +17,15 @@ public class TrapFoodSensor : MonoBehaviour
 
             if (!Physics.Raycast(startingPoint, direction, direction.magnitude, layerMask)　&& _isActiveSensor )// 敵との間に壁や本棚などが無ければ処理開始
             {
-                Debug.Log("障害物なし");
                 if (enemyStatus.HasAppetite)
                 {
                     float random = Random.value * 100f;
                     if (random <= 30f)
                     {
-                        Destroy(collider.gameObject);
+                        //Destroy(collider.gameObject);
                         MoveEnemy(enemyStatus);
                         transform.parent.gameObject.layer = 0;//レイヤーをdefaultに戻して拾えなくする
-                        Destroy(this.gameObject);
+                        //Destroy(this.gameObject);
                     }
                 }
                 _isActiveSensor = false;

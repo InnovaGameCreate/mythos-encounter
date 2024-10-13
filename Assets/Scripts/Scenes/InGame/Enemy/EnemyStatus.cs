@@ -125,7 +125,7 @@ namespace Scenes.Ingame.Enemy
         /// <summary>
         /// 食欲を持っているかどうか
         /// </summary>
-        public bool HasAppetite { get; private set; }
+        public bool HasAppetite { get; private set; } = true;
         /// <summary>
         /// 強制移動モード
         /// </summary>
@@ -178,6 +178,7 @@ namespace Scenes.Ingame.Enemy
         // Update is called once per frame
         void Update()
         {
+            Debug.Log("食欲" + HasAppetite);
             if (_debugMode && Input.GetKey(KeyCode.Z)) { FallBack(); }
 
             if (_stiffnessTime.Value > 0) { 
