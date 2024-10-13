@@ -406,7 +406,7 @@ MonoBehaviour:
   inSideWallYPrefab: {fileID: 109861664846363845, guid: e2affe5c2d976bf41a24ad67e112139a, type: 3}
   wallXDoorPrefab: {fileID: 3064727835192536343, guid: 8457aec2305875b45b017bcb1dee3ab9, type: 3}
   wallYDoorPrefab: {fileID: 109861664846363845, guid: 0868872c032118c49a56ac0a3242a273, type: 3}
-  playerSpawnRoomPrefab: {fileID: 8786186942910803785, guid: fb3b94e0d3de78842a2c2cdd2820335d, type: 3}
+  playerSpawnRoomPrefab: {fileID: 6720460764856524669, guid: fb3b94e0d3de78842a2c2cdd2820335d, type: 3}
   escapeSpawnRoomPrefab: {fileID: 8786186942910803785, guid: d7b4bafd6d0cc6c4b8672dd9b1ed1882, type: 3}
   journalRoomPrefab: {fileID: 7104717311803946632, guid: eeba671f4abdc4442abd6a7d33463b2f, type: 3}
   _2x2RoomPrefab:

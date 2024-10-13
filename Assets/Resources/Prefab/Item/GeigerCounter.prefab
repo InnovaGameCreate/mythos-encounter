@@ -140,38 +140,6 @@ MonoBehaviour:
     cutoutTextureName: 
     DilateRenderingMode: 0
     cutoutTextureIndex: 0
-  - IsVisible: 0
-    CutoutMask: 8
-    edgeDilateAmount: 5
-    frontEdgeDilateAmount: 5
-    backEdgeDilateAmount: 5
-    renderer: {fileID: 8968320424866258723}
-    SubmeshIndex: 0
-    BoundsMode: 0
-    Bounds:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0.5, y: 0.5, z: 0.5}
-    CutoutThreshold: 0.5
-    CullMode: 2
-    cutoutTextureName: 
-    DilateRenderingMode: 0
-    cutoutTextureIndex: 0
-  - IsVisible: 0
-    CutoutMask: 8
-    edgeDilateAmount: 5
-    frontEdgeDilateAmount: 5
-    backEdgeDilateAmount: 5
-    renderer: {fileID: 8088364582212844246}
-    SubmeshIndex: 0
-    BoundsMode: 0
-    Bounds:
-      m_Center: {x: 0, y: 0, z: 0}
-      m_Extent: {x: 0.5, y: 0.5, z: 0.5}
-    CutoutThreshold: 0.5
-    CullMode: 2
-    cutoutTextureName: 
-    DilateRenderingMode: 0
-    cutoutTextureIndex: 0
   renderStyle: 2
   outlineParameters:
     enabled: 1
@@ -444,15 +412,5 @@ MeshRenderer:
 --- !u!23 &5637143582556893931 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 7447353325339972583, guid: 1d804543b7ca8af4190ba6019d411ff5, type: 3}
-  m_PrefabInstance: {fileID: 2981796768915366156}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &8088364582212844246 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 6439827402875870170, guid: 1d804543b7ca8af4190ba6019d411ff5, type: 3}
-  m_PrefabInstance: {fileID: 2981796768915366156}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &8968320424866258723 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 6130709392742628911, guid: 1d804543b7ca8af4190ba6019d411ff5, type: 3}
   m_PrefabInstance: {fileID: 2981796768915366156}
   m_PrefabAsset: {fileID: 0}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GeigerCounter
   m_EditorClassIdentifier: 
   itemID: 19
-  itemName: GeigerCounter
+  itemName: "\u653E\u5C04\u7DDA\u6E2C\u5B9A\u5668"
   itemSprite: {fileID: 21300000, guid: e5505ebbb8e0ffe44b3dd322307e6123, type: 3}
   price: 100
   itemInfo: "\u6E2C\u5B9A\u3057\u305F\u5834\u6240\u306E\u653E\u5C04\u7DDA\u6FC3\u5EA6\u304C\u308F\u304B\u308B"

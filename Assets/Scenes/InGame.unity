@@ -660,30 +660,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 6616961796445261509, guid: aa4b384afbf5b184f8c221ba17895c92, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 297431091}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa4b384afbf5b184f8c221ba17895c92, type: 3}
---- !u!1 &297431090 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6616961796445261509, guid: aa4b384afbf5b184f8c221ba17895c92, type: 3}
-  m_PrefabInstance: {fileID: 297431089}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &297431091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 297431090}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5b1d54e550ead5448a79cdd7ccbfbed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  transitionScene:
-    m_SceneName: Title
 --- !u!1 &311709893
 GameObject:
   m_ObjectHideFlags: 0
@@ -1057,9 +1035,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6276747018306845529, guid: 200773a151639eb418d996dd496c2787, type: 3}
-      propertyPath: _escapeItemCount
-      value: 4
+    - target: {fileID: 1100379264400096663, guid: 200773a151639eb418d996dd496c2787, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

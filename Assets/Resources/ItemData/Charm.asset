@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Charm
   m_EditorClassIdentifier: 
   itemID: 6
-  itemName: Charm
+  itemName: "\u5FA1\u5B88\u308A"
   itemSprite: {fileID: 21300000, guid: 23aa9f311b7cb4845a0648df6c184c26, type: 3}
   price: 200
   itemInfo: "\u6240\u6301\u3057\u3066\u3044\u308B\u3068SAN\u5024\u6E1B\u5C11\u91CF\u304C\u5E38\u306B\u534A\u6E1B\u3059\u308B"
