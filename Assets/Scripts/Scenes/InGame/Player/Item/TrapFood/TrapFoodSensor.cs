@@ -17,14 +17,16 @@ public class TrapFoodSensor : MonoBehaviour
 
             if (!Physics.Raycast(startingPoint, direction, direction.magnitude, layerMask)@&& _isActiveSensor )// “G‚Æ‚ÌŠÔ‚É•Ç‚â–{’I‚È‚Ç‚ª–³‚¯‚ê‚Îˆ—ŠJn
             {
-                Debug.Log("áŠQ•¨‚È‚µ");
-                float random = Random.value * 100f;
-                if (random <= 30f)
+                if (enemyStatus.HasAppetite)
                 {
-                    Destroy(collider.gameObject);
-                    MoveEnemy();
-                    transform.parent.gameObject.layer = 0;//ƒŒƒCƒ„[‚ğdefault‚É–ß‚µ‚ÄE‚¦‚È‚­‚·‚é
-                    Destroy(this.gameObject);
+                    float random = Random.value * 100f;
+                    if (random <= 30f)
+                    {
+                        //Destroy(collider.gameObject);
+                        MoveEnemy(enemyStatus);
+                        transform.parent.gameObject.layer = 0;//ƒŒƒCƒ„[‚ğdefault‚É–ß‚µ‚ÄE‚¦‚È‚­‚·‚é
+                        //Destroy(this.gameObject);
+                    }
                 }
                 _isActiveSensor = false;
                 Invoke("ActiveSensor", 1f);
@@ -36,13 +38,26 @@ public class TrapFoodSensor : MonoBehaviour
     /// <summary>
     ///“GƒLƒƒƒ‰‚ğ—U“±‚·‚é‚½‚ß‚ÌŠÖ”
     /// </summary>
-    private void MoveEnemy()
+    private void MoveEnemy(EnemyStatus enemyStatus)
     {
-
+        enemyStatus.gameObject.GetComponent<EnemyMove>().SetMovePosition(this.transform.position);
+        enemyStatus.SetForcedMoveMode(true);
     }
 
     private void ActiveSensor()
     {
         _isActiveSensor = true;
+    }
+
+    private void OnTriggerStay(Collider other)//‚·‚²‚¢‹­ˆø‚Å‚²‚ß‚ñ‚ËA‚Å‚à‚·‚®ì‚ñ‚È‚¢‚Æ‚¢‚¯‚È‚©‚Á‚½‚ñ‚¾
+    {
+        if ((other.transform.position - this.transform.position).magnitude < 2) {
+            if (other.transform.root.gameObject.TryGetComponent<EnemyStatus>(out EnemyStatus enemyStatus))
+            {
+                if (enemyStatus.HasAppetite) {
+                    Destroy(this.gameObject.transform.root.gameObject);
+                }
+            }
+        }
     }
 }

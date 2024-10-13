@@ -99,5 +99,9 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         {
             _onDestroy.OnNext(default);
         }
+        public void SetEnemyAppitute() { 
+            _enemyStatus.SetHasAppetite(true);
+        }
+
     }
 }
