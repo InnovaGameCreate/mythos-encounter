@@ -9,13 +9,13 @@ AnimatorOverrideController:
   m_Name: SpawnOfCthulhu_Animator
   m_Controller: {fileID: 9100000, guid: b6c362d1833de9d47877e971e0c7c4bf, type: 2}
   m_Clips:
-  - m_OriginalClip: {fileID: 7400000, guid: 5ecb547e420283d4689818ddd35855ca, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: 1578e3fbda703d949a37a2d4c353febe, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 1578e3fbda703d949a37a2d4c353febe, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: d9e2448bee9738b40a5655abfaba5de2, type: 3}
-    m_OverrideClip: {fileID: 7400000, guid: dadf4d5204c3d4d41abdf0931eaf613e, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: b29e3e44201756a4794748d3ab58c142, type: 3}
-    m_OverrideClip: {fileID: 7400000, guid: 5a202548236f4ce4f84f97da157e5296, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: 3c647b0cb70bb4b438bb1711ce143303, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: 5a202548236f4ce4f84f97da157e5296, type: 2}
+    m_OverrideClip: {fileID: -203655887218126122, guid: b82133f712e196b48a4b531b95f1541b, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: 4f16edfc23e4c334c894cd9864d7c450, type: 2}
     m_OverrideClip: {fileID: 7400000, guid: 4f16edfc23e4c334c894cd9864d7c450, type: 2}
-  - m_OriginalClip: {fileID: 7400000, guid: 4f86ecdf76253e244be21009e7ba4a75, type: 3}
-    m_OverrideClip: {fileID: 7400000, guid: ba570aeafbbbc564abcaab5718080173, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: dadf4d5204c3d4d41abdf0931eaf613e, type: 2}
+    m_OverrideClip: {fileID: 1827226128182048838, guid: 891d2ad6fe8811e4eb30e2ea91e1f52a, type: 3}
+  - m_OriginalClip: {fileID: 7400000, guid: ba570aeafbbbc564abcaab5718080173, type: 2}
+    m_OverrideClip: {fileID: 1827226128182048838, guid: 60c10c59ba00f06408123b901ae1da8c, type: 3}
