@@ -31,7 +31,7 @@ namespace Scenes.Ingame.Enemy.Trace
                     }
                     else
                     {
-                        AddTrace(_traceModel.traceTypes(1));
+                        AddTrace(_traceModel.traceTypes(_enemy.GetComponent<EnemyStatus>().EnemyId));
                     }
                 }).AddTo(this);
         }
