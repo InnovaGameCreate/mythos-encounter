@@ -40,13 +40,11 @@ namespace Scenes.Ingame.Manager
 
         void Start()
         {
-            Debug.Log("EventManager.Start");
             IngameManager.Instance.OnIngame.Subscribe(_ => Init()).AddTo(this);
         }
 
         private void Init()
         {
-            Debug.Log("EventManager.Init");
             CancellationToken token = _source.Token;
             GameTime(token).Forget();
 
@@ -68,7 +66,6 @@ namespace Scenes.Ingame.Manager
         {
             while (true)
             {
-                Debug.Log($"GameTime {_gameTime}");
                 await UniTask.Delay(TimeSpan.FromSeconds(1f), cancellationToken: token);
                 _gameTime++;
             }
