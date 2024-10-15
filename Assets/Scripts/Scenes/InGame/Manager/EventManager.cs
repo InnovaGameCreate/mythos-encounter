@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using Cysharp.Threading.Tasks;
@@ -11,7 +9,7 @@ using Data;
 namespace Scenes.Ingame.Manager
 {
     /// <summary>
-    /// ?v???C???[?????????????????????????B?????L???A???V??????????????????????????
+    /// インゲーム内でのイベントを管理
     /// </summary>
     public class EventManager : MonoBehaviour
     {
@@ -42,18 +40,15 @@ namespace Scenes.Ingame.Manager
 
         void Start()
         {
-            IngameManager.Instance.OnIngame
-                .Subscribe(_ => Init());
+            Debug.Log("EventManager.Start");
+            IngameManager.Instance.OnIngame.Subscribe(_ => Init()).AddTo(this);
         }
 
         private void Init()
         {
+            Debug.Log("EventManager.Init");
             CancellationToken token = _source.Token;
-            IngameManager.Instance.OnIngame
-                .Subscribe(_ =>
-                {
-                    GameTime(token).Forget();
-                }).AddTo(this);
+            GameTime(token).Forget();
 
             _enemyStatus = FindObjectOfType<EnemyStatus>();
             _enemyStatus.OnEnemyStateChange
@@ -66,13 +61,14 @@ namespace Scenes.Ingame.Manager
 
         public int EnemyLevel()
         {
-            return 1 + (_enemyStatus.EnemyId / 3);
+            return _enemyStatus != null ? 1 + (_enemyStatus.EnemyId / 3) : 1;
         }
 
         async UniTaskVoid GameTime(CancellationToken token)
         {
             while (true)
             {
+                Debug.Log($"GameTime {_gameTime}");
                 await UniTask.Delay(TimeSpan.FromSeconds(1f), cancellationToken: token);
                 _gameTime++;
             }
