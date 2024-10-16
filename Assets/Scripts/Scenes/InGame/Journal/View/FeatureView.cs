@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FeatureView : ViewBase
+namespace Scenes.Ingame.Journal
 {
-    // Start is called before the first frame update
-    void Start()
+    public class FeatureView : ViewBase
     {
+        public override void Init()
+        {
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        }
     }
 }

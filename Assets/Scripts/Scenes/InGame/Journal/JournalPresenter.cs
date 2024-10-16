@@ -1,9 +1,6 @@
 using Cysharp.Threading.Tasks;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using Unity.VisualScripting;
 
 namespace Scenes.Ingame.Journal
 {
