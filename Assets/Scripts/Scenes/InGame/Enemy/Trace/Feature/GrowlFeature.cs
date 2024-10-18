@@ -24,7 +24,7 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
             {
                 var interval = UnityEngine.Random.Range(MINTIME, MAXTIME);
                 await UniTask.Delay(TimeSpan.FromSeconds(interval), cancellationToken: token);
-                _view.Breath();
+                _view.Grow();
             }
         }
 

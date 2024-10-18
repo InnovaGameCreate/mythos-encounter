@@ -36,7 +36,8 @@ namespace Scenes.Ingame.Player
             ownerPlayerStatus = status;
             ownerPlayerItem = PlayerItem;
             ownerPlayerStatus.ReviveCharacter();
-            
+            SoundManager.Instance.PlaySe("se_voodoo00", transform.position);
+
             GameObject[] Enemys = GameObject.FindGameObjectsWithTag("Enemy");
 
             foreach (var enemy in Enemys) 

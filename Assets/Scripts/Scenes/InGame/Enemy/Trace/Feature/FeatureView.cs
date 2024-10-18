@@ -16,7 +16,6 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         private GameObject[] nearStageObject = null;
         private GameObject interactTarget = null;
         private GameObject _floor;
-        AudioSource _audioSource;
         private Subject<Unit> _onDestroy = new Subject<Unit>();
         public IObservable<Unit> onDestroy { get => _onDestroy; }
         private ReactiveProperty<StageTile> _stageTile = new ReactiveProperty<StageTile>();
@@ -25,11 +24,9 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
         [SerializeField] private GameObject _trackSprite;
 
         private EnemyStatus _enemyStatus;
-        public AudioClip[] _breathes;
 
         public void Init()
         {
-            _audioSource = GetComponent<AudioSource>();
             _enemy = GameObject.FindWithTag("Enemy");
             _enemyStatus = _enemy.GetComponent<EnemyStatus>();
             _stageInteracts = GameObject.FindGameObjectsWithTag("StageIntract");
@@ -68,16 +65,20 @@ namespace Scenes.Ingame.Enemy.Trace.Feature
 
         public void Breath()
         {
-            _audioSource.transform.position = _enemy.transform.position;
-
             //敵の状態に応じて呼吸音を変更
             if (_enemyStatus.State == EnemyState.Chase || _enemyStatus.State == EnemyState.Attack)
-                _audioSource.clip = _breathes[1];//追跡時 or 攻撃時
+                SoundManager.Instance.PlaySe("se_blessing00", _enemy.transform.position);
             else
-                _audioSource.clip = _breathes[0];//平常時
-
-            _audioSource.Play();
+                SoundManager.Instance.PlaySe("se_blessing01", _enemy.transform.position);
         }
+        public void Grow()
+        {
+            if (_enemyStatus.State != EnemyState.Chase && _enemyStatus.State != EnemyState.Attack)
+            {
+                SoundManager.Instance.PlaySe("se_screaming00", _enemy.transform.position);
+            }
+        }
+
 
         public void TryInteract()
         {

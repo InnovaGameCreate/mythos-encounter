@@ -49,6 +49,7 @@ namespace Scenes.Ingame.Player
         public override void Effect()
         {
             //左クリック時にライトのON/OFF状態を切り替え、起動・停止する
+            SoundManager.Instance.PlaySe("se_switch00", transform.position);
             if (ownerPlayerItem.SwitchHandLights[ownerPlayerItem.nowIndex] == HandLightState.Off)
             {
                 ownerPlayerItem.ChangeSwitchHandLight(HandLightState.On);

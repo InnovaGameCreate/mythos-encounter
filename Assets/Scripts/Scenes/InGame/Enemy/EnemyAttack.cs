@@ -90,7 +90,7 @@ namespace Scenes.Ingame.Enemy
                 if (EnemyState.Discover == _enemyStatus.State)//発見動作
                 {//発見動作をする場合
                     if (_checkTimeCount > _enemyStatus.DiscoverTime) {
-
+                        SoundManager.Instance.PlaySe("se_screaming00",transform.position);
                         _myVisivilityMap.SetEveryGridWatchNum(50);//リセット
                         _enemyStatus.SetEnemyState(EnemyState.Chase);
                         _blindChaseTimeCount = 0;

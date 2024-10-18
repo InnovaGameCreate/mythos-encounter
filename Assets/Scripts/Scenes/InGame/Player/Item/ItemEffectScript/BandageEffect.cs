@@ -34,6 +34,7 @@ namespace Scenes.Ingame.Player
         public IEnumerator UseBandage()
         {
             Debug.Log("包帯使う");
+            SoundManager.Instance.PlaySe("se_bandage00", transform.position);
 
             //アイテム使用直後にステータス変更を行う
             ownerPlayerStatus.UseItem(true);
