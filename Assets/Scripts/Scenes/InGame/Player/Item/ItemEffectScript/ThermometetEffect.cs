@@ -31,6 +31,7 @@ namespace Scenes.Ingame.Player
 
         public override void Effect()
         {
+            SoundManager.Instance.PlaySe("se_switch00", transform.position);
             ownerPlayerItem.UseThermometer();    
             ownerPlayerItem.ChangeCanUseItem(false);                   
         }

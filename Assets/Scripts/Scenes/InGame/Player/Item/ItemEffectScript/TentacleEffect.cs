@@ -27,6 +27,7 @@ namespace Scenes.Ingame.Player
         private async UniTaskVoid TantacleEffect()
         {
             var token = ownerPlayerStatus.GetCancellationTokenOnDestroy();
+            SoundManager.Instance.PlaySe("se_tentacle00", transform.position);
             while (true)
             {
                 Debug.Log("Tentacle");
