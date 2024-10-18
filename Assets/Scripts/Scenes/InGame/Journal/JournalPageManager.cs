@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
 using UnityEngine.InputSystem;
@@ -10,7 +8,6 @@ namespace Scenes.Ingame.Journal
     public class JournalPageManager : MonoBehaviour
     {
         PlayerAction _inputs;
-
 
         [SerializeField]
         PlayerJournalTest _player;
@@ -61,8 +58,6 @@ namespace Scenes.Ingame.Journal
         //ページ変更
         private void OnChangePage(InputAction.CallbackContext context)
         {
-            //if (!this.gameObject.activeSelf) return;
-            Debug.Log("OnChangePage");
             _currentPage.Value = (PageType)Enum.ToObject(typeof(PageType), ((int)_currentPage.Value + 1) % Enum.GetValues(typeof(PageType)).Length);
         }
 

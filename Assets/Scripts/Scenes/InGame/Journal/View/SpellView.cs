@@ -1,18 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UniRx;
+using System.Text.RegularExpressions;
 
-public class SpellView : ViewBase
+namespace Scenes.Ingame.Journal
 {
-    // Start is called before the first frame update
-    void Start()
+    public class SpellView : ViewBase
     {
+        [SerializeField] private TextMeshProUGUI _rightPage;
+        [SerializeField] private Transform _content;
+        [SerializeField] private NameButtonView _spellButton;
 
-    }
+        public override void Init()
+        {
+            WebDataRequest.instance.OnEndLoad.Subscribe(_ =>
+            {
+                var spellList = WebDataRequest.GetSpellDataArrayList;
+                foreach (var spell in spellList)
+                {
+                    var spellButton = Instantiate(_spellButton, _content);
+                    spellButton.NameSet(spell.Name);
+                    spellButton.button.OnClickAsObservable().Subscribe(_ => _rightPage.text = text(spell)).AddTo(this);
+                }
+            }).AddTo(this);
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-
+        public string text(SpellStruct detail)
+        {
+            return $"<size=22>{detail.Name}</size>\n\n<size=18>à–¾</size>\n{Regex.Unescape(detail.Explanation)}\n\n<size=18>‰ğ•úğŒ</size>\n{Regex.Unescape(detail.unlockExplanation)}";
+        }
     }
 }
