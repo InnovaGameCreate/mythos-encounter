@@ -9,6 +9,7 @@ public class SoundManager : MonoBehaviour
     [SerializeField] private List<AudioClip> _seAudioClipList = new List<AudioClip>();
     [SerializeField] private List<AudioClip> _bgmAudioClipList = new List<AudioClip>();
     public static SoundManager Instance { get; private set; }
+    private string[] damageVoiceNames = { "se_damagevoice00", "se_damagevoice01", "se_damagevoice02" };//damageÇéÛÇØÇΩç€ÇÃSE
 
     private void Awake()
     {
@@ -35,6 +36,12 @@ public class SoundManager : MonoBehaviour
             transform.position = soundPosition;
         }
         _seSource.PlayOneShot(audio);
+    }
+
+    public void PlayDamageSe(Vector3 soundPosition)
+    {
+        int randomIndex = Random.Range(0, damageVoiceNames.Length);
+        PlaySe(damageVoiceNames[randomIndex], soundPosition);
     }
 
     public void PlayBgm(string bgmName)
