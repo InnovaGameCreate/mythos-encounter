@@ -3,6 +3,7 @@ using UniRx;
 using Cysharp.Threading.Tasks;
 using Scenes.Ingame.InGameSystem;
 using System;
+using Data;
 namespace Scenes.Ingame.Manager
 {
     public class ResultManager : MonoBehaviour
@@ -32,6 +33,7 @@ namespace Scenes.Ingame.Manager
                     _resultValue.firstContact = eventManager.GetContact;
                     _resultValue.totalMoney = Bonus();
                     _result.OnNext(_resultValue);
+                    PlayerInformationFacade.Instance.GetMoney(Bonus());
                 }).AddTo(this);
 
         }
