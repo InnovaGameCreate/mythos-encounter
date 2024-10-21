@@ -54,6 +54,7 @@ namespace Scenes.Ingame.Stage
                 _doorCollider.isTrigger = false;
                 _isAnimation = false;
             });
+            SoundManager.Instance.PlaySe("se_door00", transform.position);
         }
         private void DoorClose()
         {
@@ -62,6 +63,7 @@ namespace Scenes.Ingame.Stage
                 _doorCollider.isTrigger = false;
                 _isAnimation = false;
             });
+            SoundManager.Instance.PlaySe("se_door01", transform.position);
         }
 
         private void QuickDoorOpen()
