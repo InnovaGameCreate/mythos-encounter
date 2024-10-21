@@ -138,6 +138,50 @@ namespace Data
             playerInformation.GetItem(itemId, count);
         }
 
+        /// <summary>
+        /// ロビーからインゲームにで使用するスペルのIDを設定する時などに使う関数
+        /// </summary>
+        public void SetCurrentSpell(int spellId)
+        {
+            playerInformation.SetCurrentSpell(spellId);
+        }
+
+        /// <summary>
+        /// ロビーからインゲームに持ち込むアイテムを設定する時などに使う関数
+        /// </summary>
+        public void SetCurrentitem(int?[] items)
+        {
+            //配列の数が7出ない場合は整形する
+            int[] setItems;
+            if (items.Length == 7)
+            {
+                setItems = items.Select(x => x ?? 0).ToArray();
+            }
+            else
+            {
+                setItems = Enumerable.Range(0, 7)
+                .Select(i => i < items.Length ? (items[i] ?? 0) : 0)
+                    .ToArray();
+            }
+            playerInformation.SetCurrentItem(setItems);
+        }
+
+        /// <summary>
+        /// プレイヤーがセットしたアイテムを取得する関数
+        /// </summary>
+        public int[] GetCurrentitem()
+        {
+            return playerInformation.CurrentItems;
+        }
+
+        /// <summary>
+        /// プレイヤーがセットしたスペルのIDを取得する関数
+        /// </summary>
+        public int GetSpellId()
+        {
+            return playerInformation.CurrentSpell;
+        }
+
         public void LostItem(int itemId, int count)
         {
             int lostCount = 0;
@@ -157,6 +201,9 @@ namespace Data
             playerInformation.MetEnemy(enemyId);
         }
 
+        /// <summary>
+        /// データをデータベースに上げる関数
+        /// </summary>
         public void SendPlayerInformation()
         {
             PlayerDataStruct sendData = new PlayerDataStruct();
