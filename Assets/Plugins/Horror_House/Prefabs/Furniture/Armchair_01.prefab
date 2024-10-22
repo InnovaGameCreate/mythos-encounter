@@ -16,7 +16,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &3941103999527636729
 Transform:
@@ -94,13 +94,14 @@ GameObject:
   - component: {fileID: 6994880475441298166}
   - component: {fileID: 945651403934864231}
   - component: {fileID: 3147173501427331076}
-  - component: {fileID: 1851675458118404583}
+  - component: {fileID: 4723559502122655038}
+  - component: {fileID: 8602490234033043685}
   m_Layer: 0
   m_Name: Armchair_01_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6994880475441298166
 Transform:
@@ -167,8 +168,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &1851675458118404583
-MeshCollider:
+--- !u!65 &4723559502122655038
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -185,10 +186,30 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 837487739043391535, guid: 69069328216839c4286e716dc450277a, type: 3}
+  serializedVersion: 3
+  m_Size: {x: 0.84793955, y: 0.48185667, z: 0.85881364}
+  m_Center: {x: 0.20158125, y: 0.24092834, z: -0.023270158}
+--- !u!65 &8602490234033043685
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 936533162805488202}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.27349195, y: 0.6834562, z: 0.8599743}
+  m_Center: {x: -0.08564275, y: 0.8229965, z: -0.02283916}
 --- !u!1 &1692514939898156651
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,7 +288,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &385476542339696179
 Transform:
