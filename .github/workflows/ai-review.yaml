@@ -1,4 +1,4 @@
-name: ai-pr-reviewer
+name: ai-reviewer
 
 permissions:
   contents: read
