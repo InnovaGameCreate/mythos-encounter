@@ -9,7 +9,7 @@ namespace Scenes.Lobby.RoomSettingPanel
 {
     public class InteractMap : MonoBehaviour
     {
-        private enum DisplayState //ディスプレイ制御フラグ
+        public enum DisplayState //ディスプレイ制御フラグ
         {
             Close,
             CameraMove,
@@ -18,12 +18,12 @@ namespace Scenes.Lobby.RoomSettingPanel
 
         [Header("Scene Objects")]
         [SerializeField] private Camera _displayCamera;
-        [SerializeField] private GameObject _shopPanels;
+        [SerializeField] private GameObject _mapPanels;
         [Header("Time Setting")]
         [SerializeField] private float _motionTime = 1f;
 
         // private RoomSettingManager _roomSettingManagerCs;
-        private DisplayState _displayState = DisplayState.Close; //ディスプレイの表示状態
+        public DisplayState _displayState = DisplayState.Close; //ディスプレイの表示状態
         private Vector3 _displayPosition = Vector3.zero; //ディスプレイのTransform
         private Quaternion _displayRotation = Quaternion.identity;
 
@@ -38,7 +38,7 @@ namespace Scenes.Lobby.RoomSettingPanel
         {
             if (Input.GetKeyDown(KeyCode.M))
             {
-                OnEnableDisplay();
+                //OnEnableDisplay();
             }
         }
 
@@ -65,7 +65,7 @@ namespace Scenes.Lobby.RoomSettingPanel
             //モーション後処理
             Cursor.visible = true; //カーソル有効化
             Cursor.lockState = CursorLockMode.None; //カーソル固定解除
-            _shopPanels.SetActive(true); //UIを表示
+            _mapPanels.SetActive(true); //UIを表示
             //_roomSettingManagerCs.SwitchPanel(0);
 
             //ディスプレイ有効化完了
@@ -84,7 +84,7 @@ namespace Scenes.Lobby.RoomSettingPanel
             //モーション前処理
             Cursor.visible = false; //カーソル無効化
             Cursor.lockState = CursorLockMode.Locked; //カーソルの固定
-            _shopPanels.SetActive(false); //ルーム設定UIを非表示
+            _mapPanels.SetActive(false); //ルーム設定UIを非表示
             //_roomSettingManagerCs.DiscardRunner(); //Runnerの停止
 
             //処理待機

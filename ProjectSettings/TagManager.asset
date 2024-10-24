@@ -12,6 +12,9 @@ TagManager:
   - Enemy
   - Loadout
   - TrapFoodSensor
+  - Map
+  - Shop
+  - ItemEquip
   layers:
   - Default
   - TransparentFX

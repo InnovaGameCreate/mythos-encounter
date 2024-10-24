@@ -9,7 +9,7 @@ namespace Scenes.Lobby.RoomSettingPanel
 {
     public class ItemEquip : MonoBehaviour
     {
-        private enum DisplayState //ディスプレイ制御フラグ
+        public enum DisplayState //ディスプレイ制御フラグ
         {
             Close,
             CameraMove,
@@ -19,7 +19,7 @@ namespace Scenes.Lobby.RoomSettingPanel
         [Header("Scene Objects")]
         [SerializeField] private GameObject _itemEquipPanels;
 
-        private DisplayState _displayState = DisplayState.Close; //ディスプレイの表示状態
+        public DisplayState _displayState = DisplayState.Close; //ディスプレイの表示状態
         private Vector3 _displayPosition = Vector3.zero; //ディスプレイのTransform
         private Quaternion _displayRotation = Quaternion.identity;
 

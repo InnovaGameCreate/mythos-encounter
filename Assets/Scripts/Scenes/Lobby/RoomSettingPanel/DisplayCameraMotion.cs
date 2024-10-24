@@ -10,7 +10,7 @@ namespace Scenes.Lobby.RoomSettingPanel
     [RequireComponent(typeof(RoomSettingManager))]
     public class DisplayCameraMotion : MonoBehaviour
     {
-        private enum DisplayState //ディスプレイ制御フラグ
+        public enum DisplayState //ディスプレイ制御フラグ
         {
             Close,
             CameraMove,
