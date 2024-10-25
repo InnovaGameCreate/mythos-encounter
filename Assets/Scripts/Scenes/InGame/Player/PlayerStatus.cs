@@ -283,6 +283,7 @@ namespace Scenes.Ingame.Player
                 lastHP = _health.Value;
                 _health.Value = Mathf.Max(0, _health.Value - value);
                 _bleedingHealth.Value = Mathf.Max(0, _bleedingHealth.Value - value);
+                SoundManager.Instance.PlayDamageSe(transform.position);
             }
             else if (mode == ChangeValueMode.Bleeding)
             {

@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UniRx;
-using Scenes.Ingame.Player;
 
 namespace Scenes.Ingame.Enemy
 {
@@ -15,11 +12,6 @@ namespace Scenes.Ingame.Enemy
         [Header("音源")]
         [SerializeField] private AudioClip _slowClips;//歩くときの足音のClip
         [SerializeField] private AudioClip _fastClips;//走るときの足音のClip
-
-
-        //[Header("自身についているメソッド")]
-
-        // Start is called before the first frame update
         void Start()
         {
             _enemyStatus.OnEnemyStateChange.Subscribe(state =>
@@ -47,12 +39,6 @@ namespace Scenes.Ingame.Enemy
 
                 _audioSource.PlayOneShot(_slowClips);
             }).AddTo(this);
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
         }
     }
 }

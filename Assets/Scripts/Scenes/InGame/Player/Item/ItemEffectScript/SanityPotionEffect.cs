@@ -36,6 +36,7 @@ namespace Scenes.Ingame.Player
         public IEnumerator UseSanityPotion()
         {
             Debug.Log("SAN値回復薬使う");
+            SoundManager.Instance.PlaySe("se_tranquilizer00", transform.position);
 
             //アイテム使用直後にステータス変更を行う
             ownerPlayerStatus.UseItem(true);

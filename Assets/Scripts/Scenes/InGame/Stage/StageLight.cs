@@ -41,6 +41,7 @@ namespace Scenes.Ingame.Stage
         {
             if (Input.GetMouseButtonDown(1) || processWithConditionalBypass)
             {
+                SoundManager.Instance.PlaySe("se_switch00", transform.position);
                 _lightCollider.isTrigger = true;
                 if (_isAnimation != true)
                 {
