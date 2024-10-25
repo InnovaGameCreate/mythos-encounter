@@ -12,6 +12,7 @@ namespace Scenes.Ingame.Manager
         private ResultValue _resultValue;
         private Subject<ResultValue> _result = new Subject<ResultValue>();
         public IObservable<ResultValue> OnResultValue { get { return _result; } }
+        private bool _playerHaveCap;//ユニークアイテムの効果により獲得するお金が1.5倍になるアイテムのフラグ管理
         EventManager eventManager;
 
         private void Awake()
@@ -45,7 +46,13 @@ namespace Scenes.Ingame.Manager
             money += 20 * _resultValue.level;
             money += _resultValue.getUnique ? 50 : 0;
             money += _resultValue.firstContact ? 100 : 0;
+            money = _playerHaveCap ? (int)(money * 1.5f) : money;
             return money;
+        }
+
+        public void SetRingFlag(bool flag)
+        {
+            _playerHaveCap = flag;
         }
     }
 }
