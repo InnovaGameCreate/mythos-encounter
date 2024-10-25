@@ -157,6 +157,11 @@ namespace Data
             playerInformation.MetEnemy(enemyId);
         }
 
+        public void GetMoney(int money)
+        {
+            playerInformation.GetMoney(money);
+        }
+
         public void SendPlayerInformation()
         {
             PlayerDataStruct sendData = new PlayerDataStruct();
