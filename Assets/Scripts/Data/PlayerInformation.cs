@@ -20,6 +20,8 @@ namespace Data
         private int _escape;//退散させずに脱出した回数
         private int _dispersingEscape;//退散して脱出した回数
         public static PlayerInformation Instance;
+        private int[] _currentItems = new int[7];//ゲーム前に選択したアイテム
+        private int _currentSpell;//ゲーム前に選択したアイテム
 
         public int CharacterId { get => characterId; }
         public string Name { get => _name; }
@@ -31,6 +33,8 @@ namespace Data
         public Dictionary<int, int> MythCreature { get => _mythCreature; }
         public int Escape { get => _escape; }
         public int DispersingEscape { get => _dispersingEscape; }
+        public int[] CurrentItems { get => _currentItems; }//ゲーム前に選択したアイテム
+        public int CurrentSpell { get => _currentSpell; }//ゲーム前に選択したスペル
 
         public void SpellUnlock(int i)
         {
@@ -44,8 +48,19 @@ namespace Data
 
         async void Start()
         {
-            DecodeData();
+            DecodeData().Forget();
         }
+
+        public void SetCurrentItem(int[] currentItems)
+        {
+            _currentItems = currentItems;
+        }
+
+        public void SetCurrentSpell(int spellId)
+        {
+            _currentSpell = spellId;
+        }
+
         public void MetEnemy(int enemyId)
         {
             _mythCreature[enemyId]++;
