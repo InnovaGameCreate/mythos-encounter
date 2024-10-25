@@ -7,8 +7,7 @@ using Scenes.Ingame.Player;
 
 namespace Scenes.Lobby.RoomSettingPanel
 {
-    [RequireComponent(typeof(RoomSettingManager))]
-    public class DisplayCameraMotion : MonoBehaviour
+    public class InteractMap : MonoBehaviour
     {
         public enum DisplayState //ディスプレイ制御フラグ
         {
@@ -19,27 +18,27 @@ namespace Scenes.Lobby.RoomSettingPanel
 
         [Header("Scene Objects")]
         [SerializeField] private Camera _displayCamera;
-        [SerializeField] private GameObject _roomSettingPanels;
+        [SerializeField] private GameObject _mapPanels;
         [Header("Time Setting")]
         [SerializeField] private float _motionTime = 1f;
 
-        private RoomSettingManager _roomSettingManagerCs;
-        private DisplayState _displayState = DisplayState.Close; //ディスプレイの表示状態
+        // private RoomSettingManager _roomSettingManagerCs;
+        public DisplayState _displayState = DisplayState.Close; //ディスプレイの表示状態
         private Vector3 _displayPosition = Vector3.zero; //ディスプレイのTransform
         private Quaternion _displayRotation = Quaternion.identity;
 
         private void Start()
         {
-            _roomSettingManagerCs = GetComponent<RoomSettingManager>();
+            // _roomSettingManagerCs = GetComponent<RoomSettingManager>();
             _displayPosition = _displayCamera.transform.position;
             _displayRotation = _displayCamera.transform.rotation;
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.M))
             {
-                OnEnableDisplay();
+                //OnEnableDisplay();
             }
         }
 
@@ -59,14 +58,15 @@ namespace Scenes.Lobby.RoomSettingPanel
             //処理待機
             await UniTask.WhenAll(
                 CameraMove(Camera.main.transform.position, _displayPosition),
-                CameraRotate(Camera.main.transform.rotation, _displayRotation),
-                _roomSettingManagerCs.BootRunner()); //Runnerの起動
+                CameraRotate(Camera.main.transform.rotation, _displayRotation)
+            //_roomSettingManagerCs.BootRunner()); //Runnerの起動
+            );
 
             //モーション後処理
             Cursor.visible = true; //カーソル有効化
             Cursor.lockState = CursorLockMode.None; //カーソル固定解除
-            _roomSettingPanels.SetActive(true); //ルーム設定UIを表示
-            _roomSettingManagerCs.SwitchPanel(0);
+            _mapPanels.SetActive(true); //UIを表示
+            //_roomSettingManagerCs.SwitchPanel(0);
 
             //ディスプレイ有効化完了
             _displayState = DisplayState.Open;
@@ -84,8 +84,8 @@ namespace Scenes.Lobby.RoomSettingPanel
             //モーション前処理
             Cursor.visible = false; //カーソル無効化
             Cursor.lockState = CursorLockMode.Locked; //カーソルの固定
-            _roomSettingPanels.SetActive(false); //ルーム設定UIを非表示
-            _roomSettingManagerCs.DiscardRunner(); //Runnerの停止
+            _mapPanels.SetActive(false); //ルーム設定UIを非表示
+            //_roomSettingManagerCs.DiscardRunner(); //Runnerの停止
 
             //処理待機
             await UniTask.WhenAll(
@@ -142,3 +142,4 @@ namespace Scenes.Lobby.RoomSettingPanel
         }
     }
 }
+
