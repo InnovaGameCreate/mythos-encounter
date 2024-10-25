@@ -19,7 +19,7 @@ namespace Scenes.Ingame.Player
         {
             [PlayerActionState.Idle] = 0,
             [PlayerActionState.Walk] = 1,
-            [PlayerActionState.Dash] = 2,
+            [PlayerActionState.Dash] = 1.5f,
             [PlayerActionState.Sneak] = 0.5f
         };
 
@@ -43,9 +43,6 @@ namespace Scenes.Ingame.Player
         [SerializeField] float AirDeceleration = 1.3f;
         [SerializeField] float UpGravity = 15f;
         [SerializeField] float DownGravity = 25f;
-        [SerializeField] float DashSpeed = 2;
-        //[SerializeField] float SneakSpeed = 0.5f;
-        //[SerializeField] float WalkSpeed = 1;
         [Tooltip("スタミナの回復量(per 1sec)")] [SerializeField] private int _recoverStamina;
         [Tooltip("スタミナの回復量[スタミナ切れ時](per 1sec)")] [SerializeField] private int _recoverStaminaOnlyTired;
         [Tooltip("スタミナの消費量(per 1sec)")] [SerializeField] private int _expandStamina;
