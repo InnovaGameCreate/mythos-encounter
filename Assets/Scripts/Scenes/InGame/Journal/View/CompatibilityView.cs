@@ -4,19 +4,22 @@ using UniRx;
 using Scenes.Ingame.Enemy.Trace;
 using Scenes.Ingame.Manager;
 
-public class CompatibilityView : ViewBase
+namespace Scenes.Ingame.Journal
 {
-    [SerializeField] private GridView _girdView;
-    private TraceFeatureController _traceFeatureController;
-    public override void Init()
+    public class CompatibilityView : ViewBase
     {
-        _traceFeatureController = FindObjectOfType<TraceFeatureController>();
-        WebDataRequest.instance.OnEndLoad.Subscribe(_ =>
-        {
-            _girdView.Init(WebDataRequest.GetEnemyDataArrayList);
-        }).AddTo(this);
+        [SerializeField] private GridView _girdView;
+        private TraceFeatureController _traceFeatureController;
 
-        IngameManager.Instance.OnGetJournal.Subscribe(_ => _girdView.UpdateJournalList(_traceFeatureController.traceModel.usedCombinations)).AddTo(this);
-        base.Init();
+        public override void Init()
+        {
+            _traceFeatureController = FindObjectOfType<TraceFeatureController>();
+            WebDataRequest.instance.OnEndLoad.Subscribe(_ =>
+            {
+                _girdView.Init(WebDataRequest.GetEnemyDataArrayList);
+            }).AddTo(this);
+
+            IngameManager.Instance.OnGetJournal.Subscribe(_ => _girdView.UpdateJournalList(_traceFeatureController.traceModel.usedCombinations)).AddTo(this);
+        }
     }
 }

@@ -24,9 +24,6 @@ public class JournalView : ViewBase
     [SerializeField] private Button _itemTag;
     [SerializeField] private Button _spellTag;
 
-
-
-
     private Subject<PageType> _jornalTagClick = new Subject<PageType>();
     public IObservable<PageType> OnJornalTagClick { get { return _jornalTagClick; } }
     private ViewBase _pastView;
@@ -49,7 +46,6 @@ public class JournalView : ViewBase
     }
     public void PageChange(PageType pageType)
     {
-        Debug.Log("PageChange");
         _animator.SetTrigger("isNext");
         _pastView?.Close();
         switch (pageType)
@@ -66,7 +62,7 @@ public class JournalView : ViewBase
                 _compatibilityView.Open();
                 _pastView = _compatibilityView;
                 break;
-                case PageType.Enemy:
+            case PageType.Enemy:
                 _enemyView.Open();
                 _pastView = _enemyView;
                 break;
