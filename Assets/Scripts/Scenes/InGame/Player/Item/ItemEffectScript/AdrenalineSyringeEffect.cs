@@ -38,6 +38,7 @@ namespace Scenes.Ingame.Player
         public async UniTaskVoid SyringeEffect()
         {
             var token = ownerPlayerStatus.GetCancellationTokenOnDestroy();
+            SoundManager.Instance.PlaySe("se_adrenaline00", transform.position);
             Debug.Log("アドレナリン注射器バフ状態");
 
             //アイテム使用直後にステータス変更を行う

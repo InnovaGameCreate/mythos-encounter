@@ -11,6 +11,7 @@ namespace Scenes.Ingame.Player
         public override void OnPickUp()
         {
             //‰æ–Êã‚É•úËü‘ª’èŠí‚ğ•\¦‚·‚é
+            SoundManager.Instance.PlaySe("se_geigercounter00", transform.position);
             ownerPlayerItem.ActiveGeigerCounter(true);
             //ownerPlayerItem.UseGeigerCounter(false);
             if (ownerPlayerItem.SwitchGeigerCounter[ownerPlayerItem.nowIndex] == true)// “dŒ¹‚ªon‚Å‚ ‚é

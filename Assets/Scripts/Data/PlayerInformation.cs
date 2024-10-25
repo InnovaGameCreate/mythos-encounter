@@ -70,6 +70,12 @@ namespace Data
         {
             _items[itemId] += count;
         }
+
+        public void GetMoney(int money)
+        {
+            _money += money;
+        }
+
         private async UniTaskVoid DecodeData()
         {
             await UniTask.WaitUntil(() => WebDataRequest.OnCompleteLoadData);

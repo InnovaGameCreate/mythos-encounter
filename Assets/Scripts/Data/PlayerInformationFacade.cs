@@ -8,28 +8,28 @@ namespace Data
     {
         public enum EscapeRequestType
         {
-            Escape,                     //’Eo‚Ì”
-            DispersingEscape,           //‘ŞU‚³‚¹‚Ä’Eo‚µ‚½”
-            EscapeAndDispersingEscape,  //‡Œv‚Ì’Eo”
+            Escape,                     //è„±å‡ºã®æ•°
+            DispersingEscape,           //é€€æ•£ã•ã›ã¦è„±å‡ºã—ãŸæ•°
+            EscapeAndDispersingEscape,  //åˆè¨ˆã®è„±å‡ºæ•°
         }
 
         public enum ItemRequestType
         {
-            All,        //‚·‚×‚Ä‚ÌƒAƒCƒeƒ€Šî•ñ
-            Owned,      //‚Á‚Ä‚¢‚éƒAƒCƒeƒ€‚¾‚¯‚ÌŠî•ñ
-            NotOwned    //‚Á‚Ä‚¢‚È‚¢ƒAƒCƒeƒ€‚ÌŠî•ñ
+            All,        //ã™ã¹ã¦ã®ã‚¢ã‚¤ãƒ†ãƒ æ‰€æŒæƒ…å ±
+            Owned,      //æŒã£ã¦ã„ã‚‹ã‚¢ã‚¤ãƒ†ãƒ ã ã‘ã®æ‰€æŒæƒ…å ±
+            NotOwned    //æŒã£ã¦ã„ãªã„ã‚¢ã‚¤ãƒ†ãƒ ã®æ‰€æŒæƒ…å ±
         }
         public enum spellRequestType
         {
-            All,        //‚·‚×‚Ä‚Ìô•¶Šî•ñ
-            Owned,      //‚Á‚Ä‚¢‚éô•¶‚¾‚¯‚ÌŠî•ñ
-            NotOwned    //‚Á‚Ä‚¢‚È‚¢ô•¶‚ÌŠî•ñ
+            All,        //ã™ã¹ã¦ã®å‘ªæ–‡æ‰€æŒæƒ…å ±
+            Owned,      //æŒã£ã¦ã„ã‚‹å‘ªæ–‡ã ã‘ã®æ‰€æŒæƒ…å ±
+            NotOwned    //æŒã£ã¦ã„ãªã„å‘ªæ–‡ã®æ‰€æŒæƒ…å ±
         }
         public enum EnemyRequestType
         {
-            All,        //‚·‚×‚Ä‚Ì“G‚Æ‚Ì‘˜‹ö”
-            Met,        //‰ï‚Á‚½‚±‚Æ‚ª‚ ‚é“G‚Æ‚Ì‘˜‹ö”
-            NotMet      //‰ï‚Á‚½‚±‚Æ‚ª‚È‚¢‚ ‚é“G‚Æ‚Ì‘˜‹ö”‚O
+            All,        //ã™ã¹ã¦ã®æ•µã¨ã®é­é‡æ•°
+            Met,        //ä¼šã£ãŸã“ã¨ãŒã‚ã‚‹æ•µã¨ã®é­é‡æ•°
+            NotMet      //ä¼šã£ãŸã“ã¨ãŒãªã„ã‚ã‚‹æ•µã¨ã®é­é‡æ•°ï¼ï¼
         }
 
         public static PlayerInformationFacade Instance;
@@ -45,7 +45,7 @@ namespace Data
         }
 
         /// <summary>
-        /// ’Eo”‚É‚Â‚¢‚Ä‚ÌQÆ
+        /// è„±å‡ºæ•°ã«ã¤ã„ã¦ã®å‚ç…§
         /// </summary>
         public int GetEscapeCount(EscapeRequestType type = EscapeRequestType.EscapeAndDispersingEscape)
         {
@@ -58,13 +58,13 @@ namespace Data
                 case EscapeRequestType.EscapeAndDispersingEscape:
                     return playerInformation.Escape + playerInformation.DispersingEscape;
                 default:
-                    Debug.LogError("ˆø”‚ª³Šm‚Å‚Í‚ ‚è‚Ü‚¹‚ñ");
+                    Debug.LogError("å¼•æ•°ãŒæ­£ç¢ºã§ã¯ã‚ã‚Šã¾ã›ã‚“");
                     return 0;
             }
         }
 
         /// <summary>
-        /// ‘˜‹ö‚µ‚½“G‚ª‰‚ß‚Ä‚©
+        /// é­é‡ã—ãŸæ•µãŒåˆã‚ã¦ã‹
         /// </summary>
         public bool IsFarstContactEnemy(int id)
         {
@@ -72,7 +72,7 @@ namespace Data
         }
 
         /// <summary>
-        /// ƒAƒCƒeƒ€‚Â‚¢‚Ä‚ÌQÆ
+        /// ã‚¢ã‚¤ãƒ†ãƒ ã¤ã„ã¦ã®å‚ç…§
         /// </summary>
         public Dictionary<int, int> GetEnemy(EnemyRequestType type = EnemyRequestType.All)
         {
@@ -85,13 +85,13 @@ namespace Data
                 case EnemyRequestType.NotMet:
                     return playerInformation.MythCreature.Where(x => x.Value == 0).ToDictionary(x => x.Key, x => x.Value);
                 default:
-                    Debug.LogError("ˆø”‚ª³Šm‚Å‚Í‚ ‚è‚Ü‚¹‚ñ");
+                    Debug.LogError("å¼•æ•°ãŒæ­£ç¢ºã§ã¯ã‚ã‚Šã¾ã›ã‚“");
                     return new Dictionary<int, int>();
             }
         }
 
         /// <summary>
-        /// ƒAƒCƒeƒ€‚Â‚¢‚Ä‚ÌQÆ
+        /// ã‚¢ã‚¤ãƒ†ãƒ ã¤ã„ã¦ã®å‚ç…§
         /// </summary>
         public Dictionary<int, int> GetItem(ItemRequestType type = ItemRequestType.All)
         {
@@ -104,13 +104,13 @@ namespace Data
                 case ItemRequestType.NotOwned:
                     return playerInformation.Items.Where(x => x.Value == 0).ToDictionary(x => x.Key, x => x.Value);
                 default:
-                    Debug.LogError("ˆø”‚ª³Šm‚Å‚Í‚ ‚è‚Ü‚¹‚ñ");
+                    Debug.LogError("å¼•æ•°ãŒæ­£ç¢ºã§ã¯ã‚ã‚Šã¾ã›ã‚“");
                     return new Dictionary<int, int>();
             }
         }
 
         /// <summary>
-        /// ƒAƒCƒeƒ€‚Â‚¢‚Ä‚ÌQÆ
+        /// ã‚¢ã‚¤ãƒ†ãƒ ã¤ã„ã¦ã®å‚ç…§
         /// </summary>
         public Dictionary<int, SpellStruct> GetSpell(spellRequestType type = spellRequestType.All)
         {
@@ -123,7 +123,7 @@ namespace Data
                 case spellRequestType.NotOwned:
                     return playerInformation.Spell.Where(x => x.Value == false).ToDictionary(x => x.Key, x => WebDataRequest.GetSpellDataArrayList[x.Key]);
                 default:
-                    Debug.LogError("ˆø”‚ª³Šm‚Å‚Í‚ ‚è‚Ü‚¹‚ñ");
+                    Debug.LogError("å¼•æ•°ãŒæ­£ç¢ºã§ã¯ã‚ã‚Šã¾ã›ã‚“");
                     return null;
             }
         }
@@ -139,7 +139,7 @@ namespace Data
         }
 
         /// <summary>
-        /// ƒƒr[‚©‚çƒCƒ“ƒQ[ƒ€‚É‚Åg—p‚·‚éƒXƒyƒ‹‚ÌID‚ğİ’è‚·‚é‚È‚Ç‚Ég‚¤ŠÖ”
+        /// ãƒ­ãƒ“ãƒ¼ã‹ã‚‰ã‚¤ãƒ³ã‚²ãƒ¼ãƒ ã«ã§ä½¿ç”¨ã™ã‚‹ã‚¹ãƒšãƒ«ã®IDã‚’è¨­å®šã™ã‚‹æ™‚ãªã©ã«ä½¿ã†é–¢æ•°
         /// </summary>
         public void SetCurrentSpell(int spellId)
         {
@@ -147,11 +147,11 @@ namespace Data
         }
 
         /// <summary>
-        /// ƒƒr[‚©‚çƒCƒ“ƒQ[ƒ€‚É‚¿‚ŞƒAƒCƒeƒ€‚ğİ’è‚·‚é‚È‚Ç‚Ég‚¤ŠÖ”
+        /// ãƒ­ãƒ“ãƒ¼ã‹ã‚‰ã‚¤ãƒ³ã‚²ãƒ¼ãƒ ã«æŒã¡è¾¼ã‚€ã‚¢ã‚¤ãƒ†ãƒ ã‚’è¨­å®šã™ã‚‹æ™‚ãªã©ã«ä½¿ã†é–¢æ•°
         /// </summary>
         public void SetCurrentitem(int?[] items)
         {
-            //”z—ñ‚Ì”‚ª7o‚È‚¢ê‡‚Í®Œ`‚·‚é
+            //é…åˆ—ã®æ•°ãŒ7å‡ºãªã„å ´åˆã¯æ•´å½¢ã™ã‚‹
             int[] setItems;
             if (items.Length == 7)
             {
@@ -167,7 +167,7 @@ namespace Data
         }
 
         /// <summary>
-        /// ƒvƒŒƒCƒ„[‚ªƒZƒbƒg‚µ‚½ƒAƒCƒeƒ€‚ğæ“¾‚·‚éŠÖ”
+        /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚»ãƒƒãƒˆã—ãŸã‚¢ã‚¤ãƒ†ãƒ ã‚’å–å¾—ã™ã‚‹é–¢æ•°
         /// </summary>
         public int[] GetCurrentitem()
         {
@@ -175,7 +175,7 @@ namespace Data
         }
 
         /// <summary>
-        /// ƒvƒŒƒCƒ„[‚ªƒZƒbƒg‚µ‚½ƒXƒyƒ‹‚ÌID‚ğæ“¾‚·‚éŠÖ”
+        /// ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ãŒã‚»ãƒƒãƒˆã—ãŸã‚¹ãƒšãƒ«ã®IDã‚’å–å¾—ã™ã‚‹é–¢æ•°
         /// </summary>
         public int GetSpellId()
         {
@@ -201,8 +201,13 @@ namespace Data
             playerInformation.MetEnemy(enemyId);
         }
 
+        public void GetMoney(int money)
+        {
+            playerInformation.GetMoney(money);
+        }
+        
         /// <summary>
-        /// ƒf[ƒ^‚ğƒf[ƒ^ƒx[ƒX‚Éã‚°‚éŠÖ”
+        /// ãƒ‡ãƒ¼ã‚¿ã‚’ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã«ä¸Šã’ã‚‹é–¢æ•°
         /// </summary>
         public void SendPlayerInformation()
         {

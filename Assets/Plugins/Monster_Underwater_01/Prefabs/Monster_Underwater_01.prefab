@@ -1801,7 +1801,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7966608104831177133}
-  m_LocalRotation: {x: 0.013699026, y: 0.04099876, z: 0.19286226, w: 0.98027325}
+  m_LocalRotation: {x: -0.10633238, y: -0.5632068, z: 0.16148393, w: 0.8033769}
   m_LocalPosition: {x: 0.15784794, y: -0.00000005483627, z: -0.00000045776366}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1809,7 +1809,7 @@ Transform:
   - {fileID: 7966608104830946363}
   m_Father: {fileID: 7966608104830946341}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0.633, y: -69.94, z: 22.288}
 --- !u!1 &7966608104831177135
 GameObject:
   m_ObjectHideFlags: 0
@@ -1833,7 +1833,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7966608104831177135}
-  m_LocalRotation: {x: 0.013699035, y: 0.040999018, z: 0.19286229, w: 0.98027325}
+  m_LocalRotation: {x: -0.1104677, y: -0.5837685, z: 0.1586837, w: 0.7885624}
   m_LocalPosition: {x: -0.15784869, y: -0.000000007152557, z: 0.00000030517577}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1841,7 +1841,7 @@ Transform:
   - {fileID: 7966608104830946365}
   m_Father: {fileID: 7966608104830946343}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0.633, y: -72.9, z: 22.288}
 --- !u!1 &7966608104831177153
 GameObject:
   m_ObjectHideFlags: 0
@@ -2788,6 +2788,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7966608104830946325}
   - component: {fileID: 7966608104838439815}
+  - component: {fileID: 7483722615224550646}
   m_Layer: 0
   m_Name: Monster_Underwater_01
   m_TagString: Untagged
@@ -2804,8 +2805,8 @@ Transform:
   m_GameObject: {fileID: 7966608104831177205}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.8, y: 1.8, z: 1.8}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7966608104830946313}
   - {fileID: 7966608104830946327}
@@ -2822,8 +2823,8 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7966608104831177205}
   m_Enabled: 1
-  m_Avatar: {fileID: 9000000, guid: 185eb78594b33174397def4085b340ad, type: 3}
-  m_Controller: {fileID: 9100000, guid: f38d7202c21aea142bed706fcc70317e, type: 2}
+  m_Avatar: {fileID: 9000000, guid: 7c62362115add184a898694d2ae232a9, type: 3}
+  m_Controller: {fileID: 22100000, guid: 7ae1024d5bbdebf40b3638ee32b7c25e, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -2834,6 +2835,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7483722615224550646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7966608104831177205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5aca7b4b208d49ad8efa5eb137044b10, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7966608104831177207
 GameObject:
   m_ObjectHideFlags: 0
